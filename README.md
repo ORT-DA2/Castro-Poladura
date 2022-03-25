@@ -29,6 +29,7 @@ La API maneja la siguiente estructura para describir errores al cliente: (*Esta 
 }
 ```
 
+
 - **statusCode**: El código Http correspondiente asociado al resultado ocasionado, dentro de estos los posibles son:
 - **statusDescription:** Nombre de código de error Http.
 - **message:** Mensaje que describe el error ocurrido.
