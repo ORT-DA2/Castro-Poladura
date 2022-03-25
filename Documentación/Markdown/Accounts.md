@@ -1,9 +1,6 @@
 # Accounts
 
-<aside>
 📋 **Autenticar usuario**
-
-</aside>
 
 - Acceso: **Publico**
 - Metodo: **POST**
