@@ -54,7 +54,7 @@ La autenticación que debe ser provista por un “*Bearer Token*”.
 💡 Una vez que el usuario haya iniciado sesión, cada solicitud posterior incluirá el JWT, lo que permitirá al usuario acceder a rutas, servicios y recursos permitidos con ese token.
 
 </aside>
-<br>
+
 <figure>
     <img src="Documentaci%C3%B3n/Markdown/JwtFlow.png" width="600" height="200"
          alt="Jwt flow">
