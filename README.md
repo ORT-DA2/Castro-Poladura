@@ -50,7 +50,7 @@ La API maneja la siguiente estructura para describir errores al cliente: (*Esta 
 La autenticación que debe ser provista por un “*Bearer Token*”.
 
 <aside>
-💡 Una vez que el usuario haya iniciado sesión, cada solicitud posterior incluirá el **JWT**, lo que permitirá al usuario acceder a rutas, servicios y recursos permitidos con ese token.
+💡 Una vez que el usuario haya iniciado sesión, cada solicitud posterior incluirá el JWT, lo que permitirá al usuario acceder a rutas, servicios y recursos permitidos con ese token.
 
 </aside>
 
