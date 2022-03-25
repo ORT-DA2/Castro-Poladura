@@ -55,7 +55,7 @@ La autenticación que debe ser provista por un “*Bearer Token*”.
 </aside>
 
 <figure>
-    <img src="Documentaci%C3%B3n/Markdown/JwtFlow.png" width="400" height="200"
+    <img src="Documentaci%C3%B3n/Markdown/JwtFlow.png" width="600" height="400"
          alt="Jwt flow">
 </figure>
 
