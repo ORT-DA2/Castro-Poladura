@@ -35,7 +35,7 @@ La API maneja la siguiente estructura para describir errores al cliente: (*Esta 
 - **message:** Mensaje que describe el error ocurrido.
 
 Códigos http utilizados
-<center>
+
 | Código | Descripción |
 | --- | --- |
 | 200 | OK |
@@ -45,7 +45,7 @@ Códigos http utilizados
 | 403 | Forbidden |
 | 404 | Not Found |
 | 500 | Internal Server Error |
-</center>
+
 ## **Autenticación**
 
 La autenticación que debe ser provista por un “*Bearer Token*”.
