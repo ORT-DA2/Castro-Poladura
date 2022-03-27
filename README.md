@@ -6,7 +6,7 @@
 | --- | --- |
 | Publico  | El recurso puede ser accedido de manera pública |
 | Privado | Se requiere que el usuario esté autenticado |
-| Privado-Restringido | Debe estar autenticado y debe tener autorización la del tipo de usuario exigido, estos se describen más abajo |
+| Privado-Restringido | Debe estar autenticado y debe tener autorización del tipo de usuario exigido, estos se describen más abajo |
 
 ## Tipos de usuario (Roles)
 
