@@ -4,9 +4,9 @@
 
 | Acceso | Descripción |
 | --- | --- |
-| Publico  | El recurso puede ser accedido de manera publica |
-| Privado | Debe estar autenticado y debe tener autorización la del tipo de usuario exigido, estos se describen mas abajo |
-| Privado-Restringido | Se requiere que el usuario este autenticado |
+| Publico  | El recurso puede ser accedido de manera pública |
+| Privado | Se requiere que el usuario esté autenticado |
+| Privado-Restringido | Debe estar autenticado y debe tener autorización del tipo de usuario exigido, estos se describen más abajo |
 
 ## Tipos de usuario (Roles)
 
@@ -29,11 +29,12 @@ La API maneja la siguiente estructura para describir errores al cliente: (*Esta 
 }
 ```
 
-- **statusCode**: El codigo Http correspondiente asociado al resultado ocacionado, dentro de estos los posibles son:
+
+- **statusCode**: El código Http correspondiente asociado al resultado ocasionado, dentro de estos los posibles son:
 - **statusDescription:** Nombre de código de error Http.
 - **message:** Mensaje que describe el error ocurrido.
 
-→ Códigos http utilizados
+Códigos http utilizados
 
 | Código | Descripción |
 | --- | --- |
@@ -50,14 +51,17 @@ La API maneja la siguiente estructura para describir errores al cliente: (*Esta 
 La autenticación que debe ser provista por un “*Bearer Token*”.
 
 <aside>
-💡 Una vez que el usuario haya iniciado sesión, cada solicitud posterior incluirá el **JWT**, lo que permitirá al usuario acceder a rutas, servicios y recursos permitidos con ese token.
+💡 Una vez que el usuario haya iniciado sesión, cada solicitud posterior incluirá el JWT, lo que permitirá al usuario acceder a rutas, servicios y recursos permitidos con ese token.
 
 </aside>
 
-![JwtFlow](Documentaci%C3%B3n/Markdown/JwtFlow.png)
+<figure>
+    <img src="Documentaci%C3%B3n/Markdown/JwtFlow.png" width="600" height="200"
+         alt="Jwt flow">
+</figure>
 
 ## Endpoints
 
 [Accounts](Documentaci%C3%B3n/Markdown/Accounts.md)
 
----
+

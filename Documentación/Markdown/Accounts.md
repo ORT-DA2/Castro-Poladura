@@ -1,12 +1,9 @@
 # Accounts
 
-<aside>
 📋 **Autenticar usuario**
 
-</aside>
-
-- Acceso: **Publico**
-- Metodo: **POST**
+- Acceso: **Público**
+- Método: **POST**
 - Endpoint : "**API_URL/users/login**"
 - Body:
 
