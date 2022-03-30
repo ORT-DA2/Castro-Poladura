@@ -28,8 +28,6 @@ La API maneja la siguiente estructura para describir errores al cliente: (*Esta 
     "message": "Business error described"
 }
 ```
-
-
 - **statusCode**: El código Http correspondiente asociado al resultado ocasionado, dentro de estos los posibles son:
 - **statusDescription:** Nombre de código de error Http.
 - **message:** Mensaje que describe el error ocurrido.
@@ -45,6 +43,24 @@ Códigos http utilizados
 | 403 | Forbidden |
 | 404 | Not Found |
 | 500 | Internal Server Error |
+
+## Respuesta de operación realizada por la api (Para aquellos endpoints de creación, borrado y actualización)
+
+La API maneja la siguiente estructura para describir errores al cliente: (*Esta respuesta es a modo de ejemplo*)
+
+```json
+{
+    "message": "User has been registered",
+    "code": 0
+}
+```
+
+Códigos de resultados de operaciones realizadas por la api
+
+| Código | Descripción |
+| --- | --- |
+| 0 | SUCCESS |
+| 1 | ERROR |
 
 ## **Autenticación**
 
