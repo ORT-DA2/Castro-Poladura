@@ -46,7 +46,7 @@ Códigos http utilizados
 
 ## Respuesta de operación realizada por la api (Para aquellos endpoints de creación, borrado y actualización)
 
-La API maneja la siguiente estructura para describir errores al cliente: (*Esta respuesta es a modo de ejemplo*)
+La API maneja la siguiente estructura para describir resultados de operaciones realizadas por la api (*Esta respuesta es a modo de ejemplo*)
 
 ```json
 {
