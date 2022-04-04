@@ -11,4 +11,9 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\TicketPal.Interfaces\TicketPal.Interfaces.csproj" />
+    <ProjectReference Include="..\TicketPal.Domain\TicketPal.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

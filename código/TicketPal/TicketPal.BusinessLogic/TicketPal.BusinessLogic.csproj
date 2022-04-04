@@ -1,9 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\TicketPal.DataAccess\TicketPal.DataAccess.csproj" />
+    <ProjectReference Include="..\TicketPal.Domain\TicketPal.Domain.csproj" />
     <ProjectReference Include="..\TicketPal.Interfaces\TicketPal.Interfaces.csproj" />
-    <ProjectReference Include="..\TicketPal.BusinessLogic\TicketPal.BusinessLogic.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

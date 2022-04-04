@@ -8,4 +8,10 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\TicketPal.Domain\TicketPal.Domain.csproj" />
+    <ProjectReference Include="..\TicketPal.Interfaces\TicketPal.Interfaces.csproj" />
+    <ProjectReference Include="..\TicketPal.Factory\TicketPal.Factory.csproj" />
+  </ItemGroup>
+
 </Project>
