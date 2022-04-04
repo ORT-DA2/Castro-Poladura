@@ -12,7 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 
-namespace TicketPal.Api.WebApi
+namespace TicketPal.WebApi
 {
     public class Startup
     {
@@ -30,7 +30,7 @@ namespace TicketPal.Api.WebApi
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "TicketPal.Api.WebApi", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "TicketPal.WebApi", Version = "v1" });
             });
         }
 
@@ -41,7 +41,7 @@ namespace TicketPal.Api.WebApi
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "TicketPal.Api.WebApi v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "TicketPal.WebApi v1"));
             }
 
             app.UseHttpsRedirection();

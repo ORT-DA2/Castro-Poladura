@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TicketPal.Api.Domain
+namespace TicketPal.DataAccess
 {
     public class Class1
     {

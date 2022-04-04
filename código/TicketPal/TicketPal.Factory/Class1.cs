@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TicketPal.DataAccess.Repository
+namespace TicketPal.Factory
 {
     public class Class1
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TicketPal.Api.Interfaces
+namespace TicketPal.Interfaces
 {
     public class Class1
     {
