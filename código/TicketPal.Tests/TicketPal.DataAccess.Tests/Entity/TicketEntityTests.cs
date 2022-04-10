@@ -10,17 +10,13 @@ namespace TicketPal.DataAccess.Tests.Entity
     public class TicketEntityTests
     {
         private TicketEntity ticket;
-        private int idTicket;
         private BaseEntity buyer;
-        private TicketStatus status;
         private DateTime purchaseDate;
-        private string showName;
         private PerformerEntity artist;
 
         [TestInitialize]
         public void Initialize()
         {
-            idTicket = 1;
             buyer = new UserEntity()
             {
                 Id = 1,
@@ -28,9 +24,7 @@ namespace TicketPal.DataAccess.Tests.Entity
                 LastName = "White",
                 Email = "swhite@gmail.com"
             };
-            status = TicketStatus.PURCHASED;
             purchaseDate = new DateTime(2022, 04, 04);
-            showName = "Solo";
             artist = new PerformerEntity
             {
                 PerformerType = PerformerType.SOLO_ARTIST,
@@ -124,7 +118,7 @@ namespace TicketPal.DataAccess.Tests.Entity
                 Artists = artistList
             };
 
-
+            ticket = new TicketEntity();
             ticket.Id = idTicket;
             ticket.Buyer = buyer;
             ticket.Status = status;
