@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using TicketPal.Interfaces.Enumerations;
+using TicketPal.Domain.Constants;
 
-namespace TicketPal.DataAccess
+namespace TicketPal.DataAccess.Entity
 {
-    public class PerformerEntity
+    public class PerformerEntity : BaseEntity
     {
-        public int IdPerformer { get; set; }
-        public PerformerTypeEnumeration PerformerType { get; set; }
+
+        public PerformerType PerformerType { get; set; }
         public string Name { get; set; }
         public DateTime StartYear { get; set; }
         public GenreEntity Genre { get; set; }

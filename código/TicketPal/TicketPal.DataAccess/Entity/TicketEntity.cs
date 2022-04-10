@@ -1,13 +1,12 @@
 ﻿using System;
-using TicketPal.Interfaces.Enumerations;
+using TicketPal.Domain.Constants;
 
-namespace TicketPal.DataAccess
+namespace TicketPal.DataAccess.Entity
 {
-    public class TicketEntity
+    public class TicketEntity : BaseEntity
     {
-        public int IdTicket { get; set; }
         public User Buyer { get; set; }
-        public TicketStatusEnumeration Status { get; set; }
+        public TicketStatus Status { get; set; }
         public DateTime PurchaseDate { get; set; }
         public string ShowName { get; set; }
         public PerformerEntity Artist { get; set; }

@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace TicketPal.DataAccess
+namespace TicketPal.DataAccess.Entity
 {
-    public class EventEntity
+    public abstract class EventEntity : BaseEntity
     {
         public int IdEvent { get; set; }
         public DateTime EventDate { get; set; }

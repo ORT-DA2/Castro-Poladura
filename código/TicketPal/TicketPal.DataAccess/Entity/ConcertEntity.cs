@@ -1,4 +1,4 @@
-﻿namespace TicketPal.DataAccess
+﻿namespace TicketPal.DataAccess.Entity
 {
     public class ConcertEntity : EventEntity
     {
