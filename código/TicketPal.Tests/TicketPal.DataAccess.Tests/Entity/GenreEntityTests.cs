@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TicketPal.DataAccess.Entity;
+using TicketPal.Domain.Entity;
 
 namespace TicketPal.DataAccess.Tests.Entity
 {
