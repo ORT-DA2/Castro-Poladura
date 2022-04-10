@@ -17,6 +17,7 @@ namespace TicketPal.DataAccess.Tests.Entity
         [TestInitialize]
         public void Initialize()
         {
+            ticket = new TicketEntity();
             buyer = new UserEntity()
             {
                 Id = 1,
@@ -118,7 +119,6 @@ namespace TicketPal.DataAccess.Tests.Entity
                 Artists = artistList
             };
 
-            ticket = new TicketEntity();
             ticket.Id = idTicket;
             ticket.Buyer = buyer;
             ticket.Status = status;
