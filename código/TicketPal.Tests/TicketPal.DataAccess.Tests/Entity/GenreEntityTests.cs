@@ -9,21 +9,16 @@ namespace TicketPal.DataAccess.Tests.Entity
     {
         private GenreEntity genre;
         private int idGenre;
-        private string genreName;
         private DateTime createdAt;
         private DateTime updatedAt;
 
         [TestInitialize]
         public void Initialize()
         {
-            genreName = "Blues";
             createdAt = new DateTime(2022, 04, 06);
             updatedAt = new DateTime(2022, 04, 07);
             genre = new GenreEntity();
-            genre.Id = idGenre;
-            genre.GenreName = genreName;
-            genre.CreatedAt = createdAt;
-            genre.UpdatedAt = updatedAt;
+            idGenre = 1;
 
         }
 
