@@ -21,7 +21,7 @@ namespace TicketPal.DataAccess.Tests.Entity
         public void Initialize()
         {
             idTicket = 1;
-            buyer = new User()
+            buyer = new UserEntity()
             {
                 Id = 1,
                 FirstName = "Susan",
@@ -101,7 +101,7 @@ namespace TicketPal.DataAccess.Tests.Entity
 
 
             int idTicket = 2;
-            User buyer = new User()
+            UserEntity buyer = new UserEntity()
             {
                 Id = 2,
                 FirstName = "Charles",
@@ -144,7 +144,7 @@ namespace TicketPal.DataAccess.Tests.Entity
         public void GetTicketTest()
         {
             int idTicket = ticket.Id;
-            User buyer = ticket.Buyer;
+            UserEntity buyer = ticket.Buyer;
             TicketStatus status = ticket.Status;
             DateTime purchaseDate = ticket.PurchaseDate;
             string tourName = ticket.ShowName;
