@@ -1,5 +1,9 @@
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using TicketPal.DataAccess.Repository;
 using TicketPal.Domain.Entity;
+using TicketPal.Domain.Exceptions;
 
 namespace TicketPal.DataAccess.Tests.Respository
 {
@@ -31,36 +35,6 @@ namespace TicketPal.DataAccess.Tests.Respository
             repository.Add(user2);
 
             Assert.IsTrue(repository.GetAll().ToList().Count == 2);
-
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(RepositoryException))]
-        public void SaveUserWithDuplicateIdShouldThrowException()
-        {
-            int id = 1;
-
-            var user1 = new UserEntity
-            {
-                Id = id,
-                FirstName = "SomeName1",
-                LastName = "SomeSurname1",
-                Email = "user1@example.com",
-                Password = "myPassword"
-            };
-            var user2 = new UserEntity
-            {
-                Id = id,
-                FirstName = "SomeName2",
-                LastName = "SomeSurname2",
-                Email = "user2@example.com",
-                Password = "myPassword"
-            };
-
-
-            var repository = new UserRepository(dbContext);
-            repository.Add(user1);
-            repository.Add(user2);
 
         }
 
@@ -266,8 +240,6 @@ namespace TicketPal.DataAccess.Tests.Respository
             repository.Add(user1);
             repository.Add(user2);
             repository.Add(user3);
-
-
 
             IEnumerable<UserEntity> found = repository.GetAll(u => u.Role.Equals(role));
 
