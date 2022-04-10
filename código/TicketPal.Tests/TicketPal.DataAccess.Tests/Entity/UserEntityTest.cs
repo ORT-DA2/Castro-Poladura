@@ -1,5 +1,6 @@
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using TicketPal.Domain.Entity;
 
 namespace TicketPal.DataAccess.Tests.Entity
 {
@@ -37,10 +38,10 @@ namespace TicketPal.DataAccess.Tests.Entity
 
             UserEntity request = new UserEntity
             {
-                Name = name
+                FirstName = name
             };
 
-            Assert.AreEqual(request.Name, name);
+            Assert.AreEqual(request.FirstName, name);
         }
 
         [TestMethod]
@@ -50,10 +51,10 @@ namespace TicketPal.DataAccess.Tests.Entity
 
             UserEntity request = new UserEntity
             {
-                Surname = surname
+                LastName = surname
             };
 
-            Assert.AreEqual(request.Surname, surname);
+            Assert.AreEqual(request.LastName, surname);
         }
 
         [TestMethod]

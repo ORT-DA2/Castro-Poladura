@@ -1,8 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
-using TicketPal.DataAccess.Entity;
 using TicketPal.Domain.Constants;
+using TicketPal.Domain.Entity;
 
 namespace TicketPal.DataAccess.Tests.Entity
 {
