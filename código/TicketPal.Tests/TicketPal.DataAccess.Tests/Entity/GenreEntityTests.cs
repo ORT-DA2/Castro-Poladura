@@ -9,6 +9,7 @@ namespace TicketPal.DataAccess.Tests.Entity
     {
         private GenreEntity genre;
         private int idGenre;
+
         private DateTime createdAt;
         private DateTime updatedAt;
 
@@ -23,7 +24,7 @@ namespace TicketPal.DataAccess.Tests.Entity
         }
 
         [TestMethod]
-        public void SetGenreTest()
+        public void GetGenreTest()
         {
             string genreName = "Rock";
             genre.GenreName = genreName;
@@ -35,14 +36,5 @@ namespace TicketPal.DataAccess.Tests.Entity
             Assert.AreEqual(genre.GenreName, genreName);
         }
 
-        [TestMethod]
-        public void GetGenreTest()
-        {
-            int idGenre = genre.Id;
-            string genreName = genre.GenreName;
-
-            Assert.AreEqual(genre.Id, idGenre);
-            Assert.AreEqual(genre.GenreName, genreName);
-        }
     }
 }

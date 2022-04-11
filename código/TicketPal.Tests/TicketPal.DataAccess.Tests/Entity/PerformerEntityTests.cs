@@ -37,7 +37,7 @@ namespace TicketPal.DataAccess.Tests.Entity
         }
 
         [TestMethod]
-        public void SetPerformerTest()
+        public void GetPerformerTest()
         {
             performerEntity.Id = id;
             performerEntity.PerformerType = performerTypeEnum;
@@ -52,21 +52,5 @@ namespace TicketPal.DataAccess.Tests.Entity
             Assert.AreEqual(performerEntity.Genre, genre);
         }
 
-        [TestMethod]
-        public void GetPerformerTest()
-        {
-            int id = performerEntity.Id;
-            PerformerType performerType = performerEntity.PerformerType;
-            string name = performerEntity.Name;
-            DateTime startYear = performerEntity.StartYear;
-            BaseEntity genre = performerEntity.Genre;
-
-
-            Assert.AreEqual(performerEntity.Id, id);
-            Assert.AreEqual(performerEntity.PerformerType, performerType);
-            Assert.AreEqual(performerEntity.Name, name);
-            Assert.AreEqual(performerEntity.StartYear, startYear);
-            Assert.AreEqual(performerEntity.Genre, genre);
-        }
     }
 }

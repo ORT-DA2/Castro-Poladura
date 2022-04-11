@@ -10,7 +10,7 @@ namespace TicketPal.DataAccess.Tests.Entity
     public class TicketEntityTests
     {
         private TicketEntity ticket;
-        private BaseEntity buyer;
+        private UserEntity buyer;
         private DateTime purchaseDate;
         private PerformerEntity artist;
 
@@ -41,7 +41,7 @@ namespace TicketPal.DataAccess.Tests.Entity
         }
 
         [TestMethod]
-        public void SetTicketTest()
+        public void GetTicketTest()
         {
             PerformerEntity singer = new PerformerEntity
             {
@@ -132,23 +132,6 @@ namespace TicketPal.DataAccess.Tests.Entity
             Assert.AreEqual(ticket.PurchaseDate, purchaseDate);
             Assert.AreEqual(ticket.ShowName, tourName);
             Assert.AreEqual(ticket.Artist.Name, artist.Name);
-        }
-
-        [TestMethod]
-        public void GetTicketTest()
-        {
-            int idTicket = ticket.Id;
-            UserEntity buyer = ticket.Buyer;
-            TicketStatus status = ticket.Status;
-            DateTime purchaseDate = ticket.PurchaseDate;
-            string tourName = ticket.ShowName;
-
-            Assert.AreEqual(ticket.Id, idTicket);
-            Assert.AreEqual(ticket.Buyer.Id, buyer.Id);
-            Assert.AreEqual(ticket.Status, status);
-            Assert.AreEqual(ticket.PurchaseDate, purchaseDate);
-            Assert.AreEqual(ticket.ShowName, tourName);
-
         }
     }
 }
