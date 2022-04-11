@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using TicketPal.Domain.Entity;
 using TicketPal.Domain.Exceptions;
 
@@ -10,7 +11,22 @@ namespace TicketPal.DataAccess.Repository
         public UserRepository(AppDbContext context) : base(context) { }
         public override void Update(UserEntity element)
         {
-            throw new System.NotImplementedException();
+            var found = dbContext.Set<UserEntity>().FirstOrDefault(u => u.Id == element.Id);
+
+            if (found == null)
+            {
+                throw new RepositoryException(string.Format("Couldn't find item to update with id: {0} doesn't exist", element.Id));
+            }
+
+            found.Role = (element.Role == null ? found.Role : element.Role);
+            found.FirstName = (element.FirstName == null ? found.FirstName : element.FirstName);
+            found.LastName = (element.LastName == null ? found.LastName : element.LastName);
+            found.Email = (element.Email == null ? found.Email : element.Email);
+            found.Password = (element.Password == null ? found.Password : element.Password);
+            found.UpdatedAt = DateTime.Now;
+
+            dbContext.SaveChanges();
+            dbContext.Entry(found).State = EntityState.Modified;
         }
 
         public override void Add(UserEntity user)
