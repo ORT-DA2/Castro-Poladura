@@ -115,8 +115,6 @@
 - Códigos de respuesta:
     
     → **200** OK
-    
-    → **403** Forbidden
   
 ---
 
@@ -154,8 +152,8 @@
   	 "year" : "2011",
 	 "genre" : {
     		       "id" : 1,
-   			"name" : "pop-rock",
-    			"category" : "music"
+   		       "name" : "pop-rock",
+    		       "category" : "music"
 	            }
    },
 ]
@@ -164,7 +162,5 @@
 - Códigos de respuesta:
     
     → **200** OK
-    
-    → **403** Forbidden
   
 ---
