@@ -12,7 +12,7 @@
   "name" : "Coldplay",
   "type" : "band",
   "year" : "1996",
-  "members" : ["Chris Martin","Guy Berryman","Phil Harvey","Will Champion","Jon 			Buckland"],
+  "members" : ["Chris Martin","Guy Berryman","Phil Harvey","Will Champion","Jon Buckland"],
   "genre" : "{genre_id}"
 }
 ```
@@ -69,7 +69,7 @@
   "name" : "Coldplay",
   "type" : "band",
   "year" : "1996",
-  "members" : ["Chris Martin","Guy Berryman","Phil Harvey","Will Champion","Jon 			Buckland"],
+  "members" : ["Chris Martin","Guy Berryman","Phil Harvey","Will Champion","Jon Buckland"],
   "genre" : "{genre_id}"
 }
 ```
@@ -103,12 +103,12 @@
   "name" : "Coldplay",
   "type" : "band",
   "year" : "1996",
-  "members" : ["Chris Martin","Guy Berryman","Phil Harvey","Will Champion","Jon 			Buckland"],
+  "members" : ["Chris Martin","Guy Berryman","Phil Harvey","Will Champion","Jon Buckland"],
   "genre" : {
-    			"id" : 1,
-   				"name" : "pop-rock",
-    			"category" : "music"
-			}
+    		"id" : 1,
+   		"name" : "pop-rock",
+    		"category" : "music"
+	     }
 }
 ```
 
@@ -140,12 +140,12 @@
   	"name" : "Coldplay",
   	"type" : "band",
   	"year" : "1996",
-  	"members" : ["Chris Martin","Guy Berryman","Phil Harvey","Will Champion","Jon 			Buckland"],
+  	"members" : ["Chris Martin","Guy Berryman","Phil Harvey","Will Champion","Jon Buckland"],
 	"genre" : {
-    			"id" : 1,
-   				"name" : "pop-rock",
-    			"category" : "music"
-			   }
+    		      "id" : 1,
+   		      "name" : "pop-rock",
+    		      "category" : "music"
+		   }
    },
    {
   	 "id" : 2,
@@ -153,10 +153,10 @@
   	 "type" : "solist",
   	 "year" : "2011",
 	 "genre" : {
-    			"id" : 1,
-   				"name" : "pop-rock",
+    		       "id" : 1,
+   			"name" : "pop-rock",
     			"category" : "music"
-			   }
+	            }
    },
 ]
 ```
