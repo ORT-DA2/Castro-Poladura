@@ -132,7 +132,7 @@
 - Método: **GET**
 - Endpoint : "**API_URL/users**"
 - params admitidos:
-	| Nombre Param | Tipo | Requerido Opcional | Ejemplo |
+	| Nombre Param | Tipo | Requerido/Opcional | Ejemplo |
 	| --- | --- | --- | --- |
 	| role | string | Opcional | API_URL/users?role=spectator |
 	
