@@ -1,6 +1,6 @@
 # Genres
 
-###📋 Alta Genero
+### 📋 Alta Genero
 
 - Acceso: **Privado - Admin**
 - Método: **POST**
@@ -31,7 +31,7 @@
 
 ---
 
-###📋 Baja Genero
+### 📋 Baja Genero
 
 - Acceso: **Privado - Admin**
 - Método: **DELETE**
@@ -53,7 +53,7 @@
 
 --- 
 
-###📋 Modificación de Genero
+### 📋 Modificación de Genero
 
 - Acceso: **Privado - Admin**
 - Método: **UPDATE**
@@ -84,7 +84,7 @@
 
 ---
 
-###📋 Obtener Genero
+### 📋 Obtener Genero
 
 - Acceso: **Privado - Admin**
 - Método: **GET**
@@ -107,7 +107,7 @@
 
 --- 
 
-###📋 Obtener Generos
+### 📋 Obtener Generos
 
 - Acceso: **Privado - Admin**
 - Método: **GET**
