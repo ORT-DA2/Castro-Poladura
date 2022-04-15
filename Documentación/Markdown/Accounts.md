@@ -1,6 +1,6 @@
 # Accounts
 
-📋 **Autenticar usuario**
+### 📋 Autenticar usuario
 
 - Acceso: **Público**
 - Método: **POST**
@@ -36,7 +36,7 @@
     
 ---
 
-📋 **Alta de usuario**
+### 📋 Alta de usuario
 
 - Acceso: **Privado - Admin**
 - Método: **POST**
@@ -70,7 +70,7 @@
 
 ---
 
-📋 **Baja de usuario**
+### 📋 Baja de usuario
 
 - Acceso: **Privado - Admin**
 - Método: **DELETE**
@@ -93,7 +93,7 @@
 
 ---
 
-📋 **Modificación de usuario**
+### 📋 Modificación de usuario
 
 - Acceso: **Privado - Admin**
 - Método: **UPDATE**
@@ -126,7 +126,7 @@
 
 --- 
 
-📋 **Obtener usuario**
+### 📋 Obtener usuario
 
 - Acceso: **Privado - Admin**
 - Método: **GET**
@@ -150,7 +150,7 @@
   
 ---
 
-📋 **Obtener usuarios**
+### 📋 Obtener usuarios
 
 - Acceso: **Privado - Admin**
 - Método: **GET**
