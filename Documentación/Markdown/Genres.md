@@ -93,9 +93,9 @@
 
 ```json
 {
-	"id" : 1,
-  	"name" : "suspense",
-  	"category" : "movies"
+    "id" : 1,
+    "name" : "suspense",
+    "category" : "movies"
 }
 ```
 
@@ -121,19 +121,19 @@
 ```json
 [
 	{
-		"id" : 1,
-  		"name" : "suspense",
-  		"category" : "movies"
+	    "id" : 1,
+  	    "name" : "suspense",
+            "category" : "movies"
 	},
 	{
-		"id" : 2,
-  		"name" : "pop-rock",
-  		"category" : "music"
+	    "id" : 2,
+  	    "name" : "pop-rock",
+  	    "category" : "music"
 	},
 	{
-		"id" : 1,
-  		"name" : "soul",
-  		"category" : "music"
+	     "id" : 1,
+  	     "name" : "soul",
+  	     "category" : "music"
 	}
 ]
 ```
