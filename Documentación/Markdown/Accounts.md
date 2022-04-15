@@ -126,12 +126,36 @@
 
 --- 
 
+📋 **Obtener usuario**
+
+- Acceso: **Privado - Admin**
+- Método: **GET**
+- Endpoint : "**API_URL/users/{user_id}**"
+- Ejemplo respuesta:
+
+```json
+{
+  "firstname" : "John",
+  "lastname" : "Doe",
+  "role" : "seller"
+  "email" : "johndoe@example.com"
+}
+```
+
+- Códigos de respuesta:
+    
+    → **200** OK
+    
+    → **403** Forbidden
+  
+---
+
 📋 **Obtener usuarios**
 
 - Acceso: **Privado - Admin**
 - Método: **GET**
 - Endpoint : "**API_URL/users**"
-- params admitidos:
+- Params admitidos:
 	| Nombre Param | Tipo | Requerido/Opcional | Ejemplo |
 	| --- | --- | --- | --- |
 	| role | string | Opcional | API_URL/users?role=spectator |
@@ -141,16 +165,18 @@
 ```json
 [
   {
-  "firstname" : "John",
-  "lastname" : "Doe",
-  "role" : "seller"
-  "email" : "johndoe@example.com"
+    "id" : 1,
+    "firstname" : "John",
+    "lastname" : "Doe",
+    "role" : "seller"
+    "email" : "johndoe@example.com"
   },
   {
-  "firstname" : "Sarah",
-  "lastname" : "Connor",
-  "role" : "spectator"
-  "email" : "johndoe@example.com"
+    "id" : 2,
+    "firstname" : "Sarah",
+    "lastname" : "Connor",
+    "role" : "spectator"
+    "email" : "johndoe@example.com"
   }
 ]
 ```
