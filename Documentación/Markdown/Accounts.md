@@ -20,11 +20,11 @@
 {
     "id": 1,
     "firstname": "John",
-	"lastname": "Doe",
+    "lastname": "Doe",
     "email": "johndoe@example.com",
-	"role": "spectator",
-    "password": "$2a$11$veow2TD8fGvQmbjTCpLYL.pPJKd37OWx5NcuwylCtCI4C6IkQ1zS6",
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJuYmYiOjE2MTk2MzAzNDEsImV4cCI6MTYxOTYzNzU0MSwiaWF0IjoxNjE5NjMwMzQxfQ.aQ72xFAGolUoQvtYqFTfrBOiDVHcxeZhF5X5No-L4aE"
+     "role": "spectator",
+    "password": "$2a$11$veow2TD8fGvQmbjTCpLYL.pPJKd37OWx5NcuwylCtCI4C6IkQ1zS6",         
+    "token":      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJuYmYiOjE2MTk2MzAzNDEsImV4cCI6MTYxOTYzNzU0MSwiaWF0IjoxNjE5NjMwMzQxfQ.aQ72xFAGolUoQvtYqFTfrBOiDVHcxeZhF5X5No-L4aE"
 }
 ```
 
