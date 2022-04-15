@@ -78,6 +78,6 @@ La autenticación que debe ser provista por un “*Bearer Token*”.
 
 ## Endpoints
 
-[Accounts](Documentaci%C3%B3n/Markdown/Accounts.md)
-[Genres](Documentaci%C3%B3n/Markdown/Genres.md)
+- [Accounts](Documentaci%C3%B3n/Markdown/Accounts.md)
+- [Genres](Documentaci%C3%B3n/Markdown/Genres.md)
 
