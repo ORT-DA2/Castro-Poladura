@@ -95,10 +95,13 @@
 
 ### 📋 Modificación de usuario
 
-- Acceso: **Privado - Admin**
+- Acceso para admin: **Privado - Admin**
+- Acceso para usuario spectator: **Privado - spectator**
 - Método: **UPDATE**
 - Endpoint : "**API_URL/users/{user_id}**"
 - Body:
+
+#### autorización para admin
 
 ```json
 {
@@ -109,6 +112,17 @@
   "password" : "somePassword"
 }
 ```
+
+#### autorización para spectator
+
+```json
+{
+  "firstname" : "John",
+  "lastname" : "Doe",
+  "password" : "somePassword"
+}
+```
+
 - Ejemplo respuesta:
 
 ```json
@@ -156,9 +170,9 @@
 - Método: **GET**
 - Endpoint : "**API_URL/users**"
 - Params admitidos:
-	| Nombre Param | Tipo | Requerido/Opcional | Ejemplo |
-	| --- | --- | --- | --- |
-	| role | string | Opcional | API_URL/users?role=spectator |
+	| Nombre Param | Tipo | Valores |Requerido/Opcional | Ejemplo | 
+	| --- | --- | --- | --- | --- |
+	| role | string | {admin, spectator, seller, supervisor} |Opcional | API_URL/users?role=spectator |
 	
 - Ejemplo respuesta:
 
