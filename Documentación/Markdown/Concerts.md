@@ -143,8 +143,7 @@
 		   			 	   }
    					}
 		       }
-		]
-	     	```
+		]```
 
 - Códigos de respuesta:
     
