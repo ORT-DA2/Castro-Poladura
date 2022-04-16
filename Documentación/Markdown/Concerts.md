@@ -104,7 +104,7 @@
 	| endDate | string | --- | Opcional | API_URL/concerts?endDate=2023-06-16 |
 	| performerName | string | --- | Opcional | API_URL/concerts?performerName=Coldplay |
 - Ejemplo respuesta:
-	```json
+```json
 		[
 		    {
 		    	"id" : 1,
@@ -137,13 +137,14 @@
   					"type" : "solist",
   					"year" : "2016",
 					"genre" : {
-    		      					"id" : 1,
-   		      					"name" : "pop",
-    		      					"category" : "music"
+    		      				      "id" : 1,
+   		      				      "name" : "pop",
+    		      				      "category" : "music"
 		   			 	   }
    					}
 		       }
-		]```
+		]
+```
 
 - Códigos de respuesta:
     
@@ -157,7 +158,7 @@
 - Método: **GET**
 - Endpoint : "**API_URL/concerts/{concert_id}**"
 - Ejemplo respuesta:
-	```json
+```json
 
 {	"id" : 1,
   	"concertDate" : "2022-04-01",
