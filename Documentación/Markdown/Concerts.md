@@ -105,44 +105,46 @@
 	| performerName | string | --- | Opcional | API_URL/concerts?performerName=Coldplay |
 - Ejemplo respuesta:
 	```json
-[
-	{	"id" : 1,
-  		"concertDate" : "2022-04-01",
-		"availableTickets" : "20023",
-	  	"price" : "127.97"
-  		"tourName" : "Music Of The Spheres World Tour",
-  		"performer" : {
-  						"id" : 1,
-  						"name" : "Coldplay",
-  						"type" : "band",
-  						"year" : "1996",
-  						"members" : ["Chris Martin","Guy Berryman","Phil Harvey","Will Champion","Jon Buckland"],
-						"genre" : {
-    		      					"id" : 1,
-   		      						"name" : "pop-rock",
+		[
+		    {
+		    	"id" : 1,
+  			"concertDate" : "2022-04-01",
+			"availableTickets" : "20023",
+	  		"price" : "127.97"
+  			"tourName" : "Music Of The Spheres World Tour",
+  			"performer" : {
+  					"id" : 1,
+  					"name" : "Coldplay",
+  					"type" : "band",
+  					"year" : "1996",
+  					"members" : ["Chris Martin","Guy Berryman","Phil Harvey","Will Champion","Jon Buckland"],
+					"genre" : {
+    		      				  	"id" : 1,
+   		      					"name" : "pop-rock",
     		      					"category" : "music"
-		   						  }
-   						}
-	},
-	{	"id" : 2,
-  		"concertDate" : "2023-04-01",
-		"availableTickets" : "1800",
-	  	"price" : "90.97"
-  		"tourName" : "Future Nostalgia",
-  		"performer" : {
-  						"id" : 1,
-  						"name" : "Dua Lipa",
-  						"type" : "solist",
-  						"year" : "2016",
-						"genre" : {
+		   				   }
+   					}
+		      },
+		      {	
+	 		"id" : 2,
+  			"concertDate" : "2023-04-01",
+			"availableTickets" : "1800",
+		  	"price" : "90.97"
+  			"tourName" : "Future Nostalgia",
+	  		"performer" : {
+  				   	"id" : 1,
+  					"name" : "Dua Lipa",
+  					"type" : "solist",
+  					"year" : "2016",
+					"genre" : {
     		      					"id" : 1,
-   		      						"name" : "pop",
+   		      					"name" : "pop",
     		      					"category" : "music"
-		   						  }
-   						}
-	}
-]
-```
+		   			 	   }
+   					}
+		       }
+		]
+	     ```
 
 - Códigos de respuesta:
     
