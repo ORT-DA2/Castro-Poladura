@@ -1,17 +1,19 @@
-# Concerts
+# Eventos
 
-### 📋 Alta de concierto
+### 📋 Alta de evento
 
 - Acceso: **Privado - Admin**
 - Método: **POST**
-- Endpoint : "**API_URL/concerts**"
+- Endpoint : "**API_URL/events**"
+
 - Body:
 
 ```json
 {
-  "concertDate" : "2022-04-01",
+  "date" : "2022-04-01",
   "availableTickets" : "20023",
-  "price" : "127.97"
+  "type" : "concert"
+  "price" : "127.97",
   "tourName" : "Music Of The Spheres World Tour",
   "performer" : "{performer_id}"
 }
@@ -32,20 +34,22 @@
     
     → **403** Forbidden
 
+    → **400** Bad Request
 ---
 
-### 📋 Modificación de concierto
+### 📋 Modificación de evento
 
 - Acceso: **Privado - Admin**
 - Método: **UPDATE**
-- Endpoint : "**API_URL/concerts/{concert_id}**"
+- Endpoint : "**API_URL/events/{event_id}**"
 - Body:
 
 ```json
 {
-  "concertDate" : "2022-04-01",
+  "date" : "2022-04-01",
   "availableTickets" : "20023",
-  "price" : "127.97"
+  "type" : "concert",
+  "price" : "127.97",
   "tourName" : "Music Of The Spheres World Tour",
   "performer" : "{performer_id}"
 }
@@ -56,7 +60,7 @@
 ```json
 {
   "code" : 0,
-  "message" : "Concert has been udpated"
+  "message" : "Event has been udpated"
 }
 ```
 
@@ -65,21 +69,23 @@
     → **201** OK
     
     → **403** Forbidden
+    
+    → **400** Bad Request
 
 ---
 
-### 📋 Baja de concierto
+### 📋 Baja de evento
 
 - Acceso: **Privado - Admin**
 - Método: **DELETE**
-- Endpoint : "**API_URL/concerts/{concert_id}**"
+- Endpoint : "**API_URL/events/{event_id}**"
 
 - Ejemplo respuesta:
 
 ```json
 {
   "code" : 0,
-  "message" : "Concert has been deleted"
+  "message" : "Event has been deleted"
 }
 ```
 
@@ -88,28 +94,32 @@
     → **200** OK
     
     → **403** Forbidden
+    
+    → **400** Bad Request
 
 ---
 
-### 📋 Obtener conciertos
+### 📋 Obtener eventos
 
 - Acceso: **Público**
 - Método: **GET**
-- Endpoint : "**API_URL/concerts**"
+- Endpoint : "**API_URL/events?type=concert**"
 - Params admitidos:
 	| Nombre Param | Tipo | values |Requerido/Opcional | Ejemplo | 
 	| --- | --- | --- | --- | --- |
-	| sort | string | {oldest, newest} | Opcional | API_URL/concerts?role=oldest |
-	| startDate | string | --- | Opcional | API_URL/concerts?startDate=2022-04-01 |
-	| endDate | string | --- | Opcional | API_URL/concerts?endDate=2023-06-16 |
-	| performerName | string | --- | Opcional | API_URL/concerts?performerName=Coldplay |
+	| type | string | {concert} | Requerido | API_URL/events?type=concert |
+	| sort | string | {oldest, newest} | Opcional | API_URL/events?type=concert&sort=oldest |
+	| startDate | string | --- | Opcional | API_URL/events?type=concert&startDate=2022-04-01 |
+	| endDate | string | --- | Opcional | API_URL/events?type=concert&endDate=2023-06-16 |
+	| performerName | string | --- | Opcional | API_URL/events?type=concert&performerName=Coldplay |
 - Ejemplo respuesta:
 ```json
 		[
 		    {
 		    	"id" : 1,
-  			"concertDate" : "2022-04-01",
+  			"date" : "2022-04-01",
 			"availableTickets" : "20023",
+			"type" : "concert",
 	  		"price" : "127.97"
   			"tourName" : "Music Of The Spheres World Tour",
   			"performer" : {
@@ -127,8 +137,9 @@
 		      },
 		      {	
 	 		"id" : 2,
-  			"concertDate" : "2023-04-01",
+  			"date" : "2023-04-01",
 			"availableTickets" : "1800",
+			"type" : "concert",
 		  	"price" : "90.97"
   			"tourName" : "Future Nostalgia",
 	  		"performer" : {
@@ -149,19 +160,20 @@
 - Códigos de respuesta:
     
     → **200** OK
-	
+
 ---
 
-### 📋 Obtener concierto
+### 📋 Obtener evento
 
 - Acceso: **Público**
 - Método: **GET**
-- Endpoint : "**API_URL/concerts/{concert_id}**"
+- Endpoint : "**API_URL/events/{event_id}**"
 - Ejemplo respuesta:
 ```json
 
 {	"id" : 1,
-  	"concertDate" : "2022-04-01",
+  	"date" : "2022-04-01",
+	"type" : "concert",
 	"availableTickets" : "20023",
 	"price" : "127.97"
   	"tourName" : "Music Of The Spheres World Tour",
