@@ -4,6 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace TicketPal.DataAccess.Tests.Respository
 {
+    // All Repository test classes must inherit this base class in order for tests to work
     [TestClass]
     public abstract class RepositoryBaseConfigTest
     {
