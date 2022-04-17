@@ -81,5 +81,5 @@ La autenticación que debe ser provista por un “*Bearer Token*”.
 - [Accounts](Documentaci%C3%B3n/Markdown/Accounts.md)
 - [Genres](Documentaci%C3%B3n/Markdown/Genres.md)
 - [Performers](Documentaci%C3%B3n/Markdown/Performers.md)
-- [Concerts](Documentaci%C3%B3n/Markdown/Concerts.md)
+- [Events](Documentaci%C3%B3n/Markdown/Events.md)
 
