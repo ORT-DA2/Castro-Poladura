@@ -44,8 +44,8 @@ namespace TicketPal.DataAccess.Tests.Entity
                     GenreName = "Rock"
                 },
             };
-            concert.IdEvent = idEvent;
-            concert.EventDate = eventDate;
+            concert.Id = idEvent;
+            concert.Date = eventDate;
             concert.AvailableTickets = availableTickets;
             concert.TicketPrice = ticketPrice;
             concert.TourName = tourName;
@@ -59,8 +59,8 @@ namespace TicketPal.DataAccess.Tests.Entity
         public void GetConcertTest()
         {
 
-            Assert.AreEqual(concert.IdEvent, idEvent);
-            Assert.AreEqual(concert.EventDate, eventDate);
+            Assert.AreEqual(concert.Id, idEvent);
+            Assert.AreEqual(concert.Date, eventDate);
             Assert.AreEqual(concert.AvailableTickets, availableTickets);
             Assert.AreEqual(concert.TicketPrice, ticketPrice);
             Assert.AreEqual(concert.TourName, tourName);
