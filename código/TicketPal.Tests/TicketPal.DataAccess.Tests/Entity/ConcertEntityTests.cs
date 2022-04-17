@@ -12,7 +12,6 @@ namespace TicketPal.DataAccess.Tests.Entity
         private int id;
         private DateTime createdAt;
         private DateTime updatedAt;
-        private int idEvent;
         private DateTime eventDate;
         private int availableTickets;
         private decimal ticketPrice;
@@ -27,7 +26,6 @@ namespace TicketPal.DataAccess.Tests.Entity
             createdAt = new DateTime(2022, 04, 06);
             updatedAt = new DateTime(2022, 04, 07);
             concert = new ConcertEntity();
-            idEvent = 81;
             eventDate = new DateTime(2022, 08, 08);
             availableTickets = 1384;
             ticketPrice = 1345;
@@ -45,7 +43,7 @@ namespace TicketPal.DataAccess.Tests.Entity
                     GenreName = "Rock"
                 }
             };
-            concert.Id = idEvent;
+            concert.Id = id;
             concert.EventType = eventType;
             concert.Date = eventDate;
             concert.AvailableTickets = availableTickets;
@@ -61,7 +59,7 @@ namespace TicketPal.DataAccess.Tests.Entity
         public void GetConcertTest()
         {
 
-            Assert.AreEqual(concert.Id, idEvent);
+            Assert.AreEqual(concert.Id, id);
             Assert.AreEqual(concert.EventType, eventType);
             Assert.AreEqual(concert.Date, eventDate);
             Assert.AreEqual(concert.AvailableTickets, availableTickets);
