@@ -4,19 +4,16 @@
 
 - Acceso: **Privado - Admin**
 - Método: **POST**
-- Endpoint : "**API_URL/events?type=concert**"
-- Params admitidos:
-	| Nombre Param | Tipo | Valores |Requerido/Opcional | Ejemplo | 
-	| --- | --- | --- | --- | --- |
-	| type | string | {concert} | Requerido | API_URL/events?type=concert |
+- Endpoint : "**API_URL/events**"
+
 - Body:
 
 ```json
 {
   "date" : "2022-04-01",
   "availableTickets" : "20023",
-  "price" : "127.97"
   "type" : "concert"
+  "price" : "127.97",
   "tourName" : "Music Of The Spheres World Tour",
   "performer" : "{performer_id}"
 }
@@ -49,9 +46,10 @@
 
 ```json
 {
-  "concertDate" : "2022-04-01",
+  "date" : "2022-04-01",
   "availableTickets" : "20023",
-  "price" : "127.97"
+  "type" : "concert",
+  "price" : "127.97",
   "tourName" : "Music Of The Spheres World Tour",
   "performer" : "{performer_id}"
 }
@@ -76,7 +74,7 @@
 
 ---
 
-### 📋 Baja de concierto
+### 📋 Baja de evento
 
 - Acceso: **Privado - Admin**
 - Método: **DELETE**
@@ -101,7 +99,7 @@
 
 ---
 
-### 📋 Obtener conciertos
+### 📋 Obtener eventos
 
 - Acceso: **Público**
 - Método: **GET**
@@ -119,8 +117,9 @@
 		[
 		    {
 		    	"id" : 1,
-  			"concertDate" : "2022-04-01",
+  			"date" : "2022-04-01",
 			"availableTickets" : "20023",
+			"type" : "concert",
 	  		"price" : "127.97"
   			"tourName" : "Music Of The Spheres World Tour",
   			"performer" : {
@@ -138,8 +137,9 @@
 		      },
 		      {	
 	 		"id" : 2,
-  			"concertDate" : "2023-04-01",
+  			"date" : "2023-04-01",
 			"availableTickets" : "1800",
+			"type" : "concert",
 		  	"price" : "90.97"
   			"tourName" : "Future Nostalgia",
 	  		"performer" : {
@@ -163,7 +163,7 @@
 
 ---
 
-### 📋 Obtener concierto
+### 📋 Obtener evento
 
 - Acceso: **Público**
 - Método: **GET**
@@ -172,7 +172,8 @@
 ```json
 
 {	"id" : 1,
-  	"concertDate" : "2022-04-01",
+  	"date" : "2022-04-01",
+	"type" : "concert",
 	"availableTickets" : "20023",
 	"price" : "127.97"
   	"tourName" : "Music Of The Spheres World Tour",
