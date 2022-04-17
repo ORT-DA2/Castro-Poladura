@@ -10,4 +10,9 @@ namespace TicketPal.Domain.Constants
         SOLO_ARTIST = 1,
         BAND = 2
     }
+
+    public enum EventType
+    {
+        CONCERT = 1
+    }
 }
