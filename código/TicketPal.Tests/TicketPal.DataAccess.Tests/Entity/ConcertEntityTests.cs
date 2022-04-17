@@ -18,7 +18,7 @@ namespace TicketPal.DataAccess.Tests.Entity
         private decimal ticketPrice;
         private string tourName;
         private PerformerEntity artist;
-
+        private EventType eventType;
 
         [TestInitialize]
         public void Initialize()
@@ -32,6 +32,7 @@ namespace TicketPal.DataAccess.Tests.Entity
             availableTickets = 1384;
             ticketPrice = 1345;
             tourName = "Carrousell";
+            eventType = EventType.CONCERT;
             artist = new PerformerEntity()
             {
                 PerformerType = PerformerType.SOLO_ARTIST,
@@ -42,9 +43,10 @@ namespace TicketPal.DataAccess.Tests.Entity
                 {
                     Id = 7,
                     GenreName = "Rock"
-                },
+                }
             };
             concert.Id = idEvent;
+            concert.EventType = eventType;
             concert.Date = eventDate;
             concert.AvailableTickets = availableTickets;
             concert.TicketPrice = ticketPrice;
@@ -60,6 +62,7 @@ namespace TicketPal.DataAccess.Tests.Entity
         {
 
             Assert.AreEqual(concert.Id, idEvent);
+            Assert.AreEqual(concert.EventType, eventType);
             Assert.AreEqual(concert.Date, eventDate);
             Assert.AreEqual(concert.AvailableTickets, availableTickets);
             Assert.AreEqual(concert.TicketPrice, ticketPrice);
