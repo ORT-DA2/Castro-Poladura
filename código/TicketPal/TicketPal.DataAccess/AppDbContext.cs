@@ -5,7 +5,7 @@ using TicketPal.Domain.Entity;
 namespace TicketPal.DataAccess
 {
 
-    public class AppDbContext : DbContext
+    public class AppDbContext : DbContext, IAppDbContext
     {
         protected AppDbContext(DbContextOptions options) : base(options)
         {
@@ -23,7 +23,7 @@ namespace TicketPal.DataAccess
             //Default values for BD
 
         }
-        public DbSet<UserEntity> Accounts { get; set; }
+        public DbSet<UserEntity> Users { get; set; }
 
     }
 }
