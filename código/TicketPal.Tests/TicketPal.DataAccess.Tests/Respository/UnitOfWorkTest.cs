@@ -10,22 +10,23 @@ namespace TicketPal.DataAccess.Tests.Respository
     [TestClass]
     public class UnitOfWorkTest
     {
-        private Mock<IUnitOfWork<AppDbContext>> uow;
-        private AppDbContext dbContext;
+        private Mock<IUnitOfWork> uow;
 
         [TestInitialize]
         public void Initialize()
         {
-            uow = new Mock<IUnitOfWork<PlatformContext>>();
-            uow.Setup(x => x.GenericRepository<UserEntity>())
-                .Returns(SetUpUsersRepository());
+            uow = new Mock<IUnitOfWork>();
         }
 
         [TestMethod]
         public void GetUserRepository()
         {
 
-            Assert.IsNotNull(uow.UserRepository);
+            uow.Setup(x => x.Users)
+                .Returns(SetUpUsersRepository());
+
+            var userRepo = uow.Object.Users;
+            Assert.IsNotNull(userRepo);
         }
 
         private IGenericRepository<UserEntity> SetUpUsersRepository()
