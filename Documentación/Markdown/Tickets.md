@@ -123,11 +123,7 @@
 
 - Acceso para usuario acomodador: **Privado - supervisor**
 - Método: **UPDATE**
-- Endpoint : "**API_URL/tickets?event={event_id}**"
-- Params admitidos:
-	| Nombre Param | Tipo | Valores |Requerido/Opcional | Ejemplo | 
-	| --- | --- | --- | --- | --- |
-	| event | number | --- | Requerido | API_URL/tickets?event={event_id} |
+- Endpoint : "**API_URL/tickets**"
 - Body:
 
 ####Rol seller

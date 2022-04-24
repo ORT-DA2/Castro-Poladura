@@ -15,6 +15,7 @@ namespace TicketPal.DataAccess.Tests.Entity
         private DateTime eventDate;
         private int availableTickets;
         private decimal ticketPrice;
+        private CurrencyType currency;
         private string tourName;
         private PerformerEntity artist;
         private EventType eventType;
@@ -29,6 +30,7 @@ namespace TicketPal.DataAccess.Tests.Entity
             eventDate = new DateTime(2022, 08, 08);
             availableTickets = 1384;
             ticketPrice = 1345;
+            currency = CurrencyType.UYU; 
             tourName = "Carrousell";
             eventType = EventType.CONCERT;
             artist = new PerformerEntity()
@@ -36,7 +38,7 @@ namespace TicketPal.DataAccess.Tests.Entity
                 PerformerType = PerformerType.SOLO_ARTIST,
                 Id = 24,
                 Name = "Tom Collins",
-                StartYear = new DateTime(1999, 10, 03),
+                StartYear = "1999",
                 Genre = new GenreEntity()
                 {
                     Id = 7,
@@ -48,6 +50,7 @@ namespace TicketPal.DataAccess.Tests.Entity
             concert.Date = eventDate;
             concert.AvailableTickets = availableTickets;
             concert.TicketPrice = ticketPrice;
+            concert.CurrencyType = currency;
             concert.TourName = tourName;
             concert.Artist = artist;
             concert.Id = id;
@@ -64,6 +67,7 @@ namespace TicketPal.DataAccess.Tests.Entity
             Assert.AreEqual(concert.Date, eventDate);
             Assert.AreEqual(concert.AvailableTickets, availableTickets);
             Assert.AreEqual(concert.TicketPrice, ticketPrice);
+            Assert.AreEqual(concert.CurrencyType, currency);
             Assert.AreEqual(concert.TourName, tourName);
             Assert.AreEqual(concert.Artist, artist);
         }
