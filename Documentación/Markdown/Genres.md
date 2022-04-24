@@ -115,7 +115,7 @@
 - Params admitidos : 
 	| Nombre Param | Tipo | Requerido/Opcional | Ejemplo |
 	| --- | --- | --- | --- |
-	| role | string | Opcional | API_URL/users?role=spectator |
+	| category | string | Opcional | API_URL/genres?category=music |
 - Ejemplo respuesta:
 
 ```json
