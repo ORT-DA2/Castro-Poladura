@@ -12,12 +12,16 @@ namespace TicketPal.DataAccess.Tests.Entity
         private TicketEntity ticket;
         private UserEntity buyer;
         private DateTime purchaseDate;
-        private PerformerEntity artist;
+        private ConcertEntity concert;
+        private PerformerEntity band;
+        private List<string> artists;
+        private TicketStatus status;
 
         [TestInitialize]
         public void Initialize()
         {
             ticket = new TicketEntity();
+
             buyer = new UserEntity()
             {
                 Id = 1,
@@ -25,113 +29,59 @@ namespace TicketPal.DataAccess.Tests.Entity
                 LastName = "White",
                 Email = "swhite@gmail.com"
             };
+
             purchaseDate = new DateTime(2022, 04, 04);
-            artist = new PerformerEntity
-            {
-                PerformerType = PerformerType.SOLO_ARTIST,
-                Name = "Enrique Estilos",
-                StartYear = new DateTime(2010, 01, 13),
-                Genre = new GenreEntity
-                {
-                    Id = 1,
-                    GenreName = "Pop"
-                }
-            };
 
-        }
+            artists = new List<string>();
+            artists.Add("Freddie Mercury");
+            artists.Add("Brian May");
+            artists.Add("John Deacon");
+            artists.Add("Roger Taylor");
 
-        [TestMethod]
-        public void GetTicketTest()
-        {
-            PerformerEntity singer = new PerformerEntity
-            {
-                PerformerType = PerformerType.SOLO_ARTIST,
-                Name = "Freddie Mercury",
-                StartYear = new DateTime(1969, 01, 01),
-                Genre = new GenreEntity
-                {
-                    Id = 2,
-                    GenreName = "Rock"
-                }
-            };
-            PerformerEntity guitar = new PerformerEntity
-            {
-                PerformerType = PerformerType.SOLO_ARTIST,
-                Name = "Brian May",
-                StartYear = new DateTime(1965, 01, 01),
-                Genre = new GenreEntity
-                {
-                    Id = 2,
-                    GenreName = "Rock"
-                }
-            };
-            PerformerEntity bass = new PerformerEntity
-            {
-                PerformerType = PerformerType.SOLO_ARTIST,
-                Name = "John Deacon",
-                StartYear = new DateTime(1965, 01, 01),
-                Genre = new GenreEntity
-                {
-                    Id = 2,
-                    GenreName = "Rock"
-                }
-            };
-            PerformerEntity battery = new PerformerEntity
-            {
-                PerformerType = PerformerType.SOLO_ARTIST,
-                Name = "Roger Taylor",
-                StartYear = new DateTime(1968, 01, 01),
-                Genre = new GenreEntity
-                {
-                    Id = 2,
-                    GenreName = "Rock"
-                }
-            };
-
-            List<PerformerEntity> artistList = new List<PerformerEntity>();
-            artistList.Add(guitar);
-            artistList.Add(bass);
-            artistList.Add(battery);
-            artistList.Add(singer);
-
-
-            int idTicket = 2;
-            UserEntity buyer = new UserEntity()
-            {
-                Id = 2,
-                FirstName = "Charles",
-                LastName = "Green",
-                Email = "cgreen@gmail.com"
-            };
-            TicketStatus status = TicketStatus.USED;
-            DateTime purchaseDate = new DateTime(2022, 02, 15);
-            string tourName = "A Kind of Magic";
-            PerformerEntity artist = new PerformerEntity
+            band = new PerformerEntity
             {
                 PerformerType = PerformerType.BAND,
                 Name = "Queen",
-                StartYear = new DateTime(1970, 04, 27),
+                StartYear = "1970",
                 Genre = new GenreEntity
                 {
                     Id = 2,
                     GenreName = "Rock"
                 },
-                Artists = artistList
+                Artists = artists
             };
+            concert = new ConcertEntity
+            {
+                Id = 5,
+                CreatedAt = new DateTime(2022, 01, 13),
+                Date = new DateTime(2022, 11, 21),
+                AvailableTickets = 1981,
+                TicketPrice = 650,
+                CurrencyType = CurrencyType.USD,
+                EventType = EventType.CONCERT,
+                TourName = "A Kind of Magic",
+                Artist = band
+            };
+            status = TicketStatus.PURCHASED;
+        }
 
+        [TestMethod]
+        public void GetTicketTest()
+        {
+            int idTicket = 2;
             ticket.Id = idTicket;
             ticket.Buyer = buyer;
             ticket.Status = status;
             ticket.PurchaseDate = purchaseDate;
-            ticket.ShowName = tourName;
-            ticket.Artist = artist;
+            ticket.ShowName = concert.TourName;
+            ticket.Event = concert;
 
             Assert.AreEqual(ticket.Id, idTicket);
             Assert.AreEqual(ticket.Buyer.Id, buyer.Id);
             Assert.AreEqual(ticket.Status, status);
             Assert.AreEqual(ticket.PurchaseDate, purchaseDate);
-            Assert.AreEqual(ticket.ShowName, tourName);
-            Assert.AreEqual(ticket.Artist.Name, artist.Name);
+            Assert.AreEqual(ticket.ShowName, concert.TourName);
+            Assert.AreEqual(ticket.Event.Id, concert.Id);
         }
     }
 }

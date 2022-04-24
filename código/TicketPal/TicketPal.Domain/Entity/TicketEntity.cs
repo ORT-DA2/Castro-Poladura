@@ -9,7 +9,7 @@ namespace TicketPal.Domain.Entity
         public TicketStatus Status { get; set; }
         public DateTime PurchaseDate { get; set; }
         public string ShowName { get; set; }
-        public PerformerEntity Artist { get; set; }
+        public EventEntity Event { get; set; }
 
     }
 }

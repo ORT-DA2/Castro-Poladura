@@ -15,4 +15,10 @@ namespace TicketPal.Domain.Constants
     {
         CONCERT = 1
     }
+
+    public enum CurrencyType
+    {
+        UYU = 1,
+        USD = 2
+    }
 }
