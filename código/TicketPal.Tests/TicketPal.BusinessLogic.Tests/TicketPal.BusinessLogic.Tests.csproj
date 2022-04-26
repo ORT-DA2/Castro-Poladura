@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\TicketPal\TicketPal.Interfaces\TicketPal.Interfaces.csproj" />
+    <ProjectReference Include="..\..\TicketPal\TicketPal.Domain\TicketPal.Domain.csproj" />
   </ItemGroup>
 
 </Project>
