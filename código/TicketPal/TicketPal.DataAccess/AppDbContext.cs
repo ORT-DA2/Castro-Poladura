@@ -24,6 +24,7 @@ namespace TicketPal.DataAccess
 
         }
         public DbSet<UserEntity> Users { get; set; }
+        public DbSet<GenreEntity> Genres { get; set; }
 
     }
 }

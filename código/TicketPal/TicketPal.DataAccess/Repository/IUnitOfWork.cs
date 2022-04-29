@@ -6,5 +6,6 @@ namespace TicketPal.DataAccess.Repository
     public interface IUnitOfWork
     {
         IGenericRepository<UserEntity> Users { get; }
+        IGenericRepository<GenreEntity> Genres { get; }
     }
 }
