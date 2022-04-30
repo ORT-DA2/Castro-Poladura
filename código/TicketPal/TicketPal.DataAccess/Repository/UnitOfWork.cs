@@ -8,6 +8,7 @@ namespace TicketPal.DataAccess.Repository
     {
         private IGenericRepository<UserEntity> users;
         private IGenericRepository<GenreEntity> genres;
+        private IGenericRepository<PerformerEntity> performers;
         private AppDbContext dbContext;
 
         public UnitOfWork(DbContext context)
@@ -37,6 +38,19 @@ namespace TicketPal.DataAccess.Repository
                     return this.genres;
                 }
                 return this.genres;
+            }
+        }
+
+        public IGenericRepository<PerformerEntity> Performers
+        {
+            get
+            {
+                if (performers == null)
+                {
+                    this.performers = new PerformerRepository(dbContext);
+                    return this.performers;
+                }
+                return this.performers;
             }
         }
     }

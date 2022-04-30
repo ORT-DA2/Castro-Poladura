@@ -6,7 +6,7 @@ namespace TicketPal.DataAccess.Tests.Respository
 {
     // All Repository test classes must inherit this base class in order for tests to work
     [TestClass]
-    public abstract class RepositoryBaseConfigTest
+    public abstract class RepositoryBaseConfigTests
     {
         protected ServiceCollection Services { get; private set; }
         protected ServiceProvider ServiceProvider { get; private set; }

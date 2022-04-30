@@ -7,5 +7,6 @@ namespace TicketPal.DataAccess.Repository
     {
         IGenericRepository<UserEntity> Users { get; }
         IGenericRepository<GenreEntity> Genres { get; }
+        IGenericRepository<PerformerEntity> Performers { get; }
     }
 }

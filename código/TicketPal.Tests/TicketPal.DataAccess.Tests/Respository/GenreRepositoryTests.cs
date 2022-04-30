@@ -11,7 +11,7 @@ using TicketPal.Domain.Exceptions;
 namespace TicketPal.DataAccess.Tests.Respository
 {
     [TestClass]
-    public class GenreRepositoryTests : RepositoryBaseConfigTest
+    public class GenreRepositoryTests : RepositoryBaseConfigTests
     {
         [TestMethod]
         public void SaveGenreSuccessfully()
