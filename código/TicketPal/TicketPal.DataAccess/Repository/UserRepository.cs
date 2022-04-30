@@ -8,7 +8,7 @@ namespace TicketPal.DataAccess.Repository
 {
     public class UserRepository : GenericRepository<UserEntity>
     {
-        public UserRepository(AppDbContext context) : base(context) { }
+        public UserRepository(DbContext context) : base(context) { }
         public override void Update(UserEntity element)
         {
             var found = dbContext.Set<UserEntity>().FirstOrDefault(u => u.Id == element.Id);
