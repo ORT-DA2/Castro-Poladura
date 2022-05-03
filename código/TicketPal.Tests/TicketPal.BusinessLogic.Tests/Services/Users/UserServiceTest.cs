@@ -107,7 +107,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
         [TestMethod]
         public void UserRegistrationCorrect()
         {
-            var signInRequest = new SignInRequest
+            var signInRequest = new SignUpRequest
             {
                 Firstname = "John",
                 Lastname = "Doe",
@@ -127,7 +127,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
         [TestMethod]
         public void UserRegistrationThrowsExceptionFail()
         {
-            var signInRequest = new SignInRequest
+            var signInRequest = new SignUpRequest
             {
                 Firstname = "John",
                 Lastname = "Doe",
