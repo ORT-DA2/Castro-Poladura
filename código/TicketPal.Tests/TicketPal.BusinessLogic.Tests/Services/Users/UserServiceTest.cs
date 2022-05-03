@@ -8,6 +8,9 @@ using System;
 using TicketPal.Domain.Entity;
 using TicketPal.Domain.Exceptions;
 using TicketPal.Domain.Constants;
+using TicketPal.Domain.Models.Response;
+using TicketPal.Domain.Models.Request;
+using TicketPal.Interfaces.Services.Users;
 
 namespace TicketPal.BusinessLogic.Tests.Services.Users
 {
@@ -109,8 +112,8 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
         {
             var signInRequest = new SignUpRequest
             {
-                Firstname = "John",
-                Lastname = "Doe",
+                FirstName = "John",
+                LastName = "Doe",
                 Email = "someone@example.com",
                 Password = "myTestEnteredPassword",
                 Role = UserRole.SPECTATOR.ToString()
@@ -129,8 +132,8 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
         {
             var signInRequest = new SignUpRequest
             {
-                Firstname = "John",
-                Lastname = "Doe",
+                FirstName = "John",
+                LastName = "Doe",
                 Email = "someone@example.com",
                 Password = "myTestEnteredPassword",
                 Role = UserRole.SPECTATOR.ToString()
@@ -201,7 +204,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
 
             this.usersMock.Setup(r => r.Get(It.IsAny<int>())).Returns(dbUser);
 
-            OperationResult result = userService.DeleteAccountById(id);
+            OperationResult result = userService.DeleteUser(id);
 
             Assert.IsTrue(result.ResultCode == ResultCode.SUCCESS);
         }
@@ -285,7 +288,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
 
             this.usersMock.Setup(r => r.Delete(It.IsAny<int>())).Throws(new RepositoryException());
 
-            OperationResult result = userService.DeleteAccountById(id);
+            OperationResult result = userService.DeleteUser(id);
 
             Assert.IsTrue(result.ResultCode == ResultCode.FAIL);
         }
