@@ -7,6 +7,7 @@ using System.Linq.Expressions;
 using System;
 using TicketPal.Domain.Entity;
 using TicketPal.Domain.Exceptions;
+using TicketPal.Domain.Constants;
 
 namespace TicketPal.BusinessLogic.Tests.Services.Users
 {
@@ -35,13 +36,13 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 LastName = "Doe",
                 Email = "someone@example.com",
                 Password = BC.HashPassword(userPassword),
-                Role = UserRoles.ADMIN
+                Role = UserRole.ADMIN.ToString()
             };
 
             this.usersMock.Setup(r => r.Get(It.IsAny<Expression<Func<UserEntity, bool>>>()))
                 .Returns(dbUser);
 
-            User authenticatedUser = userService.Authenticate(authRequest);
+            User authenticatedUser = userService.Login(authRequest);
 
             Assert.IsNotNull(authenticatedUser);
             Assert.IsNotNull(authenticatedUser.Token);
@@ -52,7 +53,6 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
         public void UserAuthenticatePasswordIncorrect()
         {
             int id = 1;
-
             var authRequest = new AuthenticationRequest
             {
                 Email = "someone@example.com",
@@ -66,13 +66,12 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 LastName = "Doe",
                 Email = "someone@example.com",
                 Password = BC.HashPassword(userPassword),
-                Role = UserRoles.ADMIN
+                Role = UserRole.ADMIN.ToString()
             };
 
             this.usersMock.Setup(r => r.Get(It.IsAny<Expression<Func<UserEntity, bool>>>()))
                     .Returns(dbUser);
-
-            User authenticatedUser = userService.Authenticate(authRequest);
+            User authenticatedUser = userService.Login(authRequest);
 
             Assert.IsNull(authenticatedUser);
         }
@@ -81,7 +80,6 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
         public void UserAuthenticateNoUserFound()
         {
             int id = 1;
-
             var authRequest = new AuthenticationRequest
             {
                 Email = "someone@example.com",
@@ -95,17 +93,15 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 LastName = "Doe",
                 Email = "someone@example.com",
                 Password = BC.HashPassword(userPassword),
-                Role = UserRoles.ADMIN
+                Role = UserRole.ADMIN.ToString()
             };
 
 
             this.usersMock.Setup(r => r.Get(It.IsAny<Expression<Func<UserEntity, bool>>>()))
                     .Returns(It.IsAny<UserEntity>);
 
-            User authenticatedUser = userService.Authenticate(authRequest);
-
+            User authenticatedUser = userService.Login(authRequest);
             Assert.IsNull(authenticatedUser);
-
         }
 
         [TestMethod]
@@ -117,16 +113,15 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 Lastname = "Doe",
                 Email = "someone@example.com",
                 Password = "myTestEnteredPassword",
-                Role = UserRoles.SPECTATOR
+                Role = UserRole.SPECTATOR.ToString()
             };
 
             this.usersMock.Setup(r => r.Exists(It.IsAny<int>())).Returns(false);
             this.usersMock.Setup(r => r.Add(It.IsAny<UserEntity>())).Verifiable();
 
-            OperationResult result = userService.Register(signInRequest);
+            OperationResult result = userService.SignUp(signInRequest);
 
             Assert.IsTrue(result.ResultCode == ResultCode.SUCCESS);
-
         }
 
         [TestMethod]
@@ -138,17 +133,16 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 Lastname = "Doe",
                 Email = "someone@example.com",
                 Password = "myTestEnteredPassword",
-                Role = UserRoles.SPECTATOR
+                Role = UserRole.SPECTATOR.ToString()
             };
 
             this.usersMock.Setup(r => r.Exists(It.IsAny<int>())).Returns(false);
             this.usersMock.Setup(r => r.Add(It.IsAny<UserEntity>()))
                 .Throws(new RepositoryException());
 
-            OperationResult result = userService.Register(signInRequest);
+            OperationResult result = userService.SignUp(signInRequest);
 
             Assert.IsTrue(result.ResultCode == ResultCode.FAIL);
-
         }
 
 
@@ -157,25 +151,22 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
         {
             IEnumerable<UserEntity> dbAccounts = new List<UserEntity>()
             {
-                new UserEntity{Id=1,FirstName="Jennifer",LastName="Garner",Email="user1@example.com",Role=UserRoles.ADMIN},
-                new UserEntity{Id=2,FirstName="John",LastName="Doe",Email="user2@example.com",Role=UserRoles.SELLER},
-                new UserEntity{Id=3,FirstName="Jane",LastName="Doe",Email="user3@example.com",Role=UserRoles.SUPERVISOR},
-                new UserEntity{Id=3,FirstName="Steve",LastName="Black",Email="user4@example.com",Role=UserRoles.SPECTATOR}
+                new UserEntity{Id=1,FirstName="Jennifer",LastName="Garner",Email="user1@example.com",Role=UserRole.SPECTATOR.ToString()},
+                new UserEntity{Id=2,FirstName="John",LastName="Doe",Email="user2@example.com",Role=UserRole.SPECTATOR.ToString()},
+                new UserEntity{Id=3,FirstName="Jane",LastName="Doe",Email="user3@example.com",Role=UserRole.SPECTATOR.ToString()},
+                new UserEntity{Id=3,FirstName="Steve",LastName="Black",Email="user4@example.com",Role=UserRole.SPECTATOR.ToString()}
             };
 
             this.usersMock.Setup(r => r.GetAll()).Returns(dbAccounts);
-
             IEnumerable<User> result = userService.GetUsers();
 
             Assert.IsTrue(result.ToList().Count == 4);
-
         }
 
         [TestMethod]
         public void GetUserById()
         {
             int id = 1;
-
             var dbUser = new UserEntity
             {
                 Id = id,
@@ -183,7 +174,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 LastName = "Doe",
                 Email = "someone@example.com",
                 Password = BC.HashPassword(userPassword),
-                Role = UserRoles.ADMIN
+                Role = UserRole.ADMIN.ToString()
             };
 
             this.usersMock.Setup(r => r.Get(It.IsAny<int>())).Returns(dbUser);
@@ -198,7 +189,6 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
         public void DeleteAccountCorrectly()
         {
             var id = 1;
-
             var dbUser = new UserEntity
             {
                 Id = id,
@@ -206,7 +196,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 LastName = "Doe",
                 Email = "someone@example.com",
                 Password = BC.HashPassword(userPassword),
-                Role = UserRoles.ADMIN
+                Role = UserRole.ADMIN.ToString()
             };
 
             this.usersMock.Setup(r => r.Get(It.IsAny<int>())).Returns(dbUser);
@@ -219,17 +209,18 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
         [TestMethod]
         public void UpdateUserCorrectly()
         {
-
-            var updateRequest = new UpdateSpectatorUserRequest
+            var updateRequest = new UpdateUserRequest
             {
-                FirstName = "David",
-                Lastname = "Foster",
-                Password = "somePassword"
+                FirstName = "John",
+                LastName = "Doe",
+                Password = BC.HashPassword(userPassword),
+                Email = "someone@example.com",
+                Role = "nonExistentRole"
             };
 
             this.usersMock.Setup(p => p.Update(It.IsAny<UserEntity>())).Verifiable();
 
-            OperationResult expected = userService.UpdateAccount(updateRequest);
+            OperationResult expected = userService.UpdateUser(updateRequest);
 
             Assert.IsTrue(expected.ResultCode == ResultCode.SUCCESS);
         }
@@ -237,17 +228,18 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
         [TestMethod]
         public void UpdateUserThrowsError()
         {
-
-            var updateRequest = new UpdateSpectatorUserRequest
+            var updateRequest = new UpdateUserRequest
             {
                 FirstName = "John",
                 LastName = "Doe",
-                Password = BC.HashPassword(userPassword)
+                Password = BC.HashPassword(userPassword),
+                Email = "someone@example.com",
+                Role = UserRole.SELLER.ToString()
             };
 
             this.usersMock.Setup(p => p.Update(It.IsAny<UserEntity>())).Throws(new RepositoryException());
 
-            OperationResult expected = userService.UpdateAccount(updateRequest);
+            OperationResult expected = userService.UpdateUser(updateRequest);
 
             Assert.IsTrue(expected.ResultCode == ResultCode.FAIL);
         }
@@ -255,7 +247,6 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
         [TestMethod]
         public void UpdateUserRoleNotAllowed()
         {
-
             var updateRequest = new UpdateUserRequest
             {
                 FirstName = "John",
@@ -265,9 +256,26 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 Role = "nonExistentRole"
             };
 
-            OperationResult expected = userService.UpdateAccount(updateRequest);
+            OperationResult expected = userService.UpdateUser(updateRequest);
 
             Assert.IsTrue(expected.ResultCode == ResultCode.FAIL);
+        }
+
+        [TestMethod]
+        public void UpdateUserByAdmin()
+        {
+            var updateRequest = new UpdateUserRequest
+            {
+                FirstName = "John",
+                LastName = "Doe",
+                Email = "someone@example.com",
+                Password = BC.HashPassword(userPassword),
+                Role = UserRole.SPECTATOR.ToString()
+            };
+
+            OperationResult expected = userService.UpdateUser(updateRequest,UserRole.ADMIN);
+
+            Assert.IsTrue(expected.ResultCode == ResultCode.SUCCESS);
         }
 
         [TestMethod]
