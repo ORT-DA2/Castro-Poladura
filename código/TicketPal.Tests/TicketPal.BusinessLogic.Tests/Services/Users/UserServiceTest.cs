@@ -1,5 +1,3 @@
-
-using AutoMapper;
 using BC = BCrypt.Net.BCrypt;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -37,7 +35,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 LastName = "Doe",
                 Email = "someone@example.com",
                 Password = BC.HashPassword(userPassword),
-                Role = "admin"
+                Role = UserRoles.ADMIN
             };
 
             this.usersMock.Setup(r => r.Get(It.IsAny<Expression<Func<UserEntity, bool>>>()))
@@ -68,7 +66,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 LastName = "Doe",
                 Email = "someone@example.com",
                 Password = BC.HashPassword(userPassword),
-                Role = "admin"
+                Role = UserRoles.ADMIN
             };
 
             this.usersMock.Setup(r => r.Get(It.IsAny<Expression<Func<UserEntity, bool>>>()))
@@ -97,7 +95,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 LastName = "Doe",
                 Email = "someone@example.com",
                 Password = BC.HashPassword(userPassword),
-                Role = "admin"
+                Role = UserRoles.ADMIN
             };
 
 
@@ -185,7 +183,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 LastName = "Doe",
                 Email = "someone@example.com",
                 Password = BC.HashPassword(userPassword),
-                Role = "admin"
+                Role = UserRoles.ADMIN
             };
 
             this.usersMock.Setup(r => r.Get(It.IsAny<int>())).Returns(dbUser);
@@ -208,7 +206,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 LastName = "Doe",
                 Email = "someone@example.com",
                 Password = BC.HashPassword(userPassword),
-                Role = "admin"
+                Role = UserRoles.ADMIN
             };
 
             this.usersMock.Setup(r => r.Get(It.IsAny<int>())).Returns(dbUser);
@@ -244,9 +242,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
             {
                 FirstName = "John",
                 LastName = "Doe",
-                Email = "someone@example.com",
-                Password = BC.HashPassword(userPassword),
-                Role = "nonExistentRole"
+                Password = BC.HashPassword(userPassword)
             };
 
             this.usersMock.Setup(p => p.Update(It.IsAny<UserEntity>())).Throws(new RepositoryException());
@@ -262,9 +258,10 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
 
             var updateRequest = new UpdateUserRequest
             {
-                Id = 1,
+                FirstName = "John",
+                LastName = "Doe",
                 Email = "someone@example.com",
-                Password = "somePassword",
+                Password = BC.HashPassword(userPassword),
                 Role = "nonExistentRole"
             };
 
