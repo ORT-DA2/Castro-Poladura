@@ -1,4 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using TicketPal.Domain.Constants;
+using TicketPal.Domain.Models.Request;
 
 namespace TicketPal.Domain.Tests.Models.Request
 {
@@ -32,10 +34,10 @@ namespace TicketPal.Domain.Tests.Models.Request
         {
             UpdateUserRequest request = new UpdateUserRequest
             {
-                Firstname = "someName"
+                FirstName = "someName"
             };
 
-            Assert.IsNotNull(request.Firstname);
+            Assert.IsNotNull(request.FirstName);
         }
 
         [TestMethod]
@@ -43,10 +45,10 @@ namespace TicketPal.Domain.Tests.Models.Request
         {
             UpdateUserRequest request = new UpdateUserRequest
             {
-                Lastname = "someName"
+                LastName = "someName"
             };
 
-            Assert.IsNotNull(request.Lastname);
+            Assert.IsNotNull(request.LastName);
         }
 
         [TestMethod]
@@ -54,7 +56,7 @@ namespace TicketPal.Domain.Tests.Models.Request
         {
             UpdateUserRequest request = new UpdateUserRequest
             {
-                Role = UserRoles.ADMIN
+                Role = UserRole.ADMIN.ToString()
             };
 
             Assert.IsNotNull(request.Role);

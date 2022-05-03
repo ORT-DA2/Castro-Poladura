@@ -1,29 +1,31 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using TicketPal.Domain.Constants;
+using TicketPal.Domain.Models.Request;
 
 namespace TicketPal.Domain.Tests.Models.Request
 {
     [TestClass]
     public class SignInRequestTest
     {
-        SignInRequest signInRequest;
+        SignUpRequest signInRequest;
 
         [TestInitialize]
         public void SetUp()
         {
-            signInRequest = new SignInRequest
+            signInRequest = new SignUpRequest
             {
-                Firstname = "John",
-                Lastname = "Doe",
+                FirstName = "John",
+                LastName = "Doe",
                 Email = "someone@example.com",
                 Password = "myTestEnteredPassword",
-                Role = UserRoles.SPECTATOR
+                Role = UserRole.SPECTATOR.ToString()
             };
         }
 
         [TestMethod]
         public void CheckNameEquals()
         {
-            Assert.AreEqual("John", signInRequest.Firstname);
+            Assert.AreEqual("John", signInRequest.FirstName);
 
         }
 
@@ -42,13 +44,13 @@ namespace TicketPal.Domain.Tests.Models.Request
         [TestMethod]
         public void CheckAccountRole_CorrectRole()
         {
-            Assert.AreEqual(UserRoles.SPECTATOR, signInRequest.Role);
+            Assert.AreEqual(UserRole.SPECTATOR.ToString(), signInRequest.Role.ToString());
         }
 
         [TestMethod]
         public void CheckAccountRole_IncorrectRole()
         {
-            Assert.AreNotEqual("Role2", signInRequest.Role);
+            Assert.AreNotEqual("Role2", signInRequest.Role.ToString());
         }
 
         [TestMethod]
