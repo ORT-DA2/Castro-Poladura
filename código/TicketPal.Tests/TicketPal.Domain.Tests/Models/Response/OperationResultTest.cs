@@ -1,4 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using TicketPal.Domain.Constants;
+using TicketPal.Domain.Models.Response;
 
 namespace TicketPal.Domain.Tests.Models.Response
 {
