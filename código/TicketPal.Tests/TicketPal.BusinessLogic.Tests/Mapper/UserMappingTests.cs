@@ -12,7 +12,7 @@ namespace TicketPal.BusinessLogic.Tests.Mapper
         [TestMethod]
         public void UserEntityToUserMapperTest()
         {
-            var config = new MapperConfiguration(cfg => cfg.AddProfile<AutoMapping>());
+            var config = new MapperConfiguration(cfg => cfg.AddProfile<UserMapping>());
             var mapper = config.CreateMapper();
 
             var toBeMapped = new UserEntity
