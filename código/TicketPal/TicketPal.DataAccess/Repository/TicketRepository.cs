@@ -7,7 +7,7 @@ using TicketPal.Interfaces.Repository;
 
 namespace TicketPal.DataAccess.Repository
 {
-    public class TicketRepository : GenericRepository<TicketEntity>, ITicketRepository
+    public class TicketRepository : GenericRepository<TicketEntity>
     {
         public TicketRepository(AppDbContext context) : base(context)
         {

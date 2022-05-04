@@ -1,6 +1,8 @@
-﻿namespace TicketPal.Interfaces.Repository
+﻿using TicketPal.Domain.Entity;
+
+namespace TicketPal.Interfaces.Repository
 {
-    public interface IConcertRepository
+    public interface IConcertRepository : IGenericRepository<ConcertEntity>
     {
     }
 }
