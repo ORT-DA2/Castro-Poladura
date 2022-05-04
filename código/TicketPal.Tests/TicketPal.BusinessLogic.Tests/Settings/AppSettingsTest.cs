@@ -1,4 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using TicketPal.BusinessLogic.Settings.Api;
 
 namespace TicketPal.BusinessLogic.Tests.Settings
 {
@@ -9,9 +10,7 @@ namespace TicketPal.BusinessLogic.Tests.Settings
         public void TestJwtSecretNotNull()
         {
             AppSettings settings = new AppSettings();
-
             settings.JwtSecret = "myTestJwtSecret";
-
             Assert.IsNotNull(settings.JwtSecret);
         }
     }

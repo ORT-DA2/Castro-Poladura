@@ -10,7 +10,8 @@ using TicketPal.Domain.Exceptions;
 using TicketPal.Domain.Constants;
 using TicketPal.Domain.Models.Response;
 using TicketPal.Domain.Models.Request;
-using TicketPal.Interfaces.Services.Users;
+using Microsoft.Extensions.Options;
+using TicketPal.BusinessLogic.Settings.Api;
 
 namespace TicketPal.BusinessLogic.Tests.Services.Users
 {
@@ -19,13 +20,15 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
     {
         private string jwtTestSecret;
         private string userPassword;
-        private IUserService userService;
 
         [TestMethod]
         public void UserAuthenticateCorrectly()
         {
             int id = 1;
-
+            this.userPassword = "somePassword";
+            this.jwtTestSecret = "23jrb783v29fwfvfg2874gf286fce8";
+            var testAppsettings = Options.Create(new AppSettings { JwtSecret = jwtTestSecret });
+            
             var authRequest = new AuthenticationRequest
             {
                 Email = "someone@example.com",
@@ -45,6 +48,11 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
             this.usersMock.Setup(r => r.Get(It.IsAny<Expression<Func<UserEntity, bool>>>()))
                 .Returns(dbUser);
 
+            this.userService = new UserService(
+                this.usersMock.Object,
+                testAppsettings,
+                this.mapper
+            );
             User authenticatedUser = userService.Login(authRequest);
 
             Assert.IsNotNull(authenticatedUser);
@@ -56,6 +64,10 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
         public void UserAuthenticatePasswordIncorrect()
         {
             int id = 1;
+            this.userPassword = "somePassword";
+            this.jwtTestSecret = "23jrb783v29fwfvfg2874gf286fce8";
+            var testAppsettings = Options.Create(new AppSettings { JwtSecret = jwtTestSecret });
+
             var authRequest = new AuthenticationRequest
             {
                 Email = "someone@example.com",
@@ -74,6 +86,12 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
 
             this.usersMock.Setup(r => r.Get(It.IsAny<Expression<Func<UserEntity, bool>>>()))
                     .Returns(dbUser);
+            
+            this.userService = new UserService(
+                this.usersMock.Object,
+                testAppsettings,
+                this.mapper
+            );
             User authenticatedUser = userService.Login(authRequest);
 
             Assert.IsNull(authenticatedUser);
@@ -83,6 +101,10 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
         public void UserAuthenticateNoUserFound()
         {
             int id = 1;
+            this.userPassword = "somePassword";
+            this.jwtTestSecret = "23jrb783v29fwfvfg2874gf286fce8";
+            var testAppsettings = Options.Create(new AppSettings { JwtSecret = jwtTestSecret });
+
             var authRequest = new AuthenticationRequest
             {
                 Email = "someone@example.com",
@@ -103,7 +125,13 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
             this.usersMock.Setup(r => r.Get(It.IsAny<Expression<Func<UserEntity, bool>>>()))
                     .Returns(It.IsAny<UserEntity>);
 
+            this.userService = new UserService(
+                this.usersMock.Object,
+                testAppsettings,
+                this.mapper
+            );
             User authenticatedUser = userService.Login(authRequest);
+            
             Assert.IsNull(authenticatedUser);
         }
 
