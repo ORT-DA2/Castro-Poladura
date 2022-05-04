@@ -14,8 +14,8 @@ namespace TicketPal.Domain.Tests.Models.Request
         {
             signInRequest = new SignUpRequest
             {
-                FirstName = "John",
-                LastName = "Doe",
+                Firstname = "John",
+                Lastname = "Doe",
                 Email = "someone@example.com",
                 Password = "myTestEnteredPassword",
                 Role = UserRole.SPECTATOR.ToString()
@@ -25,7 +25,7 @@ namespace TicketPal.Domain.Tests.Models.Request
         [TestMethod]
         public void CheckNameEquals()
         {
-            Assert.AreEqual("John", signInRequest.FirstName);
+            Assert.AreEqual("John", signInRequest.Firstname);
 
         }
 

@@ -34,10 +34,10 @@ namespace TicketPal.Domain.Tests.Models.Request
         {
             UpdateUserRequest request = new UpdateUserRequest
             {
-                FirstName = "someName"
+                Firstname = "someName"
             };
 
-            Assert.IsNotNull(request.FirstName);
+            Assert.IsNotNull(request.Firstname);
         }
 
         [TestMethod]
@@ -45,10 +45,10 @@ namespace TicketPal.Domain.Tests.Models.Request
         {
             UpdateUserRequest request = new UpdateUserRequest
             {
-                LastName = "someName"
+                Lastname = "someName"
             };
 
-            Assert.IsNotNull(request.LastName);
+            Assert.IsNotNull(request.Lastname);
         }
 
         [TestMethod]
