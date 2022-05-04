@@ -1,9 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TicketPal.DataAccess.Repository;
 using TicketPal.Domain.Entity;
 using TicketPal.Domain.Exceptions;
@@ -44,7 +40,7 @@ namespace TicketPal.DataAccess.Tests.Respository
             };
             var genre2 = new GenreEntity
             {
-                Id = 2,
+                Id = 1,
                 GenreName = genreName
             };
 
@@ -99,21 +95,6 @@ namespace TicketPal.DataAccess.Tests.Respository
             repository.Add(genre);
 
             Assert.IsTrue(repository.Exists(genre.Id));
-        }
-
-        [TestMethod]
-        public void ExistGenreByNameReturnsTrue()
-        {
-            var genre = new GenreEntity
-            {
-                Id = 1,
-                GenreName = "Electronic"
-            };
-
-            var repository = new GenreRepository(dbContext);
-            repository.Add(genre);
-
-            Assert.IsTrue(repository.ExistGenreName(genre.GenreName));
         }
 
         [TestMethod]

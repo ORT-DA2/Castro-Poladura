@@ -1,15 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TicketPal.Domain.Entity;
 using TicketPal.Domain.Exceptions;
+using TicketPal.Interfaces.Repository;
 
 namespace TicketPal.DataAccess.Repository
 {
-    public class PerformerRepository : GenericRepository<PerformerEntity>
+    public class PerformerRepository : GenericRepository<PerformerEntity>, IPerformerRepository
     {
         public PerformerRepository(AppDbContext context) : base(context)
         {
@@ -17,7 +15,7 @@ namespace TicketPal.DataAccess.Repository
 
         public override void Add(PerformerEntity element)
         {
-            if (Exists(element.Id) || ExistPerformerName(element.Name))
+            if (Exists(element.Id))
             {
                 throw new RepositoryException("The performer you are trying to add already exists");
             }
@@ -45,11 +43,6 @@ namespace TicketPal.DataAccess.Repository
 
             dbContext.SaveChanges();
             dbContext.Entry(found).State = EntityState.Modified;
-        }
-
-        public bool ExistPerformerName(string name)
-        {
-            return dbContext.Set<PerformerEntity>().Any(item => item.Name == name);
         }
     }
 }

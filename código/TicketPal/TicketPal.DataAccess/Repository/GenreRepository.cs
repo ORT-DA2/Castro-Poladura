@@ -1,15 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TicketPal.Domain.Entity;
 using TicketPal.Domain.Exceptions;
+using TicketPal.Interfaces.Repository;
 
 namespace TicketPal.DataAccess.Repository
 {
-    public class GenreRepository : GenericRepository<GenreEntity>
+    public class GenreRepository : GenericRepository<GenreEntity>, IGenreRepository
     {
         public GenreRepository(AppDbContext context) : base(context)
         {
@@ -17,7 +15,7 @@ namespace TicketPal.DataAccess.Repository
 
         public override void Add(GenreEntity element)
         {
-            if (Exists(element.Id) || ExistGenreName(element.GenreName))
+            if (Exists(element.Id))
             {
                 throw new RepositoryException("The genre you are trying to add already exists");
             }
@@ -41,11 +39,6 @@ namespace TicketPal.DataAccess.Repository
 
             dbContext.SaveChanges();
             dbContext.Entry(found).State = EntityState.Modified;
-        }
-
-        public bool ExistGenreName (string name)
-        {
-            return dbContext.Set<GenreEntity>().Any(item => item.GenreName == name);
         }
     }
 }

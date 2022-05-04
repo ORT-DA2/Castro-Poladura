@@ -1,9 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TicketPal.DataAccess.Repository;
 using TicketPal.Domain.Constants;
 using TicketPal.Domain.Entity;
@@ -25,9 +21,7 @@ namespace TicketPal.DataAccess.Tests.Respository
                 Id = 1,
                 GenreName = "Electropop"
             };
-            List<string> artists = new List<string>();
-            artists.Add("Guy-Manuel de Homem-Christo");
-            artists.Add("Thomas Bangalter");
+            string artists = "Guy-Manuel de Homem-Christo|Thomas Bangalter";
 
             var performer = new PerformerEntity
             {
@@ -69,7 +63,7 @@ namespace TicketPal.DataAccess.Tests.Respository
 
             var performer2 = new PerformerEntity
             {
-                Id = 2,
+                Id = 1,
                 Name = performerName,
                 StartYear = startYear,
                 PerformerType = performerType,
@@ -149,11 +143,7 @@ namespace TicketPal.DataAccess.Tests.Respository
                 Id = 1,
                 GenreName = "Rock"
             };
-            List<string> artists = new List<string>();
-            artists.Add("Andrés Ciro Martínez");
-            artists.Add("Miguel Ángel Rodríguez");
-            artists.Add("Sebastián Cardero");
-            artists.Add("Juan Ignacio Bisio");
+            string artists = "Andrés Ciro Martínez|Miguel Ángel Rodríguez|Sebastián Cardero|Juan Ignacio Bisio";
 
             var performer = new PerformerEntity
             {
@@ -169,33 +159,6 @@ namespace TicketPal.DataAccess.Tests.Respository
             repository.Add(performer);
 
             Assert.IsTrue(repository.Exists(performer.Id));
-        }
-
-        [TestMethod]
-        public void ExistPerformerByNameReturnsTrue()
-        {
-            string performerName = "Bryan Adams";
-            string startYear = "1975";
-            PerformerType performerType = PerformerType.SOLO_ARTIST;
-            GenreEntity genre = new GenreEntity()
-            {
-                Id = 1,
-                GenreName = "Rock"
-            };
-
-            var performer = new PerformerEntity
-            {
-                Id = 1,
-                Name = performerName,
-                StartYear = startYear,
-                PerformerType = performerType,
-                Genre = genre
-            };
-
-            var repository = new PerformerRepository(dbContext);
-            repository.Add(performer);
-
-            Assert.IsTrue(repository.ExistPerformerName(performer.Name));
         }
 
         [TestMethod]
@@ -238,11 +201,7 @@ namespace TicketPal.DataAccess.Tests.Respository
                 Id = 1,
                 GenreName = "Rock"
             };
-            List<string> artists = new List<string>();
-            artists.Add("Marciano Cantero");
-            artists.Add("Felipe Staiti");
-            artists.Add("Jota Morelli");
-            artists.Add("Juan Pablo Staiti");
+            string artists = "Marciano Cantero|Felipe Staiti|Jota Morelli|Juan Pablo Staiti";
 
             var performer = new PerformerEntity
             {
@@ -269,11 +228,7 @@ namespace TicketPal.DataAccess.Tests.Respository
                 Id = 1,
                 GenreName = "Alternative Rock"
             };
-            List<string> artists = new List<string>();
-            artists.Add("Tom Chaplin");
-            artists.Add("Tim Rice-Oxley");
-            artists.Add("Richard Hughes");
-            artists.Add("Jesse Quin");
+            string artists = "Tom Chaplin|Tim Rice-Oxley|Richard Hughes|Jesse Quin";
 
             var performer = new PerformerEntity
             {
@@ -306,15 +261,8 @@ namespace TicketPal.DataAccess.Tests.Respository
                 GenreName = "Folk rock"
             };
 
-            string performerName2 = "Rock and roll";
-            string startYear2 = "1959";
-            PerformerType performerType2 = PerformerType.SOLO_ARTIST;
-            GenreEntity genre2 = new GenreEntity()
-            {
-                Id = 1,
-                GenreName = "Folk rock"
-            };
-
+            string performerName2 = "Bob Marley";
+            string startYear2 = "1960";
 
             var performer1 = new PerformerEntity
             {
@@ -327,11 +275,11 @@ namespace TicketPal.DataAccess.Tests.Respository
 
             var performer2 = new PerformerEntity
             {
-                Id = 1,
+                Id = 2,
                 Name = performerName2,
                 StartYear = startYear2,
-                PerformerType = performerType2,
-                Genre = genre2
+                PerformerType = performerType,
+                Genre = genre
             };
 
             var repository = new PerformerRepository(dbContext);
@@ -389,11 +337,7 @@ namespace TicketPal.DataAccess.Tests.Respository
                 Id = 1,
                 GenreName = "Punk rock"
             };
-            List<string> artists = new List<string>();
-            artists.Add("Mariano Gabriel Martínez");
-            artists.Add("Luciano Scaglione");
-            artists.Add("Leonardo De Cecco");
-            artists.Add("Martín Locarnini");
+            string artists = "Mariano Gabriel Martínez|Luciano Scaglione|Leonardo De Cecco|Martín Locarnini";
 
             var performer = new PerformerEntity
             {
