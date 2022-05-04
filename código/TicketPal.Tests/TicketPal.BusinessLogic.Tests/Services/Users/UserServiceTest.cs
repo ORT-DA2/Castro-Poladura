@@ -35,8 +35,8 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
             var dbUser = new UserEntity
             {
                 Id = id,
-                FirstName = "John",
-                LastName = "Doe",
+                Firstname = "John",
+                Lastname = "Doe",
                 Email = "someone@example.com",
                 Password = BC.HashPassword(userPassword),
                 Role = UserRole.ADMIN.ToString()
@@ -65,8 +65,8 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
             var dbUser = new UserEntity
             {
                 Id = id,
-                FirstName = "John",
-                LastName = "Doe",
+                Firstname = "John",
+                Lastname = "Doe",
                 Email = "someone@example.com",
                 Password = BC.HashPassword(userPassword),
                 Role = UserRole.ADMIN.ToString()
@@ -92,8 +92,8 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
             var dbUser = new UserEntity
             {
                 Id = id,
-                FirstName = "John",
-                LastName = "Doe",
+                Firstname = "John",
+                Lastname = "Doe",
                 Email = "someone@example.com",
                 Password = BC.HashPassword(userPassword),
                 Role = UserRole.ADMIN.ToString()
@@ -112,8 +112,8 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
         {
             var signInRequest = new SignUpRequest
             {
-                FirstName = "John",
-                LastName = "Doe",
+                Firstname = "John",
+                Lastname = "Doe",
                 Email = "someone@example.com",
                 Password = "myTestEnteredPassword",
                 Role = UserRole.SPECTATOR.ToString()
@@ -132,8 +132,8 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
         {
             var signInRequest = new SignUpRequest
             {
-                FirstName = "John",
-                LastName = "Doe",
+                Firstname = "John",
+                Lastname = "Doe",
                 Email = "someone@example.com",
                 Password = "myTestEnteredPassword",
                 Role = UserRole.SPECTATOR.ToString()
@@ -154,10 +154,10 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
         {
             IEnumerable<UserEntity> dbAccounts = new List<UserEntity>()
             {
-                new UserEntity{Id=1,FirstName="Jennifer",LastName="Garner",Email="user1@example.com",Role=UserRole.SPECTATOR.ToString()},
-                new UserEntity{Id=2,FirstName="John",LastName="Doe",Email="user2@example.com",Role=UserRole.SPECTATOR.ToString()},
-                new UserEntity{Id=3,FirstName="Jane",LastName="Doe",Email="user3@example.com",Role=UserRole.SPECTATOR.ToString()},
-                new UserEntity{Id=3,FirstName="Steve",LastName="Black",Email="user4@example.com",Role=UserRole.SPECTATOR.ToString()}
+                new UserEntity{Id=1,Firstname="Jennifer",Lastname="Garner",Email="user1@example.com",Role=UserRole.SPECTATOR.ToString()},
+                new UserEntity{Id=2,Firstname="John",Lastname="Doe",Email="user2@example.com",Role=UserRole.SPECTATOR.ToString()},
+                new UserEntity{Id=3,Firstname="Jane",Lastname="Doe",Email="user3@example.com",Role=UserRole.SPECTATOR.ToString()},
+                new UserEntity{Id=3,Firstname="Steve",Lastname="Black",Email="user4@example.com",Role=UserRole.SPECTATOR.ToString()}
             };
 
             this.usersMock.Setup(r => r.GetAll()).Returns(dbAccounts);
@@ -173,8 +173,8 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
             var dbUser = new UserEntity
             {
                 Id = id,
-                FirstName = "John",
-                LastName = "Doe",
+                Firstname = "John",
+                Lastname = "Doe",
                 Email = "someone@example.com",
                 Password = BC.HashPassword(userPassword),
                 Role = UserRole.ADMIN.ToString()
@@ -195,8 +195,8 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
             var dbUser = new UserEntity
             {
                 Id = id,
-                FirstName = "John",
-                LastName = "Doe",
+                Firstname = "John",
+                Lastname = "Doe",
                 Email = "someone@example.com",
                 Password = BC.HashPassword(userPassword),
                 Role = UserRole.ADMIN.ToString()
@@ -214,8 +214,8 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
         {
             var updateRequest = new UpdateUserRequest
             {
-                FirstName = "John",
-                LastName = "Doe",
+                Firstname = "John",
+                Lastname = "Doe",
                 Password = BC.HashPassword(userPassword),
                 Email = "someone@example.com",
                 Role = "nonExistentRole"
@@ -233,8 +233,8 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
         {
             var updateRequest = new UpdateUserRequest
             {
-                FirstName = "John",
-                LastName = "Doe",
+                Firstname = "John",
+                Lastname = "Doe",
                 Password = BC.HashPassword(userPassword),
                 Email = "someone@example.com",
                 Role = UserRole.SELLER.ToString()
@@ -252,8 +252,8 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
         {
             var updateRequest = new UpdateUserRequest
             {
-                FirstName = "John",
-                LastName = "Doe",
+                Firstname = "John",
+                Lastname = "Doe",
                 Email = "someone@example.com",
                 Password = BC.HashPassword(userPassword),
                 Role = "nonExistentRole"
@@ -269,8 +269,8 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
         {
             var updateRequest = new UpdateUserRequest
             {
-                FirstName = "John",
-                LastName = "Doe",
+                Firstname = "John",
+                Lastname = "Doe",
                 Email = "someone@example.com",
                 Password = BC.HashPassword(userPassword),
                 Role = UserRole.SPECTATOR.ToString()
