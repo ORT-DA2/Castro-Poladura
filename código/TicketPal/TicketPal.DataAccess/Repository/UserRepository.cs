@@ -19,8 +19,8 @@ namespace TicketPal.DataAccess.Repository
             }
 
             found.Role = (element.Role == null ? found.Role : element.Role);
-            found.FirstName = (element.FirstName == null ? found.FirstName : element.FirstName);
-            found.LastName = (element.LastName == null ? found.LastName : element.LastName);
+            found.Firstname = (element.Firstname == null ? found.Firstname : element.Firstname);
+            found.Lastname = (element.Lastname == null ? found.Lastname : element.Lastname);
             found.Email = (element.Email == null ? found.Email : element.Email);
             found.Password = (element.Password == null ? found.Password : element.Password);
             found.UpdatedAt = DateTime.Now;
