@@ -10,8 +10,6 @@ using TicketPal.Domain.Exceptions;
 using TicketPal.Domain.Constants;
 using TicketPal.Domain.Models.Response;
 using TicketPal.Domain.Models.Request;
-using Microsoft.Extensions.Options;
-using TicketPal.BusinessLogic.Settings.Api;
 
 namespace TicketPal.BusinessLogic.Tests.Services.Users
 {
