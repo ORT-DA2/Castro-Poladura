@@ -1,5 +1,6 @@
 using AutoMapper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using TicketPal.BusinessLogic.Mapper;
 using TicketPal.Domain.Constants;
 using TicketPal.Domain.Entity;
 using TicketPal.Domain.Models.Response;
