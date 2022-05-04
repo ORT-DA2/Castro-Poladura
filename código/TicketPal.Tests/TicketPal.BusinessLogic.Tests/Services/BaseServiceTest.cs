@@ -3,6 +3,7 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using TicketPal.BusinessLogic.Mapper;
 using TicketPal.Interfaces.Repository;
 
 namespace TicketPal.BusinessLogic.Tests.Services
