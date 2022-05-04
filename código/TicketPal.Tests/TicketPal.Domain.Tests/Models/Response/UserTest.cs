@@ -14,7 +14,8 @@ namespace TicketPal.Domain.Tests.Models.Response
             accountToBeTested = new User
             {
                 Id = 1,
-                Name = "someName",
+                Firstname = "someName",
+                Lastname = "someLastname",
                 Email = "myaccount@example.com",
                 Password = "myPassword",
                 Token = "UcuJ7gBX87",
@@ -29,9 +30,16 @@ namespace TicketPal.Domain.Tests.Models.Response
         }
 
         [TestMethod]
-        public void CheckNameEquals()
+        public void CheckFirstnameEquals()
         {
-            Assert.AreEqual("someName", accountToBeTested.Name);
+            Assert.AreEqual("someName", accountToBeTested.Firstname);
+
+        }
+
+        [TestMethod]
+        public void CheckLastnameEquals()
+        {
+            Assert.AreEqual("someLastname", accountToBeTested.Lastname);
 
         }
 
