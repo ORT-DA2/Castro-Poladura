@@ -1,9 +1,11 @@
 
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using TicketPal.BusinessLogic.Mapper;
+using TicketPal.BusinessLogic.Settings.Api;
 using TicketPal.Interfaces.Repository;
 using TicketPal.Interfaces.Services.Users;
 
@@ -18,6 +20,9 @@ namespace TicketPal.BusinessLogic.Tests.Services
         protected Mock<IUserRepository> usersMock;
         // Services
         protected IUserService userService;
+        protected string jwtTestSecret;
+        protected string userPassword;
+        protected IOptions<AppSettings> testAppSettings;
 
 
         [TestInitialize]
@@ -31,6 +36,8 @@ namespace TicketPal.BusinessLogic.Tests.Services
 
             // Repositories mock
             this.usersMock = new Mock<IUserRepository>();
+            this.jwtTestSecret = "23jrb783v29fwfvfg2874gf286fce8";
+            this.testAppSettings = Options.Create(new AppSettings { JwtSecret = jwtTestSecret });
         }
 
     }

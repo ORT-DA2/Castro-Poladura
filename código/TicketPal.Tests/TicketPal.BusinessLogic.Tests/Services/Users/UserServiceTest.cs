@@ -18,17 +18,10 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
     [TestClass]
     public class UserServiceTest : BaseServiceTest
     {
-        private string jwtTestSecret;
-        private string userPassword;
-
         [TestMethod]
         public void UserAuthenticateCorrectly()
         {
-            int id = 1;
-            this.userPassword = "somePassword";
-            this.jwtTestSecret = "23jrb783v29fwfvfg2874gf286fce8";
-            var testAppsettings = Options.Create(new AppSettings { JwtSecret = jwtTestSecret });
-            
+            int id = 1;            
             var authRequest = new AuthenticationRequest
             {
                 Email = "someone@example.com",
@@ -50,7 +43,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
 
             this.userService = new UserService(
                 this.usersMock.Object,
-                testAppsettings,
+                this.testAppSettings,
                 this.mapper
             );
             User authenticatedUser = userService.Login(authRequest);
@@ -64,10 +57,6 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
         public void UserAuthenticatePasswordIncorrect()
         {
             int id = 1;
-            this.userPassword = "somePassword";
-            this.jwtTestSecret = "23jrb783v29fwfvfg2874gf286fce8";
-            var testAppsettings = Options.Create(new AppSettings { JwtSecret = jwtTestSecret });
-
             var authRequest = new AuthenticationRequest
             {
                 Email = "someone@example.com",
@@ -89,7 +78,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
             
             this.userService = new UserService(
                 this.usersMock.Object,
-                testAppsettings,
+                this.testAppSettings,
                 this.mapper
             );
             User authenticatedUser = userService.Login(authRequest);
@@ -101,10 +90,6 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
         public void UserAuthenticateNoUserFound()
         {
             int id = 1;
-            this.userPassword = "somePassword";
-            this.jwtTestSecret = "23jrb783v29fwfvfg2874gf286fce8";
-            var testAppsettings = Options.Create(new AppSettings { JwtSecret = jwtTestSecret });
-
             var authRequest = new AuthenticationRequest
             {
                 Email = "someone@example.com",
@@ -127,7 +112,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
 
             this.userService = new UserService(
                 this.usersMock.Object,
-                testAppsettings,
+                this.testAppSettings,
                 this.mapper
             );
             User authenticatedUser = userService.Login(authRequest);
@@ -150,6 +135,12 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
             this.usersMock.Setup(r => r.Exists(It.IsAny<int>())).Returns(false);
             this.usersMock.Setup(r => r.Add(It.IsAny<UserEntity>())).Verifiable();
 
+            this.userService = new UserService(
+                this.usersMock.Object,
+                this.testAppSettings,
+                this.mapper
+            );
+
             OperationResult result = userService.SignUp(signInRequest);
 
             Assert.IsTrue(result.ResultCode == ResultCode.SUCCESS);
@@ -170,6 +161,12 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
             this.usersMock.Setup(r => r.Exists(It.IsAny<int>())).Returns(false);
             this.usersMock.Setup(r => r.Add(It.IsAny<UserEntity>()))
                 .Throws(new RepositoryException());
+            
+            this.userService = new UserService(
+                this.usersMock.Object,
+                this.testAppSettings,
+                this.mapper
+            );
 
             OperationResult result = userService.SignUp(signInRequest);
 
@@ -189,6 +186,11 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
             };
 
             this.usersMock.Setup(r => r.GetAll()).Returns(dbAccounts);
+            this.userService = new UserService(
+                this.usersMock.Object,
+                this.testAppSettings,
+                this.mapper
+            );
             IEnumerable<User> result = userService.GetUsers();
 
             Assert.IsTrue(result.ToList().Count == 4);
@@ -209,7 +211,11 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
             };
 
             this.usersMock.Setup(r => r.Get(It.IsAny<int>())).Returns(dbUser);
-
+            this.userService = new UserService(
+                this.usersMock.Object,
+                this.testAppSettings,
+                this.mapper
+            );
             User account = userService.GetUser(id);
 
             Assert.IsNotNull(account);
@@ -231,7 +237,11 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
             };
 
             this.usersMock.Setup(r => r.Get(It.IsAny<int>())).Returns(dbUser);
-
+            this.userService = new UserService(
+                this.usersMock.Object,
+                this.testAppSettings,
+                this.mapper
+            );
             OperationResult result = userService.DeleteUser(id);
 
             Assert.IsTrue(result.ResultCode == ResultCode.SUCCESS);
@@ -250,7 +260,11 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
             };
 
             this.usersMock.Setup(p => p.Update(It.IsAny<UserEntity>())).Verifiable();
-
+            this.userService = new UserService(
+                this.usersMock.Object,
+                this.testAppSettings,
+                this.mapper
+            );
             OperationResult expected = userService.UpdateUser(updateRequest);
 
             Assert.IsTrue(expected.ResultCode == ResultCode.SUCCESS);
@@ -269,7 +283,11 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
             };
 
             this.usersMock.Setup(p => p.Update(It.IsAny<UserEntity>())).Throws(new RepositoryException());
-
+            this.userService = new UserService(
+                this.usersMock.Object,
+                this.testAppSettings,
+                this.mapper
+            );
             OperationResult expected = userService.UpdateUser(updateRequest);
 
             Assert.IsTrue(expected.ResultCode == ResultCode.FAIL);
@@ -286,7 +304,11 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 Password = BC.HashPassword(userPassword),
                 Role = "nonExistentRole"
             };
-
+            this.userService = new UserService(
+                this.usersMock.Object,
+                this.testAppSettings,
+                this.mapper
+            );
             OperationResult expected = userService.UpdateUser(updateRequest);
 
             Assert.IsTrue(expected.ResultCode == ResultCode.FAIL);
@@ -303,7 +325,11 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 Password = BC.HashPassword(userPassword),
                 Role = UserRole.SPECTATOR.ToString()
             };
-
+            this.userService = new UserService(
+                this.usersMock.Object,
+                this.testAppSettings,
+                this.mapper
+            );
             OperationResult expected = userService.UpdateUser(updateRequest,UserRole.ADMIN);
 
             Assert.IsTrue(expected.ResultCode == ResultCode.SUCCESS);
@@ -315,7 +341,11 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
             var id = 1;
 
             this.usersMock.Setup(r => r.Delete(It.IsAny<int>())).Throws(new RepositoryException());
-
+            this.userService = new UserService(
+                this.usersMock.Object,
+                this.testAppSettings,
+                this.mapper
+            );
             OperationResult result = userService.DeleteUser(id);
 
             Assert.IsTrue(result.ResultCode == ResultCode.FAIL);
@@ -327,9 +357,13 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
             int id = 1;
 
             UserEntity dbUser = null;
-
+            
             this.usersMock.Setup(r => r.Get(It.IsAny<int>())).Returns(dbUser);
-
+            this.userService = new UserService(
+                this.usersMock.Object,
+                this.testAppSettings,
+                this.mapper
+            );
             User account = userService.GetUser(id);
 
             Assert.IsNull(account);
