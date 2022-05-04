@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using TicketPal.BusinessLogic.Mapper;
 using TicketPal.Interfaces.Repository;
+using TicketPal.Interfaces.Services.Users;
 
 namespace TicketPal.BusinessLogic.Tests.Services
 {
@@ -13,8 +14,10 @@ namespace TicketPal.BusinessLogic.Tests.Services
     {
         protected Mock<DbContext> mockDbContext;
         protected IMapper mapper;
+        // Repository mocks
         protected Mock<IUserRepository> usersMock;
-
+        // Services
+        protected IUserService userService;
 
 
         [TestInitialize]
