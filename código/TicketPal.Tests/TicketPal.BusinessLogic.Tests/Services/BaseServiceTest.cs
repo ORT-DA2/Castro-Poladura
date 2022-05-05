@@ -35,6 +35,8 @@ namespace TicketPal.BusinessLogic.Tests.Services
 
             // Repositories mock
             this.usersMock = new Mock<IUserRepository>();
+            // User repository test settings
+            this.userPassword = "somePassword";
             this.jwtTestSecret = "23jrb783v29fwfvfg2874gf286fce8";
             this.testAppSettings = Options.Create(new AppSettings { JwtSecret = jwtTestSecret });
         }

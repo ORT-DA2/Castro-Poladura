@@ -10,6 +10,7 @@ using TicketPal.Domain.Exceptions;
 using TicketPal.Domain.Constants;
 using TicketPal.Domain.Models.Response;
 using TicketPal.Domain.Models.Request;
+using TicketPal.BusinessLogic.Services.Users;
 
 namespace TicketPal.BusinessLogic.Tests.Services.Users
 {
@@ -183,7 +184,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 new UserEntity{Id=3,Firstname="Steve",Lastname="Black",Email="user4@example.com",Role=UserRole.SPECTATOR.ToString()}
             };
 
-            this.usersMock.Setup(r => r.GetAll()).Returns(dbAccounts);
+            this.usersMock.Setup(r => r.GetAll(It.IsAny<Expression<Func<UserEntity, bool>>>())).Returns(dbAccounts);
             this.userService = new UserService(
                 this.usersMock.Object,
                 this.testAppSettings,
@@ -292,6 +293,27 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
         }
 
         [TestMethod]
+        public void UpdateUserRequesterRoleNotAllowed()
+        {
+            var updateRequest = new UpdateUserRequest
+            {
+                Firstname = "John",
+                Lastname = "Doe",
+                Email = "someone@example.com",
+                Password = BC.HashPassword(userPassword),
+                Role = UserRole.ADMIN.ToString()
+            };
+            this.userService = new UserService(
+                this.usersMock.Object,
+                this.testAppSettings,
+                this.mapper
+            );
+            OperationResult expected = userService.UpdateUser(updateRequest,UserRole.SELLER);
+
+            Assert.IsTrue(expected.ResultCode == ResultCode.FAIL);
+        }
+
+        [TestMethod]
         public void UpdateUserRoleNotAllowed()
         {
             var updateRequest = new UpdateUserRequest
@@ -300,14 +322,14 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 Lastname = "Doe",
                 Email = "someone@example.com",
                 Password = BC.HashPassword(userPassword),
-                Role = "nonExistentRole"
+                Role = "someIncorrectRole"
             };
             this.userService = new UserService(
                 this.usersMock.Object,
                 this.testAppSettings,
                 this.mapper
             );
-            OperationResult expected = userService.UpdateUser(updateRequest);
+            OperationResult expected = userService.UpdateUser(updateRequest,UserRole.ADMIN);
 
             Assert.IsTrue(expected.ResultCode == ResultCode.FAIL);
         }
