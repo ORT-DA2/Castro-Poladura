@@ -71,7 +71,8 @@ namespace TicketPal.BusinessLogic.Services.Users
             }
             var token = JwtUtils.GenerateJwtToken(appSettings.JwtSecret, "id", found.Id.ToString());
             var user = mapper.Map<User>(found);
-
+            user.Token = token;
+            
             return user;
         }
 
