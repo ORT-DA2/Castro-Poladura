@@ -15,10 +15,13 @@ namespace TicketPal.DataAccess.Tests.Respository
         private ConcertEntity concert;
         private UserEntity user;
         private TicketEntity ticket;
+        private string idCode;
 
         [TestInitialize]
         public void SetUp()
         {
+            idCode = "1270f7sdf897adfhlajbvlaaotoaweyoi2";
+
             performer = new PerformerEntity()
             {
                 Id = 1,
@@ -60,7 +63,7 @@ namespace TicketPal.DataAccess.Tests.Respository
                 Event = concert,
                 Buyer = user,
                 PurchaseDate = DateTime.Now,
-                ShowName = concert.TourName,
+                Code = idCode,
                 Status = TicketStatus.PURCHASED
             };
         }
@@ -68,11 +71,11 @@ namespace TicketPal.DataAccess.Tests.Respository
         [TestMethod]
         public void SaveTicketSuccessfully()
         {
-            var tourName = concert.TourName;
-            var repository = new ConcertRepository(dbContext);
-            repository.Add(concert);
+            var code = idCode;
+            var repository = new TicketRepository(dbContext);
+            repository.Add(ticket);
 
-            Assert.IsTrue(repository.GetAll().ToList().FirstOrDefault().TourName == tourName);
+            Assert.IsTrue(repository.GetAll().ToList().FirstOrDefault().Code == code);
         }
 
         [TestMethod]
@@ -85,7 +88,7 @@ namespace TicketPal.DataAccess.Tests.Respository
                 Event = concert,
                 Buyer = user,
                 PurchaseDate = DateTime.Now,
-                ShowName = concert.TourName,
+                Code = idCode,
                 Status = TicketStatus.PURCHASED
             };
 
@@ -143,21 +146,23 @@ namespace TicketPal.DataAccess.Tests.Respository
         }
 
         [TestMethod]
-        public void SearchTicketByShowNameTestCorrect()
+        public void SearchTicketByCodeTestCorrect()
         {
             var repository = new TicketRepository(dbContext);
             repository.Add(ticket);
 
-            TicketEntity found = repository.Get(g => g.ShowName.Equals(ticket.ShowName));
+            TicketEntity found = repository.Get(g => g.Code.Equals(ticket.Code));
 
             Assert.IsNotNull(found);
-            Assert.AreEqual(ticket.ShowName, found.ShowName);
+            Assert.AreEqual(ticket.Code, found.Code);
         }
 
         
         [TestMethod]
         public void ShouldCreatedDateBeTheSameDay()
         {
+            string idCode2 = "dfcnwru382w7ghqwrodugnvqpow34r8hg";
+
             var concert2 = new ConcertEntity()
             {
                 Id = 2,
@@ -176,7 +181,7 @@ namespace TicketPal.DataAccess.Tests.Respository
                 Event = concert2,
                 Buyer = user,
                 PurchaseDate = DateTime.Now,
-                ShowName = concert2.TourName,
+                Code = idCode2,
                 Status = TicketStatus.PURCHASED
             };
 
@@ -195,15 +200,15 @@ namespace TicketPal.DataAccess.Tests.Respository
             var repository = new TicketRepository(dbContext);
             repository.Add(ticket);
 
-            var newName = "Bien de bien";
+            var purchaseDate = new DateTime(2022, 04, 20);
 
-            ticket.ShowName = newName;
+            ticket.PurchaseDate = purchaseDate;
 
             repository.Update(ticket);
 
             var updatedEvent = repository.Get(ticket.Id);
 
-            Assert.IsTrue(updatedEvent.ShowName.Equals(newName));
+            Assert.IsTrue(updatedEvent.PurchaseDate.Equals(purchaseDate));
         }
 
         [TestMethod]
@@ -212,12 +217,12 @@ namespace TicketPal.DataAccess.Tests.Respository
             var repository = new TicketRepository(dbContext);
             repository.Add(ticket);
 
-            repository.Update(new TicketEntity { Id = ticket.Id, Buyer = user, Event = concert, PurchaseDate = DateTime.Now, Status = TicketStatus.PURCHASED, ShowName = null });
+            repository.Update(new TicketEntity { Id = ticket.Id, Buyer = user, Event = concert, PurchaseDate = DateTime.Now, Status = TicketStatus.PURCHASED, Code = null });
 
             var updatedEvent = repository.Get(ticket.Id);
 
 
-            Assert.IsTrue(updatedEvent.ShowName.Equals(ticket.ShowName));
+            Assert.IsTrue(updatedEvent.Code.Equals(ticket.Code));
         }
     }
 }
