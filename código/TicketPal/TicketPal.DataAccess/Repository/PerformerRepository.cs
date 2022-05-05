@@ -35,7 +35,7 @@ namespace TicketPal.DataAccess.Repository
             }
 
             found.Name = (element.Name == null ? found.Name : element.Name);
-            found.PerformerType = (element.PerformerType == null ? found.PerformerType : element.PerformerType);
+            found.PerformerType = element.PerformerType;
             found.StartYear = (element.StartYear == null ? found.StartYear : element.StartYear);
             found.Artists = (element.Artists == null ? found.Artists : element.Artists);
             found.Genre = (element.Genre == null ? found.Genre : element.Genre);

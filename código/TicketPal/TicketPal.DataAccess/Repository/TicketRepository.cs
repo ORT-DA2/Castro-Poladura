@@ -36,9 +36,9 @@ namespace TicketPal.DataAccess.Repository
 
             found.Buyer = (element.Buyer == null ? found.Buyer : element.Buyer);
             found.Event = (element.Event == null ? found.Event : element.Event);
-            found.PurchaseDate = (element.PurchaseDate == null ? found.PurchaseDate : element.PurchaseDate);
+            found.PurchaseDate = element.PurchaseDate;
             found.ShowName = (element.ShowName == null ? found.ShowName : element.ShowName);
-            found.Status = (element.Status == null ? found.Status : element.Status);
+            found.Status = element.Status;
             found.UpdatedAt = DateTime.Now;
 
             dbContext.SaveChanges();
