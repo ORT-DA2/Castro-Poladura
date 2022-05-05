@@ -1,15 +1,14 @@
 ﻿using System;
 using TicketPal.Domain.Constants;
+using TicketPal.Domain.Entity;
 
-namespace TicketPal.Domain.Entity
+namespace TicketPal.Domain.Models.Response
 {
-    public class TicketEntity : BaseEntity
+    public class Ticket
     {
-        public UserEntity Buyer { get; set; }
         public TicketStatus Status { get; set; }
         public DateTime PurchaseDate { get; set; }
         public string Code { get; set; }
         public EventEntity Event { get; set; }
-
     }
 }
