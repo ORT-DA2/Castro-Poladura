@@ -15,7 +15,7 @@ namespace TicketPal.DataAccess.Tests.Entity
         private string name;
         private string startDate;
         private GenreEntity genre;
-        private List<string> artists;
+        private string artists;
 
 
         [TestInitialize]
@@ -59,11 +59,7 @@ namespace TicketPal.DataAccess.Tests.Entity
             string startYear = "1987";
             genre.GenreName = "Punk Rock";
 
-            artists = new List<string>();
-            artists.Add("Mariano Gabriel Martínez");
-            artists.Add("Luciano Scaglione");
-            artists.Add("Leonardo De Cecco");
-            artists.Add("Martín Locarnini");
+            artists = "Mariano Gabriel Martínez|Luciano Scaglione|Leonardo De Cecco|Martín Locarnini";
 
             performerEntity.Id = id;
             performerEntity.PerformerType = performerType;
