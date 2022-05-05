@@ -47,8 +47,8 @@ namespace TicketPal.DataAccess.Tests.Respository
             user = new UserEntity()
             {
                 Id = 1,
-                FirstName = "Susan",
-                LastName = "Green",
+                Firstname = "Susan",
+                Lastname = "Green",
                 Email = "sgreen@gmail.com",
                 Password = "bfu92i3r7fu138#!%RG983267VWQE!w$^&",
                 Role = "SPECTATOR"

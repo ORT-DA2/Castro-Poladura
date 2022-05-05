@@ -34,11 +34,11 @@ namespace TicketPal.DataAccess.Repository
                 throw new RepositoryException(string.Format("Couldn't find item to update with id: {0} doesn't exist", element.Id));
             }
 
-            found.Date = (element.Date == null ? found.Date : element.Date);
-            found.AvailableTickets = (element.AvailableTickets == null ? found.AvailableTickets : element.AvailableTickets);
-            found.TicketPrice = (element.TicketPrice == null ? found.TicketPrice : element.TicketPrice);
-            found.CurrencyType = (element.CurrencyType == null ? found.CurrencyType : element.CurrencyType);
-            found.EventType = (element.EventType == null ? found.EventType : element.EventType);
+            found.Date = element.Date;
+            found.AvailableTickets = element.AvailableTickets;
+            found.TicketPrice = element.TicketPrice;
+            found.CurrencyType = element.CurrencyType;
+            found.EventType = element.EventType;
             found.UpdatedAt = DateTime.Now;
 
             dbContext.SaveChanges();
