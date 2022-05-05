@@ -1,14 +1,19 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace TicketPal.Domain.Entity
+namespace TicketPal.Domain.Models.Request
 {
-    public class UserEntity : BaseEntity
+    public class UpdateUserRequest
     {
         [Required]
-        public string Email { get; set; }
         public string Firstname { get; set; }
+        [Required]
         public string Lastname { get; set; }
+        [Required]
         public string Password { get; set; }
+        [Required]
+        public string Email { get; set; }
+        [Required]
         public string Role { get; set; }
+
     }
 }

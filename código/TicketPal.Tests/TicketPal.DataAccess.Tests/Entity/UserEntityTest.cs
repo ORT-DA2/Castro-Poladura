@@ -38,10 +38,10 @@ namespace TicketPal.DataAccess.Tests.Entity
 
             UserEntity request = new UserEntity
             {
-                FirstName = name
+                Firstname = name
             };
 
-            Assert.AreEqual(request.FirstName, name);
+            Assert.AreEqual(request.Firstname, name);
         }
 
         [TestMethod]
@@ -51,10 +51,10 @@ namespace TicketPal.DataAccess.Tests.Entity
 
             UserEntity request = new UserEntity
             {
-                LastName = surname
+                Lastname = surname
             };
 
-            Assert.AreEqual(request.LastName, surname);
+            Assert.AreEqual(request.Lastname, surname);
         }
 
         [TestMethod]

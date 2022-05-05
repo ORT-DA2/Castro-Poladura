@@ -25,8 +25,8 @@ namespace TicketPal.DataAccess.Tests.Entity
             buyer = new UserEntity()
             {
                 Id = 1,
-                FirstName = "Susan",
-                LastName = "White",
+                Firstname = "Susan",
+                Lastname = "White",
                 Email = "swhite@gmail.com"
             };
 
