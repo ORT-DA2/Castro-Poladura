@@ -14,7 +14,7 @@ namespace TicketPal.DataAccess.Tests.Entity
         private DateTime purchaseDate;
         private ConcertEntity concert;
         private PerformerEntity band;
-        private List<string> artists;
+        private string artists;
         private TicketStatus status;
         private string code;
 
@@ -33,11 +33,7 @@ namespace TicketPal.DataAccess.Tests.Entity
 
             purchaseDate = new DateTime(2022, 04, 04);
 
-            artists = new List<string>();
-            artists.Add("Freddie Mercury");
-            artists.Add("Brian May");
-            artists.Add("John Deacon");
-            artists.Add("Roger Taylor");
+            artists = "Freddie Mercury|Brian May|John Deacon|Roger Taylor";
 
             band = new PerformerEntity
             {

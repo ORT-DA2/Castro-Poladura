@@ -8,7 +8,7 @@ using TicketPal.Domain.Exceptions;
 namespace TicketPal.DataAccess.Tests.Respository
 {
     [TestClass]
-    public class UserRepositoryTest : RepositoryBaseConfigTest
+    public class UserRepositoryTests : RepositoryBaseConfigTests
     {
         [TestMethod]
         public void SaveTwoUserToDataBaseShouldReturnCountAsTwo()
