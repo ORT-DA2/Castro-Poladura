@@ -3,7 +3,6 @@ using System;
 using System.Linq;
 using TicketPal.Domain.Entity;
 using TicketPal.Domain.Exceptions;
-using TicketPal.Interfaces.Repository;
 
 namespace TicketPal.DataAccess.Repository
 {
