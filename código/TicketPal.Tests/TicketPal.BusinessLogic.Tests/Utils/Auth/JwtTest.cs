@@ -1,4 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using TicketPal.BusinessLogic.Utils.Auth;
 
 namespace TicketPal.BusinessLogic.Tests.Utils.Auth
 {
