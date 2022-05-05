@@ -16,16 +16,16 @@ namespace TicketPal.DataAccess.Tests.Respository
             var user1 = new UserEntity
             {
                 Id = 1,
-                FirstName = "SomeName1",
-                LastName = "SomeSurname1",
+                Firstname = "SomeName1",
+                Lastname = "SomeSurname1",
                 Email = "user1@example.com",
                 Password = "myPassword"
             };
             var user2 = new UserEntity
             {
                 Id = 2,
-                FirstName = "SomeName2",
-                LastName = "SomeSurname2",
+                Firstname = "SomeName2",
+                Lastname = "SomeSurname2",
                 Email = "user2@example.com",
                 Password = "myPassword"
             };
@@ -47,16 +47,16 @@ namespace TicketPal.DataAccess.Tests.Respository
             var user1 = new UserEntity
             {
                 Id = 1,
-                FirstName = "SomeName1",
-                LastName = "SomeSurname1",
+                Firstname = "SomeName1",
+                Lastname = "SomeSurname1",
                 Email = email,
                 Password = "myPassword"
             };
             var user2 = new UserEntity
             {
                 Id = 2,
-                FirstName = "SomeName2",
-                LastName = "SomeSurname2",
+                Firstname = "SomeName2",
+                Lastname = "SomeSurname2",
                 Email = email,
                 Password = "myPassword"
             };
@@ -75,8 +75,8 @@ namespace TicketPal.DataAccess.Tests.Respository
             var user = new UserEntity
             {
                 Id = 1,
-                FirstName = "SomeName1",
-                LastName = "SomeSurname1",
+                Firstname = "SomeName1",
+                Lastname = "SomeSurname1",
                 Email = "user@example.com",
                 Password = "myPassword"
             };
@@ -96,8 +96,8 @@ namespace TicketPal.DataAccess.Tests.Respository
             var user = new UserEntity
             {
                 Id = 1,
-                FirstName = "SomeName1",
-                LastName = "SomeSurname1",
+                Firstname = "SomeName1",
+                Lastname = "SomeSurname1",
                 Email = "user@example.com",
                 Password = "myPassword",
                 Role = "admin"
@@ -118,8 +118,8 @@ namespace TicketPal.DataAccess.Tests.Respository
             var user = new UserEntity
             {
                 Id = 1,
-                FirstName = "SomeName1",
-                LastName = "SomeSurname1",
+                Firstname = "SomeName1",
+                Lastname = "SomeSurname1",
                 Email = "user@example.com",
                 Password = "myPassword"
             };
@@ -138,8 +138,8 @@ namespace TicketPal.DataAccess.Tests.Respository
             var user = new UserEntity
             {
                 Id = 1,
-                FirstName = "SomeName1",
-                LastName = "SomeSurname1",
+                Firstname = "SomeName1",
+                Lastname = "SomeSurname1",
                 Email = "user@example.com",
                 Password = "myPassword"
             };
@@ -158,8 +158,8 @@ namespace TicketPal.DataAccess.Tests.Respository
             var user = new UserEntity
             {
                 Id = 1,
-                FirstName = "SomeName1",
-                LastName = "SomeSurname1",
+                Firstname = "SomeName1",
+                Lastname = "SomeSurname1",
                 Email = "user@example.com",
                 Password = "myPassword",
                 Role = "admin"
@@ -179,8 +179,8 @@ namespace TicketPal.DataAccess.Tests.Respository
             var user = new UserEntity
             {
                 Id = 1,
-                FirstName = "SomeName1",
-                LastName = "SomeSurname1",
+                Firstname = "SomeName1",
+                Lastname = "SomeSurname1",
                 Email = "user@example.com",
                 Password = "myPassword"
             };
@@ -195,8 +195,8 @@ namespace TicketPal.DataAccess.Tests.Respository
             var user = new UserEntity
             {
                 Id = 1,
-                FirstName = "SomeName1",
-                LastName = "SomeSurname1",
+                Firstname = "SomeName1",
+                Lastname = "SomeSurname1",
                 Email = "user1@example.com",
                 Password = "myPassword"
             };
@@ -282,8 +282,8 @@ namespace TicketPal.DataAccess.Tests.Respository
             var user = new UserEntity
             {
                 Id = 1,
-                FirstName = "SomeName1",
-                LastName = "SomeSurname1",
+                Firstname = "SomeName1",
+                Lastname = "SomeSurname1",
                 Email = "user@example.com",
                 Password = "myPassword",
                 Role = "admin"
@@ -298,8 +298,8 @@ namespace TicketPal.DataAccess.Tests.Respository
             var newEmail = "myNewEmail@example.com";
             var newPassword = "myNewPassword";
 
-            user.FirstName = newName;
-            user.LastName = newSurname;
+            user.Firstname = newName;
+            user.Lastname = newSurname;
             user.Email = newEmail;
             user.Password = newPassword;
 
@@ -310,8 +310,8 @@ namespace TicketPal.DataAccess.Tests.Respository
             Assert.IsTrue(
                 updatedUser.Email.Equals(newEmail)
                 && updatedUser.Password.Equals(newPassword)
-                && updatedUser.LastName.Equals(newSurname)
-                && updatedUser.FirstName.Equals(newName)
+                && updatedUser.Lastname.Equals(newSurname)
+                && updatedUser.Firstname.Equals(newName)
                 );
 
 
@@ -325,8 +325,8 @@ namespace TicketPal.DataAccess.Tests.Respository
             var user = new UserEntity
             {
                 Id = 1,
-                FirstName = "SomeName1",
-                LastName = "SomeSurname1",
+                Firstname = "SomeName1",
+                Lastname = "SomeSurname1",
                 Email = "user@example.com",
                 Password = "myPassword",
                 Role = "admin"
@@ -337,7 +337,7 @@ namespace TicketPal.DataAccess.Tests.Respository
             repository.Add(user);
 
 
-            repository.Update(new UserEntity { Id = user.Id, FirstName = null, LastName = null, Email = null, Password = null, Role = null });
+            repository.Update(new UserEntity { Id = user.Id, Firstname = null, Lastname = null, Email = null, Password = null, Role = null });
 
             var updatedUser = repository.Get(user.Id);
 
@@ -345,8 +345,8 @@ namespace TicketPal.DataAccess.Tests.Respository
             Assert.IsTrue(
                 updatedUser.Email.Equals(user.Email)
                 && updatedUser.Password.Equals(user.Password)
-                && updatedUser.LastName.Equals(user.LastName)
-                && updatedUser.FirstName.Equals(user.FirstName)
+                && updatedUser.Lastname.Equals(user.Lastname)
+                && updatedUser.Firstname.Equals(user.Firstname)
                 );
 
 

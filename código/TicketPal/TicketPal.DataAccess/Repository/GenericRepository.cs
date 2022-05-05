@@ -5,14 +5,15 @@ using System.Linq.Expressions;
 using TicketPal.Domain.Entity;
 using TicketPal.Interfaces.Repository;
 using TicketPal.Domain.Exceptions;
+using Microsoft.EntityFrameworkCore;
 
 namespace TicketPal.DataAccess.Repository
 {
     public abstract class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : BaseEntity
     {
         private bool disposed;
-        protected readonly AppDbContext dbContext;
-        public GenericRepository(AppDbContext context)
+        protected readonly DbContext dbContext;
+        public GenericRepository(DbContext context)
         {
             dbContext = context;
         }

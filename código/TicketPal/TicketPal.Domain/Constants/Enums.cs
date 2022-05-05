@@ -21,4 +21,18 @@ namespace TicketPal.Domain.Constants
         UYU = 1,
         USD = 2
     }
+
+    public enum ResultCode
+    {
+        SUCCESS = 0,
+        FAIL = 1
+    }
+
+    public enum UserRole
+    {
+        SPECTATOR = 0,
+        SELLER = 1,
+        SUPERVISOR = 2,
+        ADMIN = 3
+    }
 }
