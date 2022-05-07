@@ -12,23 +12,28 @@ using TicketPal.BusinessLogic.Utils.Auth;
 using TicketPal.Domain.Entity;
 using TicketPal.Domain.Exceptions;
 using System.Linq;
+using TicketPal.Interfaces.Factory;
 
 namespace TicketPal.BusinessLogic.Services.Users
 {
     public class UserService : IUserService
     {
-        private readonly IUserRepository repository;
-        private readonly IAppSettings appSettings;
+        private readonly IGenericRepository<UserEntity> repository;
+        private readonly AppSettings appSettings;
         private readonly IMapper mapper;
+        private readonly IServiceFactory factory;
         public UserService(
-            IUserRepository repository,
-            IOptions<IAppSettings> appSettings,
+            IServiceFactory factory,
+            IOptions<AppSettings> appSettings,
             IMapper mapper
         )
         {
+            this.factory = factory;
             this.mapper = mapper;
-            this.repository = repository;
             this.appSettings = appSettings.Value;
+
+            this.repository = factory.GetRepository(typeof(UserEntity))
+                as IGenericRepository<UserEntity>;
         }
         public OperationResult DeleteUser(int id)
         {
@@ -72,7 +77,7 @@ namespace TicketPal.BusinessLogic.Services.Users
             var token = JwtUtils.GenerateJwtToken(appSettings.JwtSecret, "id", found.Id.ToString());
             var user = mapper.Map<User>(found);
             user.Token = token;
-            
+
             return user;
         }
 

@@ -8,7 +8,7 @@ namespace TicketPal.DataAccess.Repository
 {
     public class ConcertRepository : GenericRepository<ConcertEntity>
     {
-        public ConcertRepository(AppDbContext context) : base(context)
+        public ConcertRepository(DbContext context) : base(context)
         {
         }
 
