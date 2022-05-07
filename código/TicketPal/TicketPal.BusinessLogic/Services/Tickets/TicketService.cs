@@ -1,11 +1,7 @@
 ﻿using AutoMapper;
-using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TicketPal.BusinessLogic.Settings.Api;
+using TicketPal.BusinessLogic.Utils.TicketCodes;
 using TicketPal.Domain.Constants;
 using TicketPal.Domain.Entity;
 using TicketPal.Domain.Exceptions;
@@ -37,6 +33,8 @@ namespace TicketPal.BusinessLogic.Services.Tickets
             {
                 EventEntity newEvent = concertRepository.Get(model.Event);
 
+                var ticket = new TicketCode();//se debe traer la implementacion de ITicketCode;
+
                 UserEntity buyer = new UserEntity()
                 {
                     Id = model.User.Id,
@@ -44,7 +42,7 @@ namespace TicketPal.BusinessLogic.Services.Tickets
                     Lastname = model.User.Lastname,
                     Email = model.User.Email,
                     Password = model.User.Password,
-                    Role = model.User.Role
+                    Role = model.User.Role,
                     ActiveAccount = model.User.ActiveAccount
                 };
 
@@ -53,7 +51,7 @@ namespace TicketPal.BusinessLogic.Services.Tickets
                     Buyer = buyer,
                     PurchaseDate = DateTime.Now,
                     Status = TicketStatus.PURCHASED,
-                    Code = TicketCode.GenerateCode(),
+                    Code = ticket.GenerateTicketCode(),
                     Event = newEvent
                 });
             }
