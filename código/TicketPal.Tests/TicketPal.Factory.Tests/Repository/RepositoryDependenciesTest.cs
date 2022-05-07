@@ -17,7 +17,10 @@ namespace TicketPal.Factory.Tests.Repository
         public void Init()
         {
             // Factory
-            this.factory = new ServiceFactory(this.services);
+            this.factory = new ServiceFactory(
+                this.services,
+                this.mockConfig.Object
+                );
 
             this.factory.AddDbContextService("SomeFakeConnectionString");
             this.factory.RegisterRepositories();

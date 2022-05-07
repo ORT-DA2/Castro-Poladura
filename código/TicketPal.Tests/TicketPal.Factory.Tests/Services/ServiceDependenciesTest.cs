@@ -13,11 +13,16 @@ namespace TicketPal.Factory.Tests.Services
         [TestInitialize]
         public void Init()
         {
-            this.factory = new ServiceFactory(this.services);
+            this.factory = new ServiceFactory(
+                this.services,
+                this.mockConfig.Object
+                );
             
-            this.factory.AddDbContextService("SomeFakeConnectionString");
+            this.factory.AddDbContextService(testConnectionString);
             this.factory.RegisterRepositories();
             this.factory.RegisterServices();
+
+            this.serviceProvider = services.BuildServiceProvider();
         }
 
         [TestMethod]
