@@ -9,7 +9,7 @@ namespace TicketPal.DataAccess.Repository
 {
     public class PerformerRepository : GenericRepository<PerformerEntity>
     {
-        public PerformerRepository(AppDbContext context) : base(context)
+        public PerformerRepository(DbContext context) : base(context)
         {
         }
 
