@@ -1,3 +1,4 @@
+using System;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -23,36 +24,36 @@ namespace TicketPal.Factory
             IServiceCollection services,
             IConfiguration configuration
         )
-		{
-			this.services = services;
+        {
+            this.services = services;
             this.configuration = configuration;
             LoadConfig();
-		}
+        }
 
         public void AddDbContextService(string connectionString)
-		{
-			services.AddDbContext<DbContext, AppDbContext>
+        {
+            services.AddDbContext<DbContext, AppDbContext>
                 (options => options.UseSqlServer(connectionString));
-		}
+        }
 
         public void RegisterRepositories()
         {
-            services.AddScoped(typeof(IGenericRepository<UserEntity>),typeof(UserRepository));
-            services.AddScoped(typeof(IGenericRepository<ConcertEntity>),typeof(ConcertRepository));
-            services.AddScoped(typeof(IGenericRepository<GenreEntity>),typeof(GenreRepository));
-            services.AddScoped(typeof(IGenericRepository<PerformerEntity>),typeof(PerformerRepository));
-            services.AddScoped(typeof(IGenericRepository<TicketEntity>),typeof(TicketRepository));
+            services.AddScoped(typeof(IGenericRepository<UserEntity>), typeof(UserRepository));
+            services.AddScoped(typeof(IGenericRepository<ConcertEntity>), typeof(ConcertRepository));
+            services.AddScoped(typeof(IGenericRepository<GenreEntity>), typeof(GenreRepository));
+            services.AddScoped(typeof(IGenericRepository<PerformerEntity>), typeof(PerformerRepository));
+            services.AddScoped(typeof(IGenericRepository<TicketEntity>), typeof(TicketRepository));
         }
 
         public void RegisterServices()
         {
-            services.AddScoped<IUserService,UserService>();
+            services.AddScoped<IUserService, UserService>();
         }
 
         private void LoadConfig()
         {
             services.Configure<AppSettings>(configuration.GetSection("AppSettings"));
-            
+
             // Auto Mapper Configurations
             var mapperConfig = new MapperConfiguration(mc =>
             {
@@ -60,6 +61,17 @@ namespace TicketPal.Factory
             });
             IMapper mapper = mapperConfig.CreateMapper();
             services.AddSingleton(mapper);
+        }
+
+        public object GetRepository(Type classType)
+        {
+            var serviceProvider = services.BuildServiceProvider();
+
+            var genericClass = typeof(IGenericRepository<>);
+            var constructedClass = genericClass.MakeGenericType(classType);
+
+            var repository = serviceProvider.GetService(constructedClass);
+            return repository;
         }
     }
 }
