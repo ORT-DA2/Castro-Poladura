@@ -1,14 +1,12 @@
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 using TicketPal.Domain.Entity;
 using TicketPal.Interfaces.Repository;
 
 namespace TicketPal.Factory.Tests.Repository
 {
     [TestClass]
-    public class RepositoryDependenciesTest :BaseTestFactoryConfig
+    public class RepositoryDependenciesTest : BaseTestFactoryConfig
     {
         private ServiceFactory factory;
         private ServiceProvider serviceProvider;
@@ -55,7 +53,7 @@ namespace TicketPal.Factory.Tests.Repository
             var repository = serviceProvider.GetService<IGenericRepository<PerformerEntity>>();
             Assert.IsNotNull(repository);
         }
-        
+
         [TestMethod]
         public void TicketRepositoryDependencyCheck()
         {
