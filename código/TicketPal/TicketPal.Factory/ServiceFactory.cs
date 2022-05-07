@@ -10,13 +10,15 @@ using TicketPal.BusinessLogic.Settings.Api;
 using TicketPal.DataAccess;
 using TicketPal.DataAccess.Repository;
 using TicketPal.Domain.Entity;
+using TicketPal.Interfaces.Factory;
 using TicketPal.Interfaces.Repository;
 using TicketPal.Interfaces.Services.Users;
 
 namespace TicketPal.Factory
 {
-    public class ServiceFactory
+    public class ServiceFactory : IServiceFactory
     {
+        private ServiceProvider serviceProvider;
         private readonly IServiceCollection services;
         private readonly IConfiguration configuration;
 
@@ -27,7 +29,6 @@ namespace TicketPal.Factory
         {
             this.services = services;
             this.configuration = configuration;
-            LoadConfig();
         }
 
         public void AddDbContextService(string connectionString)
@@ -50,6 +51,11 @@ namespace TicketPal.Factory
             services.AddScoped<IUserService, UserService>();
         }
 
+        public void BuildServices()
+        {
+            this.serviceProvider = services.BuildServiceProvider();
+        }
+
         private void LoadConfig()
         {
             services.Configure<AppSettings>(configuration.GetSection("AppSettings"));
@@ -65,13 +71,15 @@ namespace TicketPal.Factory
 
         public object GetRepository(Type classType)
         {
-            var serviceProvider = services.BuildServiceProvider();
-
             var genericClass = typeof(IGenericRepository<>);
             var constructedClass = genericClass.MakeGenericType(classType);
 
-            var repository = serviceProvider.GetService(constructedClass);
-            return repository;
+            return serviceProvider.GetService(constructedClass);
+        }
+
+        public object GetService(Type classType)
+        {
+            return serviceProvider.GetService(classType);
         }
     }
 }

@@ -55,8 +55,6 @@ namespace TicketPal.Factory.Tests
             this.factory.RegisterServices();
             this.factory.BuildServices();
 
-
-
         }
     }
 }
