@@ -20,7 +20,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
         [TestMethod]
         public void UserAuthenticateCorrectly()
         {
-            int id = 1;            
+            int id = 1;
             var authRequest = new AuthenticationRequest
             {
                 Email = "someone@example.com",
@@ -37,11 +37,13 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 Role = UserRole.ADMIN.ToString()
             };
 
-            this.usersMock.Setup(r => r.Get(It.IsAny<Expression<Func<UserEntity, bool>>>()))
+            this.mockUserRepo.Setup(r => r.Get(It.IsAny<Expression<Func<UserEntity, bool>>>()))
                 .Returns(dbUser);
+            this.factoryMock.Setup(m => m.GetRepository(typeof(UserEntity)))
+                .Returns(this.mockUserRepo.Object);
 
             this.userService = new UserService(
-                this.usersMock.Object,
+                this.factoryMock.Object,
                 this.testAppSettings,
                 this.mapper
             );
@@ -72,11 +74,13 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 Role = UserRole.ADMIN.ToString()
             };
 
-            this.usersMock.Setup(r => r.Get(It.IsAny<Expression<Func<UserEntity, bool>>>()))
+            this.mockUserRepo.Setup(r => r.Get(It.IsAny<Expression<Func<UserEntity, bool>>>()))
                     .Returns(dbUser);
-            
+            this.factoryMock.Setup(m => m.GetRepository(typeof(UserEntity)))
+                .Returns(this.mockUserRepo.Object);
+
             this.userService = new UserService(
-                this.usersMock.Object,
+                this.factoryMock.Object,
                 this.testAppSettings,
                 this.mapper
             );
@@ -106,16 +110,18 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
             };
 
 
-            this.usersMock.Setup(r => r.Get(It.IsAny<Expression<Func<UserEntity, bool>>>()))
+            this.mockUserRepo.Setup(r => r.Get(It.IsAny<Expression<Func<UserEntity, bool>>>()))
                     .Returns(It.IsAny<UserEntity>);
+            this.factoryMock.Setup(m => m.GetRepository(typeof(UserEntity)))
+                .Returns(this.mockUserRepo.Object);
 
             this.userService = new UserService(
-                this.usersMock.Object,
+                this.factoryMock.Object,
                 this.testAppSettings,
                 this.mapper
             );
             User authenticatedUser = userService.Login(authRequest);
-            
+
             Assert.IsNull(authenticatedUser);
         }
 
@@ -131,11 +137,14 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 Role = UserRole.SPECTATOR.ToString()
             };
 
-            this.usersMock.Setup(r => r.Exists(It.IsAny<int>())).Returns(false);
-            this.usersMock.Setup(r => r.Add(It.IsAny<UserEntity>())).Verifiable();
+            this.mockUserRepo.Setup(r => r.Exists(It.IsAny<int>())).Returns(false);
+            this.mockUserRepo.Setup(r => r.Add(It.IsAny<UserEntity>())).Verifiable();
+
+            this.factoryMock.Setup(m => m.GetRepository(typeof(UserEntity)))
+                .Returns(this.mockUserRepo.Object);
 
             this.userService = new UserService(
-                this.usersMock.Object,
+                this.factoryMock.Object,
                 this.testAppSettings,
                 this.mapper
             );
@@ -157,12 +166,15 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 Role = UserRole.SPECTATOR.ToString()
             };
 
-            this.usersMock.Setup(r => r.Exists(It.IsAny<int>())).Returns(false);
-            this.usersMock.Setup(r => r.Add(It.IsAny<UserEntity>()))
+            this.mockUserRepo.Setup(r => r.Exists(It.IsAny<int>())).Returns(false);
+            this.mockUserRepo.Setup(r => r.Add(It.IsAny<UserEntity>()))
                 .Throws(new RepositoryException());
-            
+
+            this.factoryMock.Setup(m => m.GetRepository(typeof(UserEntity)))
+                .Returns(this.mockUserRepo.Object);
+
             this.userService = new UserService(
-                this.usersMock.Object,
+                this.factoryMock.Object,
                 this.testAppSettings,
                 this.mapper
             );
@@ -184,9 +196,12 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 new UserEntity{Id=3,Firstname="Steve",Lastname="Black",Email="user4@example.com",Role=UserRole.SPECTATOR.ToString()}
             };
 
-            this.usersMock.Setup(r => r.GetAll(It.IsAny<Expression<Func<UserEntity, bool>>>())).Returns(dbAccounts);
+            this.mockUserRepo.Setup(r => r.GetAll(It.IsAny<Expression<Func<UserEntity, bool>>>())).Returns(dbAccounts);
+            this.factoryMock.Setup(m => m.GetRepository(typeof(UserEntity)))
+                .Returns(this.mockUserRepo.Object);
+
             this.userService = new UserService(
-                this.usersMock.Object,
+                this.factoryMock.Object,
                 this.testAppSettings,
                 this.mapper
             );
@@ -209,9 +224,12 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 Role = UserRole.ADMIN.ToString()
             };
 
-            this.usersMock.Setup(r => r.Get(It.IsAny<int>())).Returns(dbUser);
+            this.mockUserRepo.Setup(r => r.Get(It.IsAny<int>())).Returns(dbUser);
+            this.factoryMock.Setup(m => m.GetRepository(typeof(UserEntity)))
+                .Returns(this.mockUserRepo.Object);
+
             this.userService = new UserService(
-                this.usersMock.Object,
+                this.factoryMock.Object,
                 this.testAppSettings,
                 this.mapper
             );
@@ -235,9 +253,12 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 Role = UserRole.ADMIN.ToString()
             };
 
-            this.usersMock.Setup(r => r.Get(It.IsAny<int>())).Returns(dbUser);
+            this.mockUserRepo.Setup(r => r.Get(It.IsAny<int>())).Returns(dbUser);
+            this.factoryMock.Setup(m => m.GetRepository(typeof(UserEntity)))
+                .Returns(this.mockUserRepo.Object);
+
             this.userService = new UserService(
-                this.usersMock.Object,
+                this.factoryMock.Object,
                 this.testAppSettings,
                 this.mapper
             );
@@ -258,9 +279,12 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 Role = "nonExistentRole"
             };
 
-            this.usersMock.Setup(p => p.Update(It.IsAny<UserEntity>())).Verifiable();
+            this.mockUserRepo.Setup(p => p.Update(It.IsAny<UserEntity>())).Verifiable();
+            this.factoryMock.Setup(m => m.GetRepository(typeof(UserEntity)))
+                .Returns(this.mockUserRepo.Object);
+
             this.userService = new UserService(
-                this.usersMock.Object,
+                this.factoryMock.Object,
                 this.testAppSettings,
                 this.mapper
             );
@@ -281,9 +305,12 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 Role = UserRole.SELLER.ToString()
             };
 
-            this.usersMock.Setup(p => p.Update(It.IsAny<UserEntity>())).Throws(new RepositoryException());
+            this.mockUserRepo.Setup(p => p.Update(It.IsAny<UserEntity>())).Throws(new RepositoryException());
+            this.factoryMock.Setup(m => m.GetRepository(typeof(UserEntity)))
+                .Returns(this.mockUserRepo.Object);
+
             this.userService = new UserService(
-                this.usersMock.Object,
+                this.factoryMock.Object,
                 this.testAppSettings,
                 this.mapper
             );
@@ -303,12 +330,16 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 Password = BC.HashPassword(userPassword),
                 Role = UserRole.ADMIN.ToString()
             };
+
+            this.factoryMock.Setup(m => m.GetRepository(typeof(UserEntity)))
+                .Returns(this.mockUserRepo.Object);
+
             this.userService = new UserService(
-                this.usersMock.Object,
+                this.factoryMock.Object,
                 this.testAppSettings,
                 this.mapper
             );
-            OperationResult expected = userService.UpdateUser(updateRequest,UserRole.SELLER);
+            OperationResult expected = userService.UpdateUser(updateRequest, UserRole.SELLER);
 
             Assert.IsTrue(expected.ResultCode == ResultCode.FAIL);
         }
@@ -324,12 +355,15 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 Password = BC.HashPassword(userPassword),
                 Role = "someIncorrectRole"
             };
+            this.factoryMock.Setup(m => m.GetRepository(typeof(UserEntity)))
+                .Returns(this.mockUserRepo.Object);
+
             this.userService = new UserService(
-                this.usersMock.Object,
+                this.factoryMock.Object,
                 this.testAppSettings,
                 this.mapper
             );
-            OperationResult expected = userService.UpdateUser(updateRequest,UserRole.ADMIN);
+            OperationResult expected = userService.UpdateUser(updateRequest, UserRole.ADMIN);
 
             Assert.IsTrue(expected.ResultCode == ResultCode.FAIL);
         }
@@ -345,12 +379,15 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 Password = BC.HashPassword(userPassword),
                 Role = UserRole.SPECTATOR.ToString()
             };
+            this.factoryMock.Setup(m => m.GetRepository(typeof(UserEntity)))
+                .Returns(this.mockUserRepo.Object);
+
             this.userService = new UserService(
-                this.usersMock.Object,
+                this.factoryMock.Object,
                 this.testAppSettings,
                 this.mapper
             );
-            OperationResult expected = userService.UpdateUser(updateRequest,UserRole.ADMIN);
+            OperationResult expected = userService.UpdateUser(updateRequest, UserRole.ADMIN);
 
             Assert.IsTrue(expected.ResultCode == ResultCode.SUCCESS);
         }
@@ -360,9 +397,12 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
         {
             var id = 1;
 
-            this.usersMock.Setup(r => r.Delete(It.IsAny<int>())).Throws(new RepositoryException());
+            this.mockUserRepo.Setup(r => r.Delete(It.IsAny<int>())).Throws(new RepositoryException());
+            this.factoryMock.Setup(m => m.GetRepository(typeof(UserEntity)))
+                .Returns(this.mockUserRepo.Object);
+
             this.userService = new UserService(
-                this.usersMock.Object,
+                this.factoryMock.Object,
                 this.testAppSettings,
                 this.mapper
             );
@@ -377,10 +417,13 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
             int id = 1;
 
             UserEntity dbUser = null;
-            
-            this.usersMock.Setup(r => r.Get(It.IsAny<int>())).Returns(dbUser);
+
+            this.mockUserRepo.Setup(r => r.Get(It.IsAny<int>())).Returns(dbUser);
+            this.factoryMock.Setup(m => m.GetRepository(typeof(UserEntity)))
+                .Returns(this.mockUserRepo.Object);
+
             this.userService = new UserService(
-                this.usersMock.Object,
+                this.factoryMock.Object,
                 this.testAppSettings,
                 this.mapper
             );
