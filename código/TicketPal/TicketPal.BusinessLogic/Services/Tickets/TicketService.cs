@@ -6,6 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TicketPal.BusinessLogic.Settings.Api;
+using TicketPal.Domain.Constants;
+using TicketPal.Domain.Entity;
+using TicketPal.Domain.Exceptions;
 using TicketPal.Domain.Models.Request;
 using TicketPal.Domain.Models.Response;
 using TicketPal.Interfaces.Repository;
@@ -15,45 +18,117 @@ namespace TicketPal.BusinessLogic.Services.Tickets
 {
     public class TicketService : ITicketService
     {
-        private readonly ITicketRepository repository;
-        private readonly IAppSettings appSettings;
+        private readonly IServiceFactory serviceFactory;
         private readonly IMapper mapper;
+        public IGenericRepository<TicketEntity> ticketRepository;
+        public IGenericRepository<ConcertEntity> concertRepository;
 
-        public TicketService(ITicketRepository repository, IOptions<IAppSettings> appSettings, IMapper mapper)
+        public TicketService(IServiceFactory factory, IMapper mapper)
         {
             this.mapper = mapper;
-            this.repository = repository;
-            this.appSettings = appSettings.Value;
+            this.serviceFactory = factory;
+            ticketRepository = serviceFactory.GetRepository<TicketEntity>() as IGenericRepository<TicketEntity>;
+            concertRepository = serviceFactory.GetRepository<ConcertEntity>() as IGenericRepository<ConcertEntity>;
         }
 
         public OperationResult AddTicket(AddTicketRequest model)
         {
-            throw new NotImplementedException();
+            try
+            {
+                EventEntity newEvent = concertRepository.Get(model.Event);
+
+                UserEntity buyer = new UserEntity()
+                {
+                    Id = model.User.Id,
+                    Firstname = model.User.Firstname,
+                    Lastname = model.User.Lastname,
+                    Email = model.User.Email,
+                    Password = model.User.Password,
+                    Role = model.User.Role
+                    ActiveAccount = model.User.ActiveAccount
+                };
+
+                ticketRepository.Add(new TicketEntity
+                {
+                    Buyer = buyer,
+                    PurchaseDate = DateTime.Now,
+                    Status = TicketStatus.PURCHASED,
+                    Code = TicketCode.GenerateCode(),
+                    Event = newEvent
+                });
+            }
+            catch (RepositoryException ex)
+            {
+                return new OperationResult
+                {
+                    ResultCode = ResultCode.FAIL,
+                    Message = ex.Message
+                };
+            }
+            return new OperationResult
+            {
+                ResultCode = ResultCode.SUCCESS,
+                Message = "Concert successfully created"
+            };
         }
 
         public OperationResult DeleteTicket(int id)
         {
-            throw new NotImplementedException();
-        }
-
-        public bool ExistsTicketByName(string name)
-        {
-            throw new NotImplementedException();
+            try
+            {
+                ticketRepository.Delete(id);
+                return new OperationResult
+                {
+                    ResultCode = ResultCode.SUCCESS,
+                    Message = "Ticket removed successfully"
+                };
+            }
+            catch (RepositoryException ex)
+            {
+                return new OperationResult
+                {
+                    ResultCode = ResultCode.FAIL,
+                    Message = ex.Message
+                };
+            }
         }
 
         public Ticket GetTicket(int id)
         {
-            throw new NotImplementedException();
+            return mapper.Map<Ticket>(ticketRepository.Get(id));
         }
 
         public IEnumerable<Ticket> GetTickets()
         {
-            throw new NotImplementedException();
+            var ticket = ticketRepository.GetAll();
+            return mapper.Map<IEnumerable<TicketEntity>, IEnumerable<Ticket>>(ticket);
         }
 
         public OperationResult UpdateTicket(UpdateTicketRequest model)
         {
-            throw new NotImplementedException();
+            try
+            {
+                ticketRepository.Update(new TicketEntity
+                {
+                    Id = model.Id,
+                    Code = model.Code,
+                    Status = model.Status,
+                });
+            }
+            catch (RepositoryException ex)
+            {
+                return new OperationResult
+                {
+                    ResultCode = ResultCode.FAIL,
+                    Message = ex.Message
+                };
+            }
+
+            return new OperationResult
+            {
+                ResultCode = ResultCode.SUCCESS,
+                Message = "Ticket updated successfully"
+            };
         }
     }
 }

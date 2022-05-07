@@ -6,6 +6,7 @@ namespace TicketPal.Domain.Models.Request
 {
     public class UpdatePerformerRequest
     {
+        public int Id { get; set; }
         [Required]
         public PerformerType PerformerType { get; set; }
         [Required]
@@ -13,7 +14,7 @@ namespace TicketPal.Domain.Models.Request
         [Required]
         public string StartYear { get; set; }
         [Required]
-        public GenreEntity Genre { get; set; }
+        public int Genre { get; set; }
         [Required]
         public string Artists { get; set; }
     }

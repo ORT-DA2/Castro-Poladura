@@ -1,9 +1,5 @@
 ﻿using AutoMapper;
-using Microsoft.Extensions.Options;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using TicketPal.BusinessLogic.Settings.Api;
 using TicketPal.Domain.Constants;
 using TicketPal.Domain.Entity;
 using TicketPal.Domain.Exceptions;
@@ -16,24 +12,31 @@ namespace TicketPal.BusinessLogic.Services.Concerts
 {
     public class ConcertService : IConcertService
     {
-        private readonly IConcertRepository repository;
-        private readonly IAppSettings appSettings;
+        private readonly IServiceFactory serviceFactory;
         private readonly IMapper mapper;
+        public IGenericRepository<ConcertEntity> concertRepository;
+        public IGenericRepository<PerformerEntity> performerRepository;
 
-        public ConcertService(IConcertRepository repository, IOptions<IAppSettings> appSettings, IMapper mapper)
+        public ConcertService(IServiceFactory factory, IMapper mapper)
         {
             this.mapper = mapper;
-            this.repository = repository;
-            this.appSettings = appSettings.Value;
+            this.serviceFactory = factory;
+            this.concertRepository = serviceFactory.GetRepository(typeof(ConcertEntity)) as IGenericRepository<ConcertEntity>;
+            this.performerRepository = serviceFactory.GetRepository(typeof(PerformerEntity)) as IGenericRepository<PerformerEntity>;
         }
 
         public OperationResult AddConcert(AddConcertRequest model)
         {
             try
             {
-                repository.Add(new ConcertEntity
+                PerformerEntity artist = performerRepository.Get(model.Artist);
+                ConcertEntity found = concertRepository.Get(c => c.TourName == model.TourName && c.Artist.Name == artist.Name && c.Date == model.Date);
+
+                if (found == null)
+                {
+                    concertRepository.Add(new ConcertEntity
                     {
-                        Artist = model.Artist,
+                        Artist = artist,
                         AvailableTickets = model.AvailableTickets,
                         CurrencyType = model.CurrencyType,
                         Date = model.Date,
@@ -41,6 +44,15 @@ namespace TicketPal.BusinessLogic.Services.Concerts
                         TicketPrice = model.TicketPrice,
                         TourName = model.TourName
                     });
+                }
+                else
+                {
+                    return new OperationResult
+                    {
+                        ResultCode = ResultCode.FAIL,
+                        Message = "Concert already exists"
+                    };
+                }
             }
             catch (RepositoryException ex)
             {
@@ -61,11 +73,11 @@ namespace TicketPal.BusinessLogic.Services.Concerts
         {
             try
             {
-                repository.Delete(id);
+                concertRepository.Delete(id);
                 return new OperationResult
                 {
                     ResultCode = ResultCode.SUCCESS,
-                    Message = "User removed successfully"
+                    Message = "Concert removed successfully"
                 };
             }
             catch (RepositoryException ex)
@@ -78,19 +90,14 @@ namespace TicketPal.BusinessLogic.Services.Concerts
             }
         }
 
-        public bool ExistsConcertByTourName(string tourName)
-        {
-            throw new NotImplementedException();
-        }
-
         public Concert GetConcert(int id)
         {
-            return mapper.Map<Concert>(repository.Get(id));
+            return mapper.Map<Concert>(concertRepository.Get(id));
         }
 
         public IEnumerable<Concert> GetConcerts()
         {
-            var concerts = repository.GetAll();
+            var concerts = concertRepository.GetAll();
             return mapper.Map<IEnumerable<ConcertEntity>, IEnumerable<Concert>>(concerts);
         }
 
@@ -98,9 +105,12 @@ namespace TicketPal.BusinessLogic.Services.Concerts
         {
             try
             {
-                repository.Update(new ConcertEntity
+                PerformerEntity artist = performerRepository.Get(model.Artist);
+
+                concertRepository.Update(new ConcertEntity
                 {
-                    Artist = model.Artist,
+                    Id = model.Id,
+                    Artist = artist,
                     AvailableTickets = model.AvailableTickets,
                     CurrencyType = model.CurrencyType,
                     Date = model.Date,

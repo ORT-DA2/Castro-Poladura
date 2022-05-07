@@ -1,14 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using TicketPal.Domain.Models.Response;
 
 namespace TicketPal.Domain.Models.Request
 {
     public class AddTicketRequest
     {
-        [Required]
-        public string BuyerFirstName { get; set; }
-        [Required]
-        public string BuyerLastName { get; set; }
-        [Required]
-        public string BuyerEmail { get; set; }
+        public int Event { get; set; }
+        public User User { get; set; }
+
     }
 }

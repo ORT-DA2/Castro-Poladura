@@ -15,30 +15,47 @@ namespace TicketPal.BusinessLogic.Services.Performers
 {
     public class PerformerService : IPerformerService
     {
-        private readonly IPerformerRepository repository;
-        private readonly IAppSettings appSettings;
+        private readonly IServiceFactory serviceFactory;
         private readonly IMapper mapper;
+        public IGenericRepository<PerformerEntity> performerRepository;
+        public IGenericRepository<GenreEntity> genreRepository;
 
-        public PerformerService(IPerformerRepository repository, IOptions<IAppSettings> appSettings, IMapper mapper)
+        public PerformerService(IServiceFactory factory, IMapper mapper)
         {
             this.mapper = mapper;
-            this.repository = repository;
-            this.appSettings = appSettings.Value;
+            this.serviceFactory = factory;
+            this.performerRepository = serviceFactory.GetRepository(typeof(PerformerEntity)) as IGenericRepository<PerformerEntity>;
+            this.genreRepository = serviceFactory.GetRepository(typeof(GenreEntity)) as IGenericRepository<GenreEntity>;
         }
 
         public OperationResult AddPerformer(AddPerformerRequest model)
         {
             try
             {
-                repository.Add(new PerformerEntity
-                {
-                    Name = model.Name,
-                    Artists = (model.Artists == null ? "" : model.Artists),
-                    Genre = model.Genre,
-                    PerformerType = model.PerformerType,
-                    StartYear = model.StartYear
+                GenreEntity genre = genreRepository.Get(model.Genre);
+                PerformerEntity found = performerRepository.Get(p => p.Name == model.Name);
 
-                });
+                if (found == null)
+                {
+                    performerRepository.Add(new PerformerEntity
+                    {
+                        Name = model.Name,
+                        Artists = (model.Artists == null ? "" : model.Artists),
+                        Genre = genre,
+                        PerformerType = model.PerformerType,
+                        StartYear = model.StartYear
+
+                    });
+                }
+                else
+                {
+                    return new OperationResult
+                    {
+                        ResultCode = ResultCode.FAIL,
+                        Message = "Performer already exists"
+                    };
+                }
+                
             }
             catch (RepositoryException ex)
             {
@@ -51,7 +68,7 @@ namespace TicketPal.BusinessLogic.Services.Performers
             return new OperationResult
             {
                 ResultCode = ResultCode.SUCCESS,
-                Message = "Concert successfully created"
+                Message = "Performer successfully created"
             };
         }
 
@@ -59,11 +76,11 @@ namespace TicketPal.BusinessLogic.Services.Performers
         {
             try
             {
-                repository.Delete(id);
+                performerRepository.Delete(id);
                 return new OperationResult
                 {
                     ResultCode = ResultCode.SUCCESS,
-                    Message = "User removed successfully"
+                    Message = "Performer removed successfully"
                 };
             }
             catch (RepositoryException ex)
@@ -76,19 +93,14 @@ namespace TicketPal.BusinessLogic.Services.Performers
             }
         }
 
-        public bool ExistsPerformerByName(string name)
-        {
-            throw new NotImplementedException();
-        }
-
         public Performer GetPerformer(int id)
         {
-            return mapper.Map<Performer>(repository.Get(id));
+            return mapper.Map<Performer>(performerRepository.Get(id));
         }
 
         public IEnumerable<Performer> GetPerformers()
         {
-            var performers = repository.GetAll();
+            var performers = performerRepository.GetAll();
             return mapper.Map<IEnumerable<PerformerEntity>, IEnumerable<Performer>>(performers);
         }
 
@@ -96,11 +108,14 @@ namespace TicketPal.BusinessLogic.Services.Performers
         {
             try
             {
-                repository.Update(new PerformerEntity
+                GenreEntity genre = genreRepository.Get(model.Genre);
+
+                performerRepository.Update(new PerformerEntity
                 {
+                    Id = model.Id,
                     Name = model.Name,
                     Artists = model.Artists,
-                    Genre = model.Genre,
+                    Genre = genre,
                     PerformerType = model.PerformerType,
                     StartYear = model.StartYear
                 });

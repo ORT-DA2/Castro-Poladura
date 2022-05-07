@@ -15,25 +15,39 @@ namespace TicketPal.BusinessLogic.Services.Genres
 {
     public class GenreService : IGenreService
     {
-        private readonly IGenreRepository repository;
-        private readonly IAppSettings appSettings;
+        private readonly IServiceFactory serviceFactory;
         private readonly IMapper mapper;
+        public IGenericRepository<GenreEntity> genreRepository;
 
-        public GenreService(IGenreRepository repository, IOptions<IAppSettings> appSettings, IMapper mapper)
+        public GenreService(IServiceFactory factory, IOptions<IAppSettings> appSettings, IMapper mapper)
         {
             this.mapper = mapper;
-            this.repository = repository;
-            this.appSettings = appSettings.Value;
+            this.serviceFactory = factory;
+            this.genreRepository = serviceFactory.GetRepository(typeof(GenreEntity)) as IGenericRepository<GenreEntity>;
         }
 
         public OperationResult AddGenre(AddGenreRequest model)
         {
             try
             {
-                repository.Add(new GenreEntity
+                GenreEntity found = genreRepository.Get(g => g.GenreName == model.GenreName);
+
+                if (found == null)
                 {
-                    GenreName = model.GenreName
-                });
+                    genreRepository.Add(new GenreEntity
+                    {
+                        GenreName = model.GenreName
+                    });
+                }
+                else
+                {
+                    return new OperationResult
+                    {
+                        ResultCode = ResultCode.FAIL,
+                        Message = "Genre already exists"
+                    };
+                }
+
             }
             catch (RepositoryException ex)
             {
@@ -46,7 +60,7 @@ namespace TicketPal.BusinessLogic.Services.Genres
             return new OperationResult
             {
                 ResultCode = ResultCode.SUCCESS,
-                Message = "Concert successfully created"
+                Message = "Genre successfully created"
             };
         }
 
@@ -54,11 +68,11 @@ namespace TicketPal.BusinessLogic.Services.Genres
         {
             try
             {
-                repository.Delete(id);
+                genreRepository.Delete(id);
                 return new OperationResult
                 {
                     ResultCode = ResultCode.SUCCESS,
-                    Message = "User removed successfully"
+                    Message = "Genre removed successfully"
                 };
             }
             catch (RepositoryException ex)
@@ -71,19 +85,14 @@ namespace TicketPal.BusinessLogic.Services.Genres
             }
         }
 
-        public bool ExistsGenreByName(string name)
-        {
-            throw new NotImplementedException();
-        }
-
         public Genre GetGenre(int id)
         {
-            return mapper.Map<Genre>(repository.Get(id));
+            return mapper.Map<Genre>(genreRepository.Get(id));
         }
 
         public IEnumerable<Genre> GetGenres()
         {
-            var genres = repository.GetAll();
+            var genres = genreRepository.GetAll();
             return mapper.Map<IEnumerable<GenreEntity>, IEnumerable<Genre>>(genres);
         }
 
@@ -91,8 +100,9 @@ namespace TicketPal.BusinessLogic.Services.Genres
         {
             try
             {
-                repository.Update(new GenreEntity
+                genreRepository.Update(new GenreEntity
                 {
+                    Id = model.Id,
                     GenreName = model.GenreName
                 });
             }
@@ -108,7 +118,7 @@ namespace TicketPal.BusinessLogic.Services.Genres
             return new OperationResult
             {
                 ResultCode = ResultCode.SUCCESS,
-                Message = "Concert updated successfully"
+                Message = "Genre updated successfully"
             };
         }
     }

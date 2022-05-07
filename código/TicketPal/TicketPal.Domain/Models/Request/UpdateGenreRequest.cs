@@ -9,6 +9,7 @@ namespace TicketPal.Domain.Models.Request
 {
     public class UpdateGenreRequest
     {
+        public int Id { get; set; }
         [Required]
         public string GenreName { get; set; }
     }

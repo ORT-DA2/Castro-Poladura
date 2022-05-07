@@ -20,6 +20,6 @@ namespace TicketPal.Domain.Models.Request
         [Required]
         public string TourName { get; set; }
         [Required]
-        public PerformerEntity Artist { get; set; }
+        public int Artist { get; set; }
     }
 }

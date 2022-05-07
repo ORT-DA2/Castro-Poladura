@@ -11,6 +11,5 @@ namespace TicketPal.Interfaces.Services.Performers
         OperationResult DeletePerformer(int id);
         IEnumerable<Performer> GetPerformers();
         Performer GetPerformer(int id);
-        bool ExistsPerformerByName(string name);
     }
 }

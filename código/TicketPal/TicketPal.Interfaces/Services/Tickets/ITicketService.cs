@@ -15,6 +15,5 @@ namespace TicketPal.Interfaces.Services.Tickets
         OperationResult DeleteTicket(int id);
         IEnumerable<Ticket> GetTickets();
         Ticket GetTicket(int id);
-        bool ExistsTicketByName(string name);
     }
 }

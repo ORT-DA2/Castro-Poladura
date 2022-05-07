@@ -3,9 +3,6 @@ using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 using TicketPal.BusinessLogic.Services.Concerts;
 using TicketPal.Domain.Constants;
 using TicketPal.Domain.Entity;
@@ -22,6 +19,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
         private PerformerEntity artist;
         private AddConcertRequest concertRequest;
         private ConcertService concertService;
+        private IServiceFactory serviceFactory;
 
 
         [TestInitialize]
@@ -44,7 +42,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
 
             concertRequest = new AddConcertRequest()
             {
-                Artist = artist,
+                Artist = 1,
                 Date = DateTime.Now,
                 AvailableTickets = 30000,
                 EventType = Domain.Constants.EventType.CONCERT,
@@ -56,7 +54,11 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             this.concertsMock.Setup(m => m.Exists(It.IsAny<int>())).Returns(false);
             this.concertsMock.Setup(m => m.Add(It.IsAny<ConcertEntity>())).Verifiable();
 
-            concertService = new ConcertService(this.concertsMock.Object, this.testAppSettings, this.mapper);
+            this.performersMock.Setup(m => m.Get(It.IsAny<int>())).Returns(artist);
+
+            this.concertService = new ConcertService(serviceFactory, this.mapper);
+            this.concertService.concertRepository = this.concertsMock.Object;
+            this.concertService.performerRepository = this.performersMock.Object;
         }
 
         [TestMethod]
@@ -74,7 +76,8 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
 
             this.concertsMock.Setup(m => m.Exists(It.IsAny<int>())).Returns(true);
             this.concertsMock.Setup(m => m.Add(It.IsAny<ConcertEntity>())).Throws(new RepositoryException());
-            concertService = new ConcertService(this.concertsMock.Object, this.testAppSettings, this.mapper);
+            this.concertService = new ConcertService(serviceFactory, this.mapper);
+            this.concertService.concertRepository = this.concertsMock.Object;
 
             OperationResult result = concertService.AddConcert(concertRequest);
 
@@ -88,7 +91,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             var dbUser = new ConcertEntity
             {
                 Id = id,
-                Artist = concertRequest.Artist,
+                Artist = artist,
                 Date = concertRequest.Date,
                 AvailableTickets = concertRequest.AvailableTickets,
                 EventType = concertRequest.EventType,
@@ -98,6 +101,8 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             };
 
             this.concertsMock.Setup(m => m.Get(It.IsAny<int>())).Returns(dbUser);
+            this.concertService = new ConcertService(serviceFactory, this.mapper);
+            this.concertService.concertRepository = this.concertsMock.Object;
             OperationResult result = concertService.DeleteConcert(id);
 
             Assert.IsTrue(result.ResultCode == ResultCode.SUCCESS);
@@ -109,7 +114,8 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             var id = 1;
 
             this.concertsMock.Setup(m => m.Delete(It.IsAny<int>())).Throws(new RepositoryException());
-            this.concertService = new ConcertService(this.concertsMock.Object, this.testAppSettings, this.mapper);
+            this.concertService = new ConcertService(serviceFactory, this.mapper);
+            this.concertService.concertRepository = this.concertsMock.Object;
             OperationResult result = concertService.DeleteConcert(id);
 
             Assert.IsTrue(result.ResultCode == ResultCode.FAIL);
@@ -131,6 +137,8 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             };
 
             this.concertsMock.Setup(m => m.Update(It.IsAny<ConcertEntity>())).Verifiable();
+            this.concertService = new ConcertService(serviceFactory, this.mapper);
+            this.concertService.concertRepository = this.concertsMock.Object;
             OperationResult expected = concertService.UpdateConcert(updateRequest);
 
             Assert.IsTrue(expected.ResultCode == ResultCode.SUCCESS);
@@ -143,7 +151,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             var dbUser = new ConcertEntity
             {
                 Id = id,
-                Artist = concertRequest.Artist,
+                Artist = artist,
                 Date = concertRequest.Date,
                 AvailableTickets = concertRequest.AvailableTickets,
                 EventType = concertRequest.EventType,
@@ -153,7 +161,8 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             };
 
             this.concertsMock.Setup(r => r.Get(It.IsAny<int>())).Returns(dbUser);
-            this.concertService = new ConcertService(this.concertsMock.Object, this.testAppSettings, this.mapper);
+            this.concertService = new ConcertService(serviceFactory, this.mapper);
+            this.concertService.concertRepository = this.concertsMock.Object;
             Concert concert = concertService.GetConcert(id);
 
             Assert.IsNotNull(concert);
@@ -201,7 +210,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
                 new ConcertEntity
                 {
                     Id = 1,
-                    Artist = concertRequest.Artist,
+                    Artist = artist,
                     Date = concertRequest.Date,
                     AvailableTickets = concertRequest.AvailableTickets,
                     EventType = concertRequest.EventType,
@@ -234,7 +243,8 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             };
             
             this.concertsMock.Setup(r => r.GetAll()).Returns(dbAccounts);
-            this.concertService = new ConcertService(this.concertsMock.Object, this.testAppSettings, this.mapper);
+            this.concertService = new ConcertService(serviceFactory, this.mapper);
+            this.concertService.concertRepository = this.concertsMock.Object;
             IEnumerable<Concert> result = concertService.GetConcerts();
 
             Assert.IsTrue(result.ToList().Count == 3);

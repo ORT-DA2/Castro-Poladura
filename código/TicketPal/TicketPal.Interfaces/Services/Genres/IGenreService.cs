@@ -11,6 +11,5 @@ namespace TicketPal.Interfaces.Services.Genres
         OperationResult DeleteGenre(int id);
         IEnumerable<Genre> GetGenres();
         Genre GetGenre(int id);
-        bool ExistsGenreByName(string name);
     }
 }

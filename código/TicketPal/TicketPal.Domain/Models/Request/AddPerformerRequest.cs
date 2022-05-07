@@ -13,7 +13,7 @@ namespace TicketPal.Domain.Models.Request
         [Required]
         public string StartYear { get; set; }
         [Required]
-        public GenreEntity Genre { get; set; }
+        public int Genre { get; set; }
         [Required]
         public string Artists { get; set; }
     }

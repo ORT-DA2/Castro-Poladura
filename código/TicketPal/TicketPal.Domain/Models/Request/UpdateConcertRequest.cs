@@ -7,6 +7,7 @@ namespace TicketPal.Domain.Models.Request
 {
     public class UpdateConcertRequest
     {
+        public int Id { get; set; }
         [Required]
         public DateTime Date { get; set; }
         [Required]
@@ -20,6 +21,6 @@ namespace TicketPal.Domain.Models.Request
         [Required]
         public string TourName { get; set; }
         [Required]
-        public PerformerEntity Artist { get; set; }
+        public int Artist { get; set; }
     }
 }

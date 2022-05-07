@@ -19,6 +19,8 @@ namespace TicketPal.DataAccess.Repository
                 throw new RepositoryException("The event you are trying to add already exists");
             }
 
+            //Chequear existe objeto que tiene dentro
+
             dbContext.Set<ConcertEntity>().Add(element);
             element.CreatedAt = DateTime.Now;
             dbContext.SaveChanges();
