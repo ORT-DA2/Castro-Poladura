@@ -17,11 +17,11 @@ namespace TicketPal.BusinessLogic.Services.Users
 {
     public class UserService : IUserService
     {
-        private readonly IUserRepository repository;
+        private readonly IGenericRepository<UserEntity> repository;
         private readonly IAppSettings appSettings;
         private readonly IMapper mapper;
         public UserService(
-            IUserRepository repository,
+            IGenericRepository<UserEntity> repository,
             IOptions<IAppSettings> appSettings,
             IMapper mapper
         )

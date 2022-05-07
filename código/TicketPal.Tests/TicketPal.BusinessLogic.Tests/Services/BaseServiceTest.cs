@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using TicketPal.BusinessLogic.Mapper;
 using TicketPal.BusinessLogic.Settings.Api;
+using TicketPal.Domain.Entity;
 using TicketPal.Interfaces.Repository;
 using TicketPal.Interfaces.Services.Users;
 
@@ -16,7 +17,7 @@ namespace TicketPal.BusinessLogic.Tests.Services
         protected Mock<DbContext> mockDbContext;
         protected IMapper mapper;
         // Repository mocks
-        protected Mock<IUserRepository> usersMock;
+        protected Mock<IGenericRepository<UserEntity>> usersMock;
         // Services
         protected IUserService userService;
         protected string jwtTestSecret;
@@ -34,7 +35,7 @@ namespace TicketPal.BusinessLogic.Tests.Services
             this.mapper = mapperConfig.CreateMapper();
 
             // Repositories mock
-            this.usersMock = new Mock<IUserRepository>();
+            this.usersMock = new Mock<IGenericRepository<UserEntity>>();
             // User repository test settings
             this.userPassword = "somePassword";
             this.jwtTestSecret = "23jrb783v29fwfvfg2874gf286fce8";
