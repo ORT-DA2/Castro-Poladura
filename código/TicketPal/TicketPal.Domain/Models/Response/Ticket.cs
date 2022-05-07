@@ -6,6 +6,7 @@ namespace TicketPal.Domain.Models.Response
 {
     public class Ticket
     {
+        public int Id { get; set; }
         public TicketStatus Status { get; set; }
         public DateTime PurchaseDate { get; set; }
         public string Code { get; set; }

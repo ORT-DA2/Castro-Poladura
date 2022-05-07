@@ -11,12 +11,16 @@ using TicketPal.Interfaces.Services.Users;
 namespace TicketPal.BusinessLogic.Tests.Services
 {
     [TestClass]
-    public abstract class BaseServiceTest
+    public abstract class BaseServiceTests
     {
         protected Mock<DbContext> mockDbContext;
         protected IMapper mapper;
         // Repository mocks
         protected Mock<IUserRepository> usersMock;
+        protected Mock<IConcertRepository> concertsMock;
+        protected Mock<IGenreRepository> genresMock;
+        protected Mock<IPerformerRepository> performersMock;
+        protected Mock<ITicketRepository> ticketsMock;
         // Services
         protected IUserService userService;
         protected string jwtTestSecret;
@@ -35,6 +39,10 @@ namespace TicketPal.BusinessLogic.Tests.Services
 
             // Repositories mock
             this.usersMock = new Mock<IUserRepository>();
+            this.concertsMock = new Mock<IConcertRepository>();
+            this.genresMock = new Mock<IGenreRepository>();
+            this.performersMock = new Mock<IPerformerRepository>();
+            this.ticketsMock = new Mock<ITicketRepository>();
             // User repository test settings
             this.userPassword = "somePassword";
             this.jwtTestSecret = "23jrb783v29fwfvfg2874gf286fce8";

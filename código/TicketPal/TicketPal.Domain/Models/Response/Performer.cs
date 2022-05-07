@@ -3,7 +3,7 @@ using TicketPal.Domain.Entity;
 
 namespace TicketPal.Domain.Models.Response
 {
-    internal class Performer
+    public class Performer
     {
         public int Id { get; set; }
         public PerformerType PerformerType { get; set; }

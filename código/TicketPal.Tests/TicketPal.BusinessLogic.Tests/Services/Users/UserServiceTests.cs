@@ -15,7 +15,7 @@ using TicketPal.BusinessLogic.Services.Users;
 namespace TicketPal.BusinessLogic.Tests.Services.Users
 {
     [TestClass]
-    public class UserServiceTest : BaseServiceTest
+    public class UserServiceTests : BaseServiceTests
     {
         [TestMethod]
         public void UserAuthenticateCorrectly()

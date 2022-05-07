@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using TicketPal.Domain.Constants;
+using TicketPal.Domain.Entity;
 
 namespace TicketPal.Domain.Models.Request
 {
@@ -12,7 +13,7 @@ namespace TicketPal.Domain.Models.Request
         [Required]
         public string StartYear { get; set; }
         [Required]
-        public int Genre { get; set; }
+        public GenreEntity Genre { get; set; }
         [Required]
         public string Artists { get; set; }
     }
