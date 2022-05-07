@@ -6,6 +6,7 @@ using Moq;
 using TicketPal.BusinessLogic.Mapper;
 using TicketPal.BusinessLogic.Settings.Api;
 using TicketPal.Domain.Entity;
+using TicketPal.Interfaces.Factory;
 using TicketPal.Interfaces.Repository;
 using TicketPal.Interfaces.Services.Users;
 
@@ -15,11 +16,14 @@ namespace TicketPal.BusinessLogic.Tests.Services
     public abstract class BaseServiceTest
     {
         protected Mock<DbContext> mockDbContext;
-        protected IMapper mapper;
-        // Repository mocks
-        protected Mock<IGenericRepository<UserEntity>> usersMock;
+        // Factory
+        protected Mock<IServiceFactory> factoryMock;
+        // Repository
+        protected Mock<IGenericRepository<UserEntity>> mockUserRepo;
         // Services
         protected IUserService userService;
+        // Configs
+        protected IMapper mapper;
         protected string jwtTestSecret;
         protected string userPassword;
         protected IOptions<AppSettings> testAppSettings;
@@ -34,8 +38,10 @@ namespace TicketPal.BusinessLogic.Tests.Services
             var mapperConfig = new MapperConfiguration(cfg => cfg.AddProfile<AutoMapping>());
             this.mapper = mapperConfig.CreateMapper();
 
-            // Repositories mock
-            this.usersMock = new Mock<IGenericRepository<UserEntity>>();
+            // Init Mocks
+            this.factoryMock = new Mock<IServiceFactory>();
+            this.mockUserRepo = new Mock<IGenericRepository<UserEntity>>();
+
             // User repository test settings
             this.userPassword = "somePassword";
             this.jwtTestSecret = "23jrb783v29fwfvfg2874gf286fce8";
