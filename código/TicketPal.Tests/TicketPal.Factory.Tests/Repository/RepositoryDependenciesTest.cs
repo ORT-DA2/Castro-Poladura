@@ -31,5 +31,33 @@ namespace TicketPal.Factory.Tests.Repository
             var repository = serviceProvider.GetService<IGenericRepository<UserEntity>>();
             Assert.IsNotNull(repository);
         }
+
+        [TestMethod]
+        public void ConcertRepositoryDependencyCheck()
+        {
+            var repository = serviceProvider.GetService<IGenericRepository<ConcertEntity>>();
+            Assert.IsNotNull(repository);
+        }
+
+        [TestMethod]
+        public void GenreRepositoryDependencyCheck()
+        {
+            var repository = serviceProvider.GetService<IGenericRepository<GenreEntity>>();
+            Assert.IsNotNull(repository);
+        }
+
+        [TestMethod]
+        public void PerformerRepositoryDependencyCheck()
+        {
+            var repository = serviceProvider.GetService<IGenericRepository<PerformerEntity>>();
+            Assert.IsNotNull(repository);
+        }
+        
+        [TestMethod]
+        public void TicketRepositoryDependencyCheck()
+        {
+            var repository = serviceProvider.GetService<IGenericRepository<TicketEntity>>();
+            Assert.IsNotNull(repository);
+        }
     }
 }
