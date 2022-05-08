@@ -16,11 +16,11 @@ namespace TicketPal.BusinessLogic.Tests.Services
     [TestClass]
     public abstract class BaseServiceTest
     {
+        // Mocks
         protected Mock<DbContext> mockDbContext;
-        // Factory
         protected Mock<IServiceFactory> factoryMock;
-        // Repository
         protected Mock<IGenericRepository<UserEntity>> mockUserRepo;
+        protected Mock<IJwtService> mockJwtService;
         // Services
         protected IUserService userService;
         protected IJwtService jwtService;
@@ -43,6 +43,7 @@ namespace TicketPal.BusinessLogic.Tests.Services
             // Init Mocks
             this.factoryMock = new Mock<IServiceFactory>();
             this.mockUserRepo = new Mock<IGenericRepository<UserEntity>>();
+            this.mockJwtService = new Mock<IJwtService>(MockBehavior.Default);
 
             // User repository test settings
             this.userPassword = "somePassword";

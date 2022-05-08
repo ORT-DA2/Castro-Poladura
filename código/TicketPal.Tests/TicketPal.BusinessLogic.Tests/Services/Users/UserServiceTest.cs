@@ -11,6 +11,7 @@ using TicketPal.Domain.Constants;
 using TicketPal.Domain.Models.Response;
 using TicketPal.Domain.Models.Request;
 using TicketPal.BusinessLogic.Services.Users;
+using TicketPal.Interfaces.Services.Jwt;
 
 namespace TicketPal.BusinessLogic.Tests.Services.Users
 {
@@ -41,6 +42,14 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 .Returns(dbUser);
             this.factoryMock.Setup(m => m.GetRepository(typeof(UserEntity)))
                 .Returns(this.mockUserRepo.Object);
+            this.mockJwtService.Setup(m => m.GenerateJwtToken(
+                It.IsAny<string>(),
+                "id",
+                It.IsAny<string>()
+            )).Returns("someToken");
+
+            this.factoryMock.Setup(m => m.GetService(typeof(IJwtService)))
+                .Returns(this.mockJwtService.Object);
 
             this.userService = new UserService(
                 this.factoryMock.Object,
