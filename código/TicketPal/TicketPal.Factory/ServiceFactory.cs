@@ -5,14 +5,24 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using TicketPal.BusinessLogic.Mapper;
+using TicketPal.BusinessLogic.Services.Concerts;
+using TicketPal.BusinessLogic.Services.Genres;
+using TicketPal.BusinessLogic.Services.Performers;
+using TicketPal.BusinessLogic.Services.Tickets;
 using TicketPal.BusinessLogic.Services.Users;
 using TicketPal.BusinessLogic.Settings.Api;
+using TicketPal.BusinessLogic.Utils.TicketCodes;
 using TicketPal.DataAccess;
 using TicketPal.DataAccess.Repository;
 using TicketPal.Domain.Entity;
 using TicketPal.Interfaces.Factory;
 using TicketPal.Interfaces.Repository;
+using TicketPal.Interfaces.Services.Concerts;
+using TicketPal.Interfaces.Services.Genres;
+using TicketPal.Interfaces.Services.Performers;
+using TicketPal.Interfaces.Services.Tickets;
 using TicketPal.Interfaces.Services.Users;
+using TicketPal.Interfaces.Utils.TicketCodes;
 
 namespace TicketPal.Factory
 {
@@ -49,6 +59,11 @@ namespace TicketPal.Factory
         public void RegisterServices()
         {
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IConcertService, ConcertService>();
+            services.AddScoped<IGenreService, GenreService>();
+            services.AddScoped<IPerformerService, PerformerService>();
+            services.AddScoped<ITicketCode, TicketCode>();
+            services.AddScoped<ITicketService, TicketService>();
         }
 
         public void BuildServices()

@@ -16,9 +16,10 @@ namespace TicketPal.DataAccess.Tests.Entity
         private PerformerEntity band;
         private string artists;
         private TicketStatus status;
+        private string code;
 
         [TestInitialize]
-        public void Initialize()
+        public void SetUp()
         {
             ticket = new TicketEntity();
 
@@ -59,6 +60,7 @@ namespace TicketPal.DataAccess.Tests.Entity
                 Artist = band
             };
             status = TicketStatus.PURCHASED;
+            code = "p3q59gjnfjgo4uqfjDXNCLKMQP31foiqnvjdanv";
         }
 
         [TestMethod]
@@ -69,14 +71,14 @@ namespace TicketPal.DataAccess.Tests.Entity
             ticket.Buyer = buyer;
             ticket.Status = status;
             ticket.PurchaseDate = purchaseDate;
-            ticket.ShowName = concert.TourName;
+            ticket.Code = code;
             ticket.Event = concert;
 
             Assert.AreEqual(ticket.Id, idTicket);
             Assert.AreEqual(ticket.Buyer.Id, buyer.Id);
             Assert.AreEqual(ticket.Status, status);
             Assert.AreEqual(ticket.PurchaseDate, purchaseDate);
-            Assert.AreEqual(ticket.ShowName, concert.TourName);
+            Assert.AreEqual(ticket.Code, code);
             Assert.AreEqual(ticket.Event.Id, concert.Id);
         }
     }
