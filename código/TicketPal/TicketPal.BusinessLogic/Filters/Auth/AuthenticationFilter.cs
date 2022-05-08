@@ -50,10 +50,6 @@ namespace TicketPal.BusinessLogic.Filters.Auth
                         StatusCode = forbidden.StatusCode
                     };
                 }
-                else
-                {
-                    context.HttpContext.Items["User"] = user;
-                }
             }
 
         }
