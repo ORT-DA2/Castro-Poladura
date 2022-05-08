@@ -1,4 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using TicketPal.Domain.Models.Response.Error;
 
 namespace TicketPal.Domain.Tests.Models.Response.Error
 {
