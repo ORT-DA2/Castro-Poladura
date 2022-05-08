@@ -4,15 +4,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using TicketPal.BusinessLogic.Filters.Auth;
 using TicketPal.Domain.Constants;
 using TicketPal.Domain.Models.Response;
 using TicketPal.Interfaces.Factory;
 using TicketPal.Interfaces.Services.Jwt;
 using TicketPal.Interfaces.Services.Settings;
 using TicketPal.Interfaces.Services.Users;
+using TicketPal.WebApi.Filters.Auth;
 
-namespace TicketPal.BusinessLogic.Tests.Filters
+namespace TicketPal.WebApi.Tests.Filters
 {
     [TestClass]
     public class AuthenticationFilterTest

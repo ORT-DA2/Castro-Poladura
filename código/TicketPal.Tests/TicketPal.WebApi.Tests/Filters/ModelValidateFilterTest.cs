@@ -1,15 +1,13 @@
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using TicketPal.BusinessLogic.Filters.Model;
+using TicketPal.WebApi.Filters.Model;
 
-namespace TicketPal.BusinessLogic.Tests.Filters
+namespace TicketPal.WebApi.Tests.Filters
 {
     [TestClass]
     public class ModelValidatFilterTest

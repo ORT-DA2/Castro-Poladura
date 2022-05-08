@@ -8,7 +8,7 @@ using TicketPal.Interfaces.Services.Jwt;
 using TicketPal.Interfaces.Services.Settings;
 using TicketPal.Interfaces.Services.Users;
 
-namespace TicketPal.BusinessLogic.Filters.Auth
+namespace TicketPal.WebApi.Filters.Auth
 {
     public class AuthenticationFilter : Attribute, IAuthorizationFilter
     {
