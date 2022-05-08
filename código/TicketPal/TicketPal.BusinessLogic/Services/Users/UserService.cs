@@ -131,6 +131,7 @@ namespace TicketPal.BusinessLogic.Services.Users
                         repository.Update(
                             new UserEntity
                             {
+                                Id = model.Id,
                                 Firstname = model.Firstname,
                                 Lastname = model.Lastname,
                                 Email = model.Email
@@ -143,6 +144,7 @@ namespace TicketPal.BusinessLogic.Services.Users
                             repository.Update(
                                 new UserEntity
                                 {
+                                    Id = model.Id,
                                     Firstname = model.Firstname,
                                     Lastname = model.Lastname,
                                     Password = BC.HashPassword(model.Password),
