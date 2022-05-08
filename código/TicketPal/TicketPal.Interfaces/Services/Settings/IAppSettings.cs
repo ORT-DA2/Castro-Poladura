@@ -1,4 +1,4 @@
-namespace TicketPal.BusinessLogic.Settings.Api
+namespace TicketPal.Interfaces.Services.Settings
 {
     public interface IAppSettings
     {

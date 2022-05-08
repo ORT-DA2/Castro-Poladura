@@ -53,7 +53,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
 
             this.userService = new UserService(
                 this.factoryMock.Object,
-                this.testAppSettings,
+                this.options,
                 this.mapper
             );
             User authenticatedUser = userService.Login(authRequest);
@@ -90,7 +90,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
 
             this.userService = new UserService(
                 this.factoryMock.Object,
-                this.testAppSettings,
+                this.options,
                 this.mapper
             );
             User authenticatedUser = userService.Login(authRequest);
@@ -126,7 +126,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
 
             this.userService = new UserService(
                 this.factoryMock.Object,
-                this.testAppSettings,
+                this.options,
                 this.mapper
             );
             User authenticatedUser = userService.Login(authRequest);
@@ -154,7 +154,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
 
             this.userService = new UserService(
                 this.factoryMock.Object,
-                this.testAppSettings,
+                this.options,
                 this.mapper
             );
 
@@ -184,7 +184,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
 
             this.userService = new UserService(
                 this.factoryMock.Object,
-                this.testAppSettings,
+                this.options,
                 this.mapper
             );
 
@@ -211,7 +211,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
 
             this.userService = new UserService(
                 this.factoryMock.Object,
-                this.testAppSettings,
+                this.options,
                 this.mapper
             );
             IEnumerable<User> result = userService.GetUsers();
@@ -239,7 +239,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
 
             this.userService = new UserService(
                 this.factoryMock.Object,
-                this.testAppSettings,
+                this.options,
                 this.mapper
             );
             User account = userService.GetUser(id);
@@ -268,7 +268,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
 
             this.userService = new UserService(
                 this.factoryMock.Object,
-                this.testAppSettings,
+                this.options,
                 this.mapper
             );
             OperationResult result = userService.DeleteUser(id);
@@ -294,7 +294,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
 
             this.userService = new UserService(
                 this.factoryMock.Object,
-                this.testAppSettings,
+                this.options,
                 this.mapper
             );
             OperationResult expected = userService.UpdateUser(updateRequest);
@@ -320,7 +320,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
 
             this.userService = new UserService(
                 this.factoryMock.Object,
-                this.testAppSettings,
+                this.options,
                 this.mapper
             );
             OperationResult expected = userService.UpdateUser(updateRequest);
@@ -345,7 +345,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
 
             this.userService = new UserService(
                 this.factoryMock.Object,
-                this.testAppSettings,
+                this.options,
                 this.mapper
             );
             OperationResult expected = userService.UpdateUser(updateRequest, UserRole.SELLER);
@@ -369,7 +369,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
 
             this.userService = new UserService(
                 this.factoryMock.Object,
-                this.testAppSettings,
+                this.options,
                 this.mapper
             );
             OperationResult expected = userService.UpdateUser(updateRequest, UserRole.ADMIN);
@@ -393,7 +393,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
 
             this.userService = new UserService(
                 this.factoryMock.Object,
-                this.testAppSettings,
+                this.options,
                 this.mapper
             );
             OperationResult expected = userService.UpdateUser(updateRequest, UserRole.ADMIN);
@@ -412,7 +412,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
 
             this.userService = new UserService(
                 this.factoryMock.Object,
-                this.testAppSettings,
+                this.options,
                 this.mapper
             );
             OperationResult result = userService.DeleteUser(id);
@@ -433,7 +433,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
 
             this.userService = new UserService(
                 this.factoryMock.Object,
-                this.testAppSettings,
+                this.options,
                 this.mapper
             );
             User account = userService.GetUser(id);

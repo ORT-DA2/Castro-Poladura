@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using AutoMapper;
-using TicketPal.BusinessLogic.Settings.Api;
 using TicketPal.Domain.Constants;
 using TicketPal.Domain.Models.Request;
 using TicketPal.Domain.Models.Response;
@@ -13,18 +12,19 @@ using TicketPal.Domain.Exceptions;
 using System.Linq;
 using TicketPal.Interfaces.Factory;
 using TicketPal.Interfaces.Services.Jwt;
+using TicketPal.Interfaces.Services.Settings;
 
 namespace TicketPal.BusinessLogic.Services.Users
 {
     public class UserService : IUserService
     {
         private readonly IGenericRepository<UserEntity> repository;
-        private readonly AppSettings appSettings;
+        private readonly IAppSettings appSettings;
         private readonly IMapper mapper;
         private readonly IServiceFactory factory;
         public UserService(
             IServiceFactory factory,
-            IOptions<AppSettings> appSettings,
+            IOptions<IAppSettings> appSettings,
             IMapper mapper
         )
         {
