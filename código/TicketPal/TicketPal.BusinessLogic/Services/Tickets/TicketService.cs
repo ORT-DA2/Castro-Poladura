@@ -7,8 +7,10 @@ using TicketPal.Domain.Entity;
 using TicketPal.Domain.Exceptions;
 using TicketPal.Domain.Models.Request;
 using TicketPal.Domain.Models.Response;
+using TicketPal.Interfaces.Factory;
 using TicketPal.Interfaces.Repository;
 using TicketPal.Interfaces.Services.Tickets;
+using TicketPal.Interfaces.Utils.TicketCodes;
 
 namespace TicketPal.BusinessLogic.Services.Tickets
 {
@@ -23,8 +25,8 @@ namespace TicketPal.BusinessLogic.Services.Tickets
         {
             this.mapper = mapper;
             this.serviceFactory = factory;
-            ticketRepository = serviceFactory.GetRepository<TicketEntity>() as IGenericRepository<TicketEntity>;
-            concertRepository = serviceFactory.GetRepository<ConcertEntity>() as IGenericRepository<ConcertEntity>;
+            ticketRepository = serviceFactory.GetRepository(typeof(TicketEntity)) as IGenericRepository<TicketEntity>;
+            concertRepository = serviceFactory.GetRepository(typeof(ConcertEntity)) as IGenericRepository<ConcertEntity>;
         }
 
         public OperationResult AddTicket(AddTicketRequest model)
@@ -33,27 +35,53 @@ namespace TicketPal.BusinessLogic.Services.Tickets
             {
                 EventEntity newEvent = concertRepository.Get(model.Event);
 
-                var ticket = new TicketCode();//se debe traer la implementacion de ITicketCode;
+                TicketEntity found = ticketRepository.Get(t => t.Buyer.Email == model.User.Email && t.Event.Id == model.Event);
+                var ticketCode = serviceFactory.GetService(typeof(ITicketCode)) as ITicketCode;
 
-                UserEntity buyer = new UserEntity()
+                if(found == null)
                 {
-                    Id = model.User.Id,
-                    Firstname = model.User.Firstname,
-                    Lastname = model.User.Lastname,
-                    Email = model.User.Email,
-                    Password = model.User.Password,
-                    Role = model.User.Role,
-                    ActiveAccount = model.User.ActiveAccount
-                };
+                    if (newEvent != null)
+                    {
+                        UserEntity buyer = new UserEntity()
+                        {
+                            Id = model.User.Id,
+                            Firstname = model.User.Firstname,
+                            Lastname = model.User.Lastname,
+                            Email = model.User.Email,
+                            Password = model.User.Password,
+                            Role = model.User.Role,
+                            ActiveAccount = model.User.ActiveAccount
+                        };
 
-                ticketRepository.Add(new TicketEntity
+                        ticketRepository.Add(new TicketEntity
+                        {
+                            Buyer = buyer,
+                            PurchaseDate = DateTime.Now,
+                            Status = TicketStatus.PURCHASED,
+                            Code = ticketCode.GenerateTicketCode(),
+                            Event = newEvent
+                        });
+                    }
+                    else
+                    {
+                        return new OperationResult
+                        {
+                            ResultCode = ResultCode.FAIL,
+                            Message = "Event doesn't exists"
+                        };
+                    }
+
+                }
+                else
                 {
-                    Buyer = buyer,
-                    PurchaseDate = DateTime.Now,
-                    Status = TicketStatus.PURCHASED,
-                    Code = ticket.GenerateTicketCode(),
-                    Event = newEvent
-                });
+                    return new OperationResult
+                    {
+                        ResultCode = ResultCode.FAIL,
+                        Message = "Ticket already exists"
+                    };
+                }
+
+
             }
             catch (RepositoryException ex)
             {

@@ -19,8 +19,6 @@ namespace TicketPal.DataAccess.Repository
                 throw new RepositoryException("The performer you are trying to add already exists");
             }
 
-            //Chequear existe objeto que tiene dentro
-
             dbContext.Set<PerformerEntity>().Add(element);
             element.CreatedAt = DateTime.Now;
             dbContext.SaveChanges();

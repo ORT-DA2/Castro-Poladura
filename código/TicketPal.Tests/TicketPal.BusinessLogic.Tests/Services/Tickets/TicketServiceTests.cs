@@ -3,14 +3,14 @@ using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TicketPal.BusinessLogic.Services.Tickets;
+using TicketPal.BusinessLogic.Utils.TicketCodes;
 using TicketPal.Domain.Constants;
 using TicketPal.Domain.Entity;
 using TicketPal.Domain.Exceptions;
 using TicketPal.Domain.Models.Request;
 using TicketPal.Domain.Models.Response;
+using TicketPal.Interfaces.Utils.TicketCodes;
 
 namespace TicketPal.BusinessLogic.Tests.Services.Tickets
 {
@@ -18,8 +18,11 @@ namespace TicketPal.BusinessLogic.Tests.Services.Tickets
     public class TicketServiceTests : BaseServiceTests
     {
         private TicketEntity ticket;
+        private GenreEntity genre;
+        private PerformerEntity artist;
         private ConcertEntity concert;
         private UserEntity user;
+        private User userResponse;
         private AddTicketRequest ticketRequest;
         private TicketService ticketService;
 
@@ -27,6 +30,55 @@ namespace TicketPal.BusinessLogic.Tests.Services.Tickets
         [TestInitialize]
         public void Initialize()
         {
+            user = new UserEntity()
+            {
+                Id = 81,
+                Email = "holamundo@hotmail.com",
+                Firstname = "Jack",
+                Lastname = "Palance",
+                Password = "9284mfqp34r9wagi",
+                Role = "SPECTATOR"
+            };
+
+            userResponse = new User()
+            {
+                Id = user.Id,
+                Email = user.Email,
+                Firstname = user.Firstname,
+                Lastname = user.Lastname,
+                Password = user.Password,
+                Role = user.Role,
+                Token = "247yftgh4wyr8sfdubifkgqf3r97gh3q7gbiruy954",
+                ActiveAccount = true
+            };
+
+            genre = new GenreEntity()
+            {
+                Id = 36,
+                GenreName = "Rock"
+            };
+
+            artist = new PerformerEntity()
+            {
+                Id = 214,
+                Name = "Bryan Adams",
+                Genre = genre,
+                PerformerType = PerformerType.SOLO_ARTIST,
+                StartYear = "1978"
+            };
+
+            concert = new ConcertEntity()
+            {
+                Id = 1,
+                Artist = artist,
+                AvailableTickets = 2416,
+                CurrencyType = CurrencyType.USD,
+                Date = DateTime.Now.AddDays(120),
+                EventType = EventType.CONCERT,
+                TicketPrice = 258,
+                TourName = "The World"
+            };
+
             ticket = new TicketEntity()
             {
                 Id = 1,
@@ -39,15 +91,22 @@ namespace TicketPal.BusinessLogic.Tests.Services.Tickets
 
             ticketRequest = new AddTicketRequest()
             {
-                BuyerFirstName = user.Firstname,
-                BuyerLastName = user.Lastname,
-                BuyerEmail = user.Email
+                Event = concert.Id,
+                User = userResponse
             };
 
-            this.ticketsMock.Setup(m => m.Exists(It.IsAny<int>())).Returns(false);
-            this.ticketsMock.Setup(m => m.Add(It.IsAny<TicketEntity>())).Verifiable();
+            this.mockTicketRepo.Setup(m => m.Exists(It.IsAny<int>())).Returns(false);
+            this.mockTicketRepo.Setup(m => m.Add(It.IsAny<TicketEntity>())).Verifiable();
 
-            ticketService = new TicketService(this.ticketsMock.Object, this.testAppSettings, this.mapper);
+            this.mockConcertRepo.Setup(m => m.Get(It.IsAny<int>())).Returns(concert);
+
+            this.factoryMock.Setup(m => m.GetRepository(typeof(TicketEntity))).Returns(this.mockTicketRepo.Object);
+            this.factoryMock.Setup(m => m.GetRepository(typeof(ConcertEntity))).Returns(this.mockConcertRepo.Object);
+            var mockTicketCode = new Mock<ITicketCode>();
+            mockTicketCode.Setup(m => m.GenerateTicketCode()).Returns("gq3597gh3948tfhn93QFNeudi");
+            this.factoryMock.Setup(m => m.GetService(typeof(ITicketCode))).Returns(mockTicketCode.Object);
+
+            this.ticketService = new TicketService(this.factoryMock.Object, this.mapper);
         }
 
         [TestMethod]
@@ -63,9 +122,29 @@ namespace TicketPal.BusinessLogic.Tests.Services.Tickets
         {
             ticketService.AddTicket(ticketRequest);
 
-            this.ticketsMock.Setup(m => m.Exists(It.IsAny<int>())).Returns(true);
-            this.ticketsMock.Setup(m => m.Add(It.IsAny<TicketEntity>())).Throws(new RepositoryException());
-            ticketService = new TicketService(this.ticketsMock.Object, this.testAppSettings, this.mapper);
+            this.mockTicketRepo.Setup(m => m.Exists(It.IsAny<int>())).Returns(true);
+            this.mockTicketRepo.Setup(m => m.Add(It.IsAny<TicketEntity>())).Throws(new RepositoryException());
+            this.factoryMock.Setup(m => m.GetRepository(typeof(TicketEntity))).Returns(this.mockTicketRepo.Object);
+
+            this.ticketService = new TicketService(this.factoryMock.Object, this.mapper);
+
+            OperationResult result = ticketService.AddTicket(ticketRequest);
+
+            Assert.IsTrue(result.ResultCode == ResultCode.FAIL);
+        }
+
+        [TestMethod]
+        public void AddTicketWithNoExistentEventTest()
+        {
+            this.mockConcertRepo.Setup(m => m.Get(It.IsAny<int>()));
+
+            this.factoryMock.Setup(m => m.GetRepository(typeof(TicketEntity))).Returns(this.mockTicketRepo.Object);
+            this.factoryMock.Setup(m => m.GetRepository(typeof(ConcertEntity))).Returns(this.mockConcertRepo.Object);
+            var mockTicketCode = new Mock<ITicketCode>();
+            mockTicketCode.Setup(m => m.GenerateTicketCode()).Returns("gq3597gh3948tfhn93QFNeudi");
+            this.factoryMock.Setup(m => m.GetService(typeof(ITicketCode))).Returns(mockTicketCode.Object);
+
+            this.ticketService = new TicketService(this.factoryMock.Object, this.mapper);
 
             OperationResult result = ticketService.AddTicket(ticketRequest);
 
@@ -86,7 +165,10 @@ namespace TicketPal.BusinessLogic.Tests.Services.Tickets
                 Status = ticket.Status
             };
 
-            this.ticketsMock.Setup(m => m.Get(It.IsAny<int>())).Returns(dbUser);
+            this.mockTicketRepo.Setup(m => m.Get(It.IsAny<int>())).Returns(dbUser);
+            this.factoryMock.Setup(m => m.GetRepository(typeof(TicketEntity))).Returns(this.mockTicketRepo.Object);
+
+            this.ticketService = new TicketService(this.factoryMock.Object, this.mapper);
             OperationResult result = ticketService.DeleteTicket(id);
 
             Assert.IsTrue(result.ResultCode == ResultCode.SUCCESS);
@@ -97,8 +179,10 @@ namespace TicketPal.BusinessLogic.Tests.Services.Tickets
         {
             var id = 1;
 
-            this.ticketsMock.Setup(m => m.Delete(It.IsAny<int>())).Throws(new RepositoryException());
-            this.ticketService = new TicketService(this.ticketsMock.Object, this.testAppSettings, this.mapper);
+            this.mockTicketRepo.Setup(m => m.Delete(It.IsAny<int>())).Throws(new RepositoryException());
+            this.factoryMock.Setup(m => m.GetRepository(typeof(TicketEntity))).Returns(this.mockTicketRepo.Object);
+
+            this.ticketService = new TicketService(this.factoryMock.Object, this.mapper);
             OperationResult result = ticketService.DeleteTicket(id);
 
             Assert.IsTrue(result.ResultCode == ResultCode.FAIL);
@@ -113,7 +197,10 @@ namespace TicketPal.BusinessLogic.Tests.Services.Tickets
                 Status = ticket.Status
             };
 
-            this.ticketsMock.Setup(m => m.Update(It.IsAny<TicketEntity>())).Verifiable();
+            this.mockTicketRepo.Setup(m => m.Update(It.IsAny<TicketEntity>())).Verifiable();
+            this.factoryMock.Setup(m => m.GetRepository(typeof(TicketEntity))).Returns(this.mockTicketRepo.Object);
+
+            this.ticketService = new TicketService(this.factoryMock.Object, this.mapper);
             OperationResult expected = ticketService.UpdateTicket(updateRequest);
 
             Assert.IsTrue(expected.ResultCode == ResultCode.SUCCESS);
@@ -133,8 +220,10 @@ namespace TicketPal.BusinessLogic.Tests.Services.Tickets
                 Status = this.ticket.Status
             };
 
-            this.ticketsMock.Setup(r => r.Get(It.IsAny<int>())).Returns(dbUser);
-            this.ticketService = new TicketService(this.ticketsMock.Object, this.testAppSettings, this.mapper);
+            this.mockTicketRepo.Setup(r => r.Get(It.IsAny<int>())).Returns(dbUser);
+            this.factoryMock.Setup(m => m.GetRepository(typeof(TicketEntity))).Returns(this.mockTicketRepo.Object);
+
+            this.ticketService = new TicketService(this.factoryMock.Object, this.mapper);
             Ticket ticket = ticketService.GetTicket(id);
 
             Assert.IsNotNull(ticket);
@@ -148,8 +237,10 @@ namespace TicketPal.BusinessLogic.Tests.Services.Tickets
 
             TicketEntity dbUser = null;
 
-            this.ticketsMock.Setup(r => r.Get(It.IsAny<int>())).Returns(dbUser);
-            this.ticketService = new TicketService(this.ticketsMock.Object, this.testAppSettings, this.mapper);
+            this.mockTicketRepo.Setup(r => r.Get(It.IsAny<int>())).Returns(dbUser);
+            this.factoryMock.Setup(m => m.GetRepository(typeof(TicketEntity))).Returns(this.mockTicketRepo.Object);
+
+            this.ticketService = new TicketService(this.factoryMock.Object, this.mapper);
             Ticket ticket = ticketService.GetTicket(id);
 
             Assert.IsNull(ticket);
@@ -190,8 +281,10 @@ namespace TicketPal.BusinessLogic.Tests.Services.Tickets
                 },
             };
 
-            this.ticketsMock.Setup(r => r.GetAll()).Returns(dbAccounts);
-            this.ticketService = new TicketService(this.ticketsMock.Object, this.testAppSettings, this.mapper);
+            this.mockTicketRepo.Setup(r => r.GetAll()).Returns(dbAccounts);
+            this.factoryMock.Setup(m => m.GetRepository(typeof(TicketEntity))).Returns(this.mockTicketRepo.Object);
+
+            this.ticketService = new TicketService(this.factoryMock.Object, this.mapper);
             IEnumerable<Ticket> result = ticketService.GetTickets();
 
             Assert.IsTrue(result.ToList().Count == 3);

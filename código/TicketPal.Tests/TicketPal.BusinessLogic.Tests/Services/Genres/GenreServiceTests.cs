@@ -32,10 +32,12 @@ namespace TicketPal.BusinessLogic.Tests.Services.Genres
                 GenreName = genre.GenreName
             };
 
-            this.genresMock.Setup(m => m.Exists(It.IsAny<int>())).Returns(false);
-            this.genresMock.Setup(m => m.Add(It.IsAny<GenreEntity>())).Verifiable();
+            this.mockGenreRepo.Setup(m => m.Exists(It.IsAny<int>())).Returns(false);
+            this.mockGenreRepo.Setup(m => m.Add(It.IsAny<GenreEntity>())).Verifiable();
 
-            genreService = new GenreService(this.genresMock.Object, this.testAppSettings, this.mapper);
+            this.factoryMock.Setup(m => m.GetRepository(typeof(GenreEntity))).Returns(this.mockGenreRepo.Object);
+
+            this.genreService = new GenreService(this.factoryMock.Object, this.mapper);
         }
 
         [TestMethod]
@@ -51,9 +53,11 @@ namespace TicketPal.BusinessLogic.Tests.Services.Genres
         {
             genreService.AddGenre(genreRequest);
 
-            this.genresMock.Setup(m => m.Exists(It.IsAny<int>())).Returns(true);
-            this.genresMock.Setup(m => m.Add(It.IsAny<GenreEntity>())).Throws(new RepositoryException());
-            genreService = new GenreService(this.genresMock.Object, this.testAppSettings, this.mapper);
+            this.mockGenreRepo.Setup(m => m.Exists(It.IsAny<int>())).Returns(true);
+            this.mockGenreRepo.Setup(m => m.Add(It.IsAny<GenreEntity>())).Throws(new RepositoryException());
+            this.factoryMock.Setup(m => m.GetRepository(typeof(GenreEntity))).Returns(this.mockGenreRepo.Object);
+
+            this.genreService = new GenreService(this.factoryMock.Object, this.mapper);
 
             OperationResult result = genreService.AddGenre(genreRequest);
 
@@ -70,7 +74,10 @@ namespace TicketPal.BusinessLogic.Tests.Services.Genres
                 GenreName = genre.GenreName
             };
 
-            this.genresMock.Setup(m => m.Get(It.IsAny<int>())).Returns(dbUser);
+            this.mockGenreRepo.Setup(m => m.Get(It.IsAny<int>())).Returns(dbUser);
+            this.factoryMock.Setup(m => m.GetRepository(typeof(GenreEntity))).Returns(this.mockGenreRepo.Object);
+
+            this.genreService = new GenreService(this.factoryMock.Object, this.mapper);
             OperationResult result = genreService.DeleteGenre(id);
 
             Assert.IsTrue(result.ResultCode == ResultCode.SUCCESS);
@@ -81,8 +88,10 @@ namespace TicketPal.BusinessLogic.Tests.Services.Genres
         {
             var id = 1;
 
-            this.genresMock.Setup(m => m.Delete(It.IsAny<int>())).Throws(new RepositoryException());
-            this.genreService = new GenreService(this.genresMock.Object, this.testAppSettings, this.mapper);
+            this.mockGenreRepo.Setup(m => m.Delete(It.IsAny<int>())).Throws(new RepositoryException());
+            this.factoryMock.Setup(m => m.GetRepository(typeof(GenreEntity))).Returns(this.mockGenreRepo.Object);
+
+            this.genreService = new GenreService(this.factoryMock.Object, this.mapper);
             OperationResult result = genreService.DeleteGenre(id);
 
             Assert.IsTrue(result.ResultCode == ResultCode.FAIL);
@@ -97,7 +106,10 @@ namespace TicketPal.BusinessLogic.Tests.Services.Genres
                 GenreName = genreName
             };
 
-            this.genresMock.Setup(m => m.Update(It.IsAny<GenreEntity>())).Verifiable();
+            this.mockGenreRepo.Setup(m => m.Update(It.IsAny<GenreEntity>())).Verifiable();
+            this.factoryMock.Setup(m => m.GetRepository(typeof(GenreEntity))).Returns(this.mockGenreRepo.Object);
+
+            this.genreService = new GenreService(this.factoryMock.Object, this.mapper);
             OperationResult expected = genreService.UpdateGenre(updateRequest);
 
             Assert.IsTrue(expected.ResultCode == ResultCode.SUCCESS);
@@ -113,8 +125,10 @@ namespace TicketPal.BusinessLogic.Tests.Services.Genres
                 GenreName = genre.GenreName
             };
 
-            this.genresMock.Setup(r => r.Get(It.IsAny<int>())).Returns(dbUser);
-            this.genreService = new GenreService(this.genresMock.Object, this.testAppSettings, this.mapper);
+            this.mockGenreRepo.Setup(r => r.Get(It.IsAny<int>())).Returns(dbUser);
+            this.factoryMock.Setup(m => m.GetRepository(typeof(GenreEntity))).Returns(this.mockGenreRepo.Object);
+
+            this.genreService = new GenreService(this.factoryMock.Object, this.mapper);
             Genre concert = genreService.GetGenre(id);
 
             Assert.IsNotNull(concert);
@@ -128,8 +142,10 @@ namespace TicketPal.BusinessLogic.Tests.Services.Genres
 
             GenreEntity dbUser = null;
 
-            this.genresMock.Setup(r => r.Get(It.IsAny<int>())).Returns(dbUser);
-            this.genreService = new GenreService(this.genresMock.Object, this.testAppSettings, this.mapper);
+            this.mockGenreRepo.Setup(r => r.Get(It.IsAny<int>())).Returns(dbUser);
+            this.factoryMock.Setup(m => m.GetRepository(typeof(GenreEntity))).Returns(this.mockGenreRepo.Object);
+
+            this.genreService = new GenreService(this.factoryMock.Object, this.mapper);
             Genre concert = genreService.GetGenre(id);
 
             Assert.IsNull(concert);
@@ -158,8 +174,10 @@ namespace TicketPal.BusinessLogic.Tests.Services.Genres
                 },
             };
 
-            this.genresMock.Setup(r => r.GetAll()).Returns(dbAccounts);
-            this.genreService = new GenreService(this.genresMock.Object, this.testAppSettings, this.mapper);
+            this.mockGenreRepo.Setup(r => r.GetAll()).Returns(dbAccounts);
+            this.factoryMock.Setup(m => m.GetRepository(typeof(GenreEntity))).Returns(this.mockGenreRepo.Object);
+
+            this.genreService = new GenreService(this.factoryMock.Object, this.mapper);
             IEnumerable<Genre> result = genreService.GetGenres();
 
             Assert.IsTrue(result.ToList().Count == 3);

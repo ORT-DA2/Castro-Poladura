@@ -8,6 +8,7 @@ using TicketPal.Domain.Entity;
 using TicketPal.Domain.Exceptions;
 using TicketPal.Domain.Models.Request;
 using TicketPal.Domain.Models.Response;
+using TicketPal.Interfaces.Factory;
 using TicketPal.Interfaces.Repository;
 using TicketPal.Interfaces.Services.Performers;
 
@@ -37,15 +38,26 @@ namespace TicketPal.BusinessLogic.Services.Performers
 
                 if (found == null)
                 {
-                    performerRepository.Add(new PerformerEntity
+                    if (genre != null)
                     {
-                        Name = model.Name,
-                        Artists = (model.Artists == null ? "" : model.Artists),
-                        Genre = genre,
-                        PerformerType = model.PerformerType,
-                        StartYear = model.StartYear
+                        performerRepository.Add(new PerformerEntity
+                        {
+                            Name = model.Name,
+                            Artists = (model.Artists == null ? "" : model.Artists),
+                            Genre = genre,
+                            PerformerType = model.PerformerType,
+                            StartYear = model.StartYear
 
-                    });
+                        });
+                    }
+                    else
+                    {
+                        return new OperationResult
+                        {
+                            ResultCode = ResultCode.FAIL,
+                            Message = "Genre doesn't exists"
+                        };
+                    }
                 }
                 else
                 {

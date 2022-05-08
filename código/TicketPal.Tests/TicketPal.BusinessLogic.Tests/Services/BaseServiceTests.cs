@@ -20,6 +20,10 @@ namespace TicketPal.BusinessLogic.Tests.Services
         protected Mock<IServiceFactory> factoryMock;
         // Repository
         protected Mock<IGenericRepository<UserEntity>> mockUserRepo;
+        protected Mock<IGenericRepository<ConcertEntity>> mockConcertRepo;
+        protected Mock<IGenericRepository<GenreEntity>> mockGenreRepo;
+        protected Mock<IGenericRepository<PerformerEntity>> mockPerformerRepo;
+        protected Mock<IGenericRepository<TicketEntity>> mockTicketRepo;
         // Services
         protected IUserService userService;
         // Configs
@@ -41,6 +45,10 @@ namespace TicketPal.BusinessLogic.Tests.Services
             // Init Mocks
             this.factoryMock = new Mock<IServiceFactory>();
             this.mockUserRepo = new Mock<IGenericRepository<UserEntity>>();
+            this.mockConcertRepo = new Mock<IGenericRepository<ConcertEntity>>();
+            this.mockGenreRepo = new Mock<IGenericRepository<GenreEntity>>();
+            this.mockPerformerRepo = new Mock<IGenericRepository<PerformerEntity>>();
+            this.mockTicketRepo = new Mock<IGenericRepository<TicketEntity>>();
 
             // User repository test settings
             this.userPassword = "somePassword";

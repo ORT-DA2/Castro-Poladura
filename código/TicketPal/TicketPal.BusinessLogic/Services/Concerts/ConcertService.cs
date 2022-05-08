@@ -5,6 +5,7 @@ using TicketPal.Domain.Entity;
 using TicketPal.Domain.Exceptions;
 using TicketPal.Domain.Models.Request;
 using TicketPal.Domain.Models.Response;
+using TicketPal.Interfaces.Factory;
 using TicketPal.Interfaces.Repository;
 using TicketPal.Interfaces.Services.Concerts;
 
@@ -34,16 +35,28 @@ namespace TicketPal.BusinessLogic.Services.Concerts
 
                 if (found == null)
                 {
-                    concertRepository.Add(new ConcertEntity
+                    if (artist != null)
                     {
-                        Artist = artist,
-                        AvailableTickets = model.AvailableTickets,
-                        CurrencyType = model.CurrencyType,
-                        Date = model.Date,
-                        EventType = model.EventType,
-                        TicketPrice = model.TicketPrice,
-                        TourName = model.TourName
-                    });
+                        concertRepository.Add(new ConcertEntity
+                        {
+                            Artist = artist,
+                            AvailableTickets = model.AvailableTickets,
+                            CurrencyType = model.CurrencyType,
+                            Date = model.Date,
+                            EventType = model.EventType,
+                            TicketPrice = model.TicketPrice,
+                            TourName = model.TourName
+                        });
+                    }
+                    else
+                    {
+                        return new OperationResult
+                        {
+                            ResultCode = ResultCode.FAIL,
+                            Message = "Artist doesn't exists"
+                        };
+                    }
+                    
                 }
                 else
                 {

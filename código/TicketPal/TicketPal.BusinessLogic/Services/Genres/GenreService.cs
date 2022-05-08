@@ -8,6 +8,7 @@ using TicketPal.Domain.Entity;
 using TicketPal.Domain.Exceptions;
 using TicketPal.Domain.Models.Request;
 using TicketPal.Domain.Models.Response;
+using TicketPal.Interfaces.Factory;
 using TicketPal.Interfaces.Repository;
 using TicketPal.Interfaces.Services.Genres;
 
@@ -19,7 +20,7 @@ namespace TicketPal.BusinessLogic.Services.Genres
         private readonly IMapper mapper;
         public IGenericRepository<GenreEntity> genreRepository;
 
-        public GenreService(IServiceFactory factory, IOptions<IAppSettings> appSettings, IMapper mapper)
+        public GenreService(IServiceFactory factory, IMapper mapper)
         {
             this.mapper = mapper;
             this.serviceFactory = factory;
