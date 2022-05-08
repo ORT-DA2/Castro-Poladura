@@ -3,8 +3,8 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using TicketPal.BusinessLogic.Mapper;
+using TicketPal.BusinessLogic.Services;
 using TicketPal.BusinessLogic.Services.Users;
 using TicketPal.BusinessLogic.Settings.Api;
 using TicketPal.DataAccess;
@@ -12,6 +12,7 @@ using TicketPal.DataAccess.Repository;
 using TicketPal.Domain.Entity;
 using TicketPal.Interfaces.Factory;
 using TicketPal.Interfaces.Repository;
+using TicketPal.Interfaces.Services.Jwt;
 using TicketPal.Interfaces.Services.Users;
 
 namespace TicketPal.Factory
@@ -49,6 +50,7 @@ namespace TicketPal.Factory
         public void RegisterServices()
         {
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IJwtService, JwtService>();
         }
 
         public void BuildServices()

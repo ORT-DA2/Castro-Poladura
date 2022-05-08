@@ -1,9 +1,10 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TicketPal.BusinessLogic.Utils.Auth;
+using TicketPal.BusinessLogic.Services;
 
-namespace TicketPal.BusinessLogic.Tests.Utils.Auth
+namespace TicketPal.BusinessLogic.Tests.Services.Jwt
 {
-    public class JwtTest
+    [TestClass]
+    public class JwtServiceTest : BaseServiceTest
     {
         private string secret;
 
@@ -11,12 +12,13 @@ namespace TicketPal.BusinessLogic.Tests.Utils.Auth
         public void Init()
         {
             secret = "23jrb783v29fwfvfg2874gf286fce8";
+            this.jwtService = new JwtService();
         }
         [TestMethod]
         public void ShouldTokenBeGenerated()
         {
             int id = 1234;
-            string token = JwtUtils.GenerateJwtToken(secret,"id",id.ToString());
+            string token = jwtService.GenerateJwtToken(secret, "id", id.ToString());
 
             Assert.IsNotNull(token);
         }
@@ -25,10 +27,10 @@ namespace TicketPal.BusinessLogic.Tests.Utils.Auth
         public void GenerateTokenAndCheckIdDecrypted()
         {
             int id = 1234;
-            var token = JwtUtils.GenerateJwtToken(secret, "id", id.ToString());
+            var token = jwtService.GenerateJwtToken(secret, "id", id.ToString());
 
-            
-            var decrypted = JwtUtils.ClaimTokenValue(secret,token,"id");
+
+            var decrypted = jwtService.ClaimTokenValue(secret, token, "id");
             int decryptedId = int.Parse(decrypted);
 
             Assert.IsTrue(decryptedId == id);

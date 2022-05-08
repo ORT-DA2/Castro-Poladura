@@ -8,11 +8,11 @@ using TicketPal.Interfaces.Repository;
 using TicketPal.Interfaces.Services.Users;
 using Microsoft.Extensions.Options;
 using BC = BCrypt.Net.BCrypt;
-using TicketPal.BusinessLogic.Utils.Auth;
 using TicketPal.Domain.Entity;
 using TicketPal.Domain.Exceptions;
 using System.Linq;
 using TicketPal.Interfaces.Factory;
+using TicketPal.Interfaces.Services.Jwt;
 
 namespace TicketPal.BusinessLogic.Services.Users
 {
@@ -74,7 +74,9 @@ namespace TicketPal.BusinessLogic.Services.Users
             {
                 return null;
             }
-            var token = JwtUtils.GenerateJwtToken(appSettings.JwtSecret, "id", found.Id.ToString());
+            var jwtService = this.factory.GetService(typeof(IJwtService)) as IJwtService;
+
+            var token = jwtService.GenerateJwtToken(appSettings.JwtSecret, "id", found.Id.ToString());
             var user = mapper.Map<User>(found);
             user.Token = token;
 
