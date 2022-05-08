@@ -4,6 +4,7 @@ namespace TicketPal.Domain.Models.Request
 {
     public class UpdateUserRequest
     {
+        public int Id { get; set; }
         [Required]
         public string Firstname { get; set; }
         [Required]
