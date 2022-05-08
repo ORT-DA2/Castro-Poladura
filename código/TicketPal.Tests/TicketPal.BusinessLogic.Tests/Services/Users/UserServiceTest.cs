@@ -329,55 +329,6 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
         }
 
         [TestMethod]
-        public void UpdateUserRequesterRoleNotAllowed()
-        {
-            var updateRequest = new UpdateUserRequest
-            {
-                Firstname = "John",
-                Lastname = "Doe",
-                Email = "someone@example.com",
-                Password = BC.HashPassword(userPassword),
-                Role = UserRole.ADMIN.ToString()
-            };
-
-            this.factoryMock.Setup(m => m.GetRepository(typeof(UserEntity)))
-                .Returns(this.mockUserRepo.Object);
-
-            this.userService = new UserService(
-                this.factoryMock.Object,
-                this.options,
-                this.mapper
-            );
-            OperationResult expected = userService.UpdateUser(updateRequest, UserRole.SELLER);
-
-            Assert.IsTrue(expected.ResultCode == ResultCode.FAIL);
-        }
-
-        [TestMethod]
-        public void UpdateUserRoleNotAllowed()
-        {
-            var updateRequest = new UpdateUserRequest
-            {
-                Firstname = "John",
-                Lastname = "Doe",
-                Email = "someone@example.com",
-                Password = BC.HashPassword(userPassword),
-                Role = "someIncorrectRole"
-            };
-            this.factoryMock.Setup(m => m.GetRepository(typeof(UserEntity)))
-                .Returns(this.mockUserRepo.Object);
-
-            this.userService = new UserService(
-                this.factoryMock.Object,
-                this.options,
-                this.mapper
-            );
-            OperationResult expected = userService.UpdateUser(updateRequest, UserRole.ADMIN);
-
-            Assert.IsTrue(expected.ResultCode == ResultCode.FAIL);
-        }
-
-        [TestMethod]
         public void UpdateUserByAdmin()
         {
             var updateRequest = new UpdateUserRequest
