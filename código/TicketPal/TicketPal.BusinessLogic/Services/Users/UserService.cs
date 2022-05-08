@@ -124,11 +124,22 @@ namespace TicketPal.BusinessLogic.Services.Users
 
         public OperationResult UpdateUser(UpdateUserRequest model, UserRole authorization = UserRole.SPECTATOR)
         {
-            if (Values.authorizedRolesToUpdate.Contains(authorization.ToString()))
+            try
             {
-                try
+                if (authorization.Equals(UserRole.SPECTATOR))
                 {
-                    if (authorization.Equals(UserRole.SPECTATOR))
+                    repository.Update(
+                        new UserEntity
+                        {
+                            Id = model.Id,
+                            Firstname = model.Firstname,
+                            Lastname = model.Lastname,
+                            Email = model.Email
+                        });
+                }
+                else if (authorization.Equals(UserRole.ADMIN))
+                {
+                    if (Values.validRoles.Contains(model.Role))
                     {
                         repository.Update(
                             new UserEntity
@@ -136,52 +147,30 @@ namespace TicketPal.BusinessLogic.Services.Users
                                 Id = model.Id,
                                 Firstname = model.Firstname,
                                 Lastname = model.Lastname,
-                                Email = model.Email
+                                Password = BC.HashPassword(model.Password),
+                                Email = model.Email,
+                                Role = model.Role
                             });
                     }
-                    else if (authorization.Equals(UserRole.ADMIN))
+                    else
                     {
-                        if (Values.validRoles.Contains(model.Role))
+                        return new OperationResult
                         {
-                            repository.Update(
-                                new UserEntity
-                                {
-                                    Id = model.Id,
-                                    Firstname = model.Firstname,
-                                    Lastname = model.Lastname,
-                                    Password = BC.HashPassword(model.Password),
-                                    Email = model.Email,
-                                    Role = model.Role
-                                });
-                        }
-                        else
-                        {
-                            return new OperationResult
-                            {
-                                ResultCode = ResultCode.FAIL,
-                                Message = $"Can't validate role: {model.Role}"
-                            };
-                        }
+                            ResultCode = ResultCode.FAIL,
+                            Message = $"Can't validate role: {model.Role}"
+                        };
                     }
                 }
-                catch (RepositoryException ex)
-                {
-                    return new OperationResult
-                    {
-                        ResultCode = ResultCode.FAIL,
-                        Message = ex.Message
-                    };
-                }
-
             }
-            else
+            catch (RepositoryException ex)
             {
                 return new OperationResult
                 {
                     ResultCode = ResultCode.FAIL,
-                    Message = "Not authorized to update"
+                    Message = ex.Message
                 };
             }
+
             return new OperationResult
             {
                 ResultCode = ResultCode.SUCCESS,
