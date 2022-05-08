@@ -8,6 +8,7 @@ using TicketPal.BusinessLogic.Settings.Api;
 using TicketPal.Domain.Entity;
 using TicketPal.Interfaces.Factory;
 using TicketPal.Interfaces.Repository;
+using TicketPal.Interfaces.Services.Jwt;
 using TicketPal.Interfaces.Services.Users;
 
 namespace TicketPal.BusinessLogic.Tests.Services
@@ -22,6 +23,7 @@ namespace TicketPal.BusinessLogic.Tests.Services
         protected Mock<IGenericRepository<UserEntity>> mockUserRepo;
         // Services
         protected IUserService userService;
+        protected IJwtService jwtService;
         // Configs
         protected IMapper mapper;
         protected string jwtTestSecret;
