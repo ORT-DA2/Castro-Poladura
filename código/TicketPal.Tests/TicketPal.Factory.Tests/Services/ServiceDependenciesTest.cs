@@ -32,14 +32,5 @@ namespace TicketPal.Factory.Tests.Services
             Assert.IsTrue(service.GetType() == typeof(JwtService));
         }
 
-        [TestMethod]
-        public void AppSettingsDependencyCheck()
-        {
-            var service = factory.GetService(typeof(IAppSettings));
-
-            Assert.IsNotNull(service);
-            Assert.IsTrue(service.GetType() == typeof(AppSettings));
-        }
-
     }
 }

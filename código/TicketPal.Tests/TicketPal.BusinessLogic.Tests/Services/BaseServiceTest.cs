@@ -23,12 +23,11 @@ namespace TicketPal.BusinessLogic.Tests.Services
         protected Mock<IServiceFactory> factoryMock;
         protected Mock<IGenericRepository<UserEntity>> mockUserRepo;
         protected Mock<IJwtService> mockJwtService;
-        protected Mock<IAppSettings> mockAppSettings;
         // Services
         protected IUserService userService;
         protected IJwtService jwtService;
-        protected IAppSettings appSettings;
-        protected IOptions<IAppSettings> options;
+
+        protected IOptions<AppSettings> options;
         // Configs
         protected IMapper mapper;
         protected string jwtTestSecret;
@@ -47,14 +46,12 @@ namespace TicketPal.BusinessLogic.Tests.Services
             this.factoryMock = new Mock<IServiceFactory>();
             this.mockUserRepo = new Mock<IGenericRepository<UserEntity>>();
             this.mockJwtService = new Mock<IJwtService>(MockBehavior.Default);
-            this.mockAppSettings = new Mock<IAppSettings>(MockBehavior.Default);
 
             // User repository test settings
             this.userPassword = "somePassword";
             this.jwtTestSecret = "23jrb783v29fwfvfg2874gf286fce8";
 
-            this.mockAppSettings.Setup(s => s.JwtSecret).Returns("fakeSecret");
-            this.options = Options.Create(mockAppSettings.Object);
+            this.options = Options.Create(new AppSettings { JwtSecret = "someSecret"});
         }
 
     }

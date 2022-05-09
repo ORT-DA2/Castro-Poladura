@@ -214,7 +214,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 this.options,
                 this.mapper
             );
-            IEnumerable<User> result = userService.GetUsers();
+            IEnumerable<User> result = userService.GetUsers(UserRole.SPECTATOR.ToString());
 
             Assert.IsTrue(result.ToList().Count == 4);
         }
@@ -297,7 +297,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 this.options,
                 this.mapper
             );
-            OperationResult expected = userService.UpdateUser(updateRequest);
+            OperationResult expected = userService.UpdateUser(updateRequest,"SPECTATOR");
 
             Assert.IsTrue(expected.ResultCode == ResultCode.SUCCESS);
         }
@@ -323,7 +323,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 this.options,
                 this.mapper
             );
-            OperationResult expected = userService.UpdateUser(updateRequest);
+            OperationResult expected = userService.UpdateUser(updateRequest,"SPECTATOR");
 
             Assert.IsTrue(expected.ResultCode == ResultCode.FAIL);
         }
@@ -347,7 +347,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 this.options,
                 this.mapper
             );
-            OperationResult expected = userService.UpdateUser(updateRequest, UserRole.ADMIN);
+            OperationResult expected = userService.UpdateUser(updateRequest, "SPECTATOR");
 
             Assert.IsTrue(expected.ResultCode == ResultCode.SUCCESS);
         }

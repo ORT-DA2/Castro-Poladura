@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using TicketPal.BusinessLogic.Services.Settings;
 using TicketPal.Domain.Constants;
 using TicketPal.Domain.Models.Response;
 using TicketPal.Interfaces.Factory;
@@ -17,9 +18,8 @@ namespace TicketPal.WebApi.Tests.Filters
     [TestClass]
     public class AuthenticationFilterTest
     {
-        private AuthenticationFilter filter;
+        private AuthFilter filter;
         // Services
-        private Mock<IAppSettings> mockAppSettings;
         private Mock<IUserService> mockUserService;
         private Mock<IJwtService> mockJwtService;
         // Factory
@@ -31,22 +31,18 @@ namespace TicketPal.WebApi.Tests.Filters
             // Factory
             this.mockFactoryService = new Mock<IServiceFactory>();
             // Services
-            this.mockAppSettings = new Mock<IAppSettings>();
             this.mockUserService = new Mock<IUserService>();
             this.mockJwtService = new Mock<IJwtService>();
 
             // Service mock setups
-            mockAppSettings.Setup(s => s.JwtSecret).Returns("someFakeSecret");
             mockJwtService.Setup(s => s.ClaimTokenValue(
-                mockAppSettings.Object.JwtSecret,
+                new AppSettings().JwtSecret,
                 It.IsAny<string>(),
                 "id"
                 )).Returns("0");
             mockUserService.Setup(s => s.GetUser(It.IsAny<int>())).Returns(null as User);
 
             // Factory mock setups
-            mockFactoryService.Setup(s => s.GetService(typeof(IAppSettings)))
-            .Returns(mockAppSettings.Object);
             mockFactoryService.Setup(s => s.GetService(typeof(IJwtService)))
             .Returns(mockJwtService.Object);
         }
@@ -59,13 +55,14 @@ namespace TicketPal.WebApi.Tests.Filters
             mockFactoryService.Setup(s => s.GetService(typeof(IUserService)))
             .Returns(mockUserService.Object);
 
-            filter = new AuthenticationFilter(
-                mockFactoryService.Object,
-                new string[] { UserRole.ADMIN.ToString() }
+            filter = new AuthFilter(
+                UserRole.ADMIN.ToString()
             );
 
             var mockHttpContext = new Mock<HttpContext>();
             mockHttpContext.Setup(x => x.Request.Headers["Authorization"]).Returns(null as string);
+            mockHttpContext.Setup(x => x.RequestServices.GetService(typeof(IServiceFactory)))
+                .Returns(mockFactoryService.Object);
 
             var actionContext = new ActionContext(
                 mockHttpContext.Object,
@@ -93,20 +90,63 @@ namespace TicketPal.WebApi.Tests.Filters
                     Email = "myaccount@example.com",
                     Password = "myPassword",
                     Token = "token",
-                    Role = It.IsAny<string>()
+                    Role = ""
                 }
             );
 
             mockFactoryService.Setup(s => s.GetService(typeof(IUserService)))
             .Returns(mockUserService.Object);
 
-            filter = new AuthenticationFilter(
-                mockFactoryService.Object,
-                new string[] { UserRole.ADMIN.ToString() }
+            filter = new AuthFilter(
+                UserRole.ADMIN.ToString()
             );
 
             var mockHttpContext = new Mock<HttpContext>();
             mockHttpContext.Setup(x => x.Request.Headers["Authorization"]).Returns("token");
+            mockHttpContext.Setup(x => x.RequestServices.GetService(typeof(IServiceFactory)))
+                .Returns(mockFactoryService.Object);
+
+            var actionContext = new ActionContext(
+                mockHttpContext.Object,
+                new Microsoft.AspNetCore.Routing.RouteData(),
+                new Microsoft.AspNetCore.Mvc.Abstractions.ActionDescriptor() { DisplayName = "Authorization" },
+                new Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary()
+                );
+
+            var authContext = new AuthorizationFilterContext(actionContext, new List<IFilterMetadata>());
+
+            filter.OnAuthorization(authContext);
+
+            Assert.AreEqual(403, (authContext.Result as ObjectResult).StatusCode);
+        }
+
+        [TestMethod]
+        public void onFailedAuthenticationUserWithWrongRole()
+        {
+            this.mockUserService.Setup(s => s.GetUser(It.IsAny<int>())).Returns(
+                new User
+                {
+                    Id = 1,
+                    Firstname = "someName",
+                    Lastname = "someLastname",
+                    Email = "myaccount@example.com",
+                    Password = "myPassword",
+                    Token = "token",
+                    Role = UserRole.SPECTATOR.ToString()
+                }
+            );
+
+            mockFactoryService.Setup(s => s.GetService(typeof(IUserService)))
+            .Returns(mockUserService.Object);
+
+            filter = new AuthFilter(
+                UserRole.ADMIN.ToString()
+            );
+
+            var mockHttpContext = new Mock<HttpContext>();
+            mockHttpContext.Setup(x => x.Request.Headers["Authorization"]).Returns("token");
+            mockHttpContext.Setup(x => x.RequestServices.GetService(typeof(IServiceFactory)))
+                .Returns(mockFactoryService.Object);
 
             var actionContext = new ActionContext(
                 mockHttpContext.Object,
@@ -130,13 +170,12 @@ namespace TicketPal.WebApi.Tests.Filters
             mockFactoryService.Setup(s => s.GetService(typeof(IUserService)))
             .Returns(mockUserService.Object);
 
-            filter = new AuthenticationFilter(
-                mockFactoryService.Object,
-                new string[] { UserRole.ADMIN.ToString() }
-            );
+            filter = new AuthFilter();
 
             var mockHttpContext = new Mock<HttpContext>();
             mockHttpContext.Setup(x => x.Request.Headers["Authorization"]).Returns("token");
+            mockHttpContext.Setup(x => x.RequestServices.GetService(typeof(IServiceFactory)))
+                .Returns(mockFactoryService.Object);
 
             var actionContext = new ActionContext(
                 mockHttpContext.Object,

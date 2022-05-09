@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using TicketPal.BusinessLogic.Services.Settings;
 using TicketPal.Interfaces.Factory;
 using TicketPal.Interfaces.Services.Settings;
 
@@ -16,7 +17,7 @@ namespace TicketPal.Factory.Tests
         protected IServiceCollection services;
         protected Mock<IConfiguration> mockConfig;
         protected Mock<IMapper> mockMapper;
-        protected Mock<IOptions<IAppSettings>> mockSettings;
+        protected Mock<IOptions<AppSettings>> mockSettings;
         protected string testConnectionString = "SomeFakeConnectionString";
 
         [TestInitialize]
