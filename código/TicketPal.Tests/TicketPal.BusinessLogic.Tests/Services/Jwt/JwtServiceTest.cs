@@ -4,7 +4,7 @@ using TicketPal.BusinessLogic.Services;
 namespace TicketPal.BusinessLogic.Tests.Services.Jwt
 {
     [TestClass]
-    public class JwtServiceTest : BaseServiceTest
+    public class JwtServiceTest : BaseServiceTests
     {
         private string secret;
 

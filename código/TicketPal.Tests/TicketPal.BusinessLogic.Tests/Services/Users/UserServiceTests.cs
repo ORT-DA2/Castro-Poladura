@@ -16,7 +16,7 @@ using TicketPal.Interfaces.Services.Jwt;
 namespace TicketPal.BusinessLogic.Tests.Services.Users
 {
     [TestClass]
-    public class UserServiceTest : BaseServiceTest
+    public class UserServiceTests : BaseServiceTests
     {
         [TestMethod]
         public void UserAuthenticateCorrectly()
@@ -35,7 +35,8 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 Lastname = "Doe",
                 Email = "someone@example.com",
                 Password = BC.HashPassword(userPassword),
-                Role = UserRole.ADMIN.ToString()
+                Role = UserRole.ADMIN.ToString(),
+                ActiveAccount = true
             };
 
             this.mockUserRepo.Setup(r => r.Get(It.IsAny<Expression<Func<UserEntity, bool>>>()))
@@ -80,7 +81,8 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 Lastname = "Doe",
                 Email = "someone@example.com",
                 Password = BC.HashPassword(userPassword),
-                Role = UserRole.ADMIN.ToString()
+                Role = UserRole.ADMIN.ToString(),
+                ActiveAccount = true
             };
 
             this.mockUserRepo.Setup(r => r.Get(It.IsAny<Expression<Func<UserEntity, bool>>>()))
@@ -115,7 +117,8 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 Lastname = "Doe",
                 Email = "someone@example.com",
                 Password = BC.HashPassword(userPassword),
-                Role = UserRole.ADMIN.ToString()
+                Role = UserRole.ADMIN.ToString(),
+                ActiveAccount= true
             };
 
 
@@ -143,7 +146,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 Lastname = "Doe",
                 Email = "someone@example.com",
                 Password = "myTestEnteredPassword",
-                Role = UserRole.SPECTATOR.ToString()
+                Role = UserRole.SPECTATOR.ToString(),
             };
 
             this.mockUserRepo.Setup(r => r.Exists(It.IsAny<int>())).Returns(false);
@@ -230,7 +233,8 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 Lastname = "Doe",
                 Email = "someone@example.com",
                 Password = BC.HashPassword(userPassword),
-                Role = UserRole.ADMIN.ToString()
+                Role = UserRole.ADMIN.ToString(),
+                ActiveAccount = true
             };
 
             this.mockUserRepo.Setup(r => r.Get(It.IsAny<int>())).Returns(dbUser);
@@ -259,7 +263,8 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 Lastname = "Doe",
                 Email = "someone@example.com",
                 Password = BC.HashPassword(userPassword),
-                Role = UserRole.ADMIN.ToString()
+                Role = UserRole.ADMIN.ToString(),
+                ActiveAccount = true
             };
 
             this.mockUserRepo.Setup(r => r.Get(It.IsAny<int>())).Returns(dbUser);
