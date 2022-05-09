@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
-using TicketPal.BusinessLogic.Settings.Api;
 using TicketPal.Domain.Constants;
 using TicketPal.Domain.Entity;
 using TicketPal.Domain.Exceptions;

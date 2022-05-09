@@ -1,4 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using TicketPal.BusinessLogic.Services;
 using TicketPal.BusinessLogic.Services.Concerts;
 using TicketPal.BusinessLogic.Services.Genres;
 using TicketPal.BusinessLogic.Services.Performers;
@@ -6,6 +7,7 @@ using TicketPal.BusinessLogic.Services.Tickets;
 using TicketPal.BusinessLogic.Services.Users;
 using TicketPal.Interfaces.Services.Concerts;
 using TicketPal.Interfaces.Services.Genres;
+using TicketPal.Interfaces.Services.Jwt;
 using TicketPal.Interfaces.Services.Performers;
 using TicketPal.Interfaces.Services.Tickets;
 using TicketPal.Interfaces.Services.Users;
@@ -26,6 +28,13 @@ namespace TicketPal.Factory.Tests.Services
         }
 
         [TestMethod]
+        public void JwtServiceDependencyCheck()
+        {
+            var service = factory.GetService(typeof(IJwtService));
+
+            Assert.IsNotNull(service);
+            Assert.IsTrue(service.GetType() == typeof(JwtService));
+        }
         public void ConcertServiceDependencyCheck()
         {
             var service = factory.GetService(typeof(IConcertService));

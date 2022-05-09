@@ -11,6 +11,7 @@ using TicketPal.Domain.Constants;
 using TicketPal.Domain.Models.Response;
 using TicketPal.Domain.Models.Request;
 using TicketPal.BusinessLogic.Services.Users;
+using TicketPal.Interfaces.Services.Jwt;
 
 namespace TicketPal.BusinessLogic.Tests.Services.Users
 {
@@ -42,10 +43,18 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 .Returns(dbUser);
             this.factoryMock.Setup(m => m.GetRepository(typeof(UserEntity)))
                 .Returns(this.mockUserRepo.Object);
+            this.mockJwtService.Setup(m => m.GenerateJwtToken(
+                It.IsAny<string>(),
+                "id",
+                It.IsAny<string>()
+            )).Returns("someToken");
+
+            this.factoryMock.Setup(m => m.GetService(typeof(IJwtService)))
+                .Returns(this.mockJwtService.Object);
 
             this.userService = new UserService(
                 this.factoryMock.Object,
-                this.testAppSettings,
+                this.options,
                 this.mapper
             );
             User authenticatedUser = userService.Login(authRequest);
@@ -83,7 +92,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
 
             this.userService = new UserService(
                 this.factoryMock.Object,
-                this.testAppSettings,
+                this.options,
                 this.mapper
             );
             User authenticatedUser = userService.Login(authRequest);
@@ -120,7 +129,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
 
             this.userService = new UserService(
                 this.factoryMock.Object,
-                this.testAppSettings,
+                this.options,
                 this.mapper
             );
             User authenticatedUser = userService.Login(authRequest);
@@ -148,7 +157,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
 
             this.userService = new UserService(
                 this.factoryMock.Object,
-                this.testAppSettings,
+                this.options,
                 this.mapper
             );
 
@@ -178,7 +187,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
 
             this.userService = new UserService(
                 this.factoryMock.Object,
-                this.testAppSettings,
+                this.options,
                 this.mapper
             );
 
@@ -205,10 +214,10 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
 
             this.userService = new UserService(
                 this.factoryMock.Object,
-                this.testAppSettings,
+                this.options,
                 this.mapper
             );
-            IEnumerable<User> result = userService.GetUsers();
+            IEnumerable<User> result = userService.GetUsers(UserRole.SPECTATOR.ToString());
 
             Assert.IsTrue(result.ToList().Count == 4);
         }
@@ -234,7 +243,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
 
             this.userService = new UserService(
                 this.factoryMock.Object,
-                this.testAppSettings,
+                this.options,
                 this.mapper
             );
             User account = userService.GetUser(id);
@@ -264,7 +273,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
 
             this.userService = new UserService(
                 this.factoryMock.Object,
-                this.testAppSettings,
+                this.options,
                 this.mapper
             );
             OperationResult result = userService.DeleteUser(id);
@@ -290,10 +299,10 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
 
             this.userService = new UserService(
                 this.factoryMock.Object,
-                this.testAppSettings,
+                this.options,
                 this.mapper
             );
-            OperationResult expected = userService.UpdateUser(updateRequest);
+            OperationResult expected = userService.UpdateUser(updateRequest,"SPECTATOR");
 
             Assert.IsTrue(expected.ResultCode == ResultCode.SUCCESS);
         }
@@ -316,59 +325,10 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
 
             this.userService = new UserService(
                 this.factoryMock.Object,
-                this.testAppSettings,
+                this.options,
                 this.mapper
             );
-            OperationResult expected = userService.UpdateUser(updateRequest);
-
-            Assert.IsTrue(expected.ResultCode == ResultCode.FAIL);
-        }
-
-        [TestMethod]
-        public void UpdateUserRequesterRoleNotAllowed()
-        {
-            var updateRequest = new UpdateUserRequest
-            {
-                Firstname = "John",
-                Lastname = "Doe",
-                Email = "someone@example.com",
-                Password = BC.HashPassword(userPassword),
-                Role = UserRole.ADMIN.ToString()
-            };
-
-            this.factoryMock.Setup(m => m.GetRepository(typeof(UserEntity)))
-                .Returns(this.mockUserRepo.Object);
-
-            this.userService = new UserService(
-                this.factoryMock.Object,
-                this.testAppSettings,
-                this.mapper
-            );
-            OperationResult expected = userService.UpdateUser(updateRequest, UserRole.SELLER);
-
-            Assert.IsTrue(expected.ResultCode == ResultCode.FAIL);
-        }
-
-        [TestMethod]
-        public void UpdateUserRoleNotAllowed()
-        {
-            var updateRequest = new UpdateUserRequest
-            {
-                Firstname = "John",
-                Lastname = "Doe",
-                Email = "someone@example.com",
-                Password = BC.HashPassword(userPassword),
-                Role = "someIncorrectRole"
-            };
-            this.factoryMock.Setup(m => m.GetRepository(typeof(UserEntity)))
-                .Returns(this.mockUserRepo.Object);
-
-            this.userService = new UserService(
-                this.factoryMock.Object,
-                this.testAppSettings,
-                this.mapper
-            );
-            OperationResult expected = userService.UpdateUser(updateRequest, UserRole.ADMIN);
+            OperationResult expected = userService.UpdateUser(updateRequest,"SPECTATOR");
 
             Assert.IsTrue(expected.ResultCode == ResultCode.FAIL);
         }
@@ -389,10 +349,10 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
 
             this.userService = new UserService(
                 this.factoryMock.Object,
-                this.testAppSettings,
+                this.options,
                 this.mapper
             );
-            OperationResult expected = userService.UpdateUser(updateRequest, UserRole.ADMIN);
+            OperationResult expected = userService.UpdateUser(updateRequest, "SPECTATOR");
 
             Assert.IsTrue(expected.ResultCode == ResultCode.SUCCESS);
         }
@@ -408,7 +368,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
 
             this.userService = new UserService(
                 this.factoryMock.Object,
-                this.testAppSettings,
+                this.options,
                 this.mapper
             );
             OperationResult result = userService.DeleteUser(id);
@@ -429,7 +389,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
 
             this.userService = new UserService(
                 this.factoryMock.Object,
-                this.testAppSettings,
+                this.options,
                 this.mapper
             );
             User account = userService.GetUser(id);

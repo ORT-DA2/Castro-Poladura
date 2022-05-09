@@ -8,10 +8,10 @@ namespace TicketPal.Interfaces.Services.Users
     public interface IUserService
     {
         User Login(AuthenticationRequest model);
-        IEnumerable<User> GetUsers(UserRole role = UserRole.SPECTATOR);
+        IEnumerable<User> GetUsers(string role);
         User GetUser(int id);
         OperationResult SignUp(SignUpRequest model);
-        OperationResult UpdateUser(UpdateUserRequest model, UserRole authorization = UserRole.SPECTATOR);
+        OperationResult UpdateUser(UpdateUserRequest model, string authorization);
         OperationResult DeleteUser(int id);
     }
 }

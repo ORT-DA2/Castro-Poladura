@@ -1,5 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TicketPal.BusinessLogic.Settings.Api;
+using TicketPal.BusinessLogic.Services.Settings;
 
 namespace TicketPal.BusinessLogic.Tests.Settings
 {
