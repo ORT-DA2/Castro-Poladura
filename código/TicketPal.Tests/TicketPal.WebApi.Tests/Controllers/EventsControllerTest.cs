@@ -199,12 +199,16 @@ namespace TicketPal.WebApi.Tests.Controllers
         [TestMethod]
         public void GetConcerts()
         {
-            mockService.Setup(s => s.GetConcerts(It.IsAny<Expression<Func<ConcertEntity, bool>>>()))
+            mockService.Setup(s => s.GetConcerts(It.IsAny<Expression<Func<ConcertEntity, bool>>>(),false))
                 .Returns(concerts);
 
             var result = controller.GetConcerts(
-
-            );
+                0,
+                true,
+                "05/9/2022",
+                "05/12/2022",
+                "Bono"
+                );
             var objectResult = result as ObjectResult;
             var statusCode = objectResult.StatusCode;
 

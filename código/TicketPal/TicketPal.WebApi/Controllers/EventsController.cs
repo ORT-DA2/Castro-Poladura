@@ -81,7 +81,7 @@ namespace TicketPal.WebApi.Controllers
         [HttpGet]
         public IActionResult GetConcerts(
             [BindRequired][FromQuery] int type,
-            [FromQuery(Name = "newest")] bool sort,
+            [FromQuery(Name = "newest")] bool newest,
             [FromQuery(Name = "startDate")] string startDate,
             [FromQuery(Name = "endDate")] string endDate,
             [FromQuery(Name = "performerName")] string performerName
@@ -115,7 +115,7 @@ namespace TicketPal.WebApi.Controllers
             {
                 return Ok(eventService.GetConcerts(
                     e => ((int)e.EventType) == type
-                    , sort
+                    , newest
                     ));
             }
             else if (!String.IsNullOrEmpty(startDate)
@@ -126,7 +126,7 @@ namespace TicketPal.WebApi.Controllers
                 return Ok(eventService.GetConcerts(
                     e => ((int)e.EventType) == type
                     && e.Date >= dtStart
-                    , sort
+                    , newest
                     ));
             }
             else if (String.IsNullOrEmpty(startDate)
@@ -137,7 +137,7 @@ namespace TicketPal.WebApi.Controllers
                 return Ok(eventService.GetConcerts(
                     e => ((int)e.EventType) == type
                     && e.Date <= dtEnd
-                    , sort
+                    , newest
                     ));
             }
             else if (!String.IsNullOrEmpty(startDate)
@@ -147,7 +147,7 @@ namespace TicketPal.WebApi.Controllers
                 return Ok(eventService.GetConcerts(
                     e => ((int)e.EventType) == type
                     && (e.Date >= dtStart && e.Date <= dtEnd)
-                    , sort
+                    , newest
                     ));
             }
             else
@@ -156,7 +156,7 @@ namespace TicketPal.WebApi.Controllers
                     e => ((int)e.EventType) == type
                     && (e.Date >= dtStart && e.Date <= dtEnd)
                     && e.Artist.Name.Equals(performerName)
-                    , sort
+                    , newest
                     ));
             }
 
