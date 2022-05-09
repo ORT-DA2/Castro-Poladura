@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using TicketPal.Domain.Constants;
+using TicketPal.Domain.Entity;
 using TicketPal.Domain.Models.Request;
 using TicketPal.Domain.Models.Response;
 using TicketPal.Interfaces.Services.Concerts;
@@ -197,9 +199,12 @@ namespace TicketPal.WebApi.Tests.Controllers
         [TestMethod]
         public void GetConcerts()
         {
-            mockService.Setup(s => s.GetConcerts()).Returns(concerts);
+            mockService.Setup(s => s.GetConcerts(It.IsAny<Expression<Func<ConcertEntity, bool>>>()))
+                .Returns(concerts);
 
-            var result = controller.GetConcerts();
+            var result = controller.GetConcerts(
+
+            );
             var objectResult = result as ObjectResult;
             var statusCode = objectResult.StatusCode;
 
