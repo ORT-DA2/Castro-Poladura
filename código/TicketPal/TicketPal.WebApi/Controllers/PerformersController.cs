@@ -10,7 +10,7 @@ namespace TicketPal.WebApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class PerformersController: ControllerBase
+    public class PerformersController : ControllerBase
     {
         IPerformerService performerService;
 
@@ -21,7 +21,7 @@ namespace TicketPal.WebApi.Controllers
 
         [HttpPost]
         [AuthFilter(Roles.Admin)]
-        public IActionResult AddPerformer([FromBody]AddPerformerRequest request)
+        public IActionResult AddPerformer([FromBody] AddPerformerRequest request)
         {
             var result = performerService.AddPerformer(request);
 
@@ -35,7 +35,7 @@ namespace TicketPal.WebApi.Controllers
             }
         }
 
-        [HttpPut("id")]
+        [HttpPut("{id}")]
         [AuthFilter(Roles.Admin)]
         public IActionResult UpdatePerformer([FromRoute]int id, [FromBody]UpdatePerformerRequest request)
         {
@@ -52,7 +52,7 @@ namespace TicketPal.WebApi.Controllers
             }
         }
 
-        [HttpPut("id")]
+        [HttpDelete("id")]
         [AuthFilter(Roles.Admin)]
         public IActionResult DeletePerformer([FromRoute]int id)
         {

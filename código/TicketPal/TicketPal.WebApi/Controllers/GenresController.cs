@@ -20,7 +20,7 @@ namespace TicketPal.WebApi.Controllers
         }
 
         [HttpPost]
-        [AuthFilter(Roles.Spectator+","+Roles.Admin)]
+        [AuthFilter(Roles.Admin)]
         public IActionResult AddGenre(AddGenreRequest request)
         {
             var result = genreService.AddGenre(request);
