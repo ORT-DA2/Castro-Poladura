@@ -20,13 +20,13 @@ namespace TicketPal.WebApi.Tests.Controllers
     {
         private Mock<IGenreService> mockService;
         private List<Genre> genres;
-        private GenreController controller;
+        private GenresController controller;
 
         [TestInitialize]
         public void TestSetup()
         {
             mockService = new Mock<IGenreService>(MockBehavior.Default);
-            controller = new GenreController(mockService.Object);
+            controller = new GenresController(mockService.Object);
             this.genres = SetupGenres();
         }
 
@@ -183,9 +183,6 @@ namespace TicketPal.WebApi.Tests.Controllers
 
             Assert.AreEqual(400,statusCode);
         }
-
-
-
 
         private List<Genre> SetupGenres()
         {
