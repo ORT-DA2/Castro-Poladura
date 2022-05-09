@@ -63,8 +63,13 @@ namespace TicketPal.BusinessLogic.Services.Users
 
         public IEnumerable<User> GetUsers(string role)
         {
-            var users = repository.GetAll(u => u.Role.Equals(role));
-            return mapper.Map<IEnumerable<UserEntity>, IEnumerable<User>>(users);
+            if(string.IsNullOrEmpty(role))
+            {
+                var users = repository.GetAll();
+                return mapper.Map<IEnumerable<UserEntity>, IEnumerable<User>>(users);
+            }
+            return mapper.Map<IEnumerable<UserEntity>, IEnumerable<User>>(repository.GetAll(u => u.Role.Equals(role)));
+
         }
 
         public User Login(AuthenticationRequest model)
