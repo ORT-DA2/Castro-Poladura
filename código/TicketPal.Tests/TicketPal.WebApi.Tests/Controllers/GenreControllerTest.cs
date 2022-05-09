@@ -10,6 +10,7 @@ using TicketPal.Domain.Models.Request;
 using TicketPal.Domain.Models.Response;
 using TicketPal.Interfaces.Services.Genres;
 using TicketPal.Interfaces.Services.Users;
+using TicketPal.WebApi.Controllers;
 
 namespace TicketPal.WebApi.Tests.Controllers
 {
@@ -152,7 +153,7 @@ namespace TicketPal.WebApi.Tests.Controllers
 
             mockService.Setup(s => s.UpdateGenre(request)).Returns(operationResult);
             
-            var result = controller.UpdateGenre(request);
+            var result = controller.UpdateGenre(It.IsAny<int>(),request);
             var objectResult = result as ObjectResult;
             var statusCode = objectResult.StatusCode;
 
@@ -176,7 +177,7 @@ namespace TicketPal.WebApi.Tests.Controllers
 
             mockService.Setup(s => s.UpdateGenre(request)).Returns(operationResult);
             
-            var result = controller.UpdateGenre(request);
+            var result = controller.UpdateGenre(It.IsAny<int>(),request);
             var objectResult = result as ObjectResult;
             var statusCode = objectResult.StatusCode;
 
