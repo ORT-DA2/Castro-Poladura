@@ -8,6 +8,17 @@ namespace TicketPal.Domain.Tests.Models.Request
     public class UpdateUserRequestTest
     {
         [TestMethod]
+        public void IdCheck()
+        {
+            UpdateUserRequest request = new UpdateUserRequest
+            {
+                Id = 1
+            };
+
+            Assert.IsTrue(request.Id == 1);
+        }
+
+        [TestMethod]
         public void EmailNotNull()
         {
             UpdateUserRequest request = new UpdateUserRequest

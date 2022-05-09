@@ -4,12 +4,13 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
+using TicketPal.Interfaces.Services.Jwt;
 
-namespace TicketPal.BusinessLogic.Utils.Auth
+namespace TicketPal.BusinessLogic.Services
 {
-    public class JwtUtils
+    public class JwtService : IJwtService
     {
-        public static string GenerateJwtToken(string secret,string claim,string value)
+        public string GenerateJwtToken(string secret, string claim, string value)
         {
             // generate token that is valid for 2 hours
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -24,7 +25,7 @@ namespace TicketPal.BusinessLogic.Utils.Auth
             return tokenHandler.WriteToken(token);
         }
 
-        public static string ClaimTokenValue(string secret, string token,string claim)
+        public string ClaimTokenValue(string secret, string token, string claim)
         {
             try
             {

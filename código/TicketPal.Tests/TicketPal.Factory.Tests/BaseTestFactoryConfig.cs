@@ -4,8 +4,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using TicketPal.BusinessLogic.Settings.Api;
+using TicketPal.BusinessLogic.Services.Settings;
 using TicketPal.Interfaces.Factory;
+using TicketPal.Interfaces.Services.Settings;
 
 namespace TicketPal.Factory.Tests
 {
@@ -16,6 +17,7 @@ namespace TicketPal.Factory.Tests
         protected IServiceCollection services;
         protected Mock<IConfiguration> mockConfig;
         protected Mock<IMapper> mockMapper;
+        protected Mock<IOptions<AppSettings>> mockSettings;
         protected string testConnectionString = "SomeFakeConnectionString";
 
         [TestInitialize]
@@ -24,24 +26,25 @@ namespace TicketPal.Factory.Tests
             // Mocks inits Configuration
             this.mockConfig = new Mock<IConfiguration>();
             this.mockMapper = new Mock<IMapper>();
+            // this.mockSettings = Options.Create(mockAppSettings.Object);
 
             Mock<IConfigurationSection> configurationSectionStub = new Mock<IConfigurationSection>();
-            configurationSectionStub.Setup(x => x[It.IsAny<string>()]).Returns(testConnectionString);
+            configurationSectionStub.Setup(x => x[It.IsAny<string>()]).Returns("FakeJwtSecret");
             this.mockConfig = new Mock<IConfiguration>();
-            this.mockConfig.Setup(x => x.GetSection(It.IsAny<string>())).Returns(configurationSectionStub.Object);
+            this.mockConfig.Setup(x => x.GetSection("AppSettings")).Returns(configurationSectionStub.Object);
 
             // Services
             this.services = new ServiceCollection();
 
             // User Service options configs
             this.services.AddSingleton<IConfiguration>(c => this.mockConfig.Object);
-            this.services.AddSingleton<IOptions<IAppSettings>>(c =>
-                Options.Create(new AppSettings { JwtSecret = It.IsAny<string>() }));
+
             this.services.AddOptions();
             // Service collection mock setup
             this.services.AddSingleton<IServiceCollection>(s => this.services);
             this.services.AddSingleton<IMapper>(s => this.mockMapper.Object);
-
+            var mockOptions = new Mock<IOptions<IAppSettings>>(MockBehavior.Default);
+            this.services.AddSingleton<IOptions<IAppSettings>>(s => mockOptions.Object);
             // Init Factory
             this.factory = new ServiceFactory(
                 this.services,

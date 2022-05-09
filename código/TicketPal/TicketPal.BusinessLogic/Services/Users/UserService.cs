@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using AutoMapper;
-using TicketPal.BusinessLogic.Settings.Api;
 using TicketPal.Domain.Constants;
 using TicketPal.Domain.Models.Request;
 using TicketPal.Domain.Models.Response;
@@ -8,11 +7,12 @@ using TicketPal.Interfaces.Repository;
 using TicketPal.Interfaces.Services.Users;
 using Microsoft.Extensions.Options;
 using BC = BCrypt.Net.BCrypt;
-using TicketPal.BusinessLogic.Utils.Auth;
 using TicketPal.Domain.Entity;
 using TicketPal.Domain.Exceptions;
 using System.Linq;
 using TicketPal.Interfaces.Factory;
+using TicketPal.Interfaces.Services.Jwt;
+using TicketPal.BusinessLogic.Services.Settings;
 
 namespace TicketPal.BusinessLogic.Services.Users
 {
@@ -61,9 +61,9 @@ namespace TicketPal.BusinessLogic.Services.Users
             return mapper.Map<User>(repository.Get(id));
         }
 
-        public IEnumerable<User> GetUsers(UserRole role = UserRole.SPECTATOR)
+        public IEnumerable<User> GetUsers(string role)
         {
-            var users = repository.GetAll(u => u.Role.Equals(role.ToString()));
+            var users = repository.GetAll(u => u.Role.Equals(role));
             return mapper.Map<IEnumerable<UserEntity>, IEnumerable<User>>(users);
         }
 
@@ -74,7 +74,9 @@ namespace TicketPal.BusinessLogic.Services.Users
             {
                 return null;
             }
-            var token = JwtUtils.GenerateJwtToken(appSettings.JwtSecret, "id", found.Id.ToString());
+            var jwtService = this.factory.GetService(typeof(IJwtService)) as IJwtService;
+
+            var token = jwtService.GenerateJwtToken(appSettings.JwtSecret, "id", found.Id.ToString());
             var user = mapper.Map<User>(found);
             user.Token = token;
 
@@ -120,64 +122,55 @@ namespace TicketPal.BusinessLogic.Services.Users
             };
         }
 
-        public OperationResult UpdateUser(UpdateUserRequest model, UserRole authorization = UserRole.SPECTATOR)
+        public OperationResult UpdateUser(UpdateUserRequest model, string authorization)
         {
-            if (Values.authorizedRolesToUpdate.Contains(authorization.ToString()))
+            try
             {
-                try
+                if (authorization.Equals(UserRole.SPECTATOR.ToString()))
                 {
-                    if (authorization.Equals(UserRole.SPECTATOR))
+                    repository.Update(
+                        new UserEntity
+                        {
+                            Id = model.Id,
+                            Firstname = model.Firstname,
+                            Lastname = model.Lastname,
+                            Email = model.Email
+                        });
+                }
+                else if (authorization.Equals(UserRole.ADMIN.ToString()))
+                {
+                    if (Values.validRoles.Contains(model.Role))
                     {
                         repository.Update(
                             new UserEntity
                             {
+                                Id = model.Id,
                                 Firstname = model.Firstname,
                                 Lastname = model.Lastname,
-                                Email = model.Email
+                                Password = BC.HashPassword(model.Password),
+                                Email = model.Email,
+                                Role = model.Role
                             });
                     }
-                    else if (authorization.Equals(UserRole.ADMIN))
+                    else
                     {
-                        if (Values.validRoles.Contains(model.Role))
+                        return new OperationResult
                         {
-                            repository.Update(
-                                new UserEntity
-                                {
-                                    Firstname = model.Firstname,
-                                    Lastname = model.Lastname,
-                                    Password = BC.HashPassword(model.Password),
-                                    Email = model.Email,
-                                    Role = model.Role
-                                });
-                        }
-                        else
-                        {
-                            return new OperationResult
-                            {
-                                ResultCode = ResultCode.FAIL,
-                                Message = $"Can't validate role: {model.Role}"
-                            };
-                        }
+                            ResultCode = ResultCode.FAIL,
+                            Message = $"Can't validate role: {model.Role}"
+                        };
                     }
                 }
-                catch (RepositoryException ex)
-                {
-                    return new OperationResult
-                    {
-                        ResultCode = ResultCode.FAIL,
-                        Message = ex.Message
-                    };
-                }
-
             }
-            else
+            catch (RepositoryException ex)
             {
                 return new OperationResult
                 {
                     ResultCode = ResultCode.FAIL,
-                    Message = "Not authorized to update"
+                    Message = ex.Message
                 };
             }
+
             return new OperationResult
             {
                 ResultCode = ResultCode.SUCCESS,

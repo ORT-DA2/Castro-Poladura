@@ -20,8 +20,6 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
         private PerformerEntity artist;
         private AddConcertRequest concertRequest;
         private ConcertService concertService;
-        private IServiceFactory serviceFactory;
-
 
         [TestInitialize]
         public void Initialize()
