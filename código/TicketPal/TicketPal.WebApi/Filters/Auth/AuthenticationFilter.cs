@@ -1,7 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using TicketPal.BusinessLogic.Services.Settings;
+using TicketPal.Domain.Models.Response;
 using TicketPal.Domain.Models.Response.Error;
 using TicketPal.Interfaces.Factory;
 using TicketPal.Interfaces.Services.Jwt;
@@ -10,22 +14,26 @@ using TicketPal.Interfaces.Services.Users;
 
 namespace TicketPal.WebApi.Filters.Auth
 {
-    public class AuthenticationFilter : Attribute, IAuthorizationFilter
+    public class AuthFilter : Attribute, IAuthorizationFilter
     {
-        private string[] roleArgs;
+        private string[] args;
         private IUserService userService;
-        private IAppSettings settingsService;
+        private AppSettings settingsService;
         private IJwtService jwtService;
 
-        public AuthenticationFilter(IServiceFactory factory, string[] args)
+        public AuthFilter(string arguments="")
         {
-            roleArgs = args;
-            this.settingsService = factory.GetService(typeof(IAppSettings)) as IAppSettings;
-            this.userService = factory.GetService(typeof(IUserService)) as IUserService;
-            this.jwtService = factory.GetService(typeof(IJwtService)) as IJwtService;
+            this.args = arguments.Split(",");
+            this.settingsService = new AppSettings();
         }
+
         public void OnAuthorization(AuthorizationFilterContext context)
         {
+            var factory = context.HttpContext.RequestServices.GetService(typeof(IServiceFactory)) as IServiceFactory;
+            
+            this.userService = factory.GetService(typeof(IUserService)) as IUserService;
+            this.jwtService = factory.GetService(typeof(IJwtService)) as IJwtService;
+
             var token = context.HttpContext.Request.Headers["Authorization"]
                 .FirstOrDefault()?.Split(" ").Last();
 
@@ -42,7 +50,7 @@ namespace TicketPal.WebApi.Filters.Auth
                 var accountId = int.Parse(jwtService.ClaimTokenValue(settingsService.JwtSecret, token, "id"));
                 var user = userService.GetUser(accountId);
 
-                if (user == null || !roleArgs.Contains(user.Role))
+                if (user == null || !args.Contains(user.Role))
                 {
                     var forbidden = new ForbiddenError("No required authorization to access resource.");
                     context.Result = new ObjectResult(forbidden)

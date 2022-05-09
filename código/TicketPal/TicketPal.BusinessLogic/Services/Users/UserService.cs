@@ -12,19 +12,19 @@ using TicketPal.Domain.Exceptions;
 using System.Linq;
 using TicketPal.Interfaces.Factory;
 using TicketPal.Interfaces.Services.Jwt;
-using TicketPal.Interfaces.Services.Settings;
+using TicketPal.BusinessLogic.Services.Settings;
 
 namespace TicketPal.BusinessLogic.Services.Users
 {
     public class UserService : IUserService
     {
         private readonly IGenericRepository<UserEntity> repository;
-        private readonly IAppSettings appSettings;
+        private readonly AppSettings appSettings;
         private readonly IMapper mapper;
         private readonly IServiceFactory factory;
         public UserService(
             IServiceFactory factory,
-            IOptions<IAppSettings> appSettings,
+            IOptions<AppSettings> appSettings,
             IMapper mapper
         )
         {
@@ -61,9 +61,9 @@ namespace TicketPal.BusinessLogic.Services.Users
             return mapper.Map<User>(repository.Get(id));
         }
 
-        public IEnumerable<User> GetUsers(UserRole role = UserRole.SPECTATOR)
+        public IEnumerable<User> GetUsers(string role)
         {
-            var users = repository.GetAll(u => u.Role.Equals(role.ToString()));
+            var users = repository.GetAll(u => u.Role.Equals(role));
             return mapper.Map<IEnumerable<UserEntity>, IEnumerable<User>>(users);
         }
 
@@ -122,11 +122,11 @@ namespace TicketPal.BusinessLogic.Services.Users
             };
         }
 
-        public OperationResult UpdateUser(UpdateUserRequest model, UserRole authorization = UserRole.SPECTATOR)
+        public OperationResult UpdateUser(UpdateUserRequest model, string authorization)
         {
             try
             {
-                if (authorization.Equals(UserRole.SPECTATOR))
+                if (authorization.Equals(UserRole.SPECTATOR.ToString()))
                 {
                     repository.Update(
                         new UserEntity
@@ -137,7 +137,7 @@ namespace TicketPal.BusinessLogic.Services.Users
                             Email = model.Email
                         });
                 }
-                else if (authorization.Equals(UserRole.ADMIN))
+                else if (authorization.Equals(UserRole.ADMIN.ToString()))
                 {
                     if (Values.validRoles.Contains(model.Role))
                     {

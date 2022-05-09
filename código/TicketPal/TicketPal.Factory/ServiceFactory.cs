@@ -3,6 +3,7 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using TicketPal.BusinessLogic.Mapper;
 using TicketPal.BusinessLogic.Services;
 using TicketPal.BusinessLogic.Services.Settings;
@@ -13,7 +14,6 @@ using TicketPal.Domain.Entity;
 using TicketPal.Interfaces.Factory;
 using TicketPal.Interfaces.Repository;
 using TicketPal.Interfaces.Services.Jwt;
-using TicketPal.Interfaces.Services.Settings;
 using TicketPal.Interfaces.Services.Users;
 
 namespace TicketPal.Factory
@@ -52,14 +52,13 @@ namespace TicketPal.Factory
         public void RegisterServices()
         {
             LoadMapperServiceConfig();
-            services.AddScoped<IAppSettings, AppSettings>();
-            services.Configure<IAppSettings>(configuration.GetSection("AppSettings"));
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IJwtService, JwtService>();
         }
 
         public void BuildServices()
         {
+            services.AddSingleton<IServiceFactory>(s => this);
             this.serviceProvider = services.BuildServiceProvider();
         }
 
