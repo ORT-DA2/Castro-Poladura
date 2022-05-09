@@ -1,8 +1,13 @@
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using TicketPal.BusinessLogic.Services.Settings;
 using TicketPal.Domain.Constants;
 using TicketPal.Domain.Models.Request;
+using TicketPal.Domain.Models.Response;
 using TicketPal.Domain.Models.Response.Error;
 using TicketPal.Interfaces.Factory;
+using TicketPal.Interfaces.Services.Jwt;
+using TicketPal.Interfaces.Services.Settings;
 using TicketPal.Interfaces.Services.Users;
 using TicketPal.WebApi.Constants;
 using TicketPal.WebApi.Filters.Auth;
@@ -28,11 +33,11 @@ namespace TicketPal.WebApi.Controllers
         }
 
         [HttpPost]
-        [TypeFilter(typeof(AuthenticationFilter),
-            Arguments = new string[] { Roles.Spectator, Roles.Admin })]
+        [AuthFilter(Roles.Spectator+","+Roles.Admin)]
         public IActionResult Register([FromBody] SignUpRequest request)
         {
             var result = userService.SignUp(request);
+            
             if (result.ResultCode == ResultCode.FAIL)
             {
                 return BadRequest(new BadRequestError(result.Message));
@@ -43,6 +48,69 @@ namespace TicketPal.WebApi.Controllers
             }
         }
 
+        [HttpGet("{id}")]
+        [AuthFilter(Roles.Admin+","+Roles.Spectator)]
+        public IActionResult GetUserAccount([FromRoute]int id)
+        {
+            return Ok(userService.GetUser(id));
+        }
 
+        [HttpGet]
+        [AuthFilter(Roles.Admin)]
+        public IActionResult GetUserAccounts([FromQuery(Name = "role")]string role)
+        {
+            return Ok(userService.GetUsers(role));
+        }
+
+        [HttpPut("{id}")]
+        [AuthFilter(Roles.Admin+","+Roles.Spectator)]
+        public IActionResult Update([FromRoute]int id, [FromBody]UpdateUserRequest request)
+        {
+            
+            var token = HttpContext.Request.Headers["Authorization"]
+                .FirstOrDefault()?.Split(" ").Last();
+
+            var factory = HttpContext.RequestServices.GetService(typeof(IServiceFactory)) as IServiceFactory;
+            var jwtService = factory.GetService(typeof(IJwtService)) as IJwtService;
+            var settings = new AppSettings();
+
+            var accountId = int.Parse(jwtService.ClaimTokenValue(settings.JwtSecret, token, "id"));
+            var authenticatedUser = userService.GetUser(accountId);
+            
+            if(!authenticatedUser.Role.Equals(request.Role))
+            {
+                return BadRequest(new BadRequestError("Different role from request your're trying to update"));
+            }
+            else
+            {
+                var result = userService.UpdateUser(request,authenticatedUser.Role);
+
+                if (result.ResultCode == ResultCode.FAIL)
+                {
+                    return BadRequest(new BadRequestError(result.Message));
+                }
+                else
+                {
+                    return Ok(result);
+                }
+
+            }
+        }
+
+        [HttpDelete("{id}")]
+        [AuthFilter(Roles.Admin)]
+        public IActionResult DeleteAccount([FromRoute]int id)
+        {
+            var result = userService.DeleteUser(id);
+
+            if (result.ResultCode == ResultCode.FAIL)
+            {
+                return BadRequest(new BadRequestError(result.Message));
+            }
+            else
+            {
+                return Ok(result);
+            }
+        }
     }
 }
