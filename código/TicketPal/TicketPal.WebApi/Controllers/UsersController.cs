@@ -83,6 +83,7 @@ namespace TicketPal.WebApi.Controllers
             }
             else
             {
+                request.Id = id;
                 var result = userService.UpdateUser(request,authenticatedUser.Role);
 
                 if (result.ResultCode == ResultCode.FAIL)

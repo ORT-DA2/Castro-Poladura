@@ -72,7 +72,7 @@ namespace TicketPal.WebApi.Tests.Controllers
             var objectResult = result as ObjectResult;
             var statusCode = objectResult.StatusCode;
 
-            Assert.AreEqual(201, statusCode);
+            Assert.AreEqual(200, statusCode);
         }
 
         [TestMethod]
