@@ -1,5 +1,8 @@
 ﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using TicketPal.Domain.Constants;
 using TicketPal.Domain.Entity;
 using TicketPal.Domain.Exceptions;
@@ -56,7 +59,7 @@ namespace TicketPal.BusinessLogic.Services.Concerts
                             Message = "Artist doesn't exists"
                         };
                     }
-                    
+
                 }
                 else
                 {
@@ -112,6 +115,21 @@ namespace TicketPal.BusinessLogic.Services.Concerts
         {
             var concerts = concertRepository.GetAll();
             return mapper.Map<IEnumerable<ConcertEntity>, IEnumerable<Concert>>(concerts);
+        }
+
+        public IEnumerable<Concert> GetConcerts(Expression<Func<ConcertEntity, bool>> predicate, bool newest)
+        {
+            if (!newest)
+            {
+                var concerts = concertRepository.GetAll(predicate).OrderBy(c => c.Date);
+                return mapper.Map<IEnumerable<ConcertEntity>, IEnumerable<Concert>>(concerts);
+            }
+            else
+            {
+                var concerts = concertRepository.GetAll(predicate).OrderByDescending(c => c.Date);
+                return mapper.Map<IEnumerable<ConcertEntity>, IEnumerable<Concert>>(concerts);
+            }
+
         }
 
         public OperationResult UpdateConcert(UpdateConcertRequest model)
