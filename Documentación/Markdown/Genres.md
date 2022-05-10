@@ -9,8 +9,7 @@
 
 ```json
 {
-  "name" : "pop-rock",
-  "category" : "music"
+    "genreName":"Pop"
 }
 ```
 
@@ -40,8 +39,8 @@
 
 ```json
 {
-  "code" : 0,
-  "message" : "Genre deleted"
+    "message": "Genre removed successfully",
+    "resultCode": 0
 }
 ```
 
@@ -62,8 +61,7 @@
 
 ```json
 {
-  "name" : "suspense",
-  "category" : "movies"
+    "genreName":"Pop"
 }
 ```
 
@@ -71,8 +69,8 @@
 
 ```json
 {
-  "code" : 0,
-  "message" : "Genre added"
+    "message": "Genre updated successfully",
+    "resultCode": 0
 }
 ```
 
@@ -94,8 +92,7 @@
 ```json
 {
     "id" : 1,
-    "name" : "suspense",
-    "category" : "movies"
+    "genreName": "pop"
 }
 ```
 
@@ -122,18 +119,15 @@
 [
     {
         "id" : 1,
-  	"name" : "suspense",
-        "category" : "movies"
+        "genreName" : "movies"
     },
     {
 	"id" : 2,
-  	"name" : "pop-rock",
-  	"category" : "music"
+  	"genreName" : "music"
     },
     {
         "id" : 1,
-  	"name" : "soul",
-  	"category" : "music"
+  	"genreName" : "soul"
     }
 ]
 ```
