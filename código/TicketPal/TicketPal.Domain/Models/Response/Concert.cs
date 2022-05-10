@@ -13,6 +13,6 @@ namespace TicketPal.Domain.Models.Response
         public CurrencyType CurrencyType { get; set; }
         public EventType EventType { get; set; }
         public string TourName { get; set; }
-        public PerformerEntity Artist { get; set; }
+        public Performer Artist { get; set; }
     }
 }

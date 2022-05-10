@@ -9,7 +9,7 @@ namespace TicketPal.Domain.Models.Response
         public PerformerType PerformerType { get; set; }
         public string Name { get; set; }
         public string StartYear { get; set; }
-        public GenreEntity Genre { get; set; }
+        public Genre Genre { get; set; }
         public string Artists { get; set; }
     }
 }

@@ -33,7 +33,7 @@ namespace TicketPal.WebApi.Controllers
         }
 
         [HttpPost]
-        [AuthFilter(Roles.Spectator+","+Roles.Admin)]
+        [AuthFilter(Roles.Admin)]
         public IActionResult Register([FromBody] SignUpRequest request)
         {
             var result = userService.SignUp(request);
@@ -52,6 +52,21 @@ namespace TicketPal.WebApi.Controllers
         [AuthFilter(Roles.Admin+","+Roles.Spectator)]
         public IActionResult GetUserAccount([FromRoute]int id)
         {
+            var token = HttpContext.Request.Headers["Authorization"]
+                .FirstOrDefault()?.Split(" ").Last();
+
+            var factory = HttpContext.RequestServices.GetService(typeof(IServiceFactory)) as IServiceFactory;
+            var jwtService = factory.GetService(typeof(IJwtService)) as IJwtService;
+            var settings = new AppSettings();
+
+            var accountId = int.Parse(jwtService.ClaimTokenValue(settings.JwtSecret, token, "id"));
+            var authenticatedUser = userService.GetUser(accountId);
+
+            if (authenticatedUser.Id != id)
+            {
+                return Unauthorized(new UnauthorizedError("Not authenticated"));
+            }
+
             return Ok(userService.GetUser(id));
         }
 
@@ -77,12 +92,13 @@ namespace TicketPal.WebApi.Controllers
             var accountId = int.Parse(jwtService.ClaimTokenValue(settings.JwtSecret, token, "id"));
             var authenticatedUser = userService.GetUser(accountId);
             
-            if(!authenticatedUser.Role.Equals(request.Role))
+            if(!authenticatedUser.Role.Equals(Roles.Admin) && !authenticatedUser.Role.Equals(request.Role))
             {
                 return BadRequest(new BadRequestError("Different role from request your're trying to update"));
             }
             else
             {
+                request.Id = id;
                 var result = userService.UpdateUser(request,authenticatedUser.Role);
 
                 if (result.ResultCode == ResultCode.FAIL)
