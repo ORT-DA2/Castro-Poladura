@@ -15,9 +15,21 @@
 ####Rol seller
 ```json
 {
-	"buyerFirstName": "Pedro",
-   	"buyerLastName": "González",
-   	"buyerEmail": "pgonzalez@gmail.com"	 
+    	"id": 1,
+    	"firstname": "Lucas",
+    	"lastname": "Castro",
+    	"email": "lucas@example.com",
+    	"password": "$2a$11$S6cYKpMo4ucbAW1L9Ir79uesYzIizbREknjSC8NOqo4JJV8z3pqZq",
+    	"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJuYmYiOjE2NTIxNDAxMDEsImV4cCI6MTY1MjE0NzMwMSwiaWF0IjoxNjUyMTQwMTAxfQ.Ydd3PhBJOxb5wqJs5kTrLOsrQweTY4JYB88oUBdQO34",
+    	"role": "ADMIN",
+    	"activeAccount": false
+}
+```
+- Ejemplo respuesta:
+```json
+{
+    "message": "User updated successfully",
+    "resultCode": 0
 }
 ```
 
