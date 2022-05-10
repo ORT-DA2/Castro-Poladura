@@ -12,7 +12,7 @@
 	| event | number | --- | Requerido | API_URL/tickets?event={event_id} |
 - Body:
 
-####Rol seller
+#### Rol seller
 ```json
 {
     	"id": 1,
