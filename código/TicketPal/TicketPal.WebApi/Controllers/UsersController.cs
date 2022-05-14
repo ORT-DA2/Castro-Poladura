@@ -3,11 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using TicketPal.BusinessLogic.Services.Settings;
 using TicketPal.Domain.Constants;
 using TicketPal.Domain.Models.Request;
-using TicketPal.Domain.Models.Response;
 using TicketPal.Domain.Models.Response.Error;
 using TicketPal.Interfaces.Factory;
 using TicketPal.Interfaces.Services.Jwt;
-using TicketPal.Interfaces.Services.Settings;
 using TicketPal.Interfaces.Services.Users;
 using TicketPal.WebApi.Constants;
 using TicketPal.WebApi.Filters.Auth;
@@ -37,7 +35,7 @@ namespace TicketPal.WebApi.Controllers
         public IActionResult Register([FromBody] SignUpRequest request)
         {
             var result = userService.SignUp(request);
-            
+
             if (result.ResultCode == ResultCode.FAIL)
             {
                 return BadRequest(new BadRequestError(result.Message));
@@ -49,8 +47,8 @@ namespace TicketPal.WebApi.Controllers
         }
 
         [HttpGet("{id}")]
-        [AuthFilter(Roles.Admin+","+Roles.Spectator)]
-        public IActionResult GetUserAccount([FromRoute]int id)
+        [AuthFilter(Roles.Admin + "," + Roles.Spectator)]
+        public IActionResult GetUserAccount([FromRoute] int id)
         {
             var token = HttpContext.Request.Headers["Authorization"]
                 .FirstOrDefault()?.Split(" ").Last();
@@ -72,16 +70,16 @@ namespace TicketPal.WebApi.Controllers
 
         [HttpGet]
         [AuthFilter(Roles.Admin)]
-        public IActionResult GetUserAccounts([FromQuery(Name = "role")]string role)
+        public IActionResult GetUserAccounts([FromQuery(Name = "role")] string role)
         {
             return Ok(userService.GetUsers(role));
         }
 
         [HttpPut("{id}")]
-        [AuthFilter(Roles.Admin+","+Roles.Spectator)]
-        public IActionResult Update([FromRoute]int id, [FromBody]UpdateUserRequest request)
+        [AuthFilter(Roles.Admin + "," + Roles.Spectator)]
+        public IActionResult Update([FromRoute] int id, [FromBody] UpdateUserRequest request)
         {
-            
+
             var token = HttpContext.Request.Headers["Authorization"]
                 .FirstOrDefault()?.Split(" ").Last();
 
@@ -91,15 +89,15 @@ namespace TicketPal.WebApi.Controllers
 
             var accountId = int.Parse(jwtService.ClaimTokenValue(settings.JwtSecret, token, "id"));
             var authenticatedUser = userService.GetUser(accountId);
-            
-            if(!authenticatedUser.Role.Equals(Roles.Admin) && !authenticatedUser.Role.Equals(request.Role))
+
+            if (!authenticatedUser.Role.Equals(Roles.Admin) && !authenticatedUser.Role.Equals(request.Role))
             {
                 return BadRequest(new BadRequestError("Different role from request your're trying to update"));
             }
             else
             {
                 request.Id = id;
-                var result = userService.UpdateUser(request,authenticatedUser.Role);
+                var result = userService.UpdateUser(request, authenticatedUser.Role);
 
                 if (result.ResultCode == ResultCode.FAIL)
                 {
@@ -115,7 +113,7 @@ namespace TicketPal.WebApi.Controllers
 
         [HttpDelete("{id}")]
         [AuthFilter(Roles.Admin)]
-        public IActionResult DeleteAccount([FromRoute]int id)
+        public IActionResult DeleteAccount([FromRoute] int id)
         {
             var result = userService.DeleteUser(id);
 

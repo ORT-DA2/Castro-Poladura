@@ -8,9 +8,7 @@ using TicketPal.BusinessLogic.Services.Settings;
 using TicketPal.Domain.Entity;
 using TicketPal.Interfaces.Factory;
 using TicketPal.Interfaces.Repository;
-using TicketPal.Interfaces.Services;
 using TicketPal.Interfaces.Services.Jwt;
-using TicketPal.Interfaces.Services.Settings;
 using TicketPal.Interfaces.Services.Users;
 
 namespace TicketPal.BusinessLogic.Tests.Services
@@ -59,7 +57,7 @@ namespace TicketPal.BusinessLogic.Tests.Services
             this.userPassword = "somePassword";
             this.jwtTestSecret = "23jrb783v29fwfvfg2874gf286fce8";
 
-            this.options = Options.Create(new AppSettings { JwtSecret = "someSecret"});
+            this.options = Options.Create(new AppSettings { JwtSecret = "someSecret" });
         }
 
     }

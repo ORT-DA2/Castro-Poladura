@@ -25,24 +25,27 @@ namespace TicketPal.WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
+            // Settings
+            var section = Configuration.GetSection("AppSettings");
+            services.Configure<AppSettings>(section);
+            // Filters
             services.AddScoped<AuthFilter>();
             services.AddMvcCore(options =>
             {
                 options.Filters.Add(typeof(ModelValidateFilter));
             });
-
+            //Factory
             IServiceFactory factory = new ServiceFactory(
                 services,
                 Configuration
             );
-            factory.AddDbContextService(Configuration.GetConnectionString("TicketPal_SQL_EXPRESS"));
+            factory.AddDbContextService(Configuration.GetConnectionString("TicketPal_SQL_SERVER"));
             factory.RegisterRepositories();
             factory.RegisterServices();
             factory.BuildServices();
-            
+
             services.AddControllers();
-            
+
             services.Configure<ApiBehaviorOptions>(opt =>
             {
                 opt.SuppressModelStateInvalidFilter = true;

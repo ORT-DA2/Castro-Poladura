@@ -1,9 +1,7 @@
 
-using TicketPal.Interfaces.Services.Settings;
-
 namespace TicketPal.BusinessLogic.Services.Settings
 {
-    public class AppSettings : IAppSettings
+    public class AppSettings
     {
         public AppSettings()
         {
