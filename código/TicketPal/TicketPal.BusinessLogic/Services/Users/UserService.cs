@@ -13,6 +13,7 @@ using System.Linq;
 using TicketPal.Interfaces.Factory;
 using TicketPal.Interfaces.Services.Jwt;
 using TicketPal.BusinessLogic.Services.Settings;
+using System;
 
 namespace TicketPal.BusinessLogic.Services.Users
 {
@@ -88,6 +89,27 @@ namespace TicketPal.BusinessLogic.Services.Users
             return user;
         }
 
+        public User RetrieveUserFromToken(string token)
+        {
+            if(!String.IsNullOrEmpty(token))
+            {
+                var jwtService = this.factory.GetService(typeof(IJwtService)) as IJwtService;
+                var claimToken = jwtService.ClaimTokenValue(this.appSettings.JwtSecret, token, "id");
+            
+                if(claimToken != null)
+                {
+                    var accountId = int.Parse(claimToken);
+                    return GetUser(accountId);
+                }
+                else 
+                {
+                    return null;
+                }
+            }else
+            {
+                return null;
+            }
+        }
 
         public OperationResult SignUp(SignUpRequest model)
         {
