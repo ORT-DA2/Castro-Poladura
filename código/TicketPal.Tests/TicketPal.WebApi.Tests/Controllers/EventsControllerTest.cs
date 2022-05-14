@@ -199,14 +199,19 @@ namespace TicketPal.WebApi.Tests.Controllers
         [TestMethod]
         public void GetConcerts()
         {
-            mockService.Setup(s => s.GetConcerts(It.IsAny<Expression<Func<ConcertEntity, bool>>>(),false))
-                .Returns(concerts);
+            mockService.Setup(s => s.GetConcerts(
+                It.IsAny<EventType>(),
+                true,
+                It.IsAny<string>(),
+                It.IsAny<string>(),
+                It.IsAny<string>()
+            )).Returns(concerts);
 
             var result = controller.GetConcerts(
-                0,
+                EventType.CONCERT,
                 true,
-                "05/9/2022",
-                "05/12/2022",
+                DateTime.Now.ToString("dd/M/yyyy"),
+                DateTime.Now.AddDays(30).ToString("dd/M/yyyy"),
                 "Bono"
                 );
             var objectResult = result as ObjectResult;
@@ -214,6 +219,66 @@ namespace TicketPal.WebApi.Tests.Controllers
 
             Assert.AreEqual(200, statusCode);
 
+        }
+
+        [TestMethod]
+        public void GetConcertsWrongStartDate()
+        {
+            mockService.Setup(s => s.GetConcerts(
+                EventType.CONCERT,
+                false,
+                It.IsAny<string>(),
+                It.IsAny<string>(),
+                It.IsAny<string>()
+            )).Returns(concerts);
+
+            var result = controller.GetConcerts(
+                0,
+                true,
+                "3fewfsdd",
+                DateTime.Now.AddDays(30).ToString("dd/M/yyyy"),
+                "Bono"
+                );
+            var operationResult = new OperationResult
+            {
+                ResultCode = ResultCode.FAIL,
+                Message = "error"
+            };
+
+            var objectResult = result as ObjectResult;
+            var statusCode = objectResult.StatusCode;
+
+            Assert.AreEqual(400, statusCode);
+        }
+
+        [TestMethod]
+        public void GetConcertsWrongEndDate()
+        {
+            mockService.Setup(s => s.GetConcerts(
+                EventType.CONCERT,
+                false,
+                It.IsAny<string>(),
+                It.IsAny<string>(),
+                It.IsAny<string>()
+            )).Returns(concerts);
+
+            var result = controller.GetConcerts(
+                0,
+                true,
+                DateTime.Now.AddDays(30).ToString("dd/M/yyyy"),
+                "fdsf23fs",
+                "Bono"
+                );
+            var operationResult = new OperationResult
+            {
+                ResultCode = ResultCode.FAIL,
+                Message = "error"
+            };
+
+            var objectResult = result as ObjectResult;
+            var statusCode = objectResult.StatusCode;
+
+            Assert.AreEqual(400, statusCode);
         }
 
         private List<Concert> SetupEvents()
