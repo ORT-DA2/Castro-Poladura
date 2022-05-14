@@ -118,7 +118,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 Email = "someone@example.com",
                 Password = BC.HashPassword(userPassword),
                 Role = UserRole.ADMIN.ToString(),
-                ActiveAccount= true
+                ActiveAccount = true
             };
 
 
@@ -302,7 +302,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 this.options,
                 this.mapper
             );
-            OperationResult expected = userService.UpdateUser(updateRequest,"SPECTATOR");
+            OperationResult expected = userService.UpdateUser(updateRequest, "SPECTATOR");
 
             Assert.IsTrue(expected.ResultCode == ResultCode.SUCCESS);
         }
@@ -328,7 +328,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 this.options,
                 this.mapper
             );
-            OperationResult expected = userService.UpdateUser(updateRequest,"SPECTATOR");
+            OperationResult expected = userService.UpdateUser(updateRequest, "SPECTATOR");
 
             Assert.IsTrue(expected.ResultCode == ResultCode.FAIL);
         }
@@ -395,6 +395,76 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
             User account = userService.GetUser(id);
 
             Assert.IsNull(account);
+
+        }
+
+        [TestMethod]
+        public void RetrieveUserFromTokenIsNullToken()
+        {
+            this.userService = new UserService(
+                this.factoryMock.Object,
+                this.options,
+                this.mapper
+            );
+
+            var user = userService.RetrieveUserFromToken(null);
+            Assert.IsNull(user);
+        }
+
+        [TestMethod]
+        public void RetrieveUserFromTokenClaimNull()
+        {
+            this.mockJwtService.Setup(m => m.ClaimTokenValue(
+                It.IsAny<string>(),
+                It.IsAny<string>(),
+                "id"
+            )).Returns(null as string);
+
+            this.factoryMock.Setup(m => m.GetService(typeof(IJwtService)))
+                .Returns(this.mockJwtService.Object);
+
+            this.userService = new UserService(
+                this.factoryMock.Object,
+                this.options,
+                this.mapper
+            );
+            var user = userService.RetrieveUserFromToken("someToken");
+            Assert.IsNull(user);
+        }
+
+        [TestMethod]
+        public void RetrieveUserFromTokenOk()
+        {
+            var dbUser = new UserEntity
+            {
+                Id = 1,
+                Firstname = "John",
+                Lastname = "Doe",
+                Email = "someone@example.com",
+                Password = BC.HashPassword(userPassword),
+                Role = UserRole.ADMIN.ToString(),
+                ActiveAccount = true
+            };
+
+            this.mockJwtService.Setup(m => m.ClaimTokenValue(
+                It.IsAny<string>(),
+                It.IsAny<string>(),
+                "id"
+            )).Returns("1");
+
+            this.mockUserRepo.Setup(r => r.Get(It.IsAny<int>())).Returns(dbUser);
+            this.factoryMock.Setup(m => m.GetRepository(typeof(UserEntity)))
+                .Returns(this.mockUserRepo.Object);
+            this.factoryMock.Setup(m => m.GetService(typeof(IJwtService)))
+                .Returns(this.mockJwtService.Object);
+
+            this.userService = new UserService(
+                this.factoryMock.Object,
+                this.options,
+                this.mapper
+            );
+            var user = userService.RetrieveUserFromToken("someToken");
+            Assert.IsNull(user);
 
         }
     }
