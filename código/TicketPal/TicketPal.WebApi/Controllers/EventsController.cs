@@ -77,10 +77,9 @@ namespace TicketPal.WebApi.Controllers
             return Ok(eventService.GetConcert(id));
         }
 
-        // Need to refactor to use in service in future release
         [HttpGet]
         public IActionResult GetConcerts(
-            [BindRequired][FromQuery] int type,
+            [BindRequired][FromQuery] EventType type,
             [FromQuery(Name = "newest")] bool newest,
             [FromQuery(Name = "startDate")] string startDate,
             [FromQuery(Name = "endDate")] string endDate,
@@ -94,72 +93,22 @@ namespace TicketPal.WebApi.Controllers
                        DateTimeStyles.None,
                        out dtEnd);
             DateTime dtStart;
-            var parseEndDate = DateTime.TryParseExact(startDate,
+            var parseEndDate = DateTime.TryParseExact(endDate,
                        "dd/M/yyyy",
                        CultureInfo.InvariantCulture,
                        DateTimeStyles.None,
                        out dtStart);
-            if (String.IsNullOrEmpty(startDate) && !parseStartDate)
+
+            if (String.IsNullOrEmpty(startDate) || !parseStartDate)
             {
                 return BadRequest(new BadRequestError("Start date not in: dd/M/yyyy"));
             }
-            if (String.IsNullOrEmpty(endDate) && !parseEndDate)
+            if (String.IsNullOrEmpty(endDate) || !parseEndDate)
             {
                 return BadRequest(new BadRequestError("End date not in: dd/M/yyyy"));
             }
 
-            if (String.IsNullOrEmpty(startDate)
-                && String.IsNullOrEmpty(endDate)
-                && String.IsNullOrEmpty(performerName)
-                )
-            {
-                return Ok(eventService.GetConcerts(
-                    e => ((int)e.EventType) == type
-                    , newest
-                    ));
-            }
-            else if (!String.IsNullOrEmpty(startDate)
-            && String.IsNullOrEmpty(endDate)
-            && String.IsNullOrEmpty(performerName)
-            )
-            {
-                return Ok(eventService.GetConcerts(
-                    e => ((int)e.EventType) == type
-                    && e.Date >= dtStart
-                    , newest
-                    ));
-            }
-            else if (String.IsNullOrEmpty(startDate)
-            && !String.IsNullOrEmpty(endDate)
-            && String.IsNullOrEmpty(performerName)
-            )
-            {
-                return Ok(eventService.GetConcerts(
-                    e => ((int)e.EventType) == type
-                    && e.Date <= dtEnd
-                    , newest
-                    ));
-            }
-            else if (!String.IsNullOrEmpty(startDate)
-            && !String.IsNullOrEmpty(endDate)
-            && String.IsNullOrEmpty(performerName))
-            {
-                return Ok(eventService.GetConcerts(
-                    e => ((int)e.EventType) == type
-                    && (e.Date >= dtStart && e.Date <= dtEnd)
-                    , newest
-                    ));
-            }
-            else
-            {
-                return Ok(eventService.GetConcerts(
-                    e => ((int)e.EventType) == type
-                    && (e.Date >= dtStart && e.Date <= dtEnd)
-                    && e.Artist.Name.Equals(performerName)
-                    , newest
-                    ));
-            }
-
+            return Ok(eventService.GetConcerts(type,newest,startDate,endDate,performerName));
         }
 
 
