@@ -204,73 +204,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
         }
 
         [TestMethod]
-        public void GetAllConcertsSuccesfullyTest()
-        {
-            var artist2 = new PerformerEntity()
-            {
-                Id = 2,
-                Genre = genre,
-                Name = "George Michael",
-                PerformerType = PerformerType.SOLO_ARTIST,
-                StartYear = "1981"
-            };
-
-            var artist3 = new PerformerEntity()
-            {
-                Id = 3,
-                Genre = genre,
-                Name = "Boy George",
-                PerformerType = PerformerType.SOLO_ARTIST,
-                StartYear = "1981"
-            };
-
-            IEnumerable<ConcertEntity> dbAccounts = new List<ConcertEntity>()
-            {
-                new ConcertEntity
-                {
-                    Id = 1,
-                    Artist = artist,
-                    Date = concertRequest.Date,
-                    AvailableTickets = concertRequest.AvailableTickets,
-                    EventType = concertRequest.EventType,
-                    TicketPrice = concertRequest.TicketPrice,
-                    CurrencyType = concertRequest.CurrencyType,
-                    TourName = concertRequest.TourName
-                },
-                new ConcertEntity
-                {
-                    Id = 2,
-                    Artist = artist2,
-                    Date = concertRequest.Date.AddDays(25),
-                    AvailableTickets = concertRequest.AvailableTickets,
-                    EventType = concertRequest.EventType,
-                    TicketPrice = concertRequest.TicketPrice,
-                    CurrencyType = concertRequest.CurrencyType,
-                    TourName = "Faith"
-                },
-                new ConcertEntity
-                {
-                    Id = 3,
-                    Artist = artist3,
-                    Date = concertRequest.Date.AddDays(35),
-                    AvailableTickets = concertRequest.AvailableTickets,
-                    EventType = concertRequest.EventType,
-                    TicketPrice = concertRequest.TicketPrice,
-                    CurrencyType = concertRequest.CurrencyType,
-                    TourName = "Karma Camaleon"
-                },
-            };
-
-            this.mockConcertRepo.Setup(r => r.GetAll()).Returns(dbAccounts);
-            this.factoryMock.Setup(m => m.GetRepository(typeof(ConcertEntity))).Returns(this.mockConcertRepo.Object);
-            this.concertService = new ConcertService(this.factoryMock.Object, this.mapper);
-            IEnumerable<Concert> result = concertService.GetConcerts();
-
-            Assert.IsTrue(result.ToList().Count == 3);
-        }
-
-        [TestMethod]
-        public void GetAllOldestConcertsWithParamsSuccesfullyTest()
+        public void GetAllConcertsWithNoArtistTest()
         {
             var artist2 = new PerformerEntity()
             {
@@ -330,13 +264,18 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             this.mockConcertRepo.Setup(r => r.GetAll(It.IsAny<Expression<Func<ConcertEntity, bool>>>())).Returns(dbAccounts);
             this.factoryMock.Setup(m => m.GetRepository(typeof(ConcertEntity))).Returns(this.mockConcertRepo.Object);
             this.concertService = new ConcertService(this.factoryMock.Object, this.mapper);
-            IEnumerable<Concert> result = concertService.GetConcerts(It.IsAny<Expression<Func<ConcertEntity, bool>>>(), false);
+            IEnumerable<Concert> result = concertService.GetConcerts(
+                EventType.CONCERT,
+                true,
+                DateTime.Now.ToString("dd/M/yyyy"),
+                DateTime.Now.AddDays(30).ToString("dd/M/yyyy"),
+                null
+                );
 
             Assert.IsTrue(result.ToList().Count == 3);
         }
-
         [TestMethod]
-        public void GetAllNewestConcertsWithParamsSuccesfullyTest()
+        public void GetAllNewestConcertsTest()
         {
             var artist2 = new PerformerEntity()
             {
@@ -396,7 +335,300 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             this.mockConcertRepo.Setup(r => r.GetAll(It.IsAny<Expression<Func<ConcertEntity, bool>>>())).Returns(dbAccounts);
             this.factoryMock.Setup(m => m.GetRepository(typeof(ConcertEntity))).Returns(this.mockConcertRepo.Object);
             this.concertService = new ConcertService(this.factoryMock.Object, this.mapper);
-            IEnumerable<Concert> result = concertService.GetConcerts(It.IsAny<Expression<Func<ConcertEntity, bool>>>(), true);
+            IEnumerable<Concert> result = concertService.GetConcerts(
+                EventType.CONCERT,
+                true,
+                DateTime.Now.ToString("dd/M/yyyy"),
+                DateTime.Now.AddDays(30).ToString("dd/M/yyyy"),
+                artist2.Name
+                );
+
+            Assert.IsTrue(result.ToList().Count == 3);
+        }
+
+        [TestMethod]
+        public void GetAllOldestConcertsTest()
+        {
+            var artist2 = new PerformerEntity()
+            {
+                Id = 2,
+                Genre = genre,
+                Name = "George Michael",
+                PerformerType = PerformerType.SOLO_ARTIST,
+                StartYear = "1981"
+            };
+
+            var artist3 = new PerformerEntity()
+            {
+                Id = 3,
+                Genre = genre,
+                Name = "Boy George",
+                PerformerType = PerformerType.SOLO_ARTIST,
+                StartYear = "1981"
+            };
+
+            IEnumerable<ConcertEntity> dbAccounts = new List<ConcertEntity>()
+            {
+                new ConcertEntity
+                {
+                    Id = 1,
+                    Artist = artist,
+                    Date = concertRequest.Date,
+                    AvailableTickets = concertRequest.AvailableTickets,
+                    EventType = concertRequest.EventType,
+                    TicketPrice = concertRequest.TicketPrice,
+                    CurrencyType = concertRequest.CurrencyType,
+                    TourName = concertRequest.TourName
+                },
+                new ConcertEntity
+                {
+                    Id = 2,
+                    Artist = artist2,
+                    Date = concertRequest.Date.AddDays(25),
+                    AvailableTickets = concertRequest.AvailableTickets,
+                    EventType = concertRequest.EventType,
+                    TicketPrice = concertRequest.TicketPrice,
+                    CurrencyType = concertRequest.CurrencyType,
+                    TourName = "Faith"
+                },
+                new ConcertEntity
+                {
+                    Id = 3,
+                    Artist = artist3,
+                    Date = concertRequest.Date.AddDays(35),
+                    AvailableTickets = concertRequest.AvailableTickets,
+                    EventType = concertRequest.EventType,
+                    TicketPrice = concertRequest.TicketPrice,
+                    CurrencyType = concertRequest.CurrencyType,
+                    TourName = "Karma Camaleon"
+                },
+            };
+
+            this.mockConcertRepo.Setup(r => r.GetAll(It.IsAny<Expression<Func<ConcertEntity, bool>>>())).Returns(dbAccounts);
+            this.factoryMock.Setup(m => m.GetRepository(typeof(ConcertEntity))).Returns(this.mockConcertRepo.Object);
+            this.concertService = new ConcertService(this.factoryMock.Object, this.mapper);
+            IEnumerable<Concert> result = concertService.GetConcerts(
+                EventType.CONCERT,
+                false,
+                DateTime.Now.ToString("dd/M/yyyy"),
+                DateTime.Now.AddDays(30).ToString("dd/M/yyyy"),
+                artist2.Name
+                );
+
+            Assert.IsTrue(result.ToList().Count == 3);
+        }
+
+        [TestMethod]
+        public void GetAllConcertsWithNoArtistAndNoStartDateTest()
+        {
+            var artist2 = new PerformerEntity()
+            {
+                Id = 2,
+                Genre = genre,
+                Name = "George Michael",
+                PerformerType = PerformerType.SOLO_ARTIST,
+                StartYear = "1981"
+            };
+
+            var artist3 = new PerformerEntity()
+            {
+                Id = 3,
+                Genre = genre,
+                Name = "Boy George",
+                PerformerType = PerformerType.SOLO_ARTIST,
+                StartYear = "1981"
+            };
+
+            IEnumerable<ConcertEntity> dbAccounts = new List<ConcertEntity>()
+            {
+                new ConcertEntity
+                {
+                    Id = 1,
+                    Artist = artist,
+                    Date = concertRequest.Date,
+                    AvailableTickets = concertRequest.AvailableTickets,
+                    EventType = concertRequest.EventType,
+                    TicketPrice = concertRequest.TicketPrice,
+                    CurrencyType = concertRequest.CurrencyType,
+                    TourName = concertRequest.TourName
+                },
+                new ConcertEntity
+                {
+                    Id = 2,
+                    Artist = artist2,
+                    Date = concertRequest.Date.AddDays(25),
+                    AvailableTickets = concertRequest.AvailableTickets,
+                    EventType = concertRequest.EventType,
+                    TicketPrice = concertRequest.TicketPrice,
+                    CurrencyType = concertRequest.CurrencyType,
+                    TourName = "Faith"
+                },
+                new ConcertEntity
+                {
+                    Id = 3,
+                    Artist = artist3,
+                    Date = concertRequest.Date.AddDays(35),
+                    AvailableTickets = concertRequest.AvailableTickets,
+                    EventType = concertRequest.EventType,
+                    TicketPrice = concertRequest.TicketPrice,
+                    CurrencyType = concertRequest.CurrencyType,
+                    TourName = "Karma Camaleon"
+                },
+            };
+
+            this.mockConcertRepo.Setup(r => r.GetAll(It.IsAny<Expression<Func<ConcertEntity, bool>>>())).Returns(dbAccounts);
+            this.factoryMock.Setup(m => m.GetRepository(typeof(ConcertEntity))).Returns(this.mockConcertRepo.Object);
+            this.concertService = new ConcertService(this.factoryMock.Object, this.mapper);
+            IEnumerable<Concert> result = concertService.GetConcerts(
+                EventType.CONCERT,
+                true,
+                null,
+                DateTime.Now.AddDays(30).ToString("dd/M/yyyy"),
+                null
+                );
+
+            Assert.IsTrue(result.ToList().Count == 3);
+        }
+        [TestMethod]
+        public void GetAllConcertsWithNoArtistAndNoEndDateTest()
+        {
+            var artist2 = new PerformerEntity()
+            {
+                Id = 2,
+                Genre = genre,
+                Name = "George Michael",
+                PerformerType = PerformerType.SOLO_ARTIST,
+                StartYear = "1981"
+            };
+
+            var artist3 = new PerformerEntity()
+            {
+                Id = 3,
+                Genre = genre,
+                Name = "Boy George",
+                PerformerType = PerformerType.SOLO_ARTIST,
+                StartYear = "1981"
+            };
+
+            IEnumerable<ConcertEntity> dbAccounts = new List<ConcertEntity>()
+            {
+                new ConcertEntity
+                {
+                    Id = 1,
+                    Artist = artist,
+                    Date = concertRequest.Date,
+                    AvailableTickets = concertRequest.AvailableTickets,
+                    EventType = concertRequest.EventType,
+                    TicketPrice = concertRequest.TicketPrice,
+                    CurrencyType = concertRequest.CurrencyType,
+                    TourName = concertRequest.TourName
+                },
+                new ConcertEntity
+                {
+                    Id = 2,
+                    Artist = artist2,
+                    Date = concertRequest.Date.AddDays(25),
+                    AvailableTickets = concertRequest.AvailableTickets,
+                    EventType = concertRequest.EventType,
+                    TicketPrice = concertRequest.TicketPrice,
+                    CurrencyType = concertRequest.CurrencyType,
+                    TourName = "Faith"
+                },
+                new ConcertEntity
+                {
+                    Id = 3,
+                    Artist = artist3,
+                    Date = concertRequest.Date.AddDays(35),
+                    AvailableTickets = concertRequest.AvailableTickets,
+                    EventType = concertRequest.EventType,
+                    TicketPrice = concertRequest.TicketPrice,
+                    CurrencyType = concertRequest.CurrencyType,
+                    TourName = "Karma Camaleon"
+                },
+            };
+
+            this.mockConcertRepo.Setup(r => r.GetAll(It.IsAny<Expression<Func<ConcertEntity, bool>>>())).Returns(dbAccounts);
+            this.factoryMock.Setup(m => m.GetRepository(typeof(ConcertEntity))).Returns(this.mockConcertRepo.Object);
+            this.concertService = new ConcertService(this.factoryMock.Object, this.mapper);
+            IEnumerable<Concert> result = concertService.GetConcerts(
+                EventType.CONCERT,
+                true,
+                DateTime.Now.AddDays(30).ToString("dd/M/yyyy"),
+                null,
+                null
+                );
+
+            Assert.IsTrue(result.ToList().Count == 3);
+        }
+
+        [TestMethod]
+        public void GetAllConcertsOnlyType()
+        {
+            var artist2 = new PerformerEntity()
+            {
+                Id = 2,
+                Genre = genre,
+                Name = "George Michael",
+                PerformerType = PerformerType.SOLO_ARTIST,
+                StartYear = "1981"
+            };
+
+            var artist3 = new PerformerEntity()
+            {
+                Id = 3,
+                Genre = genre,
+                Name = "Boy George",
+                PerformerType = PerformerType.SOLO_ARTIST,
+                StartYear = "1981"
+            };
+
+            IEnumerable<ConcertEntity> dbAccounts = new List<ConcertEntity>()
+            {
+                new ConcertEntity
+                {
+                    Id = 1,
+                    Artist = artist,
+                    Date = concertRequest.Date,
+                    AvailableTickets = concertRequest.AvailableTickets,
+                    EventType = concertRequest.EventType,
+                    TicketPrice = concertRequest.TicketPrice,
+                    CurrencyType = concertRequest.CurrencyType,
+                    TourName = concertRequest.TourName
+                },
+                new ConcertEntity
+                {
+                    Id = 2,
+                    Artist = artist2,
+                    Date = concertRequest.Date.AddDays(25),
+                    AvailableTickets = concertRequest.AvailableTickets,
+                    EventType = concertRequest.EventType,
+                    TicketPrice = concertRequest.TicketPrice,
+                    CurrencyType = concertRequest.CurrencyType,
+                    TourName = "Faith"
+                },
+                new ConcertEntity
+                {
+                    Id = 3,
+                    Artist = artist3,
+                    Date = concertRequest.Date.AddDays(35),
+                    AvailableTickets = concertRequest.AvailableTickets,
+                    EventType = concertRequest.EventType,
+                    TicketPrice = concertRequest.TicketPrice,
+                    CurrencyType = concertRequest.CurrencyType,
+                    TourName = "Karma Camaleon"
+                },
+            };
+
+            this.mockConcertRepo.Setup(r => r.GetAll(It.IsAny<Expression<Func<ConcertEntity, bool>>>())).Returns(dbAccounts);
+            this.factoryMock.Setup(m => m.GetRepository(typeof(ConcertEntity))).Returns(this.mockConcertRepo.Object);
+            this.concertService = new ConcertService(this.factoryMock.Object, this.mapper);
+            IEnumerable<Concert> result = concertService.GetConcerts(
+                EventType.CONCERT,
+                true,
+                null,
+                null,
+                null
+                );
 
             Assert.IsTrue(result.ToList().Count == 3);
         }
