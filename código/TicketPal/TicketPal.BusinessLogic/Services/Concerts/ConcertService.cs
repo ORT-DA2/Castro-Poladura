@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using TicketPal.Domain.Constants;
@@ -111,23 +112,93 @@ namespace TicketPal.BusinessLogic.Services.Concerts
             return mapper.Map<Concert>(concertRepository.Get(id));
         }
 
-        public IEnumerable<Concert> GetConcerts()
+        public IEnumerable<Concert> GetConcerts(EventType type, bool newest, string startDate, string endDate, string artistName)
         {
-            var concerts = concertRepository.GetAll();
-            return mapper.Map<IEnumerable<ConcertEntity>, IEnumerable<Concert>>(concerts);
-        }
+            IEnumerable<ConcertEntity> concerts = new List<ConcertEntity>();
 
-        public IEnumerable<Concert> GetConcerts(Expression<Func<ConcertEntity, bool>> predicate, bool newest)
-        {
-            if (!newest)
+            if (String.IsNullOrEmpty(startDate)
+                && String.IsNullOrEmpty(endDate)
+                && String.IsNullOrEmpty(artistName)
+                )
             {
-                var concerts = concertRepository.GetAll(predicate).OrderBy(c => c.Date);
-                return mapper.Map<IEnumerable<ConcertEntity>, IEnumerable<Concert>>(concerts);
+                concerts = concertRepository.GetAll(
+                    c => c.EventType.Equals(type)
+                );
+            }
+            else if (!String.IsNullOrEmpty(startDate)
+            && String.IsNullOrEmpty(endDate)
+            && String.IsNullOrEmpty(artistName)
+            )
+            {
+                var dtStart = DateTime.ParseExact(startDate,
+                       "dd/M/yyyy",
+                       CultureInfo.InvariantCulture,
+                       DateTimeStyles.None);
+
+                concerts = concertRepository.GetAll(
+                    c => c.EventType.Equals(type) 
+                        && c.Date >= dtStart
+                );
+            }
+            else if (String.IsNullOrEmpty(startDate)
+            && !String.IsNullOrEmpty(endDate)
+            && String.IsNullOrEmpty(artistName)
+            )
+            {
+                var dtEnd = DateTime.ParseExact(endDate,
+                       "dd/M/yyyy",
+                       CultureInfo.InvariantCulture,
+                       DateTimeStyles.None);
+
+                concerts = concertRepository.GetAll(
+                    c => c.EventType.Equals(type) 
+                        && c.Date >= dtEnd
+                );
+            }
+            else if (!String.IsNullOrEmpty(startDate)
+            && !String.IsNullOrEmpty(endDate)
+            && String.IsNullOrEmpty(artistName))
+            {
+                var dtStart = DateTime.ParseExact(startDate,
+                       "dd/M/yyyy",
+                       CultureInfo.InvariantCulture,
+                       DateTimeStyles.None);
+                var dtEnd = DateTime.ParseExact(startDate,
+                       "dd/M/yyyy",
+                       CultureInfo.InvariantCulture,
+                       DateTimeStyles.None);
+
+                 concerts = concertRepository.GetAll(
+                    c => c.EventType.Equals(type) 
+                        && (c.Date >= dtStart && c.Date <= dtEnd)
+                );
             }
             else
             {
-                var concerts = concertRepository.GetAll(predicate).OrderByDescending(c => c.Date);
-                return mapper.Map<IEnumerable<ConcertEntity>, IEnumerable<Concert>>(concerts);
+                var dtStart = DateTime.ParseExact(startDate,
+                       "dd/M/yyyy",
+                       CultureInfo.InvariantCulture,
+                       DateTimeStyles.None);
+                var dtEnd = DateTime.ParseExact(endDate,
+                       "dd/M/yyyy",
+                       CultureInfo.InvariantCulture,
+                       DateTimeStyles.None);
+
+                concerts = concertRepository.GetAll(
+                    c => c.EventType.Equals(type) 
+                        && (c.Date >= dtStart && c.Date <= dtEnd)
+                        && c.Artist.Name.Equals(artistName)
+                );
+            }
+            if (!newest)
+            {
+                return mapper.Map<IEnumerable<ConcertEntity>, IEnumerable<Concert>>(
+                    concerts.OrderBy(c => c.Date));
+            }
+            else
+            {
+                return mapper.Map<IEnumerable<ConcertEntity>, IEnumerable<Concert>>(
+                    concerts.OrderByDescending(c => c.Date));
             }
 
         }
