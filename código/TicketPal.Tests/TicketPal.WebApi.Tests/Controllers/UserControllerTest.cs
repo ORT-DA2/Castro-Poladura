@@ -104,11 +104,21 @@ namespace TicketPal.WebApi.Tests.Controllers
         }
 
         [TestMethod]
-        public void GetAnyAccountOk()
+        public void GetAnyAccountAdminOk()
         {
-            mockService.Setup(s => s.GetUser(It.IsAny<int>())).Returns(users[2]);
+            var mockHttpContext = new Mock<HttpContext>();
+            var mockHeaderHttp = new Mock<IHeaderDictionary>();
+            mockHeaderHttp.Setup(x => x[It.IsAny<string>()]).Returns("someHeader");
+            var mockHttpRequest = new Mock<HttpRequest>();
+            mockHttpRequest.Setup(s => s.Headers).Returns(mockHeaderHttp.Object);
+            var mockServiceProvider = new Mock<IServiceProvider>();
+            mockHttpContext.Setup(s => s.Request).Returns(mockHttpRequest.Object);
+            
+            controller.ControllerContext.HttpContext = mockHttpContext.Object;
 
-            var account = controller.GetUserAccount(It.IsAny<int>());
+            mockService.Setup(s => s.RetrieveUserFromToken(It.IsAny<string>())).Returns(users[0]);
+
+            var account = controller.GetUserAccount(users[1].Id);
 
             var objectResult = account as ObjectResult;
             var statusCode = objectResult.StatusCode;
@@ -119,8 +129,17 @@ namespace TicketPal.WebApi.Tests.Controllers
         [TestMethod]
         public void GetAccountIfSameAccountOk()
         {
+            var mockHttpContext = new Mock<HttpContext>();
+            var mockHeaderHttp = new Mock<IHeaderDictionary>();
+            mockHeaderHttp.Setup(x => x[It.IsAny<string>()]).Returns("someHeader");
+            var mockHttpRequest = new Mock<HttpRequest>();
+            mockHttpRequest.Setup(s => s.Headers).Returns(mockHeaderHttp.Object);
+            var mockServiceProvider = new Mock<IServiceProvider>();
+            mockHttpContext.Setup(s => s.Request).Returns(mockHttpRequest.Object);
+            
+            controller.ControllerContext.HttpContext = mockHttpContext.Object;
 
-            mockService.Setup(s => s.GetUser(users[3].Id)).Returns(users[3]);
+            mockService.Setup(s => s.RetrieveUserFromToken(It.IsAny<string>())).Returns(users[3]);
 
             var account = controller.GetUserAccount(users[3].Id);
 
@@ -146,31 +165,19 @@ namespace TicketPal.WebApi.Tests.Controllers
         [TestMethod]
         public void UpdateAccountOk()
         {
-            
             var mockHttpContext = new Mock<HttpContext>();
-            var mockFactory = new Mock<IServiceFactory>();
-            var mockJwt = new Mock<IJwtService>();
             var mockHeaderHttp = new Mock<IHeaderDictionary>();
             mockHeaderHttp.Setup(x => x[It.IsAny<string>()]).Returns("someHeader");
             var mockHttpRequest = new Mock<HttpRequest>();
             mockHttpRequest.Setup(s => s.Headers).Returns(mockHeaderHttp.Object);
             var mockServiceProvider = new Mock<IServiceProvider>();
-            
-            mockJwt.Setup(s => s.ClaimTokenValue(It.IsAny<string>(),It.IsAny<string>(),"id"))
-                .Returns("0");
-            
-            mockFactory.Setup(s => s.GetService(typeof(IJwtService)))
-                .Returns(mockJwt.Object);
             mockHttpContext.Setup(s => s.Request).Returns(mockHttpRequest.Object);
-            mockHttpContext.Setup(s => s.RequestServices).Returns(mockServiceProvider.Object);
-            mockHttpContext.Setup(s => s.RequestServices.GetService(typeof(IServiceFactory)))
-                .Returns(mockFactory.Object);
-            
             
             controller.ControllerContext.HttpContext = mockHttpContext.Object;
 
             var updateRequest = new UpdateUserRequest
             {
+                Id = 4,
                 Firstname = "someName",
                 Lastname = "someLastName",
                 Email = "someEmail",
@@ -184,7 +191,7 @@ namespace TicketPal.WebApi.Tests.Controllers
                 Message = "User updated successfully"
             };
 
-            mockService.Setup(s => s.GetUser(It.IsAny<int>())).Returns(users[3]);
+            mockService.Setup(s => s.RetrieveUserFromToken(It.IsAny<string>())).Returns(users[3]);
             mockService.Setup(s => s.UpdateUser(updateRequest, It.IsAny<string>()))
                 .Returns(operationResult);
 
@@ -200,24 +207,12 @@ namespace TicketPal.WebApi.Tests.Controllers
         public void UpdateSpectatorUserAccountBySameUserOk()
         {
             var mockHttpContext = new Mock<HttpContext>();
-            var mockFactory = new Mock<IServiceFactory>();
-            var mockJwt = new Mock<IJwtService>();
             var mockHeaderHttp = new Mock<IHeaderDictionary>();
             mockHeaderHttp.Setup(x => x[It.IsAny<string>()]).Returns("someHeader");
             var mockHttpRequest = new Mock<HttpRequest>();
             mockHttpRequest.Setup(s => s.Headers).Returns(mockHeaderHttp.Object);
             var mockServiceProvider = new Mock<IServiceProvider>();
-            
-            mockJwt.Setup(s => s.ClaimTokenValue(It.IsAny<string>(),It.IsAny<string>(),"id"))
-                .Returns("0");
-            
-            mockFactory.Setup(s => s.GetService(typeof(IJwtService)))
-                .Returns(mockJwt.Object);
-            mockHttpContext.Setup(s => s.Request).Returns(mockHttpRequest.Object);
-            mockHttpContext.Setup(s => s.RequestServices).Returns(mockServiceProvider.Object);
-            mockHttpContext.Setup(s => s.RequestServices.GetService(typeof(IServiceFactory)))
-                .Returns(mockFactory.Object);
-            
+            mockHttpContext.Setup(s => s.Request).Returns(mockHttpRequest.Object);            
             
             controller.ControllerContext.HttpContext = mockHttpContext.Object;
 
@@ -236,7 +231,7 @@ namespace TicketPal.WebApi.Tests.Controllers
                 Message = "User updated successfully"
             };
 
-            mockService.Setup(s => s.GetUser(It.IsAny<int>())).Returns(users[3]);
+            mockService.Setup(s => s.RetrieveUserFromToken(It.IsAny<string>())).Returns(users[3]);
             mockService.Setup(s => s.UpdateUser(updateRequest, It.IsAny<string>()))
                 .Returns(operationResult);
 
@@ -252,24 +247,12 @@ namespace TicketPal.WebApi.Tests.Controllers
         public void UpdateUserAccountBadRequest()
         {
             var mockHttpContext = new Mock<HttpContext>();
-            var mockFactory = new Mock<IServiceFactory>();
-            var mockJwt = new Mock<IJwtService>();
             var mockHeaderHttp = new Mock<IHeaderDictionary>();
             mockHeaderHttp.Setup(x => x[It.IsAny<string>()]).Returns("someHeader");
             var mockHttpRequest = new Mock<HttpRequest>();
             mockHttpRequest.Setup(s => s.Headers).Returns(mockHeaderHttp.Object);
             var mockServiceProvider = new Mock<IServiceProvider>();
-            
-            mockJwt.Setup(s => s.ClaimTokenValue(It.IsAny<string>(),It.IsAny<string>(),"id"))
-                .Returns("0");
-            
-            mockFactory.Setup(s => s.GetService(typeof(IJwtService)))
-                .Returns(mockJwt.Object);
-            mockHttpContext.Setup(s => s.Request).Returns(mockHttpRequest.Object);
-            mockHttpContext.Setup(s => s.RequestServices).Returns(mockServiceProvider.Object);
-            mockHttpContext.Setup(s => s.RequestServices.GetService(typeof(IServiceFactory)))
-                .Returns(mockFactory.Object);
-            
+            mockHttpContext.Setup(s => s.Request).Returns(mockHttpRequest.Object);            
             
             controller.ControllerContext.HttpContext = mockHttpContext.Object;
             
@@ -288,7 +271,7 @@ namespace TicketPal.WebApi.Tests.Controllers
                 Message = "some error message"
             };
 
-            mockService.Setup(s => s.GetUser(It.IsAny<int>())).Returns(users[4]);
+            mockService.Setup(s => s.RetrieveUserFromToken(It.IsAny<string>())).Returns(users[4]);
             mockService.Setup(s => s.UpdateUser(updateRequest, It.IsAny<string>()))
                 .Returns(operationResult);
 
