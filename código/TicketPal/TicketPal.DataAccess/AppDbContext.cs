@@ -1,4 +1,3 @@
-
 using Microsoft.EntityFrameworkCore;
 using TicketPal.Domain.Entity;
 using DbData = TicketPal.DataAccess.Data.SeedData;
