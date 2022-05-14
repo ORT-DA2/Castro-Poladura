@@ -464,8 +464,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 this.mapper
             );
             var user = userService.RetrieveUserFromToken("someToken");
-            Assert.IsNull(user);
-
+            Assert.IsNotNull(user);
         }
     }
 }
