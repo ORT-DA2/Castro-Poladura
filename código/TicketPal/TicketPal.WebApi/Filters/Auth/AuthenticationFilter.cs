@@ -14,26 +14,20 @@ namespace TicketPal.WebApi.Filters.Auth
     {
         private string[] args;
         private IUserService userService;
-        private AppSettings settingsService;
-        private IJwtService jwtService;
 
         public AuthFilter(string arguments = "")
         {
             this.args = arguments.Split(",");
-            this.settingsService = new AppSettings();
         }
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            var factory = context.HttpContext.RequestServices.GetService(typeof(IServiceFactory)) as IServiceFactory;
-
-            this.userService = factory.GetService(typeof(IUserService)) as IUserService;
-            this.jwtService = factory.GetService(typeof(IJwtService)) as IJwtService;
-
             var token = context.HttpContext.Request.Headers["Authorization"]
                 .FirstOrDefault()?.Split(" ").Last();
+            this.userService = context.HttpContext.RequestServices.GetService(typeof(IUserService)) as IUserService;   
+            var user = userService.RetrieveUserFromToken(token);
 
-            if (String.IsNullOrEmpty(token))
+            if (user == null)
             {
                 var unauthorizedError = new UnauthorizedError("Access denied.");
                 context.Result = new ObjectResult(unauthorizedError)
@@ -42,11 +36,8 @@ namespace TicketPal.WebApi.Filters.Auth
                 };
             }
             else
-            {
-                var accountId = int.Parse(jwtService.ClaimTokenValue(settingsService.JwtSecret, token, "id"));
-                var user = userService.GetUser(accountId);
-
-                if (user == null || !args.Contains(user.Role))
+            {                
+                if (!args.Contains(user.Role))
                 {
                     var forbidden = new ForbiddenError("No required authorization to access resource.");
                     context.Result = new ObjectResult(forbidden)
@@ -55,7 +46,6 @@ namespace TicketPal.WebApi.Filters.Auth
                     };
                 }
             }
-
         }
     }
 }
