@@ -1,5 +1,13 @@
 # API-Docs
 
+## Endpoints
+
+- [Accounts](Documentaci%C3%B3n/Markdown/Accounts.md)
+- [Genres](Documentaci%C3%B3n/Markdown/Genres.md)
+- [Performers](Documentaci%C3%B3n/Markdown/Performers.md)
+- [Events](Documentaci%C3%B3n/Markdown/Events.md)
+- [Tickets](Documentaci%C3%B3n/Markdown/Tickets.md)
+
 ## Accesos
 
 | Acceso | Descripción |
@@ -75,12 +83,4 @@ La autenticación que debe ser provista por un “*Bearer Token*”.
     <img src="Documentaci%C3%B3n/Markdown/JwtFlow.png" width="600" height="200"
          alt="Jwt flow">
 </figure>
-
-## Endpoints
-
-- [Accounts](Documentaci%C3%B3n/Markdown/Accounts.md)
-- [Genres](Documentaci%C3%B3n/Markdown/Genres.md)
-- [Performers](Documentaci%C3%B3n/Markdown/Performers.md)
-- [Events](Documentaci%C3%B3n/Markdown/Events.md)
-- [Tickets](Documentaci%C3%B3n/Markdown/Tickets.md)
 
