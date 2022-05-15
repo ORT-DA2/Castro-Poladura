@@ -20,21 +20,12 @@ namespace TicketPal.WebApi.Tests.Filters
         private AuthFilter filter;
         // Mock services
         private Mock<IUserService> mockUserService;
-        private Mock<IJwtService> mockJwtService;
 
         [TestInitialize]
         public void Init()
         {
             // Services mocks
             this.mockUserService = new Mock<IUserService>();
-            this.mockJwtService = new Mock<IJwtService>();
-
-            // Service mock setups
-            mockJwtService.Setup(s => s.ClaimTokenValue(
-                new AppSettings().JwtSecret,
-                It.IsAny<string>(),
-                "id"
-                )).Returns("0");
             mockUserService.Setup(s => s.GetUser(It.IsAny<int>())).Returns(null as User);
         }
 
