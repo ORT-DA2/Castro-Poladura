@@ -3,6 +3,7 @@ using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using TicketPal.BusinessLogic.Services.Tickets;
 using TicketPal.BusinessLogic.Utils.TicketCodes;
 using TicketPal.Domain.Constants;
@@ -286,6 +287,49 @@ namespace TicketPal.BusinessLogic.Tests.Services.Tickets
 
             this.ticketService = new TicketService(this.factoryMock.Object, this.mapper);
             IEnumerable<Ticket> result = ticketService.GetTickets();
+
+            Assert.IsTrue(result.ToList().Count == 3);
+        }
+
+        [TestMethod]
+        public void GetAllUserTicketsSuccesfullyTest()
+        {
+            IEnumerable<TicketEntity> dbAccounts = new List<TicketEntity>()
+            {
+                new TicketEntity
+                {
+                    Id = 1,
+                    Buyer = ticket.Buyer,
+                    Code = ticket.Code,
+                    Event = ticket.Event,
+                    PurchaseDate = ticket.PurchaseDate,
+                    Status = ticket.Status
+                },
+                new TicketEntity
+                {
+                    Id = 2,
+                    Buyer = ticket.Buyer,
+                    Code = "nc934hg9q23runvgq0284daf27gd",
+                    Event = ticket.Event,
+                    PurchaseDate = ticket.PurchaseDate.AddDays(-30),
+                    Status = ticket.Status
+                },
+                new TicketEntity
+                {
+                    Id = 3,
+                    Buyer = ticket.Buyer,
+                    Code = "FMN0438abuutfv9q483ghwvnod4536u4w6ht",
+                    Event = ticket.Event,
+                    PurchaseDate = DateTime.Now.AddDays(-120),
+                    Status = TicketStatus.USED
+                },
+            };
+
+            this.mockTicketRepo.Setup(r => r.GetAll(It.IsAny<Expression<Func<TicketEntity, bool>>>())).Returns(dbAccounts);
+            this.factoryMock.Setup(m => m.GetRepository(typeof(TicketEntity))).Returns(this.mockTicketRepo.Object);
+
+            this.ticketService = new TicketService(this.factoryMock.Object, this.mapper);
+            IEnumerable<Ticket> result = ticketService.GetUserTickets(It.IsAny<int>());
 
             Assert.IsTrue(result.ToList().Count == 3);
         }
