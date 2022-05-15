@@ -124,12 +124,17 @@ namespace TicketPal.BusinessLogic.Services.Tickets
             return mapper.Map<Ticket>(ticketRepository.Get(id));
         }
 
+        public IEnumerable<Ticket> GetUserTickets(int userId)
+        {
+            var ticket = ticketRepository.GetAll(t => t.Buyer.Id == userId);
+            return mapper.Map<IEnumerable<TicketEntity>, IEnumerable<Ticket>>(ticket);
+        }
+
         public IEnumerable<Ticket> GetTickets()
         {
             var ticket = ticketRepository.GetAll();
             return mapper.Map<IEnumerable<TicketEntity>, IEnumerable<Ticket>>(ticket);
         }
-
         public OperationResult UpdateTicket(UpdateTicketRequest model)
         {
             try
