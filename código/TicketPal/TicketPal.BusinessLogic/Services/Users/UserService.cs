@@ -43,7 +43,7 @@ namespace TicketPal.BusinessLogic.Services.Users
                 repository.Delete(id);
                 return new OperationResult
                 {
-                    ResultCode = ResultCode.SUCCESS,
+                    ResultCode = Constants.CODE_SUCCESS,
                     Message = "User removed successfully"
                 };
             }
@@ -51,7 +51,7 @@ namespace TicketPal.BusinessLogic.Services.Users
             {
                 return new OperationResult
                 {
-                    ResultCode = ResultCode.FAIL,
+                    ResultCode = Constants.CODE_FAIL,
                     Message = ex.Message
                 };
             }
@@ -113,11 +113,11 @@ namespace TicketPal.BusinessLogic.Services.Users
 
         public OperationResult SignUp(SignUpRequest model)
         {
-            if (!Values.validRoles.Contains(model.Role))
+            if (!Constants.ValidRoles.Contains(model.Role))
             {
                 return new OperationResult
                 {
-                    ResultCode = ResultCode.FAIL,
+                    ResultCode = Constants.CODE_FAIL,
                     Message = $"Can't validate role: {model.Role}"
                 };
             }
@@ -138,13 +138,13 @@ namespace TicketPal.BusinessLogic.Services.Users
             {
                 return new OperationResult
                 {
-                    ResultCode = ResultCode.FAIL,
+                    ResultCode = Constants.CODE_FAIL,
                     Message = ex.Message
                 };
             }
             return new OperationResult
             {
-                ResultCode = ResultCode.SUCCESS,
+                ResultCode = Constants.CODE_SUCCESS,
                 Message = "User successfully registered"
             };
         }
@@ -153,7 +153,7 @@ namespace TicketPal.BusinessLogic.Services.Users
         {
             try
             {
-                if (authorization.Equals(UserRole.SPECTATOR.ToString()))
+                if (authorization.Equals(Constants.ROLE_SPECTATOR))
                 {
                     repository.Update(
                         new UserEntity
@@ -164,9 +164,9 @@ namespace TicketPal.BusinessLogic.Services.Users
                             Email = model.Email
                         });
                 }
-                else if (authorization.Equals(UserRole.ADMIN.ToString()))
+                else if (authorization.Equals(Constants.ROLE_ADMIN))
                 {
-                    if (Values.validRoles.Contains(model.Role))
+                    if (Constants.ValidRoles.Contains(model.Role))
                     {
                         repository.Update(
                             new UserEntity
@@ -183,7 +183,7 @@ namespace TicketPal.BusinessLogic.Services.Users
                     {
                         return new OperationResult
                         {
-                            ResultCode = ResultCode.FAIL,
+                            ResultCode = Constants.CODE_FAIL,
                             Message = $"Can't validate role: {model.Role}"
                         };
                     }
@@ -193,14 +193,14 @@ namespace TicketPal.BusinessLogic.Services.Users
             {
                 return new OperationResult
                 {
-                    ResultCode = ResultCode.FAIL,
+                    ResultCode = Constants.CODE_FAIL,
                     Message = ex.Message
                 };
             }
 
             return new OperationResult
             {
-                ResultCode = ResultCode.SUCCESS,
+                ResultCode = Constants.CODE_SUCCESS,
                 Message = "User updated successfully"
             };
         }

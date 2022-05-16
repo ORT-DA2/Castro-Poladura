@@ -47,10 +47,10 @@ namespace TicketPal.Domain.Tests.Models.Response
 
             OperationResult result = new OperationResult
             {
-                ResultCode = ResultCode.SUCCESS
+                ResultCode = Constants.Constants.CODE_SUCCESS
             };
 
-            Assert.IsTrue(result.ResultCode == ResultCode.SUCCESS);
+            Assert.IsTrue(result.ResultCode == Constants.Constants.CODE_SUCCESS);
         }
 
         [TestMethod]
@@ -59,10 +59,10 @@ namespace TicketPal.Domain.Tests.Models.Response
 
             OperationResult result = new OperationResult
             {
-                ResultCode = ResultCode.FAIL
+                ResultCode = Constants.Constants.CODE_FAIL
             };
 
-            Assert.IsTrue(result.ResultCode == ResultCode.FAIL);
+            Assert.IsTrue(result.ResultCode == Constants.Constants.CODE_FAIL);
         }
     }
 }

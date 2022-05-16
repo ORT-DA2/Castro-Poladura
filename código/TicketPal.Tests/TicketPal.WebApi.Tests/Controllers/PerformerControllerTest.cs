@@ -33,13 +33,13 @@ namespace TicketPal.WebApi.Tests.Controllers
                 Name = "someName",
                 Artists = "name1|name2|name3",
                 Genre = 2,
-                PerformerType = PerformerType.SOLO_ARTIST,
+                PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 StartYear = "12/03/1998"
             };
 
             var operationResult = new OperationResult
             {
-                ResultCode = ResultCode.SUCCESS,
+                ResultCode = Constants.CODE_SUCCESS,
                 Message = "success"
             };
             
@@ -60,13 +60,13 @@ namespace TicketPal.WebApi.Tests.Controllers
                 Name = "someName",
                 Artists = "name1|name2|name3",
                 Genre = 2,
-                PerformerType = PerformerType.SOLO_ARTIST,
+                PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 StartYear = "12/03/1998"
             };
 
             var operationResult = new OperationResult
             {
-                ResultCode = ResultCode.FAIL,
+                ResultCode = Constants.CODE_FAIL,
                 Message = "error"
             };
             
@@ -88,13 +88,13 @@ namespace TicketPal.WebApi.Tests.Controllers
                 Name = "someName",
                 Artists = "name1|name2|name3",
                 Genre = 2,
-                PerformerType = PerformerType.SOLO_ARTIST,
+                PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 StartYear = "12/03/1998"
             };
 
             var operationResult = new OperationResult
             {
-                ResultCode = ResultCode.SUCCESS,
+                ResultCode = Constants.CODE_SUCCESS,
                 Message = "success"
             };
             
@@ -116,13 +116,13 @@ namespace TicketPal.WebApi.Tests.Controllers
                 Name = "someName",
                 Artists = "name1|name2|name3",
                 Genre = 2,
-                PerformerType = PerformerType.SOLO_ARTIST,
+                PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 StartYear = "12/03/1998"
             };
 
             var operationResult = new OperationResult
             {
-                ResultCode = ResultCode.FAIL,
+                ResultCode = Constants.CODE_FAIL,
                 Message = "fail"
             };
             
@@ -140,7 +140,7 @@ namespace TicketPal.WebApi.Tests.Controllers
         {
             var operationResult = new OperationResult
             {
-                ResultCode = ResultCode.SUCCESS,
+                ResultCode = Constants.CODE_SUCCESS,
                 Message = "success"
             };
 
@@ -158,7 +158,7 @@ namespace TicketPal.WebApi.Tests.Controllers
         {
             var operationResult = new OperationResult
             {
-                ResultCode = ResultCode.FAIL,
+                ResultCode = Constants.CODE_FAIL,
                 Message = "fail"
             };
 
@@ -206,7 +206,7 @@ namespace TicketPal.WebApi.Tests.Controllers
                     Name = "someName",
                     Artists = "name1|name2|name3",
                     Genre = new Genre(),
-                    PerformerType = PerformerType.SOLO_ARTIST,
+                    PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                     StartYear = "12/03/1998"
                 },
                 new Performer 
@@ -215,7 +215,7 @@ namespace TicketPal.WebApi.Tests.Controllers
                     Name = "someName",
                     Artists = "name1|name2|name3",
                     Genre = new Genre(),
-                    PerformerType = PerformerType.BAND,
+                    PerformerType = Constants.PERFORMER_TYPE_BAND,
                     StartYear = "12/03/1998"
                 },
                 new Performer 
@@ -224,7 +224,7 @@ namespace TicketPal.WebApi.Tests.Controllers
                     Name = "someName",
                     Artists = "name1|name2|name3",
                     Genre = new Genre(),
-                    PerformerType = PerformerType.SOLO_ARTIST,
+                    PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                     StartYear = "10/03/2000"
                 },
             };

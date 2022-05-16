@@ -20,7 +20,7 @@ namespace TicketPal.DataAccess.Tests.Respository
                 Id = 1,
                 Name = "Shakira",
                 StartYear = "1990",
-                PerformerType = PerformerType.SOLO_ARTIST,
+                PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 Genre = new GenreEntity()
                 {
                     Id = 1,
@@ -33,9 +33,9 @@ namespace TicketPal.DataAccess.Tests.Respository
                 Id = 1,
                 Artist = performer,
                 AvailableTickets = 500,
-                CurrencyType = CurrencyType.USD,
+                CurrencyType = Constants.CURRENCY_US_DOLLARS,
                 Date = DateTime.Now,
-                EventType = EventType.CONCERT,
+                EventType = Constants.EVENT_CONCERT_TYPE,
                 TicketPrice = 100,
                 TourName = tourName
             };
@@ -56,7 +56,7 @@ namespace TicketPal.DataAccess.Tests.Respository
                 Id = 1,
                 Name = "Michael Jackson",
                 StartYear = "1964",
-                PerformerType = PerformerType.SOLO_ARTIST,
+                PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 Genre = new GenreEntity()
                 {
                     Id = 1,
@@ -69,9 +69,9 @@ namespace TicketPal.DataAccess.Tests.Respository
                 Id = 1,
                 Artist = performer,
                 AvailableTickets = 235,
-                CurrencyType = CurrencyType.USD,
+                CurrencyType = Constants.CURRENCY_US_DOLLARS,
                 Date = DateTime.Now,
-                EventType = EventType.CONCERT,
+                EventType = Constants.EVENT_CONCERT_TYPE,
                 TicketPrice = 300,
                 TourName = "Smooth Criminal"
             };
@@ -81,9 +81,9 @@ namespace TicketPal.DataAccess.Tests.Respository
                 Id = 1,
                 Artist = performer,
                 AvailableTickets = 235,
-                CurrencyType = CurrencyType.USD,
+                CurrencyType = Constants.CURRENCY_US_DOLLARS,
                 Date = DateTime.Now,
-                EventType = EventType.CONCERT,
+                EventType = Constants.EVENT_CONCERT_TYPE,
                 TicketPrice = 300,
                 TourName = "Smooth Criminal"
             };
@@ -102,7 +102,7 @@ namespace TicketPal.DataAccess.Tests.Respository
                 Id = 1,
                 Name = "Robbie Williams",
                 StartYear = "1990",
-                PerformerType = PerformerType.SOLO_ARTIST,
+                PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 Genre = new GenreEntity()
                 {
                     Id = 1,
@@ -115,9 +115,9 @@ namespace TicketPal.DataAccess.Tests.Respository
                 Id = 1,
                 Artist = performer,
                 AvailableTickets = 2156,
-                CurrencyType = CurrencyType.USD,
+                CurrencyType = Constants.CURRENCY_US_DOLLARS,
                 Date = DateTime.Now,
-                EventType = EventType.CONCERT,
+                EventType = Constants.EVENT_CONCERT_TYPE,
                 TicketPrice = 160,
                 TourName = "Rock DJ"
             };
@@ -139,7 +139,7 @@ namespace TicketPal.DataAccess.Tests.Respository
                 Id = 1,
                 Name = "Nirvana",
                 StartYear = "1987",
-                PerformerType = PerformerType.BAND,
+                PerformerType = Constants.PERFORMER_TYPE_BAND,
                 Genre = new GenreEntity()
                 {
                     Id = 1,
@@ -153,9 +153,9 @@ namespace TicketPal.DataAccess.Tests.Respository
                 Id = 1,
                 Artist = performer,
                 AvailableTickets = 235,
-                CurrencyType = CurrencyType.USD,
+                CurrencyType = Constants.CURRENCY_US_DOLLARS,
                 Date = DateTime.Now,
-                EventType = EventType.CONCERT,
+                EventType = Constants.EVENT_CONCERT_TYPE,
                 TicketPrice = 300,
                 TourName = "Bleach"
             };
@@ -175,7 +175,7 @@ namespace TicketPal.DataAccess.Tests.Respository
                 Id = 1,
                 Name = "Carrie Underwood",
                 StartYear = "2005",
-                PerformerType = PerformerType.SOLO_ARTIST,
+                PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 Genre = new GenreEntity()
                 {
                     Id = 1,
@@ -188,9 +188,9 @@ namespace TicketPal.DataAccess.Tests.Respository
                 Id = 1,
                 Artist = performer,
                 AvailableTickets = 768,
-                CurrencyType = CurrencyType.USD,
+                CurrencyType = Constants.CURRENCY_US_DOLLARS,
                 Date = DateTime.Now,
-                EventType = EventType.CONCERT,
+                EventType = Constants.EVENT_CONCERT_TYPE,
                 TicketPrice = 59.99m,
                 TourName = "Some Hearts"
             };
@@ -209,7 +209,7 @@ namespace TicketPal.DataAccess.Tests.Respository
                 Id = 1,
                 Name = "Brad Paisley",
                 StartYear = "1999",
-                PerformerType = PerformerType.SOLO_ARTIST,
+                PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 Genre = new GenreEntity()
                 {
                     Id = 1,
@@ -222,9 +222,9 @@ namespace TicketPal.DataAccess.Tests.Respository
                 Id = 1,
                 Artist = performer,
                 AvailableTickets = 3457,
-                CurrencyType = CurrencyType.USD,
+                CurrencyType = Constants.CURRENCY_US_DOLLARS,
                 Date = DateTime.Now,
-                EventType = EventType.CONCERT,
+                EventType = Constants.EVENT_CONCERT_TYPE,
                 TicketPrice = 78,
                 TourName = "The World"
             };
@@ -245,7 +245,7 @@ namespace TicketPal.DataAccess.Tests.Respository
                 Id = 1,
                 Name = "Jaime Roos",
                 StartYear = "1977",
-                PerformerType = PerformerType.SOLO_ARTIST,
+                PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 Genre = new GenreEntity()
                 {
                     Id = 1,
@@ -258,9 +258,9 @@ namespace TicketPal.DataAccess.Tests.Respository
                 Id = 1,
                 Artist = performer,
                 AvailableTickets = 2165,
-                CurrencyType = CurrencyType.UYU,
+                CurrencyType = Constants.CURRENCY_URUGUAYAN_PESO,
                 Date = DateTime.Now,
-                EventType = EventType.CONCERT,
+                EventType = Constants.EVENT_CONCERT_TYPE,
                 TicketPrice = 1500,
                 TourName = "A las 10"
             };
@@ -277,7 +277,7 @@ namespace TicketPal.DataAccess.Tests.Respository
                 Id = 1,
                 Name = "Natalia Oreiro",
                 StartYear = "1989",
-                PerformerType = PerformerType.SOLO_ARTIST,
+                PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 Genre = new GenreEntity()
                 {
                     Id = 1,
@@ -290,9 +290,9 @@ namespace TicketPal.DataAccess.Tests.Respository
                 Id = 1,
                 Artist = performer,
                 AvailableTickets = 10000,
-                CurrencyType = CurrencyType.UYU,
+                CurrencyType = Constants.CURRENCY_URUGUAYAN_PESO,
                 Date = DateTime.Now,
-                EventType = EventType.CONCERT,
+                EventType = Constants.EVENT_CONCERT_TYPE,
                 TicketPrice = 2300,
                 TourName = "Turmalina"
             };
@@ -316,7 +316,7 @@ namespace TicketPal.DataAccess.Tests.Respository
                 Id = 1,
                 Name = "Buitres",
                 StartYear = "1989",
-                PerformerType = PerformerType.BAND,
+                PerformerType = Constants.PERFORMER_TYPE_BAND,
                 Genre = new GenreEntity()
                 {
                     Id = 1,
@@ -330,9 +330,9 @@ namespace TicketPal.DataAccess.Tests.Respository
                 Id = 1,
                 Artist = performer,
                 AvailableTickets = 5624,
-                CurrencyType = CurrencyType.UYU,
+                CurrencyType = Constants.CURRENCY_URUGUAYAN_PESO,
                 Date = DateTime.Now,
-                EventType = EventType.CONCERT,
+                EventType = Constants.EVENT_CONCERT_TYPE,
                 TicketPrice = 2000,
                 TourName = "Buitres Después de la Una"
             };
@@ -341,9 +341,9 @@ namespace TicketPal.DataAccess.Tests.Respository
                 Id = 2,
                 Artist = performer,
                 AvailableTickets = 20000,
-                CurrencyType = CurrencyType.UYU,
+                CurrencyType = Constants.CURRENCY_URUGUAYAN_PESO,
                 Date = DateTime.Now.AddDays(30),
-                EventType = EventType.CONCERT,
+                EventType = Constants.EVENT_CONCERT_TYPE,
                 TicketPrice = 2100,
                 TourName = "El amor te ha hecho idiota"
             };
@@ -367,7 +367,7 @@ namespace TicketPal.DataAccess.Tests.Respository
                 Id = 1,
                 Name = "Buitres",
                 StartYear = "1989",
-                PerformerType = PerformerType.BAND,
+                PerformerType = Constants.PERFORMER_TYPE_BAND,
                 Genre = new GenreEntity()
                 {
                     Id = 1,
@@ -381,9 +381,9 @@ namespace TicketPal.DataAccess.Tests.Respository
                 Id = 1,
                 Artist = performer,
                 AvailableTickets = 5624,
-                CurrencyType = CurrencyType.UYU,
+                CurrencyType = Constants.CURRENCY_URUGUAYAN_PESO,
                 Date = DateTime.Now,
-                EventType = EventType.CONCERT,
+                EventType = Constants.EVENT_CONCERT_TYPE,
                 TicketPrice = 2000,
                 TourName = "Buitres Después de la Una"
             };
@@ -410,7 +410,7 @@ namespace TicketPal.DataAccess.Tests.Respository
                 Id = 1,
                 Name = "Jaime Roos",
                 StartYear = "1977",
-                PerformerType = PerformerType.SOLO_ARTIST,
+                PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 Genre = new GenreEntity()
                 {
                     Id = 1,
@@ -423,9 +423,9 @@ namespace TicketPal.DataAccess.Tests.Respository
                 Id = 1,
                 Artist = performer,
                 AvailableTickets = 2165,
-                CurrencyType = CurrencyType.UYU,
+                CurrencyType = Constants.CURRENCY_URUGUAYAN_PESO,
                 Date = DateTime.Now,
-                EventType = EventType.CONCERT,
+                EventType = Constants.EVENT_CONCERT_TYPE,
                 TicketPrice = 1500,
                 TourName = "A las 10"
             };

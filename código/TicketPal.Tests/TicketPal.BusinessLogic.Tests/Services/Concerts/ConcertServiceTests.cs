@@ -10,7 +10,6 @@ using TicketPal.Domain.Entity;
 using TicketPal.Domain.Exceptions;
 using TicketPal.Domain.Models.Request;
 using TicketPal.Domain.Models.Response;
-using TicketPal.Interfaces.Factory;
 
 namespace TicketPal.BusinessLogic.Tests.Services.Concerts
 {
@@ -36,7 +35,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
                 Id = 1,
                 Name = "Taylor Swift",
                 Genre = genre,
-                PerformerType = Domain.Constants.PerformerType.SOLO_ARTIST,
+                PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 StartYear = "2004"
             };
 
@@ -45,9 +44,9 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
                 Artist = 1,
                 Date = DateTime.Now,
                 AvailableTickets = 30000,
-                EventType = Domain.Constants.EventType.CONCERT,
+                EventType = Constants.EVENT_CONCERT_TYPE,
                 TicketPrice = 150,
-                CurrencyType = CurrencyType.USD,
+                CurrencyType = Constants.CURRENCY_US_DOLLARS,
                 TourName = "Fearless Tour"
             };
 
@@ -67,7 +66,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
         {
             OperationResult result = concertService.AddConcert(concertRequest);
 
-            Assert.IsTrue(result.ResultCode == ResultCode.SUCCESS);
+            Assert.IsTrue(result.ResultCode == Constants.CODE_SUCCESS);
         }
 
         [TestMethod]
@@ -82,7 +81,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
 
             OperationResult result = concertService.AddConcert(concertRequest);
 
-            Assert.IsTrue(result.ResultCode == ResultCode.FAIL);
+            Assert.IsTrue(result.ResultCode == Constants.CODE_FAIL);
         }
 
         [TestMethod]
@@ -97,7 +96,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
 
             OperationResult result = concertService.AddConcert(concertRequest);
 
-            Assert.IsTrue(result.ResultCode == ResultCode.FAIL);
+            Assert.IsTrue(result.ResultCode == Constants.CODE_FAIL);
         }
 
         [TestMethod]
@@ -121,7 +120,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             this.concertService = new ConcertService(this.factoryMock.Object, this.mapper);
             OperationResult result = concertService.DeleteConcert(id);
 
-            Assert.IsTrue(result.ResultCode == ResultCode.SUCCESS);
+            Assert.IsTrue(result.ResultCode == Constants.CODE_SUCCESS);
         }
 
         [TestMethod]
@@ -134,7 +133,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             this.concertService = new ConcertService(this.factoryMock.Object, this.mapper);
             OperationResult result = concertService.DeleteConcert(id);
 
-            Assert.IsTrue(result.ResultCode == ResultCode.FAIL);
+            Assert.IsTrue(result.ResultCode == Constants.CODE_FAIL);
         }
 
         [TestMethod]
@@ -145,7 +144,6 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             {
                 Artist = concertRequest.Artist,
                 Date = concertRequest.Date,
-                AvailableTickets = concertRequest.AvailableTickets,
                 EventType = concertRequest.EventType,
                 TicketPrice = concertRequest.TicketPrice,
                 CurrencyType = concertRequest.CurrencyType,
@@ -157,7 +155,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             this.concertService = new ConcertService(this.factoryMock.Object, this.mapper);
             OperationResult expected = concertService.UpdateConcert(updateRequest);
 
-            Assert.IsTrue(expected.ResultCode == ResultCode.SUCCESS);
+            Assert.IsTrue(expected.ResultCode == Constants.CODE_SUCCESS);
         }
 
         [TestMethod]
@@ -211,7 +209,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
                 Id = 2,
                 Genre = genre,
                 Name = "George Michael",
-                PerformerType = PerformerType.SOLO_ARTIST,
+                PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 StartYear = "1981"
             };
 
@@ -220,7 +218,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
                 Id = 3,
                 Genre = genre,
                 Name = "Boy George",
-                PerformerType = PerformerType.SOLO_ARTIST,
+                PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 StartYear = "1981"
             };
 
@@ -265,7 +263,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             this.factoryMock.Setup(m => m.GetRepository(typeof(ConcertEntity))).Returns(this.mockConcertRepo.Object);
             this.concertService = new ConcertService(this.factoryMock.Object, this.mapper);
             IEnumerable<Concert> result = concertService.GetConcerts(
-                EventType.CONCERT,
+                Constants.EVENT_CONCERT_TYPE,
                 true,
                 DateTime.Now.ToString("dd/M/yyyy"),
                 DateTime.Now.AddDays(30).ToString("dd/M/yyyy"),
@@ -282,7 +280,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
                 Id = 2,
                 Genre = genre,
                 Name = "George Michael",
-                PerformerType = PerformerType.SOLO_ARTIST,
+                PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 StartYear = "1981"
             };
 
@@ -291,7 +289,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
                 Id = 3,
                 Genre = genre,
                 Name = "Boy George",
-                PerformerType = PerformerType.SOLO_ARTIST,
+                PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 StartYear = "1981"
             };
 
@@ -336,7 +334,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             this.factoryMock.Setup(m => m.GetRepository(typeof(ConcertEntity))).Returns(this.mockConcertRepo.Object);
             this.concertService = new ConcertService(this.factoryMock.Object, this.mapper);
             IEnumerable<Concert> result = concertService.GetConcerts(
-                EventType.CONCERT,
+                Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 true,
                 DateTime.Now.ToString("dd/M/yyyy"),
                 DateTime.Now.AddDays(30).ToString("dd/M/yyyy"),
@@ -354,7 +352,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
                 Id = 2,
                 Genre = genre,
                 Name = "George Michael",
-                PerformerType = PerformerType.SOLO_ARTIST,
+                PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 StartYear = "1981"
             };
 
@@ -363,7 +361,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
                 Id = 3,
                 Genre = genre,
                 Name = "Boy George",
-                PerformerType = PerformerType.SOLO_ARTIST,
+                PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 StartYear = "1981"
             };
 
@@ -408,7 +406,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             this.factoryMock.Setup(m => m.GetRepository(typeof(ConcertEntity))).Returns(this.mockConcertRepo.Object);
             this.concertService = new ConcertService(this.factoryMock.Object, this.mapper);
             IEnumerable<Concert> result = concertService.GetConcerts(
-                EventType.CONCERT,
+                Constants.EVENT_CONCERT_TYPE,
                 false,
                 DateTime.Now.ToString("dd/M/yyyy"),
                 DateTime.Now.AddDays(30).ToString("dd/M/yyyy"),
@@ -426,7 +424,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
                 Id = 2,
                 Genre = genre,
                 Name = "George Michael",
-                PerformerType = PerformerType.SOLO_ARTIST,
+                PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 StartYear = "1981"
             };
 
@@ -435,7 +433,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
                 Id = 3,
                 Genre = genre,
                 Name = "Boy George",
-                PerformerType = PerformerType.SOLO_ARTIST,
+                PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 StartYear = "1981"
             };
 
@@ -480,7 +478,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             this.factoryMock.Setup(m => m.GetRepository(typeof(ConcertEntity))).Returns(this.mockConcertRepo.Object);
             this.concertService = new ConcertService(this.factoryMock.Object, this.mapper);
             IEnumerable<Concert> result = concertService.GetConcerts(
-                EventType.CONCERT,
+                Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 true,
                 null,
                 DateTime.Now.AddDays(30).ToString("dd/M/yyyy"),
@@ -497,7 +495,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
                 Id = 2,
                 Genre = genre,
                 Name = "George Michael",
-                PerformerType = PerformerType.SOLO_ARTIST,
+                PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 StartYear = "1981"
             };
 
@@ -506,7 +504,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
                 Id = 3,
                 Genre = genre,
                 Name = "Boy George",
-                PerformerType = PerformerType.SOLO_ARTIST,
+                PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 StartYear = "1981"
             };
 
@@ -551,7 +549,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             this.factoryMock.Setup(m => m.GetRepository(typeof(ConcertEntity))).Returns(this.mockConcertRepo.Object);
             this.concertService = new ConcertService(this.factoryMock.Object, this.mapper);
             IEnumerable<Concert> result = concertService.GetConcerts(
-                EventType.CONCERT,
+                Constants.EVENT_CONCERT_TYPE,
                 true,
                 DateTime.Now.AddDays(30).ToString("dd/M/yyyy"),
                 null,
@@ -569,7 +567,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
                 Id = 2,
                 Genre = genre,
                 Name = "George Michael",
-                PerformerType = PerformerType.SOLO_ARTIST,
+                PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 StartYear = "1981"
             };
 
@@ -578,7 +576,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
                 Id = 3,
                 Genre = genre,
                 Name = "Boy George",
-                PerformerType = PerformerType.SOLO_ARTIST,
+                PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 StartYear = "1981"
             };
 
@@ -623,7 +621,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             this.factoryMock.Setup(m => m.GetRepository(typeof(ConcertEntity))).Returns(this.mockConcertRepo.Object);
             this.concertService = new ConcertService(this.factoryMock.Object, this.mapper);
             IEnumerable<Concert> result = concertService.GetConcerts(
-                EventType.CONCERT,
+                Constants.EVENT_CONCERT_TYPE,
                 true,
                 null,
                 null,

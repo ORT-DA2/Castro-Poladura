@@ -11,7 +11,7 @@ namespace TicketPal.DataAccess.Tests.Entity
     {
         private PerformerEntity performerEntity;
         private int id;
-        private PerformerType performerTypeEnum;
+        private string performerTypeEnum;
         private string name;
         private string startDate;
         private GenreEntity genre;
@@ -24,7 +24,7 @@ namespace TicketPal.DataAccess.Tests.Entity
             performerEntity = new PerformerEntity();
             int idTicket = 1;
             id = idTicket;
-            performerTypeEnum = PerformerType.SOLO_ARTIST;
+            performerTypeEnum = Constants.PERFORMER_TYPE_SOLO_ARTIST;
             name = "Roberto Carlos";
             startDate = "1958";
             genre = new GenreEntity()
@@ -54,7 +54,7 @@ namespace TicketPal.DataAccess.Tests.Entity
         public void GetBandPerformerTest()
         {
             int id = 77;
-            PerformerType performerType = PerformerType.BAND;
+            var performerType = Constants.PERFORMER_TYPE_BAND;
             string name = "Ataque77";
             string startYear = "1987";
             genre.GenreName = "Punk Rock";

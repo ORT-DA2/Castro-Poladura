@@ -61,7 +61,7 @@ namespace TicketPal.WebApi.Tests.Controllers
 
             var operationResult = new OperationResult
             {
-                ResultCode = ResultCode.SUCCESS,
+                ResultCode = Constants.CODE_SUCCESS,
                 Message = "User registered successfully"
             };
 
@@ -89,7 +89,7 @@ namespace TicketPal.WebApi.Tests.Controllers
 
             var operationResult = new OperationResult
             {
-                ResultCode = ResultCode.FAIL,
+                ResultCode = Constants.CODE_FAIL,
                 Message = "Some error message"
             };
 
@@ -152,9 +152,9 @@ namespace TicketPal.WebApi.Tests.Controllers
         [TestMethod]
         public void GetAnyAccountsOk()
         {
-            mockService.Setup(s => s.GetUsers(UserRole.SPECTATOR.ToString())).Returns(users);
+            mockService.Setup(s => s.GetUsers(Constants.ROLE_SPECTATOR)).Returns(users);
 
-            var account = controller.GetUserAccounts(UserRole.SPECTATOR.ToString());
+            var account = controller.GetUserAccounts(Constants.ROLE_SPECTATOR);
 
             var objectResult = account as ObjectResult;
             var statusCode = objectResult.StatusCode;
@@ -182,12 +182,12 @@ namespace TicketPal.WebApi.Tests.Controllers
                 Lastname = "someLastName",
                 Email = "someEmail",
                 Password = "somePassword",
-                Role = UserRole.SPECTATOR.ToString()
+                Role = Constants.ROLE_SPECTATOR
             };
 
             var operationResult = new OperationResult
             {
-                ResultCode = ResultCode.SUCCESS,
+                ResultCode = Constants.CODE_SUCCESS,
                 Message = "User updated successfully"
             };
 
@@ -227,7 +227,7 @@ namespace TicketPal.WebApi.Tests.Controllers
 
             var operationResult = new OperationResult
             {
-                ResultCode = ResultCode.SUCCESS,
+                ResultCode = Constants.CODE_SUCCESS,
                 Message = "User updated successfully"
             };
 
@@ -267,7 +267,7 @@ namespace TicketPal.WebApi.Tests.Controllers
 
             var operationResult = new OperationResult
             {
-                ResultCode = ResultCode.FAIL,
+                ResultCode = Constants.CODE_FAIL,
                 Message = "some error message"
             };
 
@@ -288,7 +288,7 @@ namespace TicketPal.WebApi.Tests.Controllers
         {
             var operationResult = new OperationResult
             {
-                ResultCode = ResultCode.SUCCESS,
+                ResultCode = Constants.CODE_SUCCESS,
                 Message = "User updated successfully"
             };
 
@@ -307,7 +307,7 @@ namespace TicketPal.WebApi.Tests.Controllers
         {
             var operationResult = new OperationResult
             {
-                ResultCode = ResultCode.FAIL,
+                ResultCode = Constants.CODE_FAIL,
                 Message = "some error message"
             };
 
@@ -334,7 +334,7 @@ namespace TicketPal.WebApi.Tests.Controllers
                     Email = "myaccount1@example.com",
                     Password = "myPassword1",
                     Token = "token1",
-                    Role = UserRole.ADMIN.ToString()
+                    Role = Constants.ROLE_ADMIN
                 },
                 new User
                 {
@@ -344,7 +344,7 @@ namespace TicketPal.WebApi.Tests.Controllers
                     Email = "myaccount2@example.com",
                     Password = "myPassword2",
                     Token = "token2",
-                    Role = UserRole.SELLER.ToString()
+                    Role = Constants.ROLE_SELLER
                 },
                 new User
                 {
@@ -354,7 +354,7 @@ namespace TicketPal.WebApi.Tests.Controllers
                     Email = "myaccount3@example.com",
                     Password = "myPassword3",
                     Token = "token3",
-                    Role = UserRole.SUPERVISOR.ToString()
+                    Role = Constants.ROLES_SUPERVISOR
                 },
                 new User
                 {
@@ -364,7 +364,7 @@ namespace TicketPal.WebApi.Tests.Controllers
                     Email = "myaccount4@example.com",
                     Password = "myPassword4",
                     Token = "token4",
-                    Role = UserRole.SPECTATOR.ToString()
+                    Role = Constants.ROLE_SPECTATOR
                 },
                 new User
                 {
@@ -374,7 +374,7 @@ namespace TicketPal.WebApi.Tests.Controllers
                     Email = "myaccount5@example.com",
                     Password = "myPassword5",
                     Token = "token5",
-                    Role = UserRole.SUPERVISOR.ToString()
+                    Role = Constants.ROLES_SUPERVISOR
                 }
             };
         }

@@ -15,10 +15,10 @@ namespace TicketPal.DataAccess.Tests.Entity
         private DateTime eventDate;
         private int availableTickets;
         private decimal ticketPrice;
-        private CurrencyType currency;
+        private string currency;
         private string tourName;
         private PerformerEntity artist;
-        private EventType eventType;
+        private string eventType;
 
         [TestInitialize]
         public void Initialize()
@@ -30,12 +30,12 @@ namespace TicketPal.DataAccess.Tests.Entity
             eventDate = new DateTime(2022, 08, 08);
             availableTickets = 1384;
             ticketPrice = 1345;
-            currency = CurrencyType.UYU; 
+            currency = Constants.CURRENCY_URUGUAYAN_PESO; 
             tourName = "Carrousell";
-            eventType = EventType.CONCERT;
+            eventType = Constants.EVENT_CONCERT_TYPE;
             artist = new PerformerEntity()
             {
-                PerformerType = PerformerType.SOLO_ARTIST,
+                PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 Id = 24,
                 Name = "Tom Collins",
                 StartYear = "1999",

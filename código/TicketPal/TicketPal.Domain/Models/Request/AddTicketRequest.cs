@@ -4,7 +4,7 @@ namespace TicketPal.Domain.Models.Request
 {
     public class AddTicketRequest
     {
-        public int Event { get; set; }
+        public int EventId { get; set; }
         public User User { get; set; }
 
     }

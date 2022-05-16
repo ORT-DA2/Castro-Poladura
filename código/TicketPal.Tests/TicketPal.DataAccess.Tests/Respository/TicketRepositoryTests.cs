@@ -27,7 +27,7 @@ namespace TicketPal.DataAccess.Tests.Respository
                 Id = 1,
                 Name = "Berugo Carámbula",
                 StartYear = "1963",
-                PerformerType = PerformerType.SOLO_ARTIST,
+                PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 Genre = new GenreEntity()
                 {
                     Id = 1,
@@ -40,9 +40,9 @@ namespace TicketPal.DataAccess.Tests.Respository
                 Id = 1,
                 Artist = performer,
                 AvailableTickets = 15000,
-                CurrencyType = CurrencyType.UYU,
+                CurrencyType = Constants.CURRENCY_URUGUAYAN_PESO,
                 Date = DateTime.Now,
-                EventType = EventType.CONCERT,
+                EventType = Constants.EVENT_CONCERT_TYPE,
                 TicketPrice = 1800,
                 TourName = "Solo de guitarra"
             };
@@ -64,7 +64,7 @@ namespace TicketPal.DataAccess.Tests.Respository
                 Buyer = user,
                 PurchaseDate = DateTime.Now,
                 Code = idCode,
-                Status = TicketStatus.PURCHASED
+                Status = Constants.TICKET_PURCHASED_STATUS
             };
         }
 
@@ -89,7 +89,7 @@ namespace TicketPal.DataAccess.Tests.Respository
                 Buyer = user,
                 PurchaseDate = DateTime.Now,
                 Code = idCode,
-                Status = TicketStatus.PURCHASED
+                Status = Constants.TICKET_PURCHASED_STATUS
             };
 
             var repository = new TicketRepository(dbContext);
@@ -168,9 +168,9 @@ namespace TicketPal.DataAccess.Tests.Respository
                 Id = 2,
                 Artist = performer,
                 AvailableTickets = 9800,
-                CurrencyType = CurrencyType.UYU,
+                CurrencyType = Constants.CURRENCY_URUGUAYAN_PESO,
                 Date = DateTime.Now,
-                EventType = EventType.CONCERT,
+                EventType = Constants.EVENT_CONCERT_TYPE,
                 TicketPrice = 1950,
                 TourName = "Solo de piano"
             };
@@ -182,7 +182,7 @@ namespace TicketPal.DataAccess.Tests.Respository
                 Buyer = user,
                 PurchaseDate = DateTime.Now,
                 Code = idCode2,
-                Status = TicketStatus.PURCHASED
+                Status = Constants.TICKET_PURCHASED_STATUS
             };
 
             var repository = new TicketRepository(dbContext);
@@ -217,7 +217,7 @@ namespace TicketPal.DataAccess.Tests.Respository
             var repository = new TicketRepository(dbContext);
             repository.Add(ticket);
 
-            repository.Update(new TicketEntity { Id = ticket.Id, Buyer = user, Event = concert, PurchaseDate = DateTime.Now, Status = TicketStatus.PURCHASED, Code = null });
+            repository.Update(new TicketEntity { Id = ticket.Id, Buyer = user, Event = concert, PurchaseDate = DateTime.Now, Status = Constants.TICKET_PURCHASED_STATUS, Code = null });
 
             var updatedEvent = repository.Get(ticket.Id);
 

@@ -6,7 +6,6 @@ using TicketPal.Domain.Constants;
 using TicketPal.Domain.Models.Request;
 using TicketPal.Domain.Models.Response.Error;
 using TicketPal.Interfaces.Services.Concerts;
-using TicketPal.WebApi.Constants;
 using TicketPal.WebApi.Filters.Auth;
 
 namespace TicketPal.WebApi.Controllers
@@ -23,12 +22,12 @@ namespace TicketPal.WebApi.Controllers
         }
 
         [HttpPost]
-        [AuthFilter(Roles.Admin)]
+        [AuthFilter(Constants.ROLE_ADMIN)]
         public IActionResult AddConcert([FromBody] AddConcertRequest request)
         {
             var result = eventService.AddConcert(request);
 
-            if (result.ResultCode == ResultCode.FAIL)
+            if (result.ResultCode == Constants.CODE_FAIL)
             {
                 return BadRequest(new BadRequestError(result.Message));
             }
@@ -39,13 +38,13 @@ namespace TicketPal.WebApi.Controllers
         }
 
         [HttpPut("{id}")]
-        [AuthFilter(Roles.Admin)]
+        [AuthFilter(Constants.ROLE_ADMIN)]
         public IActionResult UpdateConcert([FromRoute] int id, [FromBody] UpdateConcertRequest request)
         {
             request.Id = id;
             var result = eventService.UpdateConcert(request);
 
-            if (result.ResultCode == ResultCode.FAIL)
+            if (result.ResultCode == Constants.CODE_FAIL)
             {
                 return BadRequest(new BadRequestError(result.Message));
             }
@@ -56,12 +55,12 @@ namespace TicketPal.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        [AuthFilter(Roles.Admin)]
+        [AuthFilter(Constants.ROLE_ADMIN)]
         public IActionResult DeleteConcert([FromRoute] int id)
         {
             var result = eventService.DeleteConcert(id);
 
-            if (result.ResultCode == ResultCode.FAIL)
+            if (result.ResultCode == Constants.CODE_FAIL)
             {
                 return BadRequest(new BadRequestError(result.Message));
             }
@@ -79,7 +78,7 @@ namespace TicketPal.WebApi.Controllers
 
         [HttpGet]
         public IActionResult GetConcerts(
-            [BindRequired][FromQuery] EventType type,
+            [BindRequired][FromQuery] string type,
             [FromQuery(Name = "newest")] bool newest,
             [FromQuery(Name = "startDate")] string startDate,
             [FromQuery(Name = "endDate")] string endDate,

@@ -15,7 +15,7 @@ namespace TicketPal.DataAccess.Tests.Respository
         {
             string performerName = "Daft Punk";
             string startYear = "1993";
-            PerformerType performerType = PerformerType.BAND;
+            var performerType = Constants.PERFORMER_TYPE_BAND;
             GenreEntity genre = new GenreEntity()
             {
                 Id = 1,
@@ -45,7 +45,7 @@ namespace TicketPal.DataAccess.Tests.Respository
         {
             string performerName = "Julian Casablancas";
             string startYear = "1998";
-            PerformerType performerType = PerformerType.SOLO_ARTIST;
+            var performerType = Constants.PERFORMER_TYPE_SOLO_ARTIST;
             GenreEntity genre = new GenreEntity()
             {
                 Id = 1,
@@ -81,7 +81,7 @@ namespace TicketPal.DataAccess.Tests.Respository
         {
             string performerName = "Adele";
             string startYear = "2006";
-            PerformerType performerType = PerformerType.SOLO_ARTIST;
+            var performerType = Constants.PERFORMER_TYPE_SOLO_ARTIST;
             GenreEntity genre = new GenreEntity()
             {
                 Id = 1,
@@ -109,7 +109,7 @@ namespace TicketPal.DataAccess.Tests.Respository
         {
             string performerName = "Adele";
             string startYear = "2006";
-            PerformerType performerType = PerformerType.SOLO_ARTIST;
+            var performerType = Constants.PERFORMER_TYPE_SOLO_ARTIST;
             GenreEntity genre = new GenreEntity()
             {
                 Id = 1,
@@ -137,7 +137,7 @@ namespace TicketPal.DataAccess.Tests.Respository
         {
             string performerName = "Los Piojos";
             string startYear = "1988";
-            PerformerType performerType = PerformerType.BAND;
+            var performerType = Constants.PERFORMER_TYPE_BAND;
             GenreEntity genre = new GenreEntity()
             {
                 Id = 1,
@@ -166,7 +166,7 @@ namespace TicketPal.DataAccess.Tests.Respository
         {
             string performerName = "Bryan Adams";
             string startYear = "1975";
-            PerformerType performerType = PerformerType.SOLO_ARTIST;
+            var performerType = Constants.PERFORMER_TYPE_SOLO_ARTIST;
             GenreEntity genre = new GenreEntity()
             {
                 Id = 1,
@@ -195,7 +195,7 @@ namespace TicketPal.DataAccess.Tests.Respository
         {
             string performerName = "Enanitos Verdes";
             string startYear = "1979";
-            PerformerType performerType = PerformerType.BAND;
+            var performerType = Constants.PERFORMER_TYPE_BAND;
             GenreEntity genre = new GenreEntity()
             {
                 Id = 1,
@@ -222,7 +222,7 @@ namespace TicketPal.DataAccess.Tests.Respository
         {
             string performerName = "Keane";
             string startYear = "1995";
-            PerformerType performerType = PerformerType.BAND;
+            var performerType = Constants.PERFORMER_TYPE_BAND;
             GenreEntity genre = new GenreEntity()
             {
                 Id = 1,
@@ -254,7 +254,7 @@ namespace TicketPal.DataAccess.Tests.Respository
         {
             string performerName = "Bob Dylan";
             string startYear = "1959";
-            PerformerType performerType = PerformerType.SOLO_ARTIST;
+            var performerType = Constants.PERFORMER_TYPE_SOLO_ARTIST;
             GenreEntity genre = new GenreEntity()
             {
                 Id = 1,
@@ -296,7 +296,7 @@ namespace TicketPal.DataAccess.Tests.Respository
         {
             string performerName = "Ann Lennox";
             string startYear = "1976";
-            PerformerType performerType = PerformerType.SOLO_ARTIST;
+            var performerType = Constants.PERFORMER_TYPE_SOLO_ARTIST;
             GenreEntity genre = new GenreEntity()
             {
                 Id = 1,
@@ -331,7 +331,7 @@ namespace TicketPal.DataAccess.Tests.Respository
         {
             string performerName = "Attaque 77";
             string startYear = "1987";
-            PerformerType performerType = PerformerType.BAND;
+            var performerType = Constants.PERFORMER_TYPE_BAND;
             GenreEntity genre = new GenreEntity()
             {
                 Id = 1,

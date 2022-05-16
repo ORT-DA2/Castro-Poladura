@@ -35,7 +35,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Performers
             {
                 Id = 1,
                 Name = "Coldplay",
-                PerformerType = Domain.Constants.PerformerType.BAND,
+                PerformerType = Constants.PERFORMER_TYPE_BAND,
                 StartYear = "1996",
                 Genre = genre,
                 Artists = artists
@@ -66,7 +66,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Performers
         {
             OperationResult result = performerService.AddPerformer(performerRequest);
 
-            Assert.IsTrue(result.ResultCode == ResultCode.SUCCESS);
+            Assert.IsTrue(result.ResultCode == Constants.CODE_SUCCESS);
         }
 
         [TestMethod]
@@ -82,7 +82,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Performers
 
             OperationResult result = performerService.AddPerformer(performerRequest);
 
-            Assert.IsTrue(result.ResultCode == ResultCode.FAIL);
+            Assert.IsTrue(result.ResultCode == Constants.CODE_FAIL);
         }
 
         [TestMethod]
@@ -97,7 +97,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Performers
 
             OperationResult result = performerService.AddPerformer(performerRequest);
 
-            Assert.IsTrue(result.ResultCode == ResultCode.FAIL);
+            Assert.IsTrue(result.ResultCode == Constants.CODE_FAIL);
         }
 
         [TestMethod]
@@ -120,7 +120,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Performers
             this.performerService = new PerformerService(this.factoryMock.Object, this.mapper);
             OperationResult result = performerService.DeletePerformer(id);
 
-            Assert.IsTrue(result.ResultCode == ResultCode.SUCCESS);
+            Assert.IsTrue(result.ResultCode == Constants.CODE_SUCCESS);
         }
 
         [TestMethod]
@@ -134,7 +134,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Performers
             this.performerService = new PerformerService(this.factoryMock.Object, this.mapper);
             OperationResult result = performerService.DeletePerformer(id);
 
-            Assert.IsTrue(result.ResultCode == ResultCode.FAIL);
+            Assert.IsTrue(result.ResultCode == Constants.CODE_FAIL);
         }
 
         [TestMethod]
@@ -151,7 +151,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Performers
             this.performerService = new PerformerService(this.factoryMock.Object, this.mapper);
             OperationResult expected = performerService.UpdatePerformer(updateRequest);
 
-            Assert.IsTrue(expected.ResultCode == ResultCode.SUCCESS);
+            Assert.IsTrue(expected.ResultCode == Constants.CODE_SUCCESS);
         }
 
         [TestMethod]
@@ -223,7 +223,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Performers
                     Id = 3,
                     Name = "Pepito Perez",
                     Genre = performer.Genre,
-                    PerformerType = PerformerType.SOLO_ARTIST,
+                    PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                     StartYear = "1965"
                 },
             };

@@ -3,9 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using TicketPal.Domain.Constants;
 using TicketPal.Domain.Models.Request;
 using TicketPal.Domain.Models.Response.Error;
-using TicketPal.Interfaces.Services.Jwt;
 using TicketPal.Interfaces.Services.Users;
-using TicketPal.WebApi.Constants;
 using TicketPal.WebApi.Filters.Auth;
 
 namespace TicketPal.WebApi.Controllers
@@ -29,12 +27,12 @@ namespace TicketPal.WebApi.Controllers
         }
 
         [HttpPost]
-        [AuthFilter(Roles.Admin)]
+        [AuthFilter(Constants.ROLE_ADMIN)]
         public IActionResult Register([FromBody] SignUpRequest request)
         {
             var result = userService.SignUp(request);
 
-            if (result.ResultCode == ResultCode.FAIL)
+            if (result.ResultCode == Constants.CODE_FAIL)
             {
                 return BadRequest(new BadRequestError(result.Message));
             }
@@ -45,14 +43,14 @@ namespace TicketPal.WebApi.Controllers
         }
 
         [HttpGet("{id}")]
-        [AuthFilter(Roles.Admin + "," + Roles.Spectator)]
+        [AuthFilter(Constants.ROLE_ADMIN + "," + Constants.ROLE_SPECTATOR)]
         public IActionResult GetUserAccount([FromRoute] int id)
         {
             var token = HttpContext.Request.Headers["Authorization"]
                 .FirstOrDefault()?.Split(" ").Last();
             var authenticatedUser = userService.RetrieveUserFromToken(token);
 
-            if (authenticatedUser.Role != Roles.Admin &&
+            if (authenticatedUser.Role != Constants.ROLE_ADMIN &&
                 authenticatedUser.Id != id)
             {
                 var forbidden = new ForbiddenError("No required authorization to access resource.");
@@ -66,21 +64,21 @@ namespace TicketPal.WebApi.Controllers
         }
 
         [HttpGet]
-        [AuthFilter(Roles.Admin)]
+        [AuthFilter(Constants.ROLE_ADMIN)]
         public IActionResult GetUserAccounts([FromQuery(Name = "role")] string role)
         {
             return Ok(userService.GetUsers(role));
         }
 
         [HttpPut("{id}")]
-        [AuthFilter(Roles.Admin + "," + Roles.Spectator)]
+        [AuthFilter(Constants.ROLE_ADMIN + "," + Constants.ROLE_SPECTATOR)]
         public IActionResult Update([FromRoute] int id, [FromBody] UpdateUserRequest request)
         {
             var token = HttpContext.Request.Headers["Authorization"]
                 .FirstOrDefault()?.Split(" ").Last();
             var authenticatedUser = userService.RetrieveUserFromToken(token);
 
-            if (!authenticatedUser.Role.Equals(Roles.Admin) &&
+            if (!authenticatedUser.Role.Equals(Constants.ROLE_ADMIN) &&
             !authenticatedUser.Role.Equals(request.Role) &&
             authenticatedUser.Id != id)
             {
@@ -95,7 +93,7 @@ namespace TicketPal.WebApi.Controllers
                 request.Id = id;
                 var result = userService.UpdateUser(request, authenticatedUser.Role);
 
-                if (result.ResultCode == ResultCode.FAIL)
+                if (result.ResultCode == Constants.CODE_FAIL)
                 {
                     return BadRequest(new BadRequestError(result.Message));
                 }
@@ -107,12 +105,12 @@ namespace TicketPal.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        [AuthFilter(Roles.Admin)]
+        [AuthFilter(Constants.ROLE_ADMIN)]
         public IActionResult DeleteAccount([FromRoute] int id)
         {
             var result = userService.DeleteUser(id);
 
-            if (result.ResultCode == ResultCode.FAIL)
+            if (result.ResultCode == Constants.CODE_FAIL)
             {
                 return BadRequest(new BadRequestError(result.Message));
             }

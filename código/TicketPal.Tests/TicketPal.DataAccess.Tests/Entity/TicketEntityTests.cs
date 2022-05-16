@@ -15,7 +15,7 @@ namespace TicketPal.DataAccess.Tests.Entity
         private ConcertEntity concert;
         private PerformerEntity band;
         private string artists;
-        private TicketStatus status;
+        private string status;
         private string code;
 
         [TestInitialize]
@@ -37,7 +37,7 @@ namespace TicketPal.DataAccess.Tests.Entity
 
             band = new PerformerEntity
             {
-                PerformerType = PerformerType.BAND,
+                PerformerType = Constants.PERFORMER_TYPE_BAND,
                 Name = "Queen",
                 StartYear = "1970",
                 Genre = new GenreEntity
@@ -54,12 +54,12 @@ namespace TicketPal.DataAccess.Tests.Entity
                 Date = new DateTime(2022, 11, 21),
                 AvailableTickets = 1981,
                 TicketPrice = 650,
-                CurrencyType = CurrencyType.USD,
-                EventType = EventType.CONCERT,
+                CurrencyType = Constants.CURRENCY_US_DOLLARS,
+                EventType = Constants.EVENT_CONCERT_TYPE,
                 TourName = "A Kind of Magic",
                 Artist = band
             };
-            status = TicketStatus.PURCHASED;
+            status = Constants.TICKET_PURCHASED_STATUS;
             code = "p3q59gjnfjgo4uqfjDXNCLKMQP31foiqnvjdanv";
         }
 

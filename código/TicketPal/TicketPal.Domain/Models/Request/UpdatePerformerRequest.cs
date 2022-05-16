@@ -8,7 +8,7 @@ namespace TicketPal.Domain.Models.Request
     {
         public int Id { get; set; }
         [Required]
-        public PerformerType PerformerType { get; set; }
+        public string PerformerType { get; set; }
         [Required]
         public string Name { get; set; }
         [Required]

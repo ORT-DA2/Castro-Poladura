@@ -3,7 +3,6 @@ using TicketPal.Domain.Constants;
 using TicketPal.Domain.Models.Request;
 using TicketPal.Domain.Models.Response.Error;
 using TicketPal.Interfaces.Services.Genres;
-using TicketPal.WebApi.Constants;
 using TicketPal.WebApi.Filters.Auth;
 
 namespace TicketPal.WebApi.Controllers
@@ -20,12 +19,12 @@ namespace TicketPal.WebApi.Controllers
         }
 
         [HttpPost]
-        [AuthFilter(Roles.Admin)]
+        [AuthFilter(Constants.ROLE_ADMIN)]
         public IActionResult AddGenre(AddGenreRequest request)
         {
             var result = genreService.AddGenre(request);
 
-            if(result.ResultCode == ResultCode.FAIL)
+            if(result.ResultCode == Constants.CODE_FAIL)
             {
                 return BadRequest(new BadRequestError(result.Message));
             }
@@ -34,12 +33,12 @@ namespace TicketPal.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        [AuthFilter(Roles.Admin)]
+        [AuthFilter(Constants.ROLE_ADMIN)]
         public IActionResult DeleteGenre([FromRoute]int id)
         {
             var result = genreService.DeleteGenre(id);
 
-            if(result.ResultCode == ResultCode.FAIL)
+            if(result.ResultCode == Constants.CODE_FAIL)
             {
                 return BadRequest(new BadRequestError(result.Message));
             }
@@ -60,13 +59,13 @@ namespace TicketPal.WebApi.Controllers
         }
 
         [HttpPut("{id}")]
-        [AuthFilter(Roles.Admin)]
+        [AuthFilter(Constants.ROLE_ADMIN)]
         public IActionResult UpdateGenre([FromRoute]int id, UpdateGenreRequest request)
         {
             request.Id = id;
             var result = genreService.UpdateGenre(request);
 
-            if(result.ResultCode == ResultCode.FAIL)
+            if(result.ResultCode == Constants.CODE_FAIL)
             {
                 return BadRequest(new BadRequestError(result.Message));
             }

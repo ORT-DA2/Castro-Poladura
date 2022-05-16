@@ -21,7 +21,7 @@ namespace TicketPal.DataAccess.Data
                         Lastname = "Castro",
                         Email = "lucas@example.com",
                         Password = BC.HashPassword("lucas1"),
-                        Role = UserRole.ADMIN.ToString()
+                        Role = Constants.ROLE_ADMIN
                     },
                     new UserEntity
                     {
@@ -30,7 +30,7 @@ namespace TicketPal.DataAccess.Data
                         Lastname = "Poladura",
                         Email = "ricardo@example.com",
                         Password = BC.HashPassword("ricardo1"),
-                        Role = UserRole.ADMIN.ToString()
+                        Role = Constants.ROLE_ADMIN
                     },
                     new UserEntity
                     {
@@ -39,7 +39,7 @@ namespace TicketPal.DataAccess.Data
                         Lastname = "Test",
                         Email = "spectator@example.com",
                         Password = BC.HashPassword("spectator1"),
-                        Role = UserRole.SPECTATOR.ToString()
+                        Role = Constants.ROLE_SPECTATOR
                     },
                     new UserEntity
                     {
@@ -48,7 +48,7 @@ namespace TicketPal.DataAccess.Data
                         Lastname = "Test",
                         Email = "seller@example.com",
                         Password = BC.HashPassword("seller1"),
-                        Role = UserRole.SELLER.ToString()
+                        Role = Constants.ROLE_SELLER
                     },
                     new UserEntity
                     {
@@ -57,7 +57,16 @@ namespace TicketPal.DataAccess.Data
                         Lastname = "Test",
                         Email = "supervisor@example.com",
                         Password = BC.HashPassword("supervisor1"),
-                        Role = UserRole.SUPERVISOR.ToString()
+                        Role = Constants.ROLES_SUPERVISOR
+                    },
+                    new UserEntity
+                    {
+                        Id = 6,
+                        Firstname = "Artist",
+                        Lastname = "Test",
+                        Email = "artist@example.com",
+                        Password = BC.HashPassword("artist1"),
+                        Role = Constants.ROLE_ARTIST
                     }
                 };
             }

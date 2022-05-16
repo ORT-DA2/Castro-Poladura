@@ -9,6 +9,6 @@ namespace TicketPal.Domain.Models.Request
         [Required]
         public string Code { get; set; }
         [Required]
-        public TicketStatus Status { get; set; }
+        public string Status { get; set; }
     }
 }

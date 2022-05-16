@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using TicketPal.BusinessLogic.Services.Tickets;
-using TicketPal.BusinessLogic.Utils.TicketCodes;
 using TicketPal.Domain.Constants;
 using TicketPal.Domain.Entity;
 using TicketPal.Domain.Exceptions;
@@ -64,7 +63,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Tickets
                 Id = 214,
                 Name = "Bryan Adams",
                 Genre = genre,
-                PerformerType = PerformerType.SOLO_ARTIST,
+                PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 StartYear = "1978"
             };
 
@@ -73,9 +72,9 @@ namespace TicketPal.BusinessLogic.Tests.Services.Tickets
                 Id = 1,
                 Artist = artist,
                 AvailableTickets = 2416,
-                CurrencyType = CurrencyType.USD,
+                CurrencyType = Constants.CURRENCY_US_DOLLARS,
                 Date = DateTime.Now.AddDays(120),
-                EventType = EventType.CONCERT,
+                EventType = Constants.EVENT_CONCERT_TYPE,
                 TicketPrice = 258,
                 TourName = "The World"
             };
@@ -87,12 +86,12 @@ namespace TicketPal.BusinessLogic.Tests.Services.Tickets
                 Code = "438tgyhafnisdkgfbo2847gbae9ouf",
                 Event = concert,
                 PurchaseDate = DateTime.Now,
-                Status = TicketStatus.PURCHASED
+                Status = Constants.TICKET_PURCHASED_STATUS
             };
 
             ticketRequest = new AddTicketRequest()
             {
-                Event = concert.Id,
+                EventId = concert.Id,
                 User = userResponse
             };
 
@@ -115,7 +114,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Tickets
         {
             OperationResult result = ticketService.AddTicket(ticketRequest);
 
-            Assert.IsTrue(result.ResultCode == ResultCode.SUCCESS);
+            Assert.IsTrue(result.ResultCode == Constants.CODE_SUCCESS);
         }
 
         [TestMethod]
@@ -131,7 +130,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Tickets
 
             OperationResult result = ticketService.AddTicket(ticketRequest);
 
-            Assert.IsTrue(result.ResultCode == ResultCode.FAIL);
+            Assert.IsTrue(result.ResultCode == Constants.CODE_FAIL);
         }
 
         [TestMethod]
@@ -149,7 +148,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Tickets
 
             OperationResult result = ticketService.AddTicket(ticketRequest);
 
-            Assert.IsTrue(result.ResultCode == ResultCode.FAIL);
+            Assert.IsTrue(result.ResultCode == Constants.CODE_FAIL);
         }
 
         [TestMethod]
@@ -172,7 +171,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Tickets
             this.ticketService = new TicketService(this.factoryMock.Object, this.mapper);
             OperationResult result = ticketService.DeleteTicket(id);
 
-            Assert.IsTrue(result.ResultCode == ResultCode.SUCCESS);
+            Assert.IsTrue(result.ResultCode == Constants.CODE_SUCCESS);
         }
 
         [TestMethod]
@@ -186,7 +185,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Tickets
             this.ticketService = new TicketService(this.factoryMock.Object, this.mapper);
             OperationResult result = ticketService.DeleteTicket(id);
 
-            Assert.IsTrue(result.ResultCode == ResultCode.FAIL);
+            Assert.IsTrue(result.ResultCode == Constants.CODE_FAIL);
         }
 
         [TestMethod]
@@ -204,7 +203,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Tickets
             this.ticketService = new TicketService(this.factoryMock.Object, this.mapper);
             OperationResult expected = ticketService.UpdateTicket(updateRequest);
 
-            Assert.IsTrue(expected.ResultCode == ResultCode.SUCCESS);
+            Assert.IsTrue(expected.ResultCode == Constants.CODE_SUCCESS);
         }
 
         [TestMethod]
@@ -278,7 +277,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Tickets
                     Code = "FMN0438abuutfv9q483ghwvnod4536u4w6ht",
                     Event = ticket.Event,
                     PurchaseDate = DateTime.Now.AddDays(-120),
-                    Status = TicketStatus.USED
+                    Status = Constants.TICKET_USED_STATUS
                 },
             };
 
@@ -321,7 +320,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Tickets
                     Code = "FMN0438abuutfv9q483ghwvnod4536u4w6ht",
                     Event = ticket.Event,
                     PurchaseDate = DateTime.Now.AddDays(-120),
-                    Status = TicketStatus.USED
+                    Status = Constants.TICKET_USED_STATUS
                 },
             };
 

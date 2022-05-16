@@ -33,53 +33,42 @@ namespace TicketPal.BusinessLogic.Services.Tickets
         {
             try
             {
-                EventEntity newEvent = concertRepository.Get(model.Event);
+                EventEntity newEvent = concertRepository.Get(model.EventId);
 
-                TicketEntity found = ticketRepository.Get(t => t.Buyer.Email == model.User.Email && t.Event.Id == model.Event);
                 var ticketCode = serviceFactory.GetService(typeof(ITicketCode)) as ITicketCode;
 
-                if(found == null)
+                if (newEvent != null)
                 {
-                    if (newEvent != null)
+                    UserEntity buyer = new UserEntity()
                     {
-                        UserEntity buyer = new UserEntity()
-                        {
-                            Id = model.User.Id,
-                            Firstname = model.User.Firstname,
-                            Lastname = model.User.Lastname,
-                            Email = model.User.Email,
-                            Password = model.User.Password,
-                            Role = model.User.Role,
-                            ActiveAccount = model.User.ActiveAccount
-                        };
+                        Id = model.User.Id,
+                        Firstname = model.User.Firstname,
+                        Lastname = model.User.Lastname,
+                        Email = model.User.Email,
+                        Password = model.User.Password,
+                        Role = model.User.Role,
+                        ActiveAccount = model.User.ActiveAccount
+                    };
 
-                        ticketRepository.Add(new TicketEntity
-                        {
-                            Buyer = buyer,
-                            PurchaseDate = DateTime.Now,
-                            Status = TicketStatus.PURCHASED,
-                            Code = ticketCode.GenerateTicketCode(),
-                            Event = newEvent
-                        });
-                    }
-                    else
+                    ticketRepository.Add(new TicketEntity
                     {
-                        return new OperationResult
-                        {
-                            ResultCode = ResultCode.FAIL,
-                            Message = "Event doesn't exists"
-                        };
-                    }
-
+                        Buyer = buyer,
+                        PurchaseDate = DateTime.Now,
+                        Status = Constants.TICKET_PURCHASED_STATUS,
+                        Code = ticketCode.GenerateTicketCode(),
+                        Event = newEvent
+                    });
                 }
                 else
                 {
                     return new OperationResult
                     {
-                        ResultCode = ResultCode.FAIL,
-                        Message = "Ticket already exists"
+                        ResultCode = Constants.CODE_FAIL,
+                        Message = "Event doesn't exists"
                     };
                 }
+
+
 
 
             }
@@ -87,13 +76,13 @@ namespace TicketPal.BusinessLogic.Services.Tickets
             {
                 return new OperationResult
                 {
-                    ResultCode = ResultCode.FAIL,
+                    ResultCode = Constants.CODE_FAIL,
                     Message = ex.Message
                 };
             }
             return new OperationResult
             {
-                ResultCode = ResultCode.SUCCESS,
+                ResultCode = Constants.CODE_SUCCESS,
                 Message = "Concert successfully created"
             };
         }
@@ -105,7 +94,7 @@ namespace TicketPal.BusinessLogic.Services.Tickets
                 ticketRepository.Delete(id);
                 return new OperationResult
                 {
-                    ResultCode = ResultCode.SUCCESS,
+                    ResultCode = Constants.CODE_SUCCESS,
                     Message = "Ticket removed successfully"
                 };
             }
@@ -113,7 +102,7 @@ namespace TicketPal.BusinessLogic.Services.Tickets
             {
                 return new OperationResult
                 {
-                    ResultCode = ResultCode.FAIL,
+                    ResultCode = Constants.CODE_FAIL,
                     Message = ex.Message
                 };
             }
@@ -150,14 +139,14 @@ namespace TicketPal.BusinessLogic.Services.Tickets
             {
                 return new OperationResult
                 {
-                    ResultCode = ResultCode.FAIL,
+                    ResultCode = Constants.CODE_FAIL,
                     Message = ex.Message
                 };
             }
 
             return new OperationResult
             {
-                ResultCode = ResultCode.SUCCESS,
+                ResultCode = Constants.CODE_SUCCESS,
                 Message = "Ticket updated successfully"
             };
         }

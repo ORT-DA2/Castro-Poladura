@@ -36,12 +36,12 @@ namespace TicketPal.WebApi.Tests.Controllers
             var request = new AddTicketRequest
             {
                 User = new User(),
-                Event = 2
+                EventId = 2
             };
 
             var operationResult = new OperationResult
             {
-                ResultCode = ResultCode.SUCCESS,
+                ResultCode = Constants.CODE_SUCCESS,
                 Message = "success"
             };
 
@@ -60,12 +60,12 @@ namespace TicketPal.WebApi.Tests.Controllers
             var request = new AddTicketRequest
             {
                 User = It.IsAny<User>(),
-                Event = It.IsAny<int>()
+                EventId = It.IsAny<int>()
             };
 
             var operationResult = new OperationResult
             {
-                ResultCode = ResultCode.FAIL,
+                ResultCode = Constants.CODE_FAIL,
                 Message = "error message"
             };
 
@@ -85,12 +85,12 @@ namespace TicketPal.WebApi.Tests.Controllers
             {
                 Id = 2,
                 Code = It.IsAny<string>(),
-                Status = TicketStatus.PURCHASED
+                Status = Constants.TICKET_PURCHASED_STATUS
             };
 
             var operationResult = new OperationResult
             {
-                ResultCode = ResultCode.SUCCESS,
+                ResultCode = Constants.CODE_SUCCESS,
                 Message = "success"
             };
 
@@ -110,12 +110,12 @@ namespace TicketPal.WebApi.Tests.Controllers
             {
                 Id = 2,
                 Code = It.IsAny<string>(),
-                Status = TicketStatus.PURCHASED
+                Status = Constants.TICKET_PURCHASED_STATUS
             };
 
             var operationResult = new OperationResult
             {
-                ResultCode = ResultCode.FAIL,
+                ResultCode = Constants.CODE_FAIL,
                 Message = "error message"
             };
 
@@ -133,7 +133,7 @@ namespace TicketPal.WebApi.Tests.Controllers
         {
             var operationResult = new OperationResult
             {
-                ResultCode = ResultCode.SUCCESS,
+                ResultCode = Constants.CODE_SUCCESS,
                 Message = "success message"
             };
 
@@ -151,7 +151,7 @@ namespace TicketPal.WebApi.Tests.Controllers
         {
             var operationResult = new OperationResult
             {
-                ResultCode = ResultCode.FAIL,
+                ResultCode = Constants.CODE_FAIL,
                 Message = "some error"
             };
 
@@ -176,7 +176,7 @@ namespace TicketPal.WebApi.Tests.Controllers
             mockHttpContext.Setup(s => s.Request).Returns(mockHttpRequest.Object);
             mockUserService.Setup(s => s.RetrieveUserFromToken(It.IsAny<string>())).Returns(
                 new User {
-                    Role = UserRole.ADMIN.ToString(),
+                    Role = Constants.ROLE_ADMIN,
                     Id = 1,
                 });
             mockHttpContext.Setup(x => x.RequestServices.GetService(typeof(IUserService)))
@@ -236,19 +236,19 @@ namespace TicketPal.WebApi.Tests.Controllers
             return new List<Ticket>
             {
                 new Ticket {
-                    Buyer = new User { Role = UserRole.SPECTATOR.ToString(), Id = 1},
+                    Buyer = new User { Role = Constants.ROLE_SPECTATOR, Id = 1},
                     Event = new Concert{
                         Id = 1,
                         Date = DateTime.Now,
                         AvailableTickets = 2,
                         TicketPrice = 200M,
-                        CurrencyType = CurrencyType.UYU,
-                        EventType = EventType.CONCERT,
+                        CurrencyType = Constants.CURRENCY_URUGUAYAN_PESO,
+                        EventType = Constants.EVENT_CONCERT_TYPE,
                         TourName = "SomeName",
                         Artist = new Performer {
                             Id = 4,
                             Name = "SomeName",
-                            PerformerType = PerformerType.SOLO_ARTIST,
+                            PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                             StartYear = "1987",
                             Genre = new Genre {GenreName = "Pop"},
                             Artists = "someName|anotherName|other"
@@ -256,19 +256,19 @@ namespace TicketPal.WebApi.Tests.Controllers
                     }
                 },
                 new Ticket {
-                    Buyer = new User { Role = UserRole.ADMIN.ToString(), Id = 2},
+                    Buyer = new User { Role = Constants.ROLE_ADMIN, Id = 2},
                     Event = new Concert{
                         Id = 2,
                         Date = DateTime.Now,
                         AvailableTickets = 6,
                         TicketPrice = 188M,
-                        CurrencyType = CurrencyType.USD,
-                        EventType = EventType.CONCERT,
+                        CurrencyType = Constants.CURRENCY_US_DOLLARS,
+                        EventType = Constants.EVENT_CONCERT_TYPE,
                         TourName = "A tour name",
                         Artist = new Performer {
                             Id = 3,
                             Name = "SomeName",
-                            PerformerType = PerformerType.SOLO_ARTIST,
+                            PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                             StartYear = "1987",
                             Genre = new Genre {GenreName = "Rock"},
                             Artists = "someName|anotherName|other"

@@ -56,7 +56,7 @@ namespace TicketPal.BusinessLogic.Services.Concerts
                     {
                         return new OperationResult
                         {
-                            ResultCode = ResultCode.FAIL,
+                            ResultCode = Constants.CODE_FAIL,
                             Message = "Artist doesn't exists"
                         };
                     }
@@ -66,7 +66,7 @@ namespace TicketPal.BusinessLogic.Services.Concerts
                 {
                     return new OperationResult
                     {
-                        ResultCode = ResultCode.FAIL,
+                        ResultCode = Constants.CODE_FAIL,
                         Message = "Concert already exists"
                     };
                 }
@@ -75,13 +75,13 @@ namespace TicketPal.BusinessLogic.Services.Concerts
             {
                 return new OperationResult
                 {
-                    ResultCode = ResultCode.FAIL,
+                    ResultCode = Constants.CODE_FAIL,
                     Message = ex.Message
                 };
             }
             return new OperationResult
             {
-                ResultCode = ResultCode.SUCCESS,
+                ResultCode = Constants.CODE_SUCCESS,
                 Message = "Concert successfully created"
             };
         }
@@ -93,7 +93,7 @@ namespace TicketPal.BusinessLogic.Services.Concerts
                 concertRepository.Delete(id);
                 return new OperationResult
                 {
-                    ResultCode = ResultCode.SUCCESS,
+                    ResultCode = Constants.CODE_SUCCESS,
                     Message = "Concert removed successfully"
                 };
             }
@@ -101,7 +101,7 @@ namespace TicketPal.BusinessLogic.Services.Concerts
             {
                 return new OperationResult
                 {
-                    ResultCode = ResultCode.FAIL,
+                    ResultCode = Constants.CODE_FAIL,
                     Message = ex.Message
                 };
             }
@@ -112,7 +112,7 @@ namespace TicketPal.BusinessLogic.Services.Concerts
             return mapper.Map<Concert>(concertRepository.Get(id));
         }
 
-        public IEnumerable<Concert> GetConcerts(EventType type, bool newest, string startDate, string endDate, string artistName)
+        public IEnumerable<Concert> GetConcerts(string type, bool newest, string startDate, string endDate, string artistName)
         {
             IEnumerable<ConcertEntity> concerts = new List<ConcertEntity>();
 
@@ -213,7 +213,6 @@ namespace TicketPal.BusinessLogic.Services.Concerts
                 {
                     Id = model.Id,
                     Artist = artist,
-                    AvailableTickets = model.AvailableTickets,
                     CurrencyType = model.CurrencyType,
                     Date = model.Date,
                     EventType = model.EventType,
@@ -225,14 +224,14 @@ namespace TicketPal.BusinessLogic.Services.Concerts
             {
                 return new OperationResult
                 {
-                    ResultCode = ResultCode.FAIL,
+                    ResultCode = Constants.CODE_FAIL,
                     Message = ex.Message
                 };
             }
 
             return new OperationResult
             {
-                ResultCode = ResultCode.SUCCESS,
+                ResultCode = Constants.CODE_SUCCESS,
                 Message = "Concert updated successfully"
             };
         }

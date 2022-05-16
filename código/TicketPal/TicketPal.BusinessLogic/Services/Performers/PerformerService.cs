@@ -1,6 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.Extensions.Options;
-using System;
 using System.Collections.Generic;
 using TicketPal.Domain.Constants;
 using TicketPal.Domain.Entity;
@@ -53,7 +51,7 @@ namespace TicketPal.BusinessLogic.Services.Performers
                     {
                         return new OperationResult
                         {
-                            ResultCode = ResultCode.FAIL,
+                            ResultCode = Constants.CODE_FAIL,
                             Message = "Genre doesn't exists"
                         };
                     }
@@ -62,7 +60,7 @@ namespace TicketPal.BusinessLogic.Services.Performers
                 {
                     return new OperationResult
                     {
-                        ResultCode = ResultCode.FAIL,
+                        ResultCode = Constants.CODE_FAIL,
                         Message = "Performer already exists"
                     };
                 }
@@ -72,13 +70,13 @@ namespace TicketPal.BusinessLogic.Services.Performers
             {
                 return new OperationResult
                 {
-                    ResultCode = ResultCode.FAIL,
+                    ResultCode = Constants.CODE_FAIL,
                     Message = ex.Message
                 };
             }
             return new OperationResult
             {
-                ResultCode = ResultCode.SUCCESS,
+                ResultCode = Constants.CODE_SUCCESS,
                 Message = "Performer successfully created"
             };
         }
@@ -90,7 +88,7 @@ namespace TicketPal.BusinessLogic.Services.Performers
                 performerRepository.Delete(id);
                 return new OperationResult
                 {
-                    ResultCode = ResultCode.SUCCESS,
+                    ResultCode = Constants.CODE_SUCCESS,
                     Message = "Performer removed successfully"
                 };
             }
@@ -98,7 +96,7 @@ namespace TicketPal.BusinessLogic.Services.Performers
             {
                 return new OperationResult
                 {
-                    ResultCode = ResultCode.FAIL,
+                    ResultCode = Constants.CODE_FAIL,
                     Message = ex.Message
                 };
             }
@@ -135,14 +133,14 @@ namespace TicketPal.BusinessLogic.Services.Performers
             {
                 return new OperationResult
                 {
-                    ResultCode = ResultCode.FAIL,
+                    ResultCode = Constants.CODE_FAIL,
                     Message = ex.Message
                 };
             }
 
             return new OperationResult
             {
-                ResultCode = ResultCode.SUCCESS,
+                ResultCode = Constants.CODE_SUCCESS,
                 Message = "Concert updated successfully"
             };
         }

@@ -35,7 +35,7 @@ namespace TicketPal.WebApi.Tests.Filters
             this.mockUserService.Setup(s => s.RetrieveUserFromToken(It.IsAny<string>())).Returns(null as User);
 
             filter = new AuthFilter(
-                UserRole.ADMIN.ToString()
+                Constants.ROLE_ADMIN
             );
 
             var mockHttpContext = new Mock<HttpContext>();
@@ -74,7 +74,7 @@ namespace TicketPal.WebApi.Tests.Filters
             );
 
             filter = new AuthFilter(
-                UserRole.ADMIN.ToString()
+                Constants.ROLE_ADMIN
             );
 
             var mockHttpContext = new Mock<HttpContext>();

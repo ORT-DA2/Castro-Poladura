@@ -43,7 +43,7 @@ namespace TicketPal.BusinessLogic.Services.Genres
                 {
                     return new OperationResult
                     {
-                        ResultCode = ResultCode.FAIL,
+                        ResultCode = Constants.CODE_FAIL,
                         Message = "Genre already exists"
                     };
                 }
@@ -53,13 +53,13 @@ namespace TicketPal.BusinessLogic.Services.Genres
             {
                 return new OperationResult
                 {
-                    ResultCode = ResultCode.FAIL,
+                    ResultCode = Constants.CODE_FAIL,
                     Message = ex.Message
                 };
             }
             return new OperationResult
             {
-                ResultCode = ResultCode.SUCCESS,
+                ResultCode = Constants.CODE_SUCCESS,
                 Message = "Genre successfully created"
             };
         }
@@ -71,7 +71,7 @@ namespace TicketPal.BusinessLogic.Services.Genres
                 genreRepository.Delete(id);
                 return new OperationResult
                 {
-                    ResultCode = ResultCode.SUCCESS,
+                    ResultCode = Constants.CODE_SUCCESS,
                     Message = "Genre removed successfully"
                 };
             }
@@ -79,7 +79,7 @@ namespace TicketPal.BusinessLogic.Services.Genres
             {
                 return new OperationResult
                 {
-                    ResultCode = ResultCode.FAIL,
+                    ResultCode = Constants.CODE_FAIL,
                     Message = ex.Message
                 };
             }
@@ -110,14 +110,14 @@ namespace TicketPal.BusinessLogic.Services.Genres
             {
                 return new OperationResult
                 {
-                    ResultCode = ResultCode.FAIL,
+                    ResultCode = Constants.CODE_FAIL,
                     Message = ex.Message
                 };
             }
 
             return new OperationResult
             {
-                ResultCode = ResultCode.SUCCESS,
+                ResultCode = Constants.CODE_SUCCESS,
                 Message = "Genre updated successfully"
             };
         }
