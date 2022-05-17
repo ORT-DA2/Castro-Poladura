@@ -67,10 +67,6 @@ namespace TicketPal.BusinessLogic.Services.Tickets
                         Message = "Event doesn't exists"
                     };
                 }
-
-
-
-
             }
             catch (RepositoryException ex)
             {
