@@ -19,9 +19,30 @@ namespace TicketPal.DataAccess.Repository
                 throw new RepositoryException("The ticket you are trying to add already exists");
             }
 
-            dbContext.Set<TicketEntity>().Add(element);
-            element.CreatedAt = DateTime.Now;
-            dbContext.SaveChanges();
+            var containedEvent = dbContext.Set<EventEntity>().FirstOrDefault(e => e.Id == element.Event.Id);
+
+            if(containedEvent != null)
+            {
+                if(containedEvent.AvailableTickets > 0)
+                {
+                    containedEvent.AvailableTickets = containedEvent.AvailableTickets - 1;
+                    dbContext.Entry(containedEvent).State = EntityState.Modified; 
+                    element.Event = containedEvent;
+
+                    dbContext.Set<TicketEntity>().Add(element);
+                    element.CreatedAt = DateTime.Now;
+                    dbContext.SaveChanges();  
+                }
+                else
+                {
+                    throw new RepositoryException("No available tickets for this event.");
+                }
+            }
+            else 
+            {
+                throw new RepositoryException("No events found for this purchase.");
+            }
+
         }
 
         public override void Update(TicketEntity element)
