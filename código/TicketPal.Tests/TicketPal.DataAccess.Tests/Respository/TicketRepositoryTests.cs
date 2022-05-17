@@ -66,6 +66,10 @@ namespace TicketPal.DataAccess.Tests.Respository
                 Code = idCode,
                 Status = Constants.TICKET_PURCHASED_STATUS
             };
+
+            var eventRepository = new ConcertRepository(dbContext);
+            eventRepository.Clear();
+            eventRepository.Add(concert);
         }
 
         [TestMethod]
@@ -75,6 +79,7 @@ namespace TicketPal.DataAccess.Tests.Respository
             var repository = new TicketRepository(dbContext);
             repository.Add(ticket);
 
+            Assert.IsTrue(repository.Get(ticket.Id).Event.AvailableTickets == ticket.Event.AvailableTickets);
             Assert.IsTrue(repository.GetAll().ToList().FirstOrDefault().Code == code);
         }
 
@@ -95,6 +100,69 @@ namespace TicketPal.DataAccess.Tests.Respository
             var repository = new TicketRepository(dbContext);
             repository.Add(ticket);
             repository.Add(ticket2);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(RepositoryException))]
+        public void SaveTicketWithNoEventsShouldThrowException()
+        {
+            var ticket2 = new TicketEntity()
+            {
+                Id = 1,
+                Event = concert,
+                Buyer = user,
+                PurchaseDate = DateTime.Now,
+                Code = idCode,
+                Status = Constants.TICKET_PURCHASED_STATUS
+            };
+            var eventRepository = new ConcertRepository(dbContext);
+            eventRepository.Clear();
+
+            var repository = new TicketRepository(dbContext);
+            repository.Add(ticket);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(RepositoryException))]
+        public void SaveTicketForEventWithNoAvailableTicketsShouldThrowException()
+        {
+            var ticket = new TicketEntity()
+            {
+                Id = 1,
+                Event = new ConcertEntity 
+                {
+                    Id = 1,
+                    Artist = performer,
+                    AvailableTickets = 1,
+                    CurrencyType = Constants.CURRENCY_URUGUAYAN_PESO,
+                    Date = DateTime.Now,
+                    EventType = Constants.EVENT_CONCERT_TYPE,
+                    TicketPrice = 1800,
+                    TourName = "Solo de guitarra"
+                },  
+                Buyer = user,
+                PurchaseDate = DateTime.Now,
+                Code = idCode,
+                Status = Constants.TICKET_PURCHASED_STATUS
+            };
+
+            var eventRepository = new ConcertRepository(dbContext);
+            eventRepository.Clear();
+            eventRepository.Add(
+                new ConcertEntity 
+                {
+                    Id = 1,
+                    Artist = performer,
+                    AvailableTickets = 0,
+                    CurrencyType = Constants.CURRENCY_URUGUAYAN_PESO,
+                    Date = DateTime.Now,
+                    EventType = Constants.EVENT_CONCERT_TYPE,
+                    TicketPrice = 1800,
+                    TourName = "Solo de guitarra"
+                }
+            );
+            var repository = new TicketRepository(dbContext);
+            repository.Add(ticket);
         }
 
 
@@ -178,7 +246,7 @@ namespace TicketPal.DataAccess.Tests.Respository
             var ticket2 = new TicketEntity()
             {
                 Id = 2,
-                Event = concert2,
+                Event = concert,
                 Buyer = user,
                 PurchaseDate = DateTime.Now,
                 Code = idCode2,
