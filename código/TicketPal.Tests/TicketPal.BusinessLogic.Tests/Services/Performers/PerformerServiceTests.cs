@@ -1,7 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using TicketPal.BusinessLogic.Services.Performers;
 using TicketPal.Domain.Constants;
 using TicketPal.Domain.Entity;
@@ -40,21 +42,24 @@ namespace TicketPal.BusinessLogic.Tests.Services.Performers
 
             performerRequest = new AddPerformerRequest()
             {
-                Concerts = new List<Concert>(),
+                ConcertIds = new List<int>(),
                 Genre = genre.Id,
-                UserInfo = new User { Firstname = performer.UserInfo.Firstname },
+                UserId = 1,
                 PerformerType = performer.PerformerType,
                 StartYear = performer.StartYear
             };
 
             this.mockPerformerRepo.Setup(m => m.Exists(It.IsAny<int>())).Returns(false);
             this.mockPerformerRepo.Setup(m => m.Add(It.IsAny<PerformerEntity>())).Verifiable();
-
+            this.mockUserRepo.Setup(u => u.Get(It.IsAny<int>())).Returns(new UserEntity { Role = Constants.ROLE_ARTIST});
+            this.mockConcertRepo.Setup(c => c.GetAll(It.IsAny<Expression<Func<ConcertEntity, bool>>>()))
+                .Returns(new List<ConcertEntity>());
             this.mockGenreRepo.Setup(m => m.Get(It.IsAny<int>())).Returns(genre);
 
             this.factoryMock.Setup(m => m.GetRepository(typeof(PerformerEntity))).Returns(this.mockPerformerRepo.Object);
             this.factoryMock.Setup(m => m.GetRepository(typeof(GenreEntity))).Returns(this.mockGenreRepo.Object);
-
+            this.factoryMock.Setup(m => m.GetRepository(typeof(UserEntity))).Returns(this.mockUserRepo.Object);
+            this.factoryMock.Setup(m => m.GetRepository(typeof(ConcertEntity))).Returns(this.mockConcertRepo.Object);
             this.performerService = new PerformerService(this.factoryMock.Object, this.mapper);
         }
 

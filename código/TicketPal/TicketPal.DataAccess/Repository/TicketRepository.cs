@@ -27,6 +27,10 @@ namespace TicketPal.DataAccess.Repository
             {
                 if(containedEvent.AvailableTickets > 0)
                 {
+                    if(element.Buyer != null && element.Buyer.Id != 0)
+                    {
+                        dbContext.Attach(element.Buyer);
+                    }
                     containedEvent.AvailableTickets = containedEvent.AvailableTickets - 1;
                     dbContext.Entry(containedEvent).State = EntityState.Modified; 
                     element.Event = containedEvent;

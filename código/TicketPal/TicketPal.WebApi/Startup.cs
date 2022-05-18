@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using TicketPal.BusinessLogic.Services.Settings;
 using TicketPal.Factory;
 using TicketPal.Interfaces.Factory;
@@ -45,6 +46,10 @@ namespace TicketPal.WebApi
             factory.BuildServices();
 
             services.AddControllers();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "TicketPal.WebApi", Version = "v1" });
+            });
 
             services.Configure<ApiBehaviorOptions>(opt =>
             {
@@ -57,6 +62,14 @@ namespace TicketPal.WebApi
         {
             if (env.IsDevelopment())
             {
+                app.UseSwagger();
+                app.UseSwaggerUI(
+                    c => 
+                    {
+                        c.SwaggerEndpoint("/swagger/v1/swagger.json", "TicketPal.WebApi v1");
+                        c.RoutePrefix = string.Empty;
+                    }
+                );
                 app.UseDeveloperExceptionPage();
             }
 

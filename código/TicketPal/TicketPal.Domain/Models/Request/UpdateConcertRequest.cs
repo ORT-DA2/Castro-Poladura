@@ -14,8 +14,12 @@ namespace TicketPal.Domain.Models.Request
         [Required]
         public decimal TicketPrice { get; set; }
         [Required]
+        [Range(typeof(string), Constants.Constants.CURRENCY_URUGUAYAN_PESO, Constants.Constants.CURRENCY_US_DOLLARS,
+        ErrorMessage = "Value for {0} must be any of the following: {1} or {2}")]
         public string CurrencyType { get; set; }
         [Required]
+        [Range(typeof(string), Constants.Constants.EVENT_CONCERT_TYPE,Constants.Constants.EVENT_CONCERT_TYPE,
+        ErrorMessage = "Value for {0} must be any of the following: {0}")]
         public string EventType { get; set; }
         [Required]
         public string TourName { get; set; }

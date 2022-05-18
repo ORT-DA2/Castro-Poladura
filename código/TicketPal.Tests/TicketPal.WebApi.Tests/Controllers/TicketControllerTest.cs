@@ -247,11 +247,11 @@ namespace TicketPal.WebApi.Tests.Controllers
                         TourName = "SomeName",
                         Artist = new Performer {
                             Id = 4,
-                            Name = "SomeName",
+                            UserInfo = new User {Firstname = "someName"},
                             PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                             StartYear = "1987",
                             Genre = new Genre {GenreName = "Pop"},
-                            Artists = "someName|anotherName|other"
+                            Concerts = new List<Concert>()
                         }
                     }
                 },
@@ -267,11 +267,11 @@ namespace TicketPal.WebApi.Tests.Controllers
                         TourName = "A tour name",
                         Artist = new Performer {
                             Id = 3,
-                            Name = "SomeName",
+                            UserInfo = new User { Firstname = "someName"},
                             PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                             StartYear = "1987",
                             Genre = new Genre {GenreName = "Rock"},
-                            Artists = "someName|anotherName|other"
+                            Concerts = new List<Concert>()
                         }
                     }
                 }

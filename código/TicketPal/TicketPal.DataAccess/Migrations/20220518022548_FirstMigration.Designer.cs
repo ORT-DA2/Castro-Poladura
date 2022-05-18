@@ -10,8 +10,8 @@ using TicketPal.DataAccess;
 namespace TicketPal.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220509215113_NewMigration")]
-    partial class NewMigration
+    [Migration("20220518022548_FirstMigration")]
+    partial class FirstMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,21 @@ namespace TicketPal.DataAccess.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.15")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("ConcertEntityPerformerEntity", b =>
+                {
+                    b.Property<int>("ArtistsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ConcertsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ArtistsId", "ConcertsId");
+
+                    b.HasIndex("ConcertsId");
+
+                    b.ToTable("ConcertEntityPerformerEntity");
+                });
 
             modelBuilder.Entity("TicketPal.Domain.Entity.EventEntity", b =>
                 {
@@ -34,8 +49,8 @@ namespace TicketPal.DataAccess.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("CurrencyType")
-                        .HasColumnType("int");
+                    b.Property<string>("CurrencyType")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
@@ -44,8 +59,8 @@ namespace TicketPal.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("EventType")
-                        .HasColumnType("int");
+                    b.Property<string>("EventType")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("TicketPrice")
                         .HasColumnType("decimal(18,2)");
@@ -84,12 +99,7 @@ namespace TicketPal.DataAccess.Migrations
             modelBuilder.Entity("TicketPal.Domain.Entity.PerformerEntity", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Artists")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -97,11 +107,8 @@ namespace TicketPal.DataAccess.Migrations
                     b.Property<int?>("GenreId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("PerformerType")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("PerformerType")
-                        .HasColumnType("int");
 
                     b.Property<string>("StartYear")
                         .HasColumnType("nvarchar(max)");
@@ -138,8 +145,8 @@ namespace TicketPal.DataAccess.Migrations
                     b.Property<DateTime>("PurchaseDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -168,7 +175,7 @@ namespace TicketPal.DataAccess.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Firstname")
                         .HasColumnType("nvarchar(max)");
@@ -187,9 +194,6 @@ namespace TicketPal.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Email")
-                        .IsUnique();
-
                     b.ToTable("Users");
 
                     b.HasData(
@@ -201,7 +205,7 @@ namespace TicketPal.DataAccess.Migrations
                             Email = "lucas@example.com",
                             Firstname = "Lucas",
                             Lastname = "Castro",
-                            Password = "$2a$11$S6cYKpMo4ucbAW1L9Ir79uesYzIizbREknjSC8NOqo4JJV8z3pqZq",
+                            Password = "$2a$11$MqlrLtSou55KfTBtLQaAwOjYJCZWP5iU/15I6.fkmSSLT5yYGJ.ZK",
                             Role = "ADMIN",
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
@@ -213,7 +217,7 @@ namespace TicketPal.DataAccess.Migrations
                             Email = "ricardo@example.com",
                             Firstname = "Ricardo",
                             Lastname = "Poladura",
-                            Password = "$2a$11$lwFvrLnXCYvOaM2vmFr82us0B.WQVcIrJcSAsM2ktaIBQaMuPPepq",
+                            Password = "$2a$11$zsBZ7MOu4I4yuDUnccCJz.oegI2BJyxPKZQ8II2Il3i/8EsX0e92y",
                             Role = "ADMIN",
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
@@ -225,7 +229,7 @@ namespace TicketPal.DataAccess.Migrations
                             Email = "spectator@example.com",
                             Firstname = "Spectator",
                             Lastname = "Test",
-                            Password = "$2a$11$XLoYonqYNcwUlVcy0jW0V.cpfxT6kHReTQAEA82QfKqESmydlmbkq",
+                            Password = "$2a$11$TZPDtTy2GA8aWG2nVDhTcuzsEsTZfsjGFGuy42twjwj0ZkI4RFUXa",
                             Role = "SPECTATOR",
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
@@ -237,7 +241,7 @@ namespace TicketPal.DataAccess.Migrations
                             Email = "seller@example.com",
                             Firstname = "Seller",
                             Lastname = "Test",
-                            Password = "$2a$11$VRae6GLkLyEcYohWubGNnewSxfnHlkOOzJZZcJeFVIsBdeW2lHQ5u",
+                            Password = "$2a$11$bjY1KOya7Kf4/fpBpf.EpuoyJYyceisIVbtzesTjqutMdmSySAPE2",
                             Role = "SELLER",
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
@@ -249,8 +253,20 @@ namespace TicketPal.DataAccess.Migrations
                             Email = "supervisor@example.com",
                             Firstname = "Supervisor",
                             Lastname = "Test",
-                            Password = "$2a$11$Hzotvhokq5Bo27Yf9bKF6ugzV41HBAtBtrxjdgPUK9g9kWiv6MKT2",
+                            Password = "$2a$11$cWMfgiHR0N6UKg.8UtIBAuMowwHEnqNDqxP4dY/DyfBh20I8K95.C",
                             Role = "SUPERVISOR",
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 6,
+                            ActiveAccount = false,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "artist@example.com",
+                            Firstname = "Artist",
+                            Lastname = "Test",
+                            Password = "$2a$11$bd0itUL9uKb//1OHeB9pVO1I.kV.8QwQD2DWdpuCpTlCDafBnyOVS",
+                            Role = "ARTIST",
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
@@ -259,15 +275,25 @@ namespace TicketPal.DataAccess.Migrations
                 {
                     b.HasBaseType("TicketPal.Domain.Entity.EventEntity");
 
-                    b.Property<int?>("ArtistId")
-                        .HasColumnType("int");
-
                     b.Property<string>("TourName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasIndex("ArtistId");
-
                     b.HasDiscriminator().HasValue("ConcertEntity");
+                });
+
+            modelBuilder.Entity("ConcertEntityPerformerEntity", b =>
+                {
+                    b.HasOne("TicketPal.Domain.Entity.PerformerEntity", null)
+                        .WithMany()
+                        .HasForeignKey("ArtistsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TicketPal.Domain.Entity.ConcertEntity", null)
+                        .WithMany()
+                        .HasForeignKey("ConcertsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("TicketPal.Domain.Entity.PerformerEntity", b =>
@@ -276,7 +302,15 @@ namespace TicketPal.DataAccess.Migrations
                         .WithMany()
                         .HasForeignKey("GenreId");
 
+                    b.HasOne("TicketPal.Domain.Entity.UserEntity", "UserInfo")
+                        .WithOne("Performer")
+                        .HasForeignKey("TicketPal.Domain.Entity.PerformerEntity", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Genre");
+
+                    b.Navigation("UserInfo");
                 });
 
             modelBuilder.Entity("TicketPal.Domain.Entity.TicketEntity", b =>
@@ -294,13 +328,9 @@ namespace TicketPal.DataAccess.Migrations
                     b.Navigation("Event");
                 });
 
-            modelBuilder.Entity("TicketPal.Domain.Entity.ConcertEntity", b =>
+            modelBuilder.Entity("TicketPal.Domain.Entity.UserEntity", b =>
                 {
-                    b.HasOne("TicketPal.Domain.Entity.PerformerEntity", "Artist")
-                        .WithMany()
-                        .HasForeignKey("ArtistId");
-
-                    b.Navigation("Artist");
+                    b.Navigation("Performer");
                 });
 #pragma warning restore 612, 618
         }

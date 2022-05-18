@@ -10,8 +10,10 @@ namespace TicketPal.Domain.Models.Request
         [Required]
         public string Lastname { get; set; }
         [Required]
+        [MinLength(10)]
         public string Password { get; set; }
         [Required]
+        [EmailAddress]
         public string Email { get; set; }
         [Required]
         public string Role { get; set; }

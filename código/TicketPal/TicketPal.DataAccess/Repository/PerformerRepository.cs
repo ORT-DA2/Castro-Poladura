@@ -20,6 +20,16 @@ namespace TicketPal.DataAccess.Repository
             {
                 throw new RepositoryException("The performer you are trying to add already exists");
             }
+            if(element.Concerts != null)
+            {
+                foreach(ConcertEntity concert in element.Concerts)
+                {
+                    if(concert != null && concert.Id != 0)
+                    {
+                        dbContext.Attach(concert);
+                    }
+                }
+            }
 
             dbContext.Set<PerformerEntity>().Add(element);
             element.CreatedAt = DateTime.Now;
@@ -49,7 +59,8 @@ namespace TicketPal.DataAccess.Repository
         public override PerformerEntity Get(int id)
         {
             return dbContext.Set<PerformerEntity>()
-            .Include(u => u.UserInfo)
+            .Include(p => p.UserInfo)
+            .Include(p => p.Genre)
             .Include(p => p.Concerts)
             .ThenInclude(c => c.Artists)
             .FirstOrDefault(u => u.Id == id);
@@ -58,7 +69,8 @@ namespace TicketPal.DataAccess.Repository
         public override PerformerEntity Get(Expression<Func<PerformerEntity, bool>> predicate)
         {
             return dbContext.Set<PerformerEntity>()
-            .Include(u => u.UserInfo)
+            .Include(p => p.UserInfo)
+            .Include(p => p.Genre)
             .Include(p => p.Concerts)
             .ThenInclude(c => c.Artists)
             .FirstOrDefault(predicate);
@@ -67,7 +79,8 @@ namespace TicketPal.DataAccess.Repository
         public override IEnumerable<PerformerEntity> GetAll()
         {
             return dbContext.Set<PerformerEntity>()
-            .Include(u => u.UserInfo)
+            .Include(p => p.UserInfo)
+            .Include(p => p.Genre)
             .Include(p => p.Concerts)
             .ThenInclude(c => c.Artists)
             .AsEnumerable();
@@ -76,7 +89,8 @@ namespace TicketPal.DataAccess.Repository
         public override IEnumerable<PerformerEntity> GetAll(Expression<Func<PerformerEntity, bool>> predicate)
         {
             return dbContext.Set<PerformerEntity>()
-            .Include(u => u.UserInfo)
+            .Include(p => p.UserInfo)
+            .Include(p => p.Genre)
             .Include(p => p.Concerts)
             .ThenInclude(c => c.Artists)
             .Where(predicate)

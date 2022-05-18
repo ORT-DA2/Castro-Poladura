@@ -31,8 +31,8 @@ namespace TicketPal.WebApi.Tests.Controllers
         {
             var request = new AddPerformerRequest 
             {
-                UserInfo = new User { Firstname = "someName"},
-                Concerts = new List<Concert>(),
+                UserId = 1,
+                ConcertIds = new List<int>(),
                 Genre = 2,
                 PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 StartYear = "12/03/1998"
@@ -58,8 +58,8 @@ namespace TicketPal.WebApi.Tests.Controllers
         {
             var request = new AddPerformerRequest 
             {
-                UserInfo = new User { Firstname = "someName"},
-                Concerts = new List<Concert>(),
+                UserId = 1,
+                ConcertIds = new List<int>(),
                 Genre = 2,
                 PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 StartYear = "12/03/1998"
@@ -204,8 +204,8 @@ namespace TicketPal.WebApi.Tests.Controllers
                 new Performer 
                 {
                     Id = 1,
-                    Name = "someName",
-                    Artists = "name1|name2|name3",
+                    UserInfo = new User { Firstname = "someName"},
+                    Concerts = new List<Concert>(),
                     Genre = new Genre(),
                     PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                     StartYear = "12/03/1998"
@@ -213,8 +213,8 @@ namespace TicketPal.WebApi.Tests.Controllers
                 new Performer 
                 {
                     Id = 2,
-                    Name = "someName",
-                    Artists = "name1|name2|name3",
+                    UserInfo = new User { Firstname = "someName"},
+                    Concerts = new List<Concert>(),
                     Genre = new Genre(),
                     PerformerType = Constants.PERFORMER_TYPE_BAND,
                     StartYear = "12/03/1998"
@@ -222,8 +222,8 @@ namespace TicketPal.WebApi.Tests.Controllers
                 new Performer 
                 {
                     Id = 3,
-                    Name = "someName",
-                    Artists = "name1|name2|name3",
+                    UserInfo = new User { Firstname = "someName" },
+                    Concerts = new List<Concert>(),
                     Genre = new Genre(),
                     PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                     StartYear = "10/03/2000"

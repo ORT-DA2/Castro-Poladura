@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using System.Collections.Generic;
+using System.Linq;
 using TicketPal.Domain.Constants;
 using TicketPal.Domain.Entity;
 using TicketPal.Domain.Exceptions;
@@ -17,12 +18,16 @@ namespace TicketPal.BusinessLogic.Services.Performers
         private readonly IMapper mapper;
         public IGenericRepository<PerformerEntity> performerRepository;
         public IGenericRepository<GenreEntity> genreRepository;
+        public IGenericRepository<ConcertEntity> concertRepository;
+        public IGenericRepository<UserEntity> userRepository;
 
         public PerformerService(IServiceFactory factory, IMapper mapper)
         {
             this.mapper = mapper;
             this.serviceFactory = factory;
             this.performerRepository = serviceFactory.GetRepository(typeof(PerformerEntity)) as IGenericRepository<PerformerEntity>;
+            this.concertRepository = serviceFactory.GetRepository(typeof(ConcertEntity)) as IGenericRepository<ConcertEntity>;
+            this.userRepository = serviceFactory.GetRepository(typeof(UserEntity)) as IGenericRepository<UserEntity>;
             this.genreRepository = serviceFactory.GetRepository(typeof(GenreEntity)) as IGenericRepository<GenreEntity>;
         }
 
@@ -31,29 +36,45 @@ namespace TicketPal.BusinessLogic.Services.Performers
             try
             {
                 GenreEntity genre = genreRepository.Get(model.Genre);
-                
-                    if (genre != null)
-                    {
-                        performerRepository.Add(new PerformerEntity
-                        {
-                            UserInfo = mapper.Map<UserEntity>(model.UserInfo),
-                            Concerts = mapper.Map<IEnumerable<Concert>,IEnumerable<ConcertEntity>>(model.Concerts),
-                            Genre = genre,
-                            PerformerType = model.PerformerType,
-                            StartYear = model.StartYear
+                var concerts = concertRepository.GetAll(c => model.ConcertIds.Contains(c.Id));
+                var user = userRepository.Get(model.UserId);
 
-                        });
-                    }
-                    else
+                if (genre == null)
+                {
+                    return new OperationResult
                     {
+                        ResultCode = Constants.CODE_FAIL,
+                        Message = "Genre doesn't exists"
+                    };
+                }
+                if (user == null)
+                {
+                    return new OperationResult
+                    {
+                        ResultCode = Constants.CODE_FAIL,
+                        Message = "User doesn't exists"
+                    };
+                }
+                
+                if(!user.Role.Equals(Constants.ROLE_ARTIST)) 
+                {
                         return new OperationResult
                         {
                             ResultCode = Constants.CODE_FAIL,
-                            Message = "Genre doesn't exists"
+                            Message = "The associated user account is not from a performer"
                         };
-                    }
-                
-                
+                }
+                performerRepository.Add(new PerformerEntity
+                {
+                    UserInfo = user,
+                    Concerts = concerts,
+                    Genre = genre,
+                    PerformerType = model.PerformerType,
+                    StartYear = model.StartYear
+
+                });
+
+
             }
             catch (RepositoryException ex)
             {

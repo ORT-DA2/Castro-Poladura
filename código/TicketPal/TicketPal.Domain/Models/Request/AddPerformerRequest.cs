@@ -9,14 +9,16 @@ namespace TicketPal.Domain.Models.Request
     public class AddPerformerRequest
     {
         [Required]
+        [Range(typeof(string), Constants.Constants.PERFORMER_TYPE_BAND, Constants.Constants.PERFORMER_TYPE_SOLO_ARTIST,
+        ErrorMessage = "Value for {0} must be any of the following: {1} or {2}")]
         public string PerformerType { get; set; }
         [Required]
-        public User UserInfo { get; set; }
+        public int UserId { get; set; }
         [Required]
         public string StartYear { get; set; }
         [Required]
         public int Genre { get; set; }
         [Required]
-        public IEnumerable<Concert> Concerts { get; set; }
+        public IEnumerable<int> ConcertIds { get; set; }
     }
 }
