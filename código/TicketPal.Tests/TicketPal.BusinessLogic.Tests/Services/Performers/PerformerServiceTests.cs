@@ -15,7 +15,6 @@ namespace TicketPal.BusinessLogic.Tests.Services.Performers
     public class PerformerServiceTests : BaseServiceTests
     {
         private GenreEntity genre;
-        private string artists;
         private PerformerEntity performer;
         private AddPerformerRequest performerRequest;
         private PerformerService performerService;
@@ -29,23 +28,21 @@ namespace TicketPal.BusinessLogic.Tests.Services.Performers
                 GenreName = "Pop Rock"
             };
 
-            artists = "Chris Martin|Jon Buckland|Guy Berryman|Will Champion";
-
             performer = new PerformerEntity()
             {
                 Id = 1,
-                Name = "Coldplay",
+                UserInfo = new UserEntity { Firstname = "Coldplay"},
                 PerformerType = Constants.PERFORMER_TYPE_BAND,
                 StartYear = "1996",
                 Genre = genre,
-                Artists = artists
+                Concerts = new List<ConcertEntity>()
             };
 
             performerRequest = new AddPerformerRequest()
             {
-                Artists = performer.Artists,
+                Concerts = new List<Concert>(),
                 Genre = genre.Id,
-                Name = performer.Name,
+                UserInfo = new User { Firstname = performer.UserInfo.Firstname },
                 PerformerType = performer.PerformerType,
                 StartYear = performer.StartYear
             };
@@ -107,8 +104,8 @@ namespace TicketPal.BusinessLogic.Tests.Services.Performers
             var dbUser = new PerformerEntity
             {
                 Id = id,
-                Name = performer.Name,
-                Artists = performer.Artists,
+                UserInfo = performer.UserInfo,
+                Concerts = performer.Concerts,
                 Genre = performer.Genre,
                 PerformerType = performer.PerformerType,
                 StartYear = performer.StartYear
@@ -142,7 +139,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Performers
         {
             var updateRequest = new UpdatePerformerRequest
             {
-                Name = performer.Name
+                UserInfo = new User { Firstname = performer.UserInfo.Firstname}
             };
 
             this.mockPerformerRepo.Setup(m => m.Update(It.IsAny<PerformerEntity>())).Verifiable();
@@ -161,8 +158,8 @@ namespace TicketPal.BusinessLogic.Tests.Services.Performers
             var dbUser = new PerformerEntity
             {
                 Id = id,
-                Name = performer.Name,
-                Artists = performer.Artists,
+                UserInfo = performer.UserInfo,
+                Concerts = performer.Concerts,
                 Genre = performer.Genre,
                 PerformerType = performer.PerformerType,
                 StartYear = performer.StartYear
@@ -203,8 +200,8 @@ namespace TicketPal.BusinessLogic.Tests.Services.Performers
                 new PerformerEntity
                 {
                     Id = 1,
-                    Name = performer.Name,
-                    Artists = performer.Artists,
+                    UserInfo = performer.UserInfo,
+                    Concerts = performer.Concerts,
                     Genre = performer.Genre,
                     PerformerType = performer.PerformerType,
                     StartYear = performer.StartYear
@@ -212,8 +209,8 @@ namespace TicketPal.BusinessLogic.Tests.Services.Performers
                 new PerformerEntity
                 {
                     Id = 2,
-                    Name = "The Party Band",
-                    Artists = "Geremy Cajtak|Marcelo López",
+                    UserInfo = new UserEntity {Firstname = "The Party Band"},
+                    Concerts = new List<ConcertEntity>(),
                     Genre = new GenreEntity(){ Id = 3, GenreName = "Pachanga"},
                     PerformerType = performer.PerformerType,
                     StartYear = performer.StartYear
@@ -221,7 +218,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Performers
                 new PerformerEntity
                 {
                     Id = 3,
-                    Name = "Pepito Perez",
+                    UserInfo = new UserEntity { Firstname = "Pepito Perez" },
                     Genre = performer.Genre,
                     PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                     StartYear = "1965"

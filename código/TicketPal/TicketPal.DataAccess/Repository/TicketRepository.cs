@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using TicketPal.Domain.Entity;
 using TicketPal.Domain.Exceptions;
 
@@ -63,6 +65,39 @@ namespace TicketPal.DataAccess.Repository
 
             dbContext.SaveChanges();
             dbContext.Entry(found).State = EntityState.Modified;
+        }
+
+        public override TicketEntity Get(int id)
+        {
+            return dbContext.Set<TicketEntity>()
+            .Include(t => t.Buyer)
+            .Include(t => t.Event)
+            .FirstOrDefault(u => u.Id == id);
+        }
+
+        public override TicketEntity Get(Expression<Func<TicketEntity, bool>> predicate)
+        {
+            return dbContext.Set<TicketEntity>()
+            .Include(t => t.Buyer)
+            .Include(t => t.Event)
+            .FirstOrDefault(predicate);
+        }
+
+        public override IEnumerable<TicketEntity> GetAll()
+        {
+            return dbContext.Set<TicketEntity>()
+            .Include(t => t.Buyer)
+            .Include(t => t.Event)
+            .AsEnumerable();
+        }
+
+        public override IEnumerable<TicketEntity> GetAll(Expression<Func<TicketEntity, bool>> predicate)
+        {
+            return dbContext.Set<TicketEntity>()
+            .Include(t => t.Buyer)
+            .Include(t => t.Event)
+            .Where(predicate)
+            .AsEnumerable();
         }
     }
 }

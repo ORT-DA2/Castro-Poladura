@@ -11,5 +11,6 @@ namespace TicketPal.Domain.Entity
         public string Password { get; set; }
         public string Role { get; set; }
         public bool ActiveAccount { get; set; }
+        public PerformerEntity Performer { get; set; }
     }
 }

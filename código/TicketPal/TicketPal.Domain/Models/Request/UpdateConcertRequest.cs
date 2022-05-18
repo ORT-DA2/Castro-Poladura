@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using TicketPal.Domain.Constants;
 using TicketPal.Domain.Entity;
@@ -19,6 +20,6 @@ namespace TicketPal.Domain.Models.Request
         [Required]
         public string TourName { get; set; }
         [Required]
-        public int Artist { get; set; }
+        public IEnumerable<int> Artists { get; set; }
     }
 }

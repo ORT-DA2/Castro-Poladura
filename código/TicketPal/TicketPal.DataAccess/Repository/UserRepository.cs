@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using TicketPal.Domain.Entity;
 using TicketPal.Domain.Exceptions;
@@ -36,12 +38,44 @@ namespace TicketPal.DataAccess.Repository
             if (duplicateEmail)
             {
                 throw new RepositoryException("Email already registered");
-
             }
 
             user.CreatedAt = DateTime.Now;
             dbContext.Set<UserEntity>().Add(user);
             dbContext.SaveChanges();
+        }
+
+        public override UserEntity Get(int id)
+        {
+           return dbContext.Set<UserEntity>()
+            .Include(u => u.Performer)
+            .ThenInclude(p => p.Concerts)
+            .FirstOrDefault(u => u.Id == id);
+        }
+
+        public override UserEntity Get(Expression<Func<UserEntity, bool>> predicate)
+        {
+            return dbContext.Set<UserEntity>()
+            .Include(u => u.Performer)
+            .ThenInclude(p => p.Concerts)
+            .FirstOrDefault(predicate);
+        }
+
+        public override IEnumerable<UserEntity> GetAll()
+        {
+            return dbContext.Set<UserEntity>()
+            .Include(u => u.Performer)
+            .ThenInclude(p => p.Concerts)
+            .AsEnumerable();
+        }
+
+        public override IEnumerable<UserEntity> GetAll(Expression<Func<UserEntity, bool>> predicate)
+        {
+            return dbContext.Set<UserEntity>()
+            .Include(u => u.Performer)
+            .ThenInclude(p => p.Concerts)
+            .Where(predicate)
+            .AsEnumerable();
         }
     }
 }

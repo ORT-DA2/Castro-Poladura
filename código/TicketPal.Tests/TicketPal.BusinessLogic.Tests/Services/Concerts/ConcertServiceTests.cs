@@ -33,7 +33,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             artist = new PerformerEntity()
             {
                 Id = 1,
-                Name = "Taylor Swift",
+                UserInfo = new UserEntity { Firstname = "Taylor Swift"},
                 Genre = genre,
                 PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 StartYear = "2004"
@@ -41,7 +41,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
 
             concertRequest = new AddConcertRequest()
             {
-                Artist = 1,
+                Artists = new List<int> { 1 },
                 Date = DateTime.Now,
                 AvailableTickets = 30000,
                 EventType = Constants.EVENT_CONCERT_TYPE,
@@ -54,16 +54,16 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             this.mockConcertRepo.Setup(m => m.Add(It.IsAny<ConcertEntity>())).Verifiable();
 
             this.mockPerformerRepo.Setup(m => m.Get(It.IsAny<int>())).Returns(artist);
-
-            this.factoryMock.Setup(m => m.GetRepository(typeof(ConcertEntity))).Returns(this.mockConcertRepo.Object);
-            this.factoryMock.Setup(m => m.GetRepository(typeof(PerformerEntity))).Returns(this.mockPerformerRepo.Object);
-
-            this.concertService = new ConcertService(this.factoryMock.Object, this.mapper);
         }
 
         [TestMethod]
         public void AddConcertSuccesfullyTest()
         {
+            this.mockConcertRepo.Setup(m => m.Get(It.IsAny<Expression<Func<ConcertEntity, bool>>>()))
+                .Returns(new ConcertEntity());
+            this.factoryMock.Setup(m => m.GetRepository(typeof(PerformerEntity))).Returns(this.mockPerformerRepo.Object);
+            this.factoryMock.Setup(f => f.GetRepository(typeof(ConcertEntity))).Returns(this.mockConcertRepo.Object);
+            this.concertService = new ConcertService(this.factoryMock.Object, this.mapper);
             OperationResult result = concertService.AddConcert(concertRequest);
 
             Assert.IsTrue(result.ResultCode == Constants.CODE_SUCCESS);
@@ -72,11 +72,11 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
         [TestMethod]
         public void AddConcertTwiceFailsTest()
         {
-            concertService.AddConcert(concertRequest);
-
+        
             this.mockConcertRepo.Setup(m => m.Exists(It.IsAny<int>())).Returns(true);
             this.mockConcertRepo.Setup(m => m.Add(It.IsAny<ConcertEntity>())).Throws(new RepositoryException());
             this.factoryMock.Setup(m => m.GetRepository(typeof(ConcertEntity))).Returns(this.mockConcertRepo.Object);
+            this.factoryMock.Setup(m => m.GetRepository(typeof(PerformerEntity))).Returns(this.mockPerformerRepo.Object);
             this.concertService = new ConcertService(this.factoryMock.Object, this.mapper);
 
             OperationResult result = concertService.AddConcert(concertRequest);
@@ -87,7 +87,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
         [TestMethod]
         public void AddConcertWithNoExistentArtistTest()
         {
-            this.mockPerformerRepo.Setup(m => m.Get(It.IsAny<int>()));
+            this.mockPerformerRepo.Setup(m => m.Get(It.IsAny<int>())).Returns(It.IsAny<PerformerEntity>());
 
             this.factoryMock.Setup(m => m.GetRepository(typeof(ConcertEntity))).Returns(this.mockConcertRepo.Object);
             this.factoryMock.Setup(m => m.GetRepository(typeof(PerformerEntity))).Returns(this.mockPerformerRepo.Object);
@@ -106,7 +106,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             var dbUser = new ConcertEntity
             {
                 Id = id,
-                Artist = artist,
+                Artists = new List<PerformerEntity>(),
                 Date = concertRequest.Date,
                 AvailableTickets = concertRequest.AvailableTickets,
                 EventType = concertRequest.EventType,
@@ -142,7 +142,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             var tourName = "The Tour";
             var updateRequest = new UpdateConcertRequest
             {
-                Artist = concertRequest.Artist,
+                Artists = concertRequest.Artists,
                 Date = concertRequest.Date,
                 EventType = concertRequest.EventType,
                 TicketPrice = concertRequest.TicketPrice,
@@ -151,7 +151,8 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             };
 
             this.mockConcertRepo.Setup(m => m.Update(It.IsAny<ConcertEntity>())).Verifiable();
-            this.factoryMock.Setup(m => m.GetRepository(typeof(ConcertEntity))).Returns(this.mockConcertRepo.Object);
+            this.factoryMock.Setup(f => f.GetRepository(typeof(ConcertEntity))).Returns(this.mockConcertRepo.Object);
+            this.factoryMock.Setup(f => f.GetRepository(typeof(PerformerEntity))).Returns(this.mockPerformerRepo.Object);
             this.concertService = new ConcertService(this.factoryMock.Object, this.mapper);
             OperationResult expected = concertService.UpdateConcert(updateRequest);
 
@@ -165,7 +166,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             var dbUser = new ConcertEntity
             {
                 Id = id,
-                Artist = artist,
+                Artists = new List<PerformerEntity>(),
                 Date = concertRequest.Date,
                 AvailableTickets = concertRequest.AvailableTickets,
                 EventType = concertRequest.EventType,
@@ -208,7 +209,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             {
                 Id = 2,
                 Genre = genre,
-                Name = "George Michael",
+                UserInfo = new UserEntity{ Firstname = "George Michael"},
                 PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 StartYear = "1981"
             };
@@ -217,7 +218,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             {
                 Id = 3,
                 Genre = genre,
-                Name = "Boy George",
+                UserInfo = new UserEntity {Firstname = "Boy George"},
                 PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 StartYear = "1981"
             };
@@ -227,7 +228,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
                 new ConcertEntity
                 {
                     Id = 1,
-                    Artist = artist,
+                    Artists = new List<PerformerEntity>(),
                     Date = concertRequest.Date,
                     AvailableTickets = concertRequest.AvailableTickets,
                     EventType = concertRequest.EventType,
@@ -238,7 +239,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
                 new ConcertEntity
                 {
                     Id = 2,
-                    Artist = artist2,
+                    Artists = new List<PerformerEntity>(),
                     Date = concertRequest.Date.AddDays(25),
                     AvailableTickets = concertRequest.AvailableTickets,
                     EventType = concertRequest.EventType,
@@ -249,7 +250,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
                 new ConcertEntity
                 {
                     Id = 3,
-                    Artist = artist3,
+                    Artists = new List<PerformerEntity>(),
                     Date = concertRequest.Date.AddDays(35),
                     AvailableTickets = concertRequest.AvailableTickets,
                     EventType = concertRequest.EventType,
@@ -279,7 +280,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             {
                 Id = 2,
                 Genre = genre,
-                Name = "George Michael",
+                UserInfo = new UserEntity {Firstname = "George Michael"},
                 PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 StartYear = "1981"
             };
@@ -288,7 +289,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             {
                 Id = 3,
                 Genre = genre,
-                Name = "Boy George",
+                UserInfo = new UserEntity { Firstname = "Boy George" },
                 PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 StartYear = "1981"
             };
@@ -298,7 +299,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
                 new ConcertEntity
                 {
                     Id = 1,
-                    Artist = artist,
+                    Artists = new List<PerformerEntity>(),
                     Date = concertRequest.Date,
                     AvailableTickets = concertRequest.AvailableTickets,
                     EventType = concertRequest.EventType,
@@ -309,7 +310,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
                 new ConcertEntity
                 {
                     Id = 2,
-                    Artist = artist2,
+                    Artists = new List<PerformerEntity>(),
                     Date = concertRequest.Date.AddDays(25),
                     AvailableTickets = concertRequest.AvailableTickets,
                     EventType = concertRequest.EventType,
@@ -320,7 +321,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
                 new ConcertEntity
                 {
                     Id = 3,
-                    Artist = artist3,
+                    Artists = new List<PerformerEntity>(),
                     Date = concertRequest.Date.AddDays(35),
                     AvailableTickets = concertRequest.AvailableTickets,
                     EventType = concertRequest.EventType,
@@ -338,7 +339,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
                 true,
                 DateTime.Now.ToString("dd/M/yyyy"),
                 DateTime.Now.AddDays(30).ToString("dd/M/yyyy"),
-                artist2.Name
+                artist2.UserInfo.Firstname
                 );
 
             Assert.IsTrue(result.ToList().Count == 3);
@@ -351,7 +352,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             {
                 Id = 2,
                 Genre = genre,
-                Name = "George Michael",
+                UserInfo = new UserEntity { Firstname = "George Michael" },
                 PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 StartYear = "1981"
             };
@@ -360,7 +361,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             {
                 Id = 3,
                 Genre = genre,
-                Name = "Boy George",
+                UserInfo = new UserEntity { Firstname = "Boy george" },
                 PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 StartYear = "1981"
             };
@@ -370,7 +371,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
                 new ConcertEntity
                 {
                     Id = 1,
-                    Artist = artist,
+                    Artists = new List<PerformerEntity>(),
                     Date = concertRequest.Date,
                     AvailableTickets = concertRequest.AvailableTickets,
                     EventType = concertRequest.EventType,
@@ -381,7 +382,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
                 new ConcertEntity
                 {
                     Id = 2,
-                    Artist = artist2,
+                    Artists = new List<PerformerEntity>(),
                     Date = concertRequest.Date.AddDays(25),
                     AvailableTickets = concertRequest.AvailableTickets,
                     EventType = concertRequest.EventType,
@@ -392,7 +393,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
                 new ConcertEntity
                 {
                     Id = 3,
-                    Artist = artist3,
+                    Artists = new List<PerformerEntity>(),
                     Date = concertRequest.Date.AddDays(35),
                     AvailableTickets = concertRequest.AvailableTickets,
                     EventType = concertRequest.EventType,
@@ -410,7 +411,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
                 false,
                 DateTime.Now.ToString("dd/M/yyyy"),
                 DateTime.Now.AddDays(30).ToString("dd/M/yyyy"),
-                artist2.Name
+                artist2.UserInfo.Firstname
                 );
 
             Assert.IsTrue(result.ToList().Count == 3);
@@ -423,7 +424,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             {
                 Id = 2,
                 Genre = genre,
-                Name = "George Michael",
+                UserInfo = new UserEntity { Firstname = "George Michaels" },
                 PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 StartYear = "1981"
             };
@@ -432,7 +433,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             {
                 Id = 3,
                 Genre = genre,
-                Name = "Boy George",
+                UserInfo = new UserEntity {Firstname = "Boy George" },
                 PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 StartYear = "1981"
             };
@@ -442,7 +443,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
                 new ConcertEntity
                 {
                     Id = 1,
-                    Artist = artist,
+                    Artists = new List<PerformerEntity>(),
                     Date = concertRequest.Date,
                     AvailableTickets = concertRequest.AvailableTickets,
                     EventType = concertRequest.EventType,
@@ -453,7 +454,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
                 new ConcertEntity
                 {
                     Id = 2,
-                    Artist = artist2,
+                    Artists = new List<PerformerEntity>(),
                     Date = concertRequest.Date.AddDays(25),
                     AvailableTickets = concertRequest.AvailableTickets,
                     EventType = concertRequest.EventType,
@@ -464,7 +465,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
                 new ConcertEntity
                 {
                     Id = 3,
-                    Artist = artist3,
+                    Artists = new List<PerformerEntity>(),
                     Date = concertRequest.Date.AddDays(35),
                     AvailableTickets = concertRequest.AvailableTickets,
                     EventType = concertRequest.EventType,
@@ -494,7 +495,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             {
                 Id = 2,
                 Genre = genre,
-                Name = "George Michael",
+                UserInfo = new UserEntity {Firstname = "George Michael"},
                 PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 StartYear = "1981"
             };
@@ -503,7 +504,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             {
                 Id = 3,
                 Genre = genre,
-                Name = "Boy George",
+                UserInfo = new UserEntity { Firstname = "Boy George"},
                 PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 StartYear = "1981"
             };
@@ -513,7 +514,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
                 new ConcertEntity
                 {
                     Id = 1,
-                    Artist = artist,
+                    Artists = new List<PerformerEntity>(),
                     Date = concertRequest.Date,
                     AvailableTickets = concertRequest.AvailableTickets,
                     EventType = concertRequest.EventType,
@@ -524,7 +525,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
                 new ConcertEntity
                 {
                     Id = 2,
-                    Artist = artist2,
+                    Artists = new List<PerformerEntity>(),
                     Date = concertRequest.Date.AddDays(25),
                     AvailableTickets = concertRequest.AvailableTickets,
                     EventType = concertRequest.EventType,
@@ -535,7 +536,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
                 new ConcertEntity
                 {
                     Id = 3,
-                    Artist = artist3,
+                    Artists = new List<PerformerEntity>(),
                     Date = concertRequest.Date.AddDays(35),
                     AvailableTickets = concertRequest.AvailableTickets,
                     EventType = concertRequest.EventType,
@@ -566,7 +567,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             {
                 Id = 2,
                 Genre = genre,
-                Name = "George Michael",
+                UserInfo = new UserEntity { Firstname = "George Michael" },
                 PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 StartYear = "1981"
             };
@@ -575,7 +576,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             {
                 Id = 3,
                 Genre = genre,
-                Name = "Boy George",
+                UserInfo = new UserEntity { Firstname = "George Michael" },
                 PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 StartYear = "1981"
             };
@@ -585,7 +586,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
                 new ConcertEntity
                 {
                     Id = 1,
-                    Artist = artist,
+                    Artists = new List<PerformerEntity>(),
                     Date = concertRequest.Date,
                     AvailableTickets = concertRequest.AvailableTickets,
                     EventType = concertRequest.EventType,
@@ -596,7 +597,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
                 new ConcertEntity
                 {
                     Id = 2,
-                    Artist = artist2,
+                    Artists = new List<PerformerEntity>(),
                     Date = concertRequest.Date.AddDays(25),
                     AvailableTickets = concertRequest.AvailableTickets,
                     EventType = concertRequest.EventType,
@@ -607,7 +608,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
                 new ConcertEntity
                 {
                     Id = 3,
-                    Artist = artist3,
+                    Artists = new List<PerformerEntity>(),
                     Date = concertRequest.Date.AddDays(35),
                     AvailableTickets = concertRequest.AvailableTickets,
                     EventType = concertRequest.EventType,

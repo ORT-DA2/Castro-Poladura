@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using TicketPal.DataAccess.Repository;
 using TicketPal.Domain.Constants;
@@ -25,7 +26,7 @@ namespace TicketPal.DataAccess.Tests.Respository
             performer = new PerformerEntity()
             {
                 Id = 1,
-                Name = "Berugo Carámbula",
+                UserInfo = new UserEntity {Firstname = "Berugo Carámbula"},
                 StartYear = "1963",
                 PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 Genre = new GenreEntity()
@@ -38,7 +39,7 @@ namespace TicketPal.DataAccess.Tests.Respository
             concert = new ConcertEntity()
             {
                 Id = 1,
-                Artist = performer,
+                Artists = new List<PerformerEntity>(),
                 AvailableTickets = 15000,
                 CurrencyType = Constants.CURRENCY_URUGUAYAN_PESO,
                 Date = DateTime.Now,
@@ -132,7 +133,7 @@ namespace TicketPal.DataAccess.Tests.Respository
                 Event = new ConcertEntity 
                 {
                     Id = 1,
-                    Artist = performer,
+                    Artists = new List<PerformerEntity>(),
                     AvailableTickets = 1,
                     CurrencyType = Constants.CURRENCY_URUGUAYAN_PESO,
                     Date = DateTime.Now,
@@ -152,7 +153,7 @@ namespace TicketPal.DataAccess.Tests.Respository
                 new ConcertEntity 
                 {
                     Id = 1,
-                    Artist = performer,
+                    Artists = new List<PerformerEntity>(),
                     AvailableTickets = 0,
                     CurrencyType = Constants.CURRENCY_URUGUAYAN_PESO,
                     Date = DateTime.Now,
@@ -234,7 +235,7 @@ namespace TicketPal.DataAccess.Tests.Respository
             var concert2 = new ConcertEntity()
             {
                 Id = 2,
-                Artist = performer,
+                Artists = new List<PerformerEntity>(),
                 AvailableTickets = 9800,
                 CurrencyType = Constants.CURRENCY_URUGUAYAN_PESO,
                 Date = DateTime.Now,

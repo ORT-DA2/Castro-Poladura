@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using TicketPal.Domain.Constants;
+using TicketPal.Domain.Entity;
 using TicketPal.Domain.Models.Request;
 using TicketPal.Domain.Models.Response;
 using TicketPal.Interfaces.Services.Performers;
@@ -30,8 +31,8 @@ namespace TicketPal.WebApi.Tests.Controllers
         {
             var request = new AddPerformerRequest 
             {
-                Name = "someName",
-                Artists = "name1|name2|name3",
+                UserInfo = new User { Firstname = "someName"},
+                Concerts = new List<Concert>(),
                 Genre = 2,
                 PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 StartYear = "12/03/1998"
@@ -57,8 +58,8 @@ namespace TicketPal.WebApi.Tests.Controllers
         {
             var request = new AddPerformerRequest 
             {
-                Name = "someName",
-                Artists = "name1|name2|name3",
+                UserInfo = new User { Firstname = "someName"},
+                Concerts = new List<Concert>(),
                 Genre = 2,
                 PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 StartYear = "12/03/1998"
@@ -85,8 +86,8 @@ namespace TicketPal.WebApi.Tests.Controllers
             var request = new UpdatePerformerRequest 
             {
                 Id = 2,
-                Name = "someName",
-                Artists = "name1|name2|name3",
+                UserInfo = new User { Firstname = "someName"},
+                Artists = new List<Performer>(),
                 Genre = 2,
                 PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 StartYear = "12/03/1998"
@@ -113,8 +114,8 @@ namespace TicketPal.WebApi.Tests.Controllers
             var request = new UpdatePerformerRequest 
             {
                 Id = 2,
-                Name = "someName",
-                Artists = "name1|name2|name3",
+                UserInfo = new User {Firstname = "someName" },
+                Artists = new List<Performer>(),
                 Genre = 2,
                 PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 StartYear = "12/03/1998"

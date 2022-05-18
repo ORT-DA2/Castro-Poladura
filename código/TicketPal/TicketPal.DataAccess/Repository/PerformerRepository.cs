@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using TicketPal.Domain.Entity;
 using TicketPal.Domain.Exceptions;
 
@@ -33,15 +35,52 @@ namespace TicketPal.DataAccess.Repository
                 throw new RepositoryException(string.Format("Couldn't find item to update with id: {0} doesn't exist", element.Id));
             }
 
-            found.Name = (element.Name == null ? found.Name : element.Name);
+            found.UserInfo = (element.UserInfo == null ? found.UserInfo : element.UserInfo);
             found.PerformerType = element.PerformerType;
             found.StartYear = (element.StartYear == null ? found.StartYear : element.StartYear);
-            found.Artists = (element.Artists == null ? found.Artists : element.Artists);
+            found.Concerts = (element.Concerts == null ? found.Concerts : element.Concerts);
             found.Genre = (element.Genre == null ? found.Genre : element.Genre);
             found.UpdatedAt = DateTime.Now;
 
             dbContext.SaveChanges();
             dbContext.Entry(found).State = EntityState.Modified;
+        }
+
+        public override PerformerEntity Get(int id)
+        {
+            return dbContext.Set<PerformerEntity>()
+            .Include(u => u.UserInfo)
+            .Include(p => p.Concerts)
+            .ThenInclude(c => c.Artists)
+            .FirstOrDefault(u => u.Id == id);
+        }
+
+        public override PerformerEntity Get(Expression<Func<PerformerEntity, bool>> predicate)
+        {
+            return dbContext.Set<PerformerEntity>()
+            .Include(u => u.UserInfo)
+            .Include(p => p.Concerts)
+            .ThenInclude(c => c.Artists)
+            .FirstOrDefault(predicate);
+        }
+
+        public override IEnumerable<PerformerEntity> GetAll()
+        {
+            return dbContext.Set<PerformerEntity>()
+            .Include(u => u.UserInfo)
+            .Include(p => p.Concerts)
+            .ThenInclude(c => c.Artists)
+            .AsEnumerable();
+        }
+
+        public override IEnumerable<PerformerEntity> GetAll(Expression<Func<PerformerEntity, bool>> predicate)
+        {
+            return dbContext.Set<PerformerEntity>()
+            .Include(u => u.UserInfo)
+            .Include(p => p.Concerts)
+            .ThenInclude(c => c.Artists)
+            .Where(predicate)
+            .AsEnumerable();
         }
     }
 }

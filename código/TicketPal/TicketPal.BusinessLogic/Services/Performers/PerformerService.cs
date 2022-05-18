@@ -31,16 +31,13 @@ namespace TicketPal.BusinessLogic.Services.Performers
             try
             {
                 GenreEntity genre = genreRepository.Get(model.Genre);
-                PerformerEntity found = performerRepository.Get(p => p.Name == model.Name);
-
-                if (found == null)
-                {
+                
                     if (genre != null)
                     {
                         performerRepository.Add(new PerformerEntity
                         {
-                            Name = model.Name,
-                            Artists = (model.Artists == null ? "" : model.Artists),
+                            UserInfo = mapper.Map<UserEntity>(model.UserInfo),
+                            Concerts = mapper.Map<IEnumerable<Concert>,IEnumerable<ConcertEntity>>(model.Concerts),
                             Genre = genre,
                             PerformerType = model.PerformerType,
                             StartYear = model.StartYear
@@ -55,15 +52,7 @@ namespace TicketPal.BusinessLogic.Services.Performers
                             Message = "Genre doesn't exists"
                         };
                     }
-                }
-                else
-                {
-                    return new OperationResult
-                    {
-                        ResultCode = Constants.CODE_FAIL,
-                        Message = "Performer already exists"
-                    };
-                }
+                
                 
             }
             catch (RepositoryException ex)
@@ -122,8 +111,8 @@ namespace TicketPal.BusinessLogic.Services.Performers
                 performerRepository.Update(new PerformerEntity
                 {
                     Id = model.Id,
-                    Name = model.Name,
-                    Artists = model.Artists,
+                    UserInfo = mapper.Map<UserEntity>(model.UserInfo),
+                    Concerts = mapper.Map<IEnumerable<ConcertEntity>>(model.Artists),
                     Genre = genre,
                     PerformerType = model.PerformerType,
                     StartYear = model.StartYear

@@ -18,14 +18,19 @@ namespace TicketPal.DataAccess
         protected override void OnModelCreating(ModelBuilder builder)
         {
             //BD mapping rules
-
             builder.Entity<UserEntity>()
-                .HasIndex(u => u.Email)
-                .IsUnique(true);
+                .HasOne(p => p.Performer)
+                .WithOne(u => u.UserInfo)
+                .HasForeignKey<PerformerEntity>(p => p.Id)
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<TicketEntity>()
                 .HasOne(t => t.Event);
-
+            
+            builder.Entity<ConcertEntity>()
+                .HasMany(c => c.Artists)
+                .WithMany(a => a.Concerts);
+                
             //Default values for BD
             builder.Entity<UserEntity>()
                 .HasData(DbData.Users);

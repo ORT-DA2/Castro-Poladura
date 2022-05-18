@@ -34,7 +34,9 @@ namespace TicketPal.DataAccess.Tests.Respository
             repository.Add(user1);
             repository.Add(user2);
 
-            Assert.IsTrue(repository.GetAll().ToList().Count == 2);
+            var fetch = repository.GetAll().ToList();
+
+            Assert.IsTrue(fetch.Count == 2);
 
         }
 

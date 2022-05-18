@@ -54,22 +54,22 @@ namespace TicketPal.DataAccess.Repository
             return dbContext.Set<TEntity>().Any(item => item.Id == id);
         }
 
-        public TEntity Get(int id)
+        public virtual TEntity Get(int id)
         {
             return dbContext.Set<TEntity>().FirstOrDefault(u => u.Id == id);
         }
 
-        public TEntity Get(Expression<Func<TEntity, bool>> predicate)
+        public virtual TEntity Get(Expression<Func<TEntity, bool>> predicate)
         {
             return dbContext.Set<TEntity>().FirstOrDefault(predicate);
         }
 
-        public IEnumerable<TEntity> GetAll()
+        public virtual IEnumerable<TEntity> GetAll()
         {
             return dbContext.Set<TEntity>().AsEnumerable();
         }
 
-        public IEnumerable<TEntity> GetAll(Expression<Func<TEntity, bool>> predicate)
+        public virtual IEnumerable<TEntity> GetAll(Expression<Func<TEntity, bool>> predicate)
         {
             return dbContext.Set<TEntity>()
                 .Where(predicate)

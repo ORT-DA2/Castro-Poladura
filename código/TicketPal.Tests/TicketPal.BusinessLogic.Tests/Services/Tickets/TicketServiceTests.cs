@@ -61,7 +61,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Tickets
             artist = new PerformerEntity()
             {
                 Id = 214,
-                Name = "Bryan Adams",
+                UserInfo = new UserEntity { Firstname = "Bryan Adams" },
                 Genre = genre,
                 PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 StartYear = "1978"
@@ -70,7 +70,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Tickets
             concert = new ConcertEntity()
             {
                 Id = 1,
-                Artist = artist,
+                Artists = new List<PerformerEntity>(),
                 AvailableTickets = 2416,
                 CurrencyType = Constants.CURRENCY_US_DOLLARS,
                 Date = DateTime.Now.AddDays(120),

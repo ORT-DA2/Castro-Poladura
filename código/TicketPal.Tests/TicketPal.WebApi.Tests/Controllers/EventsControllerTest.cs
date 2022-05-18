@@ -33,7 +33,7 @@ namespace TicketPal.WebApi.Tests.Controllers
         {
             var request = new AddConcertRequest
             {
-                Artist = 2,
+                Artists = new List<int> { 2 },
                 Date = DateTime.Now,
                 AvailableTickets = 201,
                 EventType = Constants.EVENT_CONCERT_TYPE,
@@ -62,7 +62,7 @@ namespace TicketPal.WebApi.Tests.Controllers
         {
             var request = new AddConcertRequest
             {
-                Artist = 2,
+                Artists = new List<int> { 2 },
                 Date = DateTime.Now,
                 AvailableTickets = 201,
                 EventType = Constants.EVENT_CONCERT_TYPE,
@@ -92,7 +92,7 @@ namespace TicketPal.WebApi.Tests.Controllers
             var request = new UpdateConcertRequest
             {
                 Id = 1,
-                Artist = 2,
+                Artists = new List<int> { 3 },
                 Date = DateTime.Now,
                 EventType = Constants.EVENT_CONCERT_TYPE,
                 TicketPrice = 197.8M,
@@ -121,7 +121,7 @@ namespace TicketPal.WebApi.Tests.Controllers
             var request = new UpdateConcertRequest
             {
                 Id = 1,
-                Artist = 2,
+                Artists = new List<int> { 2 },
                 Date = DateTime.Now,
                 EventType = Constants.EVENT_CONCERT_TYPE,
                 TicketPrice = 197.8M,

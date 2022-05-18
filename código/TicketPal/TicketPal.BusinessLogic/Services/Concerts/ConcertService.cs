@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Linq.Expressions;
 using TicketPal.Domain.Constants;
 using TicketPal.Domain.Entity;
 using TicketPal.Domain.Exceptions;
@@ -34,33 +33,20 @@ namespace TicketPal.BusinessLogic.Services.Concerts
         {
             try
             {
-                PerformerEntity artist = performerRepository.Get(model.Artist);
-                ConcertEntity found = concertRepository.Get(c => c.TourName == model.TourName && c.Artist.Name == artist.Name && c.Date == model.Date);
-
-                if (found == null)
+                ConcertEntity found = concertRepository.Get(c => c.TourName == model.TourName && c.Date == model.Date);
+                var artists = performerRepository.GetAll(a => model.Artists.Contains(a.UserInfo.Id));
+                if (found != null)
                 {
-                    if (artist != null)
+                    concertRepository.Add(new ConcertEntity
                     {
-                        concertRepository.Add(new ConcertEntity
-                        {
-                            Artist = artist,
-                            AvailableTickets = model.AvailableTickets,
-                            CurrencyType = model.CurrencyType,
-                            Date = model.Date,
-                            EventType = model.EventType,
-                            TicketPrice = model.TicketPrice,
-                            TourName = model.TourName
-                        });
-                    }
-                    else
-                    {
-                        return new OperationResult
-                        {
-                            ResultCode = Constants.CODE_FAIL,
-                            Message = "Artist doesn't exists"
-                        };
-                    }
-
+                        Artists = artists,
+                        AvailableTickets = model.AvailableTickets,
+                        CurrencyType = model.CurrencyType,
+                        Date = model.Date,
+                        EventType = model.EventType,
+                        TicketPrice = model.TicketPrice,
+                        TourName = model.TourName
+                    });
                 }
                 else
                 {
@@ -136,7 +122,7 @@ namespace TicketPal.BusinessLogic.Services.Concerts
                        DateTimeStyles.None);
 
                 concerts = concertRepository.GetAll(
-                    c => c.EventType.Equals(type) 
+                    c => c.EventType.Equals(type)
                         && c.Date >= dtStart
                 );
             }
@@ -151,7 +137,7 @@ namespace TicketPal.BusinessLogic.Services.Concerts
                        DateTimeStyles.None);
 
                 concerts = concertRepository.GetAll(
-                    c => c.EventType.Equals(type) 
+                    c => c.EventType.Equals(type)
                         && c.Date >= dtEnd
                 );
             }
@@ -168,10 +154,10 @@ namespace TicketPal.BusinessLogic.Services.Concerts
                        CultureInfo.InvariantCulture,
                        DateTimeStyles.None);
 
-                 concerts = concertRepository.GetAll(
-                    c => c.EventType.Equals(type) 
-                        && (c.Date >= dtStart && c.Date <= dtEnd)
-                );
+                concerts = concertRepository.GetAll(
+                   c => c.EventType.Equals(type)
+                       && (c.Date >= dtStart && c.Date <= dtEnd)
+               );
             }
             else
             {
@@ -185,9 +171,9 @@ namespace TicketPal.BusinessLogic.Services.Concerts
                        DateTimeStyles.None);
 
                 concerts = concertRepository.GetAll(
-                    c => c.EventType.Equals(type) 
+                    c => c.EventType.Equals(type)
                         && (c.Date >= dtStart && c.Date <= dtEnd)
-                        && c.Artist.Name.Equals(artistName)
+                        && c.Artists.Any(a => a.UserInfo.Firstname.Equals(artistName) || a.UserInfo.Lastname.Equals(artistName))
                 );
             }
             if (!newest)
@@ -207,12 +193,12 @@ namespace TicketPal.BusinessLogic.Services.Concerts
         {
             try
             {
-                PerformerEntity artist = performerRepository.Get(model.Artist);
+                var artists = performerRepository.GetAll(a => model.Artists.Contains(a.UserInfo.Id));
 
                 concertRepository.Update(new ConcertEntity
                 {
                     Id = model.Id,
-                    Artist = artist,
+                    Artists = artists,
                     CurrencyType = model.CurrencyType,
                     Date = model.Date,
                     EventType = model.EventType,
