@@ -38,7 +38,7 @@ namespace TicketPal.DataAccess.Tests.Respository
 
             concert = new ConcertEntity()
             {
-                Artists = artists,
+                Artists = artists.ToList(),
                 AvailableTickets = 500,
                 CurrencyType = Constants.CURRENCY_US_DOLLARS,
                 Date = DateTime.Now,
@@ -127,7 +127,7 @@ namespace TicketPal.DataAccess.Tests.Respository
             var concert1 = new ConcertEntity()
             {
                 Id = 2,
-                Artists = artists,
+                Artists = artists.ToList(),
                 AvailableTickets = 5624,
                 CurrencyType = Constants.CURRENCY_URUGUAYAN_PESO,
                 Date = DateTime.Now,

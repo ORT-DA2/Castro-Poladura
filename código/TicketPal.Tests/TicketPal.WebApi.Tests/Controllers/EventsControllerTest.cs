@@ -33,7 +33,7 @@ namespace TicketPal.WebApi.Tests.Controllers
         {
             var request = new AddConcertRequest
             {
-                Artists = new List<int> { 2 },
+                ArtistsIds = new List<int> { 2 },
                 Date = DateTime.Now,
                 AvailableTickets = 201,
                 EventType = Constants.EVENT_CONCERT_TYPE,
@@ -62,7 +62,7 @@ namespace TicketPal.WebApi.Tests.Controllers
         {
             var request = new AddConcertRequest
             {
-                Artists = new List<int> { 2 },
+                ArtistsIds = new List<int> { 2 },
                 Date = DateTime.Now,
                 AvailableTickets = 201,
                 EventType = Constants.EVENT_CONCERT_TYPE,
@@ -92,7 +92,6 @@ namespace TicketPal.WebApi.Tests.Controllers
             var request = new UpdateConcertRequest
             {
                 Id = 1,
-                Artists = new List<int> { 3 },
                 Date = DateTime.Now,
                 EventType = Constants.EVENT_CONCERT_TYPE,
                 TicketPrice = 197.8M,
@@ -121,7 +120,6 @@ namespace TicketPal.WebApi.Tests.Controllers
             var request = new UpdateConcertRequest
             {
                 Id = 1,
-                Artists = new List<int> { 2 },
                 Date = DateTime.Now,
                 EventType = Constants.EVENT_CONCERT_TYPE,
                 TicketPrice = 197.8M,
@@ -208,8 +206,8 @@ namespace TicketPal.WebApi.Tests.Controllers
             var result = controller.GetConcerts(
                 Constants.EVENT_CONCERT_TYPE,
                 true,
-                DateTime.Now.ToString("dd/M/yyyy"),
-                DateTime.Now.AddDays(30).ToString("dd/M/yyyy"),
+                DateTime.Now.ToString("dd/M/yyyy hh:mm"),
+                DateTime.Now.AddDays(30).ToString("dd/M/yyyy hh:mm"),
                 "Bono"
                 );
             var objectResult = result as ObjectResult;
@@ -286,7 +284,6 @@ namespace TicketPal.WebApi.Tests.Controllers
                 new Concert
                 {
                     Id = 1,
-                    Artist = new Performer(),
                     Date = DateTime.Now,
                     AvailableTickets = 201,
                     EventType = Constants.EVENT_CONCERT_TYPE,
@@ -297,7 +294,6 @@ namespace TicketPal.WebApi.Tests.Controllers
                 new Concert
                 {
                     Id = 2,
-                    Artist = new Performer(),
                     Date = DateTime.Now,
                     AvailableTickets = 201,
                     EventType = Constants.EVENT_CONCERT_TYPE,
@@ -308,7 +304,6 @@ namespace TicketPal.WebApi.Tests.Controllers
                 new Concert
                 {
                     Id = 3,
-                    Artist = new Performer(),
                     Date = DateTime.Now,
                     AvailableTickets = 201,
                     EventType = Constants.EVENT_CONCERT_TYPE,

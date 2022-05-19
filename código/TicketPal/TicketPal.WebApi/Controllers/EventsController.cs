@@ -70,7 +70,7 @@ namespace TicketPal.WebApi.Controllers
             }
         }
 
-        [HttpGet("id")]
+        [HttpGet("{id}")]
         public IActionResult GetConcert([FromRoute] int id)
         {
             return Ok(eventService.GetConcert(id));
@@ -87,24 +87,24 @@ namespace TicketPal.WebApi.Controllers
         {
             DateTime dtEnd;
             var parseStartDate = DateTime.TryParseExact(startDate,
-                       "dd/M/yyyy",
+                       "dd/M/yyyy hh:mm",
                        CultureInfo.InvariantCulture,
                        DateTimeStyles.None,
                        out dtEnd);
             DateTime dtStart;
             var parseEndDate = DateTime.TryParseExact(endDate,
-                       "dd/M/yyyy",
+                       "dd/M/yyyy hh:mm",
                        CultureInfo.InvariantCulture,
                        DateTimeStyles.None,
                        out dtStart);
 
-            if (String.IsNullOrEmpty(startDate) || !parseStartDate)
+            if (!String.IsNullOrEmpty(startDate) && !parseStartDate)
             {
-                return BadRequest(new BadRequestError("Start date not in: dd/M/yyyy"));
+                return BadRequest(new BadRequestError("Start date not in: dd/M/yyyy hh:mm"));
             }
-            if (String.IsNullOrEmpty(endDate) || !parseEndDate)
+            if (!String.IsNullOrEmpty(endDate) && !parseEndDate)
             {
-                return BadRequest(new BadRequestError("End date not in: dd/M/yyyy"));
+                return BadRequest(new BadRequestError("End date not in: dd/M/yyyy hh:mm"));
             }
 
             return Ok(eventService.GetConcerts(type,newest,startDate,endDate,performerName));

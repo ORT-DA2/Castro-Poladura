@@ -41,7 +41,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
 
             concertRequest = new AddConcertRequest()
             {
-                Artists = new List<int> { 1 },
+                ArtistsIds = new List<int> { 1 },
                 Date = DateTime.Now,
                 AvailableTickets = 30000,
                 EventType = Constants.EVENT_CONCERT_TYPE,
@@ -60,7 +60,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
         public void AddConcertSuccesfullyTest()
         {
             this.mockConcertRepo.Setup(m => m.Get(It.IsAny<Expression<Func<ConcertEntity, bool>>>()))
-                .Returns(new ConcertEntity());
+                .Returns(It.IsAny<ConcertEntity>());
             this.factoryMock.Setup(m => m.GetRepository(typeof(PerformerEntity))).Returns(this.mockPerformerRepo.Object);
             this.factoryMock.Setup(f => f.GetRepository(typeof(ConcertEntity))).Returns(this.mockConcertRepo.Object);
             this.concertService = new ConcertService(this.factoryMock.Object, this.mapper);
@@ -85,9 +85,9 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
         }
 
         [TestMethod]
-        public void AddConcertWithNoExistentArtistTest()
+        public void AddConcertWithExistentArtistTest()
         {
-            this.mockPerformerRepo.Setup(m => m.Get(It.IsAny<int>())).Returns(It.IsAny<PerformerEntity>());
+            this.mockConcertRepo.Setup(m => m.Get(It.IsAny<Expression<Func<ConcertEntity, bool>>>())).Returns(new ConcertEntity());
 
             this.factoryMock.Setup(m => m.GetRepository(typeof(ConcertEntity))).Returns(this.mockConcertRepo.Object);
             this.factoryMock.Setup(m => m.GetRepository(typeof(PerformerEntity))).Returns(this.mockPerformerRepo.Object);
@@ -142,7 +142,6 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             var tourName = "The Tour";
             var updateRequest = new UpdateConcertRequest
             {
-                Artists = concertRequest.Artists,
                 Date = concertRequest.Date,
                 EventType = concertRequest.EventType,
                 TicketPrice = concertRequest.TicketPrice,
@@ -266,8 +265,8 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             IEnumerable<Concert> result = concertService.GetConcerts(
                 Constants.EVENT_CONCERT_TYPE,
                 true,
-                DateTime.Now.ToString("dd/M/yyyy"),
-                DateTime.Now.AddDays(30).ToString("dd/M/yyyy"),
+                DateTime.Now.ToString("dd/M/yyyy hh:mm"),
+                DateTime.Now.AddDays(30).ToString("dd/M/yyyy hh:mm"),
                 null
                 );
 
@@ -337,8 +336,8 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             IEnumerable<Concert> result = concertService.GetConcerts(
                 Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 true,
-                DateTime.Now.ToString("dd/M/yyyy"),
-                DateTime.Now.AddDays(30).ToString("dd/M/yyyy"),
+                DateTime.Now.ToString("dd/M/yyyy hh:mm"),
+                DateTime.Now.AddDays(30).ToString("dd/M/yyyy hh:mm"),
                 artist2.UserInfo.Firstname
                 );
 
@@ -409,8 +408,8 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             IEnumerable<Concert> result = concertService.GetConcerts(
                 Constants.EVENT_CONCERT_TYPE,
                 false,
-                DateTime.Now.ToString("dd/M/yyyy"),
-                DateTime.Now.AddDays(30).ToString("dd/M/yyyy"),
+                DateTime.Now.ToString("dd/M/yyyy hh:mm"),
+                DateTime.Now.AddDays(30).ToString("dd/M/yyyy hh:mm"),
                 artist2.UserInfo.Firstname
                 );
 
@@ -478,11 +477,12 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             this.mockConcertRepo.Setup(r => r.GetAll(It.IsAny<Expression<Func<ConcertEntity, bool>>>())).Returns(dbAccounts);
             this.factoryMock.Setup(m => m.GetRepository(typeof(ConcertEntity))).Returns(this.mockConcertRepo.Object);
             this.concertService = new ConcertService(this.factoryMock.Object, this.mapper);
+            var date = DateTime.Now.AddDays(30).ToString("dd/M/yyyy hh:mm");
             IEnumerable<Concert> result = concertService.GetConcerts(
                 Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 true,
                 null,
-                DateTime.Now.AddDays(30).ToString("dd/M/yyyy"),
+                date,
                 null
                 );
 
@@ -552,7 +552,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             IEnumerable<Concert> result = concertService.GetConcerts(
                 Constants.EVENT_CONCERT_TYPE,
                 true,
-                DateTime.Now.AddDays(30).ToString("dd/M/yyyy"),
+                DateTime.Now.AddDays(30).ToString("dd/M/yyyy hh:mm"),
                 null,
                 null
                 );

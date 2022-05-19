@@ -20,6 +20,7 @@ namespace TicketPal.BusinessLogic.Services.Tickets
         private readonly IMapper mapper;
         public IGenericRepository<TicketEntity> ticketRepository;
         public IGenericRepository<ConcertEntity> concertRepository;
+        public IGenericRepository<UserEntity> userRepository;
 
         public TicketService(IServiceFactory factory, IMapper mapper)
         {
@@ -27,6 +28,7 @@ namespace TicketPal.BusinessLogic.Services.Tickets
             this.serviceFactory = factory;
             ticketRepository = serviceFactory.GetRepository(typeof(TicketEntity)) as IGenericRepository<TicketEntity>;
             concertRepository = serviceFactory.GetRepository(typeof(ConcertEntity)) as IGenericRepository<ConcertEntity>;
+            userRepository = serviceFactory.GetRepository(typeof(UserEntity)) as IGenericRepository<UserEntity>;
         }
 
         public OperationResult AddTicket(AddTicketRequest model)
@@ -39,26 +41,38 @@ namespace TicketPal.BusinessLogic.Services.Tickets
 
                 if (newEvent != null)
                 {
-                    UserEntity buyer = new UserEntity()
+                    if(model.LoggedIn)
                     {
-                        Id = model.User.Id,
-                        Firstname = model.User.Firstname,
-                        Lastname = model.User.Lastname,
-                        Email = model.User.Email,
-                        Password = model.User.Password,
-                        Role = model.User.Role,
-                        ActiveAccount = model.User.ActiveAccount
-                    };
-
-                    ticketRepository.Add(new TicketEntity
+                       var buyer = userRepository.Get(model.LoggedUserId);
+                       ticketRepository.Add(new TicketEntity
+                        {
+                            Buyer = buyer,
+                            PurchaseDate = DateTime.Now,
+                            Status = Constants.TICKET_PURCHASED_STATUS,
+                            Code = ticketCode.GenerateTicketCode(),
+                            Event = newEvent
+                        });
+                    } 
+                    else 
                     {
-                        Buyer = buyer,
-                        PurchaseDate = DateTime.Now,
-                        Status = Constants.TICKET_PURCHASED_STATUS,
-                        Code = ticketCode.GenerateTicketCode(),
-                        Event = newEvent
-                    });
-                }
+                        var buyer = new UserEntity
+                        {
+                            Firstname = model.NewUser.FirstName,
+                            Lastname = model.NewUser.LastName,
+                            Email = model.NewUser.Email,
+                            ActiveAccount = false
+                        };
+                        ticketRepository.Add(new TicketEntity
+                        {
+                            Buyer = buyer,
+                            PurchaseDate = DateTime.Now,
+                            Status = Constants.TICKET_PURCHASED_STATUS,
+                            Code = ticketCode.GenerateTicketCode(),
+                            Event = newEvent
+                        });
+                    }   
+                        
+                }   
                 else
                 {
                     return new OperationResult

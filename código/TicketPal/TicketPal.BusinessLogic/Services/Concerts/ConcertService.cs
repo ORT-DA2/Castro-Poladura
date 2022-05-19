@@ -33,13 +33,13 @@ namespace TicketPal.BusinessLogic.Services.Concerts
         {
             try
             {
-                ConcertEntity found = concertRepository.Get(c => c.TourName == model.TourName && c.Date == model.Date);
-                var artists = performerRepository.GetAll(a => model.Artists.Contains(a.UserInfo.Id));
-                if (found != null)
+                var found = concertRepository.Get(c => c.TourName == model.TourName && c.Date == model.Date);
+                var artists = performerRepository.GetAll(a => model.ArtistsIds.Contains(a.UserInfo.Id));
+                if (found == null)
                 {
                     concertRepository.Add(new ConcertEntity
                     {
-                        Artists = artists,
+                        Artists = artists.ToList(),
                         AvailableTickets = model.AvailableTickets,
                         CurrencyType = model.CurrencyType,
                         Date = model.Date,
@@ -117,7 +117,7 @@ namespace TicketPal.BusinessLogic.Services.Concerts
             )
             {
                 var dtStart = DateTime.ParseExact(startDate,
-                       "dd/M/yyyy",
+                       "dd/M/yyyy hh:mm",
                        CultureInfo.InvariantCulture,
                        DateTimeStyles.None);
 
@@ -132,7 +132,7 @@ namespace TicketPal.BusinessLogic.Services.Concerts
             )
             {
                 var dtEnd = DateTime.ParseExact(endDate,
-                       "dd/M/yyyy",
+                       "dd/M/yyyy hh:mm",
                        CultureInfo.InvariantCulture,
                        DateTimeStyles.None);
 
@@ -141,16 +141,26 @@ namespace TicketPal.BusinessLogic.Services.Concerts
                         && c.Date >= dtEnd
                 );
             }
+            else if (String.IsNullOrEmpty(startDate)
+            && String.IsNullOrEmpty(endDate)
+            && !String.IsNullOrEmpty(artistName)
+            )
+            {
+                concerts = concertRepository.GetAll(
+                    c => c.Artists
+                        .Any(a => a.UserInfo.Firstname.Equals(artistName) || a.UserInfo.Lastname.Equals(artistName))
+                );
+            }
             else if (!String.IsNullOrEmpty(startDate)
             && !String.IsNullOrEmpty(endDate)
             && String.IsNullOrEmpty(artistName))
             {
                 var dtStart = DateTime.ParseExact(startDate,
-                       "dd/M/yyyy",
+                       "dd/M/yyyy hh:mm",
                        CultureInfo.InvariantCulture,
                        DateTimeStyles.None);
-                var dtEnd = DateTime.ParseExact(startDate,
-                       "dd/M/yyyy",
+                var dtEnd = DateTime.ParseExact(endDate,
+                       "dd/M/yyyy hh:mm",
                        CultureInfo.InvariantCulture,
                        DateTimeStyles.None);
 
@@ -162,11 +172,11 @@ namespace TicketPal.BusinessLogic.Services.Concerts
             else
             {
                 var dtStart = DateTime.ParseExact(startDate,
-                       "dd/M/yyyy",
+                       "dd/M/yyyy hh:mm",
                        CultureInfo.InvariantCulture,
                        DateTimeStyles.None);
                 var dtEnd = DateTime.ParseExact(endDate,
-                       "dd/M/yyyy",
+                       "dd/M/yyyy hh:mm",
                        CultureInfo.InvariantCulture,
                        DateTimeStyles.None);
 
@@ -193,12 +203,10 @@ namespace TicketPal.BusinessLogic.Services.Concerts
         {
             try
             {
-                var artists = performerRepository.GetAll(a => model.Artists.Contains(a.UserInfo.Id));
 
                 concertRepository.Update(new ConcertEntity
                 {
                     Id = model.Id,
-                    Artists = artists,
                     CurrencyType = model.CurrencyType,
                     Date = model.Date,
                     EventType = model.EventType,

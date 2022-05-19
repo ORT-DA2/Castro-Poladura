@@ -67,14 +67,12 @@ namespace TicketPal.BusinessLogic.Services.Performers
                 performerRepository.Add(new PerformerEntity
                 {
                     UserInfo = user,
-                    Concerts = concerts,
+                    Concerts = concerts.ToList(),
                     Genre = genre,
                     PerformerType = model.PerformerType,
                     StartYear = model.StartYear
 
                 });
-
-
             }
             catch (RepositoryException ex)
             {
@@ -119,7 +117,7 @@ namespace TicketPal.BusinessLogic.Services.Performers
 
         public IEnumerable<Performer> GetPerformers()
         {
-            var performers = performerRepository.GetAll();
+            var performers = performerRepository.GetAll().ToList();
             return mapper.Map<IEnumerable<PerformerEntity>, IEnumerable<Performer>>(performers);
         }
 
@@ -127,15 +125,25 @@ namespace TicketPal.BusinessLogic.Services.Performers
         {
             try
             {
-                GenreEntity genre = genreRepository.Get(model.Genre);
+                var genre = genreRepository.Get(model.GenreId);
+                var user = userRepository.Get(model.UserId);
+                var artists = performerRepository.GetAll(a => model.ArtistsIds.Contains(a.Id));
+
+                if(!string.IsNullOrEmpty(model.PerformerType) && !Constants.ValidPerformerTypes.Contains(model.PerformerType))
+                {
+                    return new OperationResult
+                    {
+                        ResultCode = Constants.CODE_FAIL,
+                        Message = "The performer type is not valid"
+                    };
+                }
 
                 performerRepository.Update(new PerformerEntity
                 {
                     Id = model.Id,
-                    UserInfo = mapper.Map<UserEntity>(model.UserInfo),
-                    Concerts = mapper.Map<IEnumerable<ConcertEntity>>(model.Artists),
-                    Genre = genre,
+                    UserInfo = user,
                     PerformerType = model.PerformerType,
+                    Genre = genre,
                     StartYear = model.StartYear
                 });
             }
@@ -151,7 +159,7 @@ namespace TicketPal.BusinessLogic.Services.Performers
             return new OperationResult
             {
                 ResultCode = Constants.CODE_SUCCESS,
-                Message = "Concert updated successfully"
+                Message = "Performer updated successfully"
             };
         }
     }

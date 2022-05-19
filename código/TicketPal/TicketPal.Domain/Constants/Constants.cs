@@ -11,6 +11,12 @@ namespace TicketPal.Domain.Constants
             ROLE_ADMIN,
             ROLE_ARTIST
         };
+        // Performer Types
+        public static string[] ValidPerformerTypes = new string[]
+        {
+            PERFORMER_TYPE_BAND,
+            PERFORMER_TYPE_SOLO_ARTIST
+        };
         
         public const string ROLE_SPECTATOR = "SPECTATOR";
         public const string ROLE_SELLER = "SELLER";

@@ -92,7 +92,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Tickets
             ticketRequest = new AddTicketRequest()
             {
                 EventId = concert.Id,
-                User = userResponse
+                LoggedUserId = 1
             };
 
             this.mockTicketRepo.Setup(m => m.Exists(It.IsAny<int>())).Returns(false);

@@ -56,7 +56,7 @@ namespace TicketPal.DataAccess.Tests.Entity
             concert.TicketPrice = ticketPrice;
             concert.CurrencyType = currency;
             concert.TourName = tourName;
-            concert.Artists = artists;
+            concert.Artists = artists.ToList();
             concert.Id = id;
             concert.CreatedAt = createdAt;
             concert.UpdatedAt = updatedAt;

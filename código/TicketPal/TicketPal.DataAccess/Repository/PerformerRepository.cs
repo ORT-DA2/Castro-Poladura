@@ -46,7 +46,7 @@ namespace TicketPal.DataAccess.Repository
             }
 
             found.UserInfo = (element.UserInfo == null ? found.UserInfo : element.UserInfo);
-            found.PerformerType = element.PerformerType;
+            found.PerformerType = (element.PerformerType == null ? found.PerformerType : element.PerformerType);
             found.StartYear = (element.StartYear == null ? found.StartYear : element.StartYear);
             found.Concerts = (element.Concerts == null ? found.Concerts : element.Concerts);
             found.Genre = (element.Genre == null ? found.Genre : element.Genre);

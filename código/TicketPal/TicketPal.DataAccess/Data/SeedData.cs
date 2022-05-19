@@ -21,7 +21,8 @@ namespace TicketPal.DataAccess.Data
                         Lastname = "Castro",
                         Email = "lucas@example.com",
                         Password = BC.HashPassword("lucas1"),
-                        Role = Constants.ROLE_ADMIN
+                        Role = Constants.ROLE_ADMIN,
+                        ActiveAccount = true
                     },
                     new UserEntity
                     {
@@ -30,7 +31,8 @@ namespace TicketPal.DataAccess.Data
                         Lastname = "Poladura",
                         Email = "ricardo@example.com",
                         Password = BC.HashPassword("ricardo1"),
-                        Role = Constants.ROLE_ADMIN
+                        Role = Constants.ROLE_ADMIN,
+                        ActiveAccount = true
                     },
                     new UserEntity
                     {
@@ -39,7 +41,8 @@ namespace TicketPal.DataAccess.Data
                         Lastname = "Test",
                         Email = "spectator@example.com",
                         Password = BC.HashPassword("spectator1"),
-                        Role = Constants.ROLE_SPECTATOR
+                        Role = Constants.ROLE_SPECTATOR,
+                        ActiveAccount = true
                     },
                     new UserEntity
                     {
@@ -48,7 +51,8 @@ namespace TicketPal.DataAccess.Data
                         Lastname = "Test",
                         Email = "seller@example.com",
                         Password = BC.HashPassword("seller1"),
-                        Role = Constants.ROLE_SELLER
+                        Role = Constants.ROLE_SELLER,
+                        ActiveAccount = true
                     },
                     new UserEntity
                     {
@@ -57,7 +61,8 @@ namespace TicketPal.DataAccess.Data
                         Lastname = "Test",
                         Email = "supervisor@example.com",
                         Password = BC.HashPassword("supervisor1"),
-                        Role = Constants.ROLES_SUPERVISOR
+                        Role = Constants.ROLES_SUPERVISOR,
+                        ActiveAccount = true
                     },
                     new UserEntity
                     {
@@ -66,7 +71,8 @@ namespace TicketPal.DataAccess.Data
                         Lastname = "Test",
                         Email = "artist@example.com",
                         Password = BC.HashPassword("artist1"),
-                        Role = Constants.ROLE_ARTIST
+                        Role = Constants.ROLE_ARTIST,
+                        ActiveAccount = true
                     }
                 };
             }

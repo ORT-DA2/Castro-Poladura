@@ -21,6 +21,6 @@ namespace TicketPal.Domain.Models.Request
         [Required]
         public string TourName { get; set; }
         [Required]
-        public IEnumerable<int> Artists { get; set; }
+        public IEnumerable<int> ArtistsIds { get; set; }
     }
 }

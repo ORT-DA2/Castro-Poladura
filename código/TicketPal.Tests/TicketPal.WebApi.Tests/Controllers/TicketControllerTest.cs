@@ -33,9 +33,19 @@ namespace TicketPal.WebApi.Tests.Controllers
         [TestMethod]
         public void AddTicketTestOk()
         {
+            var mockHttpContext = new Mock<HttpContext>();
+            var mockHeaderHttp = new Mock<IHeaderDictionary>();
+            mockHeaderHttp.Setup(x => x[It.IsAny<string>()]).Returns("someHeader");
+            var mockHttpRequest = new Mock<HttpRequest>();
+            mockHttpRequest.Setup(s => s.Headers).Returns(mockHeaderHttp.Object);
+            var mockServiceProvider = new Mock<IServiceProvider>();
+            mockHttpContext.Setup(s => s.Request).Returns(mockHttpRequest.Object);
+            
+            controller.ControllerContext.HttpContext = mockHttpContext.Object;
+            
             var request = new AddTicketRequest
             {
-                User = new User(),
+                LoggedUserId = 1,
                 EventId = 2
             };
 
@@ -47,7 +57,7 @@ namespace TicketPal.WebApi.Tests.Controllers
 
             mockTicketService.Setup(s => s.AddTicket(request)).Returns(operationResult);
 
-            var result = controller.AddTicket(request);
+            var result = controller.AddTicket(It.IsAny<int>(),request);
             var objectResult = result as ObjectResult;
             var statusCode = objectResult.StatusCode;
 
@@ -59,7 +69,7 @@ namespace TicketPal.WebApi.Tests.Controllers
         {
             var request = new AddTicketRequest
             {
-                User = It.IsAny<User>(),
+                LoggedUserId = 1,
                 EventId = It.IsAny<int>()
             };
 
@@ -71,7 +81,7 @@ namespace TicketPal.WebApi.Tests.Controllers
 
             mockTicketService.Setup(s => s.AddTicket(request)).Returns(operationResult);
 
-            var result = controller.AddTicket(request);
+            var result = controller.AddTicket(It.IsAny<int>(),request);
             var objectResult = result as ObjectResult;
             var statusCode = objectResult.StatusCode;
 
@@ -244,15 +254,7 @@ namespace TicketPal.WebApi.Tests.Controllers
                         TicketPrice = 200M,
                         CurrencyType = Constants.CURRENCY_URUGUAYAN_PESO,
                         EventType = Constants.EVENT_CONCERT_TYPE,
-                        TourName = "SomeName",
-                        Artist = new Performer {
-                            Id = 4,
-                            UserInfo = new User {Firstname = "someName"},
-                            PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
-                            StartYear = "1987",
-                            Genre = new Genre {GenreName = "Pop"},
-                            Concerts = new List<Concert>()
-                        }
+                        TourName = "SomeName"
                     }
                 },
                 new Ticket {
@@ -264,15 +266,7 @@ namespace TicketPal.WebApi.Tests.Controllers
                         TicketPrice = 188M,
                         CurrencyType = Constants.CURRENCY_US_DOLLARS,
                         EventType = Constants.EVENT_CONCERT_TYPE,
-                        TourName = "A tour name",
-                        Artist = new Performer {
-                            Id = 3,
-                            UserInfo = new User { Firstname = "someName"},
-                            PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
-                            StartYear = "1987",
-                            Genre = new Genre {GenreName = "Rock"},
-                            Concerts = new List<Concert>()
-                        }
+                        TourName = "A tour name"
                     }
                 }
             };

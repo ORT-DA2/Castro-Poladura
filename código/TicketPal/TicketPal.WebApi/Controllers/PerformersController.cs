@@ -51,7 +51,7 @@ namespace TicketPal.WebApi.Controllers
             }
         }
 
-        [HttpDelete("id")]
+        [HttpDelete("{id}")]
         [AuthFilter(Constants.ROLE_ADMIN)]
         public IActionResult DeletePerformer([FromRoute]int id)
         {
@@ -67,13 +67,15 @@ namespace TicketPal.WebApi.Controllers
             }
         }
 
-        [HttpGet("id")]
+        [HttpGet("{id}")]
+        [AuthFilter(Constants.ROLE_ADMIN)]
         public IActionResult GetPerformer([FromRoute]int id)
         {
             return Ok(performerService.GetPerformer(id));
         }
 
         [HttpGet]
+        [AuthFilter(Constants.ROLE_ADMIN)]
         public IActionResult GetPerformers()
         {
             return Ok(performerService.GetPerformers());

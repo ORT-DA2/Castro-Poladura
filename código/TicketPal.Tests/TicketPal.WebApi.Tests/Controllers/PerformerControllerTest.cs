@@ -86,10 +86,9 @@ namespace TicketPal.WebApi.Tests.Controllers
             var request = new UpdatePerformerRequest 
             {
                 Id = 2,
-                UserInfo = new User { Firstname = "someName"},
-                Artists = new List<Performer>(),
-                Genre = 2,
-                PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
+                UserId = 1,
+                ArtistsIds = new List<int>{1,2,3},
+                GenreId = 2,
                 StartYear = "12/03/1998"
             };
 
@@ -114,10 +113,9 @@ namespace TicketPal.WebApi.Tests.Controllers
             var request = new UpdatePerformerRequest 
             {
                 Id = 2,
-                UserInfo = new User {Firstname = "someName" },
-                Artists = new List<Performer>(),
-                Genre = 2,
-                PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
+                UserId = 2,
+                ArtistsIds = new List<int> {1,2},
+                GenreId = 2,
                 StartYear = "12/03/1998"
             };
 

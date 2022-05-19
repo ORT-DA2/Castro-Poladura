@@ -144,7 +144,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Performers
         {
             var updateRequest = new UpdatePerformerRequest
             {
-                UserInfo = new User { Firstname = performer.UserInfo.Firstname}
+                UserId = 1
             };
 
             this.mockPerformerRepo.Setup(m => m.Update(It.IsAny<PerformerEntity>())).Verifiable();

@@ -49,10 +49,10 @@ namespace TicketPal.DataAccess.Repository
             found.Date = element.Date;
             found.AvailableTickets = element.AvailableTickets;
             found.TicketPrice = element.TicketPrice;
-            found.CurrencyType = element.CurrencyType;
-            found.EventType = element.EventType;
+            found.CurrencyType = element.CurrencyType == null ? found.CurrencyType : element.CurrencyType;
+            found.EventType = element.EventType == null ? found.EventType : element.EventType;
             found.UpdatedAt = DateTime.Now;
-            found.Artists = (element.Artists == null) ? found.Artists : element.Artists;
+            found.TourName = element.TourName == null ? found.TourName : element.TourName;
 
             dbContext.SaveChanges();
             dbContext.Entry(found).State = EntityState.Modified;

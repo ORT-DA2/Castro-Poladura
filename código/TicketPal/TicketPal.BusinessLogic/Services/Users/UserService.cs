@@ -131,7 +131,8 @@ namespace TicketPal.BusinessLogic.Services.Users
                         Lastname = model.Lastname,
                         Password = BC.HashPassword(model.Password),
                         Role = model.Role,
-                        Email = model.Email
+                        Email = model.Email,
+                        ActiveAccount = true
                     });
             }
             catch (RepositoryException ex)
@@ -161,7 +162,8 @@ namespace TicketPal.BusinessLogic.Services.Users
                             Id = model.Id,
                             Firstname = model.Firstname,
                             Lastname = model.Lastname,
-                            Email = model.Email
+                            Email = model.Email,
+                            ActiveAccount = model.ActiveAccount
                         });
                 }
                 else if (authorization.Equals(Constants.ROLE_ADMIN))
@@ -176,7 +178,8 @@ namespace TicketPal.BusinessLogic.Services.Users
                                 Lastname = model.Lastname,
                                 Password = BC.HashPassword(model.Password),
                                 Email = model.Email,
-                                Role = model.Role
+                                Role = model.Role,
+                                ActiveAccount = model.ActiveAccount
                             });
                     }
                     else

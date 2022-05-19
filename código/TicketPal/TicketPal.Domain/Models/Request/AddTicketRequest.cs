@@ -1,11 +1,17 @@
-﻿using TicketPal.Domain.Models.Response;
+﻿using System.Text.Json.Serialization;
+using TicketPal.Domain.Models.Response;
 
 namespace TicketPal.Domain.Models.Request
 {
     public class AddTicketRequest
     {
+        [JsonIgnore]
         public int EventId { get; set; }
-        public User User { get; set; }
+        [JsonIgnore]
+        public bool LoggedIn { get; set ;}
+        public TicketBuyer NewUser { get; set ;}
+        [JsonIgnore]
+        public int LoggedUserId { get; set; }
 
     }
 }

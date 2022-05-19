@@ -9,6 +9,8 @@ using TicketPal.WebApi.Filters.Auth;
 
 namespace TicketPal.WebApi.Controllers
 {
+    [ApiController]
+    [Route("api/[controller]")]
     public class TicketController : ControllerBase
     {
         private ITicketService ticketService;
@@ -19,10 +21,21 @@ namespace TicketPal.WebApi.Controllers
             this.ticketService = service;
         }
 
-        [HttpPost]
+        [HttpPost("purchase/{eventId}")]
         [AuthFilter(Constants.ROLE_SELLER+","+Constants.ROLE_SPECTATOR+","+Constants.ROLE_ADMIN)]
-        public IActionResult AddTicket([FromBody] AddTicketRequest request)
+        public IActionResult AddTicket([FromRoute]int eventId,[FromBody] AddTicketRequest request)
         {
+            request.EventId = eventId;
+            var token = HttpContext.Request.Headers["Authorization"]
+                .FirstOrDefault()?.Split(" ").Last();
+            var authenticatedUser = userService.RetrieveUserFromToken(token);
+
+            if (authenticatedUser != null && authenticatedUser.Role == Constants.ROLE_SPECTATOR)
+            {
+                request.LoggedIn = true;
+                request.LoggedUserId = authenticatedUser.Id;
+            }
+
             var result = ticketService.AddTicket(request);
 
             if (result.ResultCode == Constants.CODE_FAIL)
