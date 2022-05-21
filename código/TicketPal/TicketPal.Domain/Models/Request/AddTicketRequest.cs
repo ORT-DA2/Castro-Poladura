@@ -8,8 +8,8 @@ namespace TicketPal.Domain.Models.Request
         [JsonIgnore]
         public int EventId { get; set; }
         [JsonIgnore]
-        public bool LoggedIn { get; set ;}
-        public TicketBuyer NewUser { get; set ;}
+        public bool UserLogged { get; set; }
+        public TicketBuyer NewUser { get; set; }
         [JsonIgnore]
         public int LoggedUserId { get; set; }
 

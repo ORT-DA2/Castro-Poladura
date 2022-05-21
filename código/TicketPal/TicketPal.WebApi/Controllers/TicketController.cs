@@ -22,17 +22,20 @@ namespace TicketPal.WebApi.Controllers
         }
 
         [HttpPost("purchase/{eventId}")]
-        [AuthFilter(Constants.ROLE_SELLER+","+Constants.ROLE_SPECTATOR+","+Constants.ROLE_ADMIN)]
-        public IActionResult AddTicket([FromRoute]int eventId,[FromBody] AddTicketRequest request)
+        [AuthFilter(Constants.ROLE_SELLER + "," + Constants.ROLE_SPECTATOR + "," + Constants.ROLE_ADMIN)]
+        public IActionResult AddTicket([FromRoute] int eventId, [FromBody] AddTicketRequest request)
         {
+            this.userService = this.HttpContext
+                .RequestServices
+                .GetService(typeof(IUserService)) as IUserService;
             request.EventId = eventId;
             var token = HttpContext.Request.Headers["Authorization"]
                 .FirstOrDefault()?.Split(" ").Last();
             var authenticatedUser = userService.RetrieveUserFromToken(token);
 
-            if (authenticatedUser != null && authenticatedUser.Role == Constants.ROLE_SPECTATOR)
+            if (authenticatedUser != null)
             {
-                request.LoggedIn = true;
+                request.UserLogged = authenticatedUser != null;
                 request.LoggedUserId = authenticatedUser.Id;
             }
 
@@ -49,8 +52,8 @@ namespace TicketPal.WebApi.Controllers
         }
 
         [HttpPut("{id}")]
-        [AuthFilter(Constants.ROLES_SUPERVISOR+","+Constants.ROLE_ADMIN)]
-        public IActionResult UpdateTicket([FromRoute]int id, [FromBody] UpdateTicketRequest request)
+        [AuthFilter(Constants.ROLES_SUPERVISOR + "," + Constants.ROLE_ADMIN)]
+        public IActionResult UpdateTicket([FromRoute] int id, [FromBody] UpdateTicketRequest request)
         {
             request.Id = id;
             var result = ticketService.UpdateTicket(request);
@@ -67,7 +70,7 @@ namespace TicketPal.WebApi.Controllers
 
         [HttpDelete("{id}")]
         [AuthFilter(Constants.ROLE_ADMIN)]
-        public IActionResult DeleteTicket([FromRoute]int id)
+        public IActionResult DeleteTicket([FromRoute] int id)
         {
             var result = ticketService.DeleteTicket(id);
 
@@ -83,13 +86,13 @@ namespace TicketPal.WebApi.Controllers
 
         [HttpGet("{id}")]
         [AuthFilter(Constants.ROLE_ADMIN)]
-        public IActionResult GetTicket([FromRoute]int id)
+        public IActionResult GetTicket([FromRoute] int id)
         {
             return Ok(ticketService.GetTicket(id));
         }
 
         [HttpGet]
-        [AuthFilter(Constants.ROLE_ADMIN+","+Constants.ROLE_SPECTATOR)]
+        [AuthFilter(Constants.ROLE_ADMIN + "," + Constants.ROLE_SPECTATOR)]
         public IActionResult GetTickets()
         {
             this.userService = this.HttpContext
@@ -98,16 +101,16 @@ namespace TicketPal.WebApi.Controllers
             var token = HttpContext.Request.Headers["Authorization"]
                 .FirstOrDefault()?.Split(" ").Last();
             var authenticatedUser = userService.RetrieveUserFromToken(token);
-            
-            if(authenticatedUser.Role.Equals(Constants.ROLE_ADMIN)) 
+
+            if (authenticatedUser.Role.Equals(Constants.ROLE_ADMIN))
             {
                 return Ok(ticketService.GetTickets());
             }
-            else 
+            else
             {
                 return Ok(ticketService.GetUserTickets(authenticatedUser.Id));
             }
         }
-        
+
     }
 }

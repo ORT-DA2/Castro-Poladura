@@ -112,6 +112,13 @@ namespace TicketPal.BusinessLogic.Tests.Services.Tickets
         [TestMethod]
         public void AddTicketSuccesfullyTest()
         {
+            ticketRequest.NewUser = new TicketBuyer
+            {
+                FirstName = "SomeBuyerName",
+                LastName = "SomeBuyerLastname",
+                Email = "buyer@email.com"
+            };
+
             OperationResult result = ticketService.AddTicket(ticketRequest);
 
             Assert.IsTrue(result.ResultCode == Constants.CODE_SUCCESS);
@@ -120,6 +127,13 @@ namespace TicketPal.BusinessLogic.Tests.Services.Tickets
         [TestMethod]
         public void AddTicketTwiceFailsTest()
         {
+            ticketRequest.NewUser = new TicketBuyer
+            {
+                FirstName = "SomeBuyerName",
+                LastName = "SomeBuyerLastname",
+                Email = "buyer@email.com"
+            };
+
             ticketService.AddTicket(ticketRequest);
 
             this.mockTicketRepo.Setup(m => m.Exists(It.IsAny<int>())).Returns(true);

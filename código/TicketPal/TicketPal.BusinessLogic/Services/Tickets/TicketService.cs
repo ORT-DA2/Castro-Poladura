@@ -10,6 +10,7 @@ using TicketPal.Domain.Models.Response;
 using TicketPal.Interfaces.Factory;
 using TicketPal.Interfaces.Repository;
 using TicketPal.Interfaces.Services.Tickets;
+using TicketPal.Interfaces.Services.Users;
 using TicketPal.Interfaces.Utils.TicketCodes;
 
 namespace TicketPal.BusinessLogic.Services.Tickets
@@ -18,9 +19,9 @@ namespace TicketPal.BusinessLogic.Services.Tickets
     {
         private readonly IServiceFactory serviceFactory;
         private readonly IMapper mapper;
-        public IGenericRepository<TicketEntity> ticketRepository;
-        public IGenericRepository<ConcertEntity> concertRepository;
-        public IGenericRepository<UserEntity> userRepository;
+        private IGenericRepository<TicketEntity> ticketRepository;
+        private IGenericRepository<ConcertEntity> concertRepository;
+        private IGenericRepository<UserEntity> userRepository;
 
         public TicketService(IServiceFactory factory, IMapper mapper)
         {
@@ -35,33 +36,32 @@ namespace TicketPal.BusinessLogic.Services.Tickets
         {
             try
             {
-                EventEntity newEvent = concertRepository.Get(model.EventId);
-
+                var newEvent = concertRepository.Get(model.EventId);
                 var ticketCode = serviceFactory.GetService(typeof(ITicketCode)) as ITicketCode;
 
                 if (newEvent != null)
                 {
-                    if(model.LoggedIn)
+                    if (model.UserLogged)
                     {
-                       var buyer = userRepository.Get(model.LoggedUserId);
-                       ticketRepository.Add(new TicketEntity
+                        var retrievedUser = userRepository.Get(model.LoggedUserId);
+
+                        ticketRepository.Add(new TicketEntity
                         {
-                            Buyer = buyer,
+                            Buyer = retrievedUser,
                             PurchaseDate = DateTime.Now,
                             Status = Constants.TICKET_PURCHASED_STATUS,
                             Code = ticketCode.GenerateTicketCode(),
                             Event = newEvent
                         });
-                    } 
-                    else 
+                    }
+                    else
                     {
-                        var buyer = new UserEntity
-                        {
-                            Firstname = model.NewUser.FirstName,
-                            Lastname = model.NewUser.LastName,
-                            Email = model.NewUser.Email,
-                            ActiveAccount = false
-                        };
+                        var buyer = new UserEntity();
+                        buyer.Firstname = model.NewUser.FirstName;
+                        buyer.Lastname = model.NewUser.LastName;
+                        buyer.Email = model.NewUser.Email;
+                        buyer.ActiveAccount = false;
+
                         ticketRepository.Add(new TicketEntity
                         {
                             Buyer = buyer,
@@ -70,9 +70,9 @@ namespace TicketPal.BusinessLogic.Services.Tickets
                             Code = ticketCode.GenerateTicketCode(),
                             Event = newEvent
                         });
-                    }   
-                        
-                }   
+                    }
+
+                }
                 else
                 {
                     return new OperationResult

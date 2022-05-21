@@ -18,31 +18,32 @@ namespace TicketPal.WebApi.Tests.Controllers
     {
         private Mock<ITicketService> mockTicketService;
         private Mock<IUserService> mockUserService;
+        private Mock<HttpContext> mockHttpContext;
         private List<Ticket> tickets;
         private TicketController controller;
 
         [TestInitialize]
         public void TestSetup()
         {
-            mockTicketService = new Mock<ITicketService>(MockBehavior.Default);
             mockUserService = new Mock<IUserService>(MockBehavior.Default);
+            mockTicketService = new Mock<ITicketService>(MockBehavior.Default);
+            mockHttpContext = new Mock<HttpContext>(MockBehavior.Default);
+
+            var mockHeaderHttp = new Mock<IHeaderDictionary>();
+            mockHeaderHttp.Setup(x => x[It.IsAny<string>()]).Returns("someHeader");
+            var mockHttpRequest = new Mock<HttpRequest>();
+            mockHttpRequest.Setup(s => s.Headers).Returns(mockHeaderHttp.Object);
+            mockHttpContext.Setup(s => s.Request).Returns(mockHttpRequest.Object);
+
+
             controller = new TicketController(mockTicketService.Object);
+
             this.tickets = SetupTickets();
         }
 
         [TestMethod]
         public void AddTicketTestOk()
         {
-            var mockHttpContext = new Mock<HttpContext>();
-            var mockHeaderHttp = new Mock<IHeaderDictionary>();
-            mockHeaderHttp.Setup(x => x[It.IsAny<string>()]).Returns("someHeader");
-            var mockHttpRequest = new Mock<HttpRequest>();
-            mockHttpRequest.Setup(s => s.Headers).Returns(mockHeaderHttp.Object);
-            var mockServiceProvider = new Mock<IServiceProvider>();
-            mockHttpContext.Setup(s => s.Request).Returns(mockHttpRequest.Object);
-            
-            controller.ControllerContext.HttpContext = mockHttpContext.Object;
-            
             var request = new AddTicketRequest
             {
                 LoggedUserId = 1,
@@ -55,9 +56,13 @@ namespace TicketPal.WebApi.Tests.Controllers
                 Message = "success"
             };
 
+            mockUserService.Setup(s => s.RetrieveUserFromToken(It.IsAny<string>())).Returns(tickets[0].Buyer);
+            mockHttpContext.Setup(x => x.RequestServices.GetService(typeof(IUserService)))
+                .Returns(mockUserService.Object);
             mockTicketService.Setup(s => s.AddTicket(request)).Returns(operationResult);
+            controller.ControllerContext.HttpContext = mockHttpContext.Object;
 
-            var result = controller.AddTicket(It.IsAny<int>(),request);
+            var result = controller.AddTicket(It.IsAny<int>(), request);
             var objectResult = result as ObjectResult;
             var statusCode = objectResult.StatusCode;
 
@@ -79,9 +84,13 @@ namespace TicketPal.WebApi.Tests.Controllers
                 Message = "error message"
             };
 
+            mockUserService.Setup(s => s.RetrieveUserFromToken(It.IsAny<string>())).Returns(tickets[0].Buyer);
+            mockHttpContext.Setup(x => x.RequestServices.GetService(typeof(IUserService)))
+                .Returns(mockUserService.Object);
             mockTicketService.Setup(s => s.AddTicket(request)).Returns(operationResult);
+            controller.ControllerContext.HttpContext = mockHttpContext.Object;
 
-            var result = controller.AddTicket(It.IsAny<int>(),request);
+            var result = controller.AddTicket(It.IsAny<int>(), request);
             var objectResult = result as ObjectResult;
             var statusCode = objectResult.StatusCode;
 
@@ -106,7 +115,7 @@ namespace TicketPal.WebApi.Tests.Controllers
 
             mockTicketService.Setup(s => s.UpdateTicket(request)).Returns(operationResult);
 
-            var result = controller.UpdateTicket(It.IsAny<int>(),request);
+            var result = controller.UpdateTicket(It.IsAny<int>(), request);
             var objectResult = result as ObjectResult;
             var statusCode = objectResult.StatusCode;
 
@@ -131,7 +140,7 @@ namespace TicketPal.WebApi.Tests.Controllers
 
             mockTicketService.Setup(s => s.UpdateTicket(request)).Returns(operationResult);
 
-            var result = controller.UpdateTicket(It.IsAny<int>(),request);
+            var result = controller.UpdateTicket(It.IsAny<int>(), request);
             var objectResult = result as ObjectResult;
             var statusCode = objectResult.StatusCode;
 
@@ -185,7 +194,8 @@ namespace TicketPal.WebApi.Tests.Controllers
             var mockServiceProvider = new Mock<IServiceProvider>();
             mockHttpContext.Setup(s => s.Request).Returns(mockHttpRequest.Object);
             mockUserService.Setup(s => s.RetrieveUserFromToken(It.IsAny<string>())).Returns(
-                new User {
+                new User
+                {
                     Role = Constants.ROLE_ADMIN,
                     Id = 1,
                 });
