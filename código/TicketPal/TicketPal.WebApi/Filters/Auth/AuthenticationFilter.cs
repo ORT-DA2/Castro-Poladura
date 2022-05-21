@@ -15,7 +15,7 @@ namespace TicketPal.WebApi.Filters.Auth
         private string[] args;
         private IUserService userService;
 
-        public AuthFilter(string arguments = "")
+        public AuthenticationFilter(string arguments = "")
         {
             this.args = arguments.Split(",");
         }

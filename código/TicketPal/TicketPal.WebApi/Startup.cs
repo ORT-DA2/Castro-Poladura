@@ -31,7 +31,7 @@ namespace TicketPal.WebApi
             var section = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(section);
             // Filters
-            services.AddScoped<AuthFilter>();
+            services.AddScoped<AuthenticationFilter>();
             services.AddMvcCore(options =>
             {
                 options.Filters.Add(typeof(ModelValidateFilter));
