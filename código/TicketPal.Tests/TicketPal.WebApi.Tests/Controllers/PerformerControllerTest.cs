@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using TicketPal.Domain.Constants;
+using TicketPal.Domain.Entity;
 using TicketPal.Domain.Models.Request;
 using TicketPal.Domain.Models.Response;
 using TicketPal.Interfaces.Services.Performers;
@@ -30,16 +31,16 @@ namespace TicketPal.WebApi.Tests.Controllers
         {
             var request = new AddPerformerRequest 
             {
-                Name = "someName",
-                Artists = "name1|name2|name3",
+                UserId = 1,
+                ConcertIds = new List<int>(),
                 Genre = 2,
-                PerformerType = PerformerType.SOLO_ARTIST,
+                PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 StartYear = "12/03/1998"
             };
 
             var operationResult = new OperationResult
             {
-                ResultCode = ResultCode.SUCCESS,
+                ResultCode = Constants.CODE_SUCCESS,
                 Message = "success"
             };
             
@@ -57,16 +58,16 @@ namespace TicketPal.WebApi.Tests.Controllers
         {
             var request = new AddPerformerRequest 
             {
-                Name = "someName",
-                Artists = "name1|name2|name3",
+                UserId = 1,
+                ConcertIds = new List<int>(),
                 Genre = 2,
-                PerformerType = PerformerType.SOLO_ARTIST,
+                PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 StartYear = "12/03/1998"
             };
 
             var operationResult = new OperationResult
             {
-                ResultCode = ResultCode.FAIL,
+                ResultCode = Constants.CODE_FAIL,
                 Message = "error"
             };
             
@@ -85,16 +86,15 @@ namespace TicketPal.WebApi.Tests.Controllers
             var request = new UpdatePerformerRequest 
             {
                 Id = 2,
-                Name = "someName",
-                Artists = "name1|name2|name3",
-                Genre = 2,
-                PerformerType = PerformerType.SOLO_ARTIST,
+                UserId = 1,
+                ArtistsIds = new List<int>{1,2,3},
+                GenreId = 2,
                 StartYear = "12/03/1998"
             };
 
             var operationResult = new OperationResult
             {
-                ResultCode = ResultCode.SUCCESS,
+                ResultCode = Constants.CODE_SUCCESS,
                 Message = "success"
             };
             
@@ -113,16 +113,15 @@ namespace TicketPal.WebApi.Tests.Controllers
             var request = new UpdatePerformerRequest 
             {
                 Id = 2,
-                Name = "someName",
-                Artists = "name1|name2|name3",
-                Genre = 2,
-                PerformerType = PerformerType.SOLO_ARTIST,
+                UserId = 2,
+                ArtistsIds = new List<int> {1,2},
+                GenreId = 2,
                 StartYear = "12/03/1998"
             };
 
             var operationResult = new OperationResult
             {
-                ResultCode = ResultCode.FAIL,
+                ResultCode = Constants.CODE_FAIL,
                 Message = "fail"
             };
             
@@ -140,7 +139,7 @@ namespace TicketPal.WebApi.Tests.Controllers
         {
             var operationResult = new OperationResult
             {
-                ResultCode = ResultCode.SUCCESS,
+                ResultCode = Constants.CODE_SUCCESS,
                 Message = "success"
             };
 
@@ -158,7 +157,7 @@ namespace TicketPal.WebApi.Tests.Controllers
         {
             var operationResult = new OperationResult
             {
-                ResultCode = ResultCode.FAIL,
+                ResultCode = Constants.CODE_FAIL,
                 Message = "fail"
             };
 
@@ -203,28 +202,28 @@ namespace TicketPal.WebApi.Tests.Controllers
                 new Performer 
                 {
                     Id = 1,
-                    Name = "someName",
-                    Artists = "name1|name2|name3",
+                    UserInfo = new User { Firstname = "someName"},
+                    Concerts = new List<Concert>(),
                     Genre = new Genre(),
-                    PerformerType = PerformerType.SOLO_ARTIST,
+                    PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                     StartYear = "12/03/1998"
                 },
                 new Performer 
                 {
                     Id = 2,
-                    Name = "someName",
-                    Artists = "name1|name2|name3",
+                    UserInfo = new User { Firstname = "someName"},
+                    Concerts = new List<Concert>(),
                     Genre = new Genre(),
-                    PerformerType = PerformerType.BAND,
+                    PerformerType = Constants.PERFORMER_TYPE_BAND,
                     StartYear = "12/03/1998"
                 },
                 new Performer 
                 {
                     Id = 3,
-                    Name = "someName",
-                    Artists = "name1|name2|name3",
+                    UserInfo = new User { Firstname = "someName" },
+                    Concerts = new List<Concert>(),
                     Genre = new Genre(),
-                    PerformerType = PerformerType.SOLO_ARTIST,
+                    PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                     StartYear = "10/03/2000"
                 },
             };

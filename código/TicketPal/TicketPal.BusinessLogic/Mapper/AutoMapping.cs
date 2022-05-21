@@ -8,10 +8,19 @@ namespace TicketPal.BusinessLogic.Mapper
     {
         public AutoMapping()
         {
+            // User
             CreateMap<UserEntity,User>();
+            // Concert
             CreateMap<ConcertEntity,Concert>();
+            // Genre
             CreateMap<GenreEntity,Genre>();
-            CreateMap<PerformerEntity,Performer>();
+            // Performer
+            CreateMap<PerformerEntity,Performer>()
+            .ForMember(
+                    dest => dest.Concerts,
+                    opt => opt.MapFrom(
+                        src => src.Concerts));
+            // Ticket
             CreateMap<TicketEntity,Ticket>();
         }
     }

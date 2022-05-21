@@ -1,14 +1,13 @@
-﻿using TicketPal.Domain.Constants;
+﻿using System.Collections.Generic;
 
 namespace TicketPal.Domain.Entity
 {
     public class PerformerEntity : BaseEntity
     {
-
-        public PerformerType PerformerType { get; set; }
-        public string Name { get; set; }
+        public string PerformerType { get; set; }
+        public UserEntity UserInfo {get; set;}
         public string StartYear { get; set; }
         public GenreEntity Genre { get; set; }
-        public string Artists { get; set; }
+        public List<ConcertEntity> Concerts { get; set; }
     }
 }

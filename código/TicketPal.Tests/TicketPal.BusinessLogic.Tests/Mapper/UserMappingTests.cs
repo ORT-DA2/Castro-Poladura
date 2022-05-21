@@ -23,7 +23,7 @@ namespace TicketPal.BusinessLogic.Tests.Mapper
                 Lastname = "Doe",
                 Email = "someone@example.com",
                 Password = "SomePassword",
-                Role = UserRole.ADMIN.ToString()
+                Role = Constants.ROLE_ADMIN
             };
 
             var user = mapper.Map<User>(toBeMapped);

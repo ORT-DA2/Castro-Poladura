@@ -67,7 +67,7 @@ namespace TicketPal.Domain.Tests.Models.Request
         {
             UpdateUserRequest request = new UpdateUserRequest
             {
-                Role = UserRole.ADMIN.ToString()
+                Role = Constants.Constants.ROLE_SPECTATOR
             };
 
             Assert.IsNotNull(request.Role);

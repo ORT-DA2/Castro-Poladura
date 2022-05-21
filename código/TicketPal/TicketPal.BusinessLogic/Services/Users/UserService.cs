@@ -13,6 +13,7 @@ using System.Linq;
 using TicketPal.Interfaces.Factory;
 using TicketPal.Interfaces.Services.Jwt;
 using TicketPal.BusinessLogic.Services.Settings;
+using System;
 
 namespace TicketPal.BusinessLogic.Services.Users
 {
@@ -42,7 +43,7 @@ namespace TicketPal.BusinessLogic.Services.Users
                 repository.Delete(id);
                 return new OperationResult
                 {
-                    ResultCode = ResultCode.SUCCESS,
+                    ResultCode = Constants.CODE_SUCCESS,
                     Message = "User removed successfully"
                 };
             }
@@ -50,7 +51,7 @@ namespace TicketPal.BusinessLogic.Services.Users
             {
                 return new OperationResult
                 {
-                    ResultCode = ResultCode.FAIL,
+                    ResultCode = Constants.CODE_FAIL,
                     Message = ex.Message
                 };
             }
@@ -63,8 +64,13 @@ namespace TicketPal.BusinessLogic.Services.Users
 
         public IEnumerable<User> GetUsers(string role)
         {
-            var users = repository.GetAll(u => u.Role.Equals(role));
-            return mapper.Map<IEnumerable<UserEntity>, IEnumerable<User>>(users);
+            if(string.IsNullOrEmpty(role))
+            {
+                var users = repository.GetAll();
+                return mapper.Map<IEnumerable<UserEntity>, IEnumerable<User>>(users);
+            }
+            return mapper.Map<IEnumerable<UserEntity>, IEnumerable<User>>(repository.GetAll(u => u.Role.Equals(role)));
+
         }
 
         public User Login(AuthenticationRequest model)
@@ -83,14 +89,35 @@ namespace TicketPal.BusinessLogic.Services.Users
             return user;
         }
 
+        public User RetrieveUserFromToken(string token)
+        {
+            if(!String.IsNullOrEmpty(token))
+            {
+                var jwtService = this.factory.GetService(typeof(IJwtService)) as IJwtService;
+                var claimToken = jwtService.ClaimTokenValue(this.appSettings.JwtSecret, token, "id");
+            
+                if(claimToken != null)
+                {
+                    var accountId = int.Parse(claimToken);
+                    return GetUser(accountId);
+                }
+                else 
+                {
+                    return null;
+                }
+            }else
+            {
+                return null;
+            }
+        }
 
         public OperationResult SignUp(SignUpRequest model)
         {
-            if (!Values.validRoles.Contains(model.Role))
+            if (!Constants.ValidRoles.Contains(model.Role))
             {
                 return new OperationResult
                 {
-                    ResultCode = ResultCode.FAIL,
+                    ResultCode = Constants.CODE_FAIL,
                     Message = $"Can't validate role: {model.Role}"
                 };
             }
@@ -104,20 +131,21 @@ namespace TicketPal.BusinessLogic.Services.Users
                         Lastname = model.Lastname,
                         Password = BC.HashPassword(model.Password),
                         Role = model.Role,
-                        Email = model.Email
+                        Email = model.Email,
+                        ActiveAccount = true
                     });
             }
             catch (RepositoryException ex)
             {
                 return new OperationResult
                 {
-                    ResultCode = ResultCode.FAIL,
+                    ResultCode = Constants.CODE_FAIL,
                     Message = ex.Message
                 };
             }
             return new OperationResult
             {
-                ResultCode = ResultCode.SUCCESS,
+                ResultCode = Constants.CODE_SUCCESS,
                 Message = "User successfully registered"
             };
         }
@@ -126,7 +154,7 @@ namespace TicketPal.BusinessLogic.Services.Users
         {
             try
             {
-                if (authorization.Equals(UserRole.SPECTATOR.ToString()))
+                if (authorization.Equals(Constants.ROLE_SPECTATOR))
                 {
                     repository.Update(
                         new UserEntity
@@ -134,12 +162,13 @@ namespace TicketPal.BusinessLogic.Services.Users
                             Id = model.Id,
                             Firstname = model.Firstname,
                             Lastname = model.Lastname,
-                            Email = model.Email
+                            Email = model.Email,
+                            ActiveAccount = model.ActiveAccount
                         });
                 }
-                else if (authorization.Equals(UserRole.ADMIN.ToString()))
+                else if (authorization.Equals(Constants.ROLE_ADMIN))
                 {
-                    if (Values.validRoles.Contains(model.Role))
+                    if (Constants.ValidRoles.Contains(model.Role))
                     {
                         repository.Update(
                             new UserEntity
@@ -149,14 +178,15 @@ namespace TicketPal.BusinessLogic.Services.Users
                                 Lastname = model.Lastname,
                                 Password = BC.HashPassword(model.Password),
                                 Email = model.Email,
-                                Role = model.Role
+                                Role = model.Role,
+                                ActiveAccount = model.ActiveAccount
                             });
                     }
                     else
                     {
                         return new OperationResult
                         {
-                            ResultCode = ResultCode.FAIL,
+                            ResultCode = Constants.CODE_FAIL,
                             Message = $"Can't validate role: {model.Role}"
                         };
                     }
@@ -166,14 +196,14 @@ namespace TicketPal.BusinessLogic.Services.Users
             {
                 return new OperationResult
                 {
-                    ResultCode = ResultCode.FAIL,
+                    ResultCode = Constants.CODE_FAIL,
                     Message = ex.Message
                 };
             }
 
             return new OperationResult
             {
-                ResultCode = ResultCode.SUCCESS,
+                ResultCode = Constants.CODE_SUCCESS,
                 Message = "User updated successfully"
             };
         }

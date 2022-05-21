@@ -6,7 +6,6 @@ using TicketPal.Domain.Constants;
 using TicketPal.Domain.Models.Request;
 using TicketPal.Domain.Models.Response.Error;
 using TicketPal.Interfaces.Services.Concerts;
-using TicketPal.WebApi.Constants;
 using TicketPal.WebApi.Filters.Auth;
 
 namespace TicketPal.WebApi.Controllers
@@ -23,12 +22,12 @@ namespace TicketPal.WebApi.Controllers
         }
 
         [HttpPost]
-        [AuthenticationFilter(Roles.Admin)]
+        [AuthFilter(Constants.ROLE_ADMIN)]
         public IActionResult AddConcert([FromBody] AddConcertRequest request)
         {
             var result = eventService.AddConcert(request);
 
-            if (result.ResultCode == ResultCode.FAIL)
+            if (result.ResultCode == Constants.CODE_FAIL)
             {
                 return BadRequest(new BadRequestError(result.Message));
             }
@@ -39,13 +38,13 @@ namespace TicketPal.WebApi.Controllers
         }
 
         [HttpPut("{id}")]
-        [AuthenticationFilter(Roles.Admin)]
+        [AuthFilter(Constants.ROLE_ADMIN)]
         public IActionResult UpdateConcert([FromRoute] int id, [FromBody] UpdateConcertRequest request)
         {
             request.Id = id;
             var result = eventService.UpdateConcert(request);
 
-            if (result.ResultCode == ResultCode.FAIL)
+            if (result.ResultCode == Constants.CODE_FAIL)
             {
                 return BadRequest(new BadRequestError(result.Message));
             }
@@ -56,12 +55,12 @@ namespace TicketPal.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        [AuthenticationFilter(Roles.Admin)]
+        [AuthFilter(Constants.ROLE_ADMIN)]
         public IActionResult DeleteConcert([FromRoute] int id)
         {
             var result = eventService.DeleteConcert(id);
 
-            if (result.ResultCode == ResultCode.FAIL)
+            if (result.ResultCode == Constants.CODE_FAIL)
             {
                 return BadRequest(new BadRequestError(result.Message));
             }
@@ -71,16 +70,15 @@ namespace TicketPal.WebApi.Controllers
             }
         }
 
-        [HttpGet("id")]
+        [HttpGet("{id}")]
         public IActionResult GetConcert([FromRoute] int id)
         {
             return Ok(eventService.GetConcert(id));
         }
 
-        // Need to refactor to use in service in future release
         [HttpGet]
         public IActionResult GetConcerts(
-            [BindRequired][FromQuery] int type,
+            [BindRequired][FromQuery] string type,
             [FromQuery(Name = "newest")] bool newest,
             [FromQuery(Name = "startDate")] string startDate,
             [FromQuery(Name = "endDate")] string endDate,
@@ -89,77 +87,27 @@ namespace TicketPal.WebApi.Controllers
         {
             DateTime dtEnd;
             var parseStartDate = DateTime.TryParseExact(startDate,
-                       "dd/M/yyyy",
+                       "dd/M/yyyy hh:mm",
                        CultureInfo.InvariantCulture,
                        DateTimeStyles.None,
                        out dtEnd);
             DateTime dtStart;
-            var parseEndDate = DateTime.TryParseExact(startDate,
-                       "dd/M/yyyy",
+            var parseEndDate = DateTime.TryParseExact(endDate,
+                       "dd/M/yyyy hh:mm",
                        CultureInfo.InvariantCulture,
                        DateTimeStyles.None,
                        out dtStart);
-            if (String.IsNullOrEmpty(startDate) && !parseStartDate)
+
+            if (!String.IsNullOrEmpty(startDate) && !parseStartDate)
             {
-                return BadRequest(new BadRequestError("Start date not in: dd/M/yyyy"));
+                return BadRequest(new BadRequestError("Start date not in: dd/M/yyyy hh:mm"));
             }
-            if (String.IsNullOrEmpty(endDate) && !parseEndDate)
+            if (!String.IsNullOrEmpty(endDate) && !parseEndDate)
             {
-                return BadRequest(new BadRequestError("End date not in: dd/M/yyyy"));
+                return BadRequest(new BadRequestError("End date not in: dd/M/yyyy hh:mm"));
             }
 
-            if (String.IsNullOrEmpty(startDate)
-                && String.IsNullOrEmpty(endDate)
-                && String.IsNullOrEmpty(performerName)
-                )
-            {
-                return Ok(eventService.GetConcerts(
-                    e => ((int)e.EventType) == type
-                    , newest
-                    ));
-            }
-            else if (!String.IsNullOrEmpty(startDate)
-            && String.IsNullOrEmpty(endDate)
-            && String.IsNullOrEmpty(performerName)
-            )
-            {
-                return Ok(eventService.GetConcerts(
-                    e => ((int)e.EventType) == type
-                    && e.Date >= dtStart
-                    , newest
-                    ));
-            }
-            else if (String.IsNullOrEmpty(startDate)
-            && !String.IsNullOrEmpty(endDate)
-            && String.IsNullOrEmpty(performerName)
-            )
-            {
-                return Ok(eventService.GetConcerts(
-                    e => ((int)e.EventType) == type
-                    && e.Date <= dtEnd
-                    , newest
-                    ));
-            }
-            else if (!String.IsNullOrEmpty(startDate)
-            && !String.IsNullOrEmpty(endDate)
-            && String.IsNullOrEmpty(performerName))
-            {
-                return Ok(eventService.GetConcerts(
-                    e => ((int)e.EventType) == type
-                    && (e.Date >= dtStart && e.Date <= dtEnd)
-                    , newest
-                    ));
-            }
-            else
-            {
-                return Ok(eventService.GetConcerts(
-                    e => ((int)e.EventType) == type
-                    && (e.Date >= dtStart && e.Date <= dtEnd)
-                    && e.Artist.Name.Equals(performerName)
-                    , newest
-                    ));
-            }
-
+            return Ok(eventService.GetConcerts(type,newest,startDate,endDate,performerName));
         }
 
 

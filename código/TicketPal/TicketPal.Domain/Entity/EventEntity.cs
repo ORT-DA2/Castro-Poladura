@@ -1,5 +1,4 @@
 ﻿using System;
-using TicketPal.Domain.Constants;
 
 namespace TicketPal.Domain.Entity
 {
@@ -8,7 +7,7 @@ namespace TicketPal.Domain.Entity
         public DateTime Date { get; set; }
         public int AvailableTickets { get; set; }
         public decimal TicketPrice { get; set; }
-        public CurrencyType CurrencyType { get; set; }
-        public EventType EventType { get; set; }
+        public string CurrencyType { get; set; }
+        public string EventType { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using TicketPal.Domain.Constants;
 using TicketPal.Domain.Entity;
@@ -14,12 +15,12 @@ namespace TicketPal.Domain.Models.Request
         [Required]
         public decimal TicketPrice { get; set; }
         [Required]
-        public CurrencyType CurrencyType { get; set; }
+        public string CurrencyType { get; set; }
         [Required]
-        public EventType EventType { get; set; }
+        public string EventType { get; set; }
         [Required]
         public string TourName { get; set; }
         [Required]
-        public int Artist { get; set; }
+        public IEnumerable<int> ArtistsIds { get; set; }
     }
 }

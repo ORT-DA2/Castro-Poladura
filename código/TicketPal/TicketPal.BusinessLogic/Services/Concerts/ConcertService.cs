@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
-using System.Linq.Expressions;
 using TicketPal.Domain.Constants;
 using TicketPal.Domain.Entity;
 using TicketPal.Domain.Exceptions;
@@ -33,39 +33,26 @@ namespace TicketPal.BusinessLogic.Services.Concerts
         {
             try
             {
-                PerformerEntity artist = performerRepository.Get(model.Artist);
-                ConcertEntity found = concertRepository.Get(c => c.TourName == model.TourName && c.Artist.Name == artist.Name && c.Date == model.Date);
-
+                var found = concertRepository.Get(c => c.TourName == model.TourName && c.Date == model.Date);
+                var artists = performerRepository.GetAll(a => model.ArtistsIds.Contains(a.UserInfo.Id));
                 if (found == null)
                 {
-                    if (artist != null)
+                    concertRepository.Add(new ConcertEntity
                     {
-                        concertRepository.Add(new ConcertEntity
-                        {
-                            Artist = artist,
-                            AvailableTickets = model.AvailableTickets,
-                            CurrencyType = model.CurrencyType,
-                            Date = model.Date,
-                            EventType = model.EventType,
-                            TicketPrice = model.TicketPrice,
-                            TourName = model.TourName
-                        });
-                    }
-                    else
-                    {
-                        return new OperationResult
-                        {
-                            ResultCode = ResultCode.FAIL,
-                            Message = "Artist doesn't exists"
-                        };
-                    }
-
+                        Artists = artists.ToList(),
+                        AvailableTickets = model.AvailableTickets,
+                        CurrencyType = model.CurrencyType,
+                        Date = model.Date,
+                        EventType = model.EventType,
+                        TicketPrice = model.TicketPrice,
+                        TourName = model.TourName
+                    });
                 }
                 else
                 {
                     return new OperationResult
                     {
-                        ResultCode = ResultCode.FAIL,
+                        ResultCode = Constants.CODE_FAIL,
                         Message = "Concert already exists"
                     };
                 }
@@ -74,13 +61,13 @@ namespace TicketPal.BusinessLogic.Services.Concerts
             {
                 return new OperationResult
                 {
-                    ResultCode = ResultCode.FAIL,
+                    ResultCode = Constants.CODE_FAIL,
                     Message = ex.Message
                 };
             }
             return new OperationResult
             {
-                ResultCode = ResultCode.SUCCESS,
+                ResultCode = Constants.CODE_SUCCESS,
                 Message = "Concert successfully created"
             };
         }
@@ -92,7 +79,7 @@ namespace TicketPal.BusinessLogic.Services.Concerts
                 concertRepository.Delete(id);
                 return new OperationResult
                 {
-                    ResultCode = ResultCode.SUCCESS,
+                    ResultCode = Constants.CODE_SUCCESS,
                     Message = "Concert removed successfully"
                 };
             }
@@ -100,7 +87,7 @@ namespace TicketPal.BusinessLogic.Services.Concerts
             {
                 return new OperationResult
                 {
-                    ResultCode = ResultCode.FAIL,
+                    ResultCode = Constants.CODE_FAIL,
                     Message = ex.Message
                 };
             }
@@ -111,23 +98,103 @@ namespace TicketPal.BusinessLogic.Services.Concerts
             return mapper.Map<Concert>(concertRepository.Get(id));
         }
 
-        public IEnumerable<Concert> GetConcerts()
+        public IEnumerable<Concert> GetConcerts(string type, bool newest, string startDate, string endDate, string artistName)
         {
-            var concerts = concertRepository.GetAll();
-            return mapper.Map<IEnumerable<ConcertEntity>, IEnumerable<Concert>>(concerts);
-        }
+            IEnumerable<ConcertEntity> concerts = new List<ConcertEntity>();
 
-        public IEnumerable<Concert> GetConcerts(Expression<Func<ConcertEntity, bool>> predicate, bool newest)
-        {
-            if (!newest)
+            if (String.IsNullOrEmpty(startDate)
+                && String.IsNullOrEmpty(endDate)
+                && String.IsNullOrEmpty(artistName)
+                )
             {
-                var concerts = concertRepository.GetAll(predicate).OrderBy(c => c.Date);
-                return mapper.Map<IEnumerable<ConcertEntity>, IEnumerable<Concert>>(concerts);
+                concerts = concertRepository.GetAll(
+                    c => c.EventType.Equals(type)
+                );
+            }
+            else if (!String.IsNullOrEmpty(startDate)
+            && String.IsNullOrEmpty(endDate)
+            && String.IsNullOrEmpty(artistName)
+            )
+            {
+                var dtStart = DateTime.ParseExact(startDate,
+                       "dd/M/yyyy hh:mm",
+                       CultureInfo.InvariantCulture,
+                       DateTimeStyles.None);
+
+                concerts = concertRepository.GetAll(
+                    c => c.EventType.Equals(type)
+                        && c.Date >= dtStart
+                );
+            }
+            else if (String.IsNullOrEmpty(startDate)
+            && !String.IsNullOrEmpty(endDate)
+            && String.IsNullOrEmpty(artistName)
+            )
+            {
+                var dtEnd = DateTime.ParseExact(endDate,
+                       "dd/M/yyyy hh:mm",
+                       CultureInfo.InvariantCulture,
+                       DateTimeStyles.None);
+
+                concerts = concertRepository.GetAll(
+                    c => c.EventType.Equals(type)
+                        && c.Date >= dtEnd
+                );
+            }
+            else if (String.IsNullOrEmpty(startDate)
+            && String.IsNullOrEmpty(endDate)
+            && !String.IsNullOrEmpty(artistName)
+            )
+            {
+                concerts = concertRepository.GetAll(
+                    c => c.Artists
+                        .Any(a => a.UserInfo.Firstname.Equals(artistName) || a.UserInfo.Lastname.Equals(artistName))
+                );
+            }
+            else if (!String.IsNullOrEmpty(startDate)
+            && !String.IsNullOrEmpty(endDate)
+            && String.IsNullOrEmpty(artistName))
+            {
+                var dtStart = DateTime.ParseExact(startDate,
+                       "dd/M/yyyy hh:mm",
+                       CultureInfo.InvariantCulture,
+                       DateTimeStyles.None);
+                var dtEnd = DateTime.ParseExact(endDate,
+                       "dd/M/yyyy hh:mm",
+                       CultureInfo.InvariantCulture,
+                       DateTimeStyles.None);
+
+                concerts = concertRepository.GetAll(
+                   c => c.EventType.Equals(type)
+                       && (c.Date >= dtStart && c.Date <= dtEnd)
+               );
             }
             else
             {
-                var concerts = concertRepository.GetAll(predicate).OrderByDescending(c => c.Date);
-                return mapper.Map<IEnumerable<ConcertEntity>, IEnumerable<Concert>>(concerts);
+                var dtStart = DateTime.ParseExact(startDate,
+                       "dd/M/yyyy hh:mm",
+                       CultureInfo.InvariantCulture,
+                       DateTimeStyles.None);
+                var dtEnd = DateTime.ParseExact(endDate,
+                       "dd/M/yyyy hh:mm",
+                       CultureInfo.InvariantCulture,
+                       DateTimeStyles.None);
+
+                concerts = concertRepository.GetAll(
+                    c => c.EventType.Equals(type)
+                        && (c.Date >= dtStart && c.Date <= dtEnd)
+                        && c.Artists.Any(a => a.UserInfo.Firstname.Equals(artistName) || a.UserInfo.Lastname.Equals(artistName))
+                );
+            }
+            if (!newest)
+            {
+                return mapper.Map<IEnumerable<ConcertEntity>, IEnumerable<Concert>>(
+                    concerts.OrderBy(c => c.Date));
+            }
+            else
+            {
+                return mapper.Map<IEnumerable<ConcertEntity>, IEnumerable<Concert>>(
+                    concerts.OrderByDescending(c => c.Date));
             }
 
         }
@@ -136,13 +203,10 @@ namespace TicketPal.BusinessLogic.Services.Concerts
         {
             try
             {
-                PerformerEntity artist = performerRepository.Get(model.Artist);
 
                 concertRepository.Update(new ConcertEntity
                 {
                     Id = model.Id,
-                    Artist = artist,
-                    AvailableTickets = model.AvailableTickets,
                     CurrencyType = model.CurrencyType,
                     Date = model.Date,
                     EventType = model.EventType,
@@ -154,14 +218,14 @@ namespace TicketPal.BusinessLogic.Services.Concerts
             {
                 return new OperationResult
                 {
-                    ResultCode = ResultCode.FAIL,
+                    ResultCode = Constants.CODE_FAIL,
                     Message = ex.Message
                 };
             }
 
             return new OperationResult
             {
-                ResultCode = ResultCode.SUCCESS,
+                ResultCode = Constants.CODE_SUCCESS,
                 Message = "Concert updated successfully"
             };
         }

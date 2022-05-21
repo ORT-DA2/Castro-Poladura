@@ -40,7 +40,7 @@ namespace TicketPal.WebApi.Tests.Controllers
 
             var operationResult = new OperationResult
             {
-                ResultCode = ResultCode.SUCCESS,
+                ResultCode = Constants.CODE_SUCCESS,
                 Message = "success"
             };
 
@@ -63,7 +63,7 @@ namespace TicketPal.WebApi.Tests.Controllers
 
             var operationResult = new OperationResult
             {
-                ResultCode = ResultCode.FAIL,
+                ResultCode = Constants.CODE_FAIL,
                 Message = "fail"
             };
 
@@ -81,7 +81,7 @@ namespace TicketPal.WebApi.Tests.Controllers
         {
             var operationResult = new OperationResult
             {
-                ResultCode = ResultCode.SUCCESS,
+                ResultCode = Constants.CODE_SUCCESS,
                 Message = "success"
             };
 
@@ -99,7 +99,7 @@ namespace TicketPal.WebApi.Tests.Controllers
         {
             var operationResult = new OperationResult
             {
-                ResultCode = ResultCode.FAIL,
+                ResultCode = Constants.CODE_FAIL,
                 Message = "error"
             };
 
@@ -147,7 +147,7 @@ namespace TicketPal.WebApi.Tests.Controllers
 
             var operationResult = new OperationResult
             {
-                ResultCode = ResultCode.SUCCESS,
+                ResultCode = Constants.CODE_SUCCESS,
                 Message = "success"
             };
 
@@ -171,7 +171,7 @@ namespace TicketPal.WebApi.Tests.Controllers
 
             var operationResult = new OperationResult
             {
-                ResultCode = ResultCode.FAIL,
+                ResultCode = Constants.CODE_FAIL,
                 Message = "fail"
             };
 

@@ -10,6 +10,7 @@ namespace TicketPal.Interfaces.Services.Users
         User Login(AuthenticationRequest model);
         IEnumerable<User> GetUsers(string role);
         User GetUser(int id);
+        User RetrieveUserFromToken(string token);
         OperationResult SignUp(SignUpRequest model);
         OperationResult UpdateUser(UpdateUserRequest model, string authorization);
         OperationResult DeleteUser(int id);

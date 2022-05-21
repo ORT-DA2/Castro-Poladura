@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
-using Microsoft.Extensions.Options;
-using System;
 using System.Collections.Generic;
+using System.Linq;
 using TicketPal.Domain.Constants;
 using TicketPal.Domain.Entity;
 using TicketPal.Domain.Exceptions;
@@ -19,12 +18,16 @@ namespace TicketPal.BusinessLogic.Services.Performers
         private readonly IMapper mapper;
         public IGenericRepository<PerformerEntity> performerRepository;
         public IGenericRepository<GenreEntity> genreRepository;
+        public IGenericRepository<ConcertEntity> concertRepository;
+        public IGenericRepository<UserEntity> userRepository;
 
         public PerformerService(IServiceFactory factory, IMapper mapper)
         {
             this.mapper = mapper;
             this.serviceFactory = factory;
             this.performerRepository = serviceFactory.GetRepository(typeof(PerformerEntity)) as IGenericRepository<PerformerEntity>;
+            this.concertRepository = serviceFactory.GetRepository(typeof(ConcertEntity)) as IGenericRepository<ConcertEntity>;
+            this.userRepository = serviceFactory.GetRepository(typeof(UserEntity)) as IGenericRepository<UserEntity>;
             this.genreRepository = serviceFactory.GetRepository(typeof(GenreEntity)) as IGenericRepository<GenreEntity>;
         }
 
@@ -33,52 +36,55 @@ namespace TicketPal.BusinessLogic.Services.Performers
             try
             {
                 GenreEntity genre = genreRepository.Get(model.Genre);
-                PerformerEntity found = performerRepository.Get(p => p.Name == model.Name);
+                var concerts = concertRepository.GetAll(c => model.ConcertIds.Contains(c.Id));
+                var user = userRepository.Get(model.UserId);
 
-                if (found == null)
-                {
-                    if (genre != null)
-                    {
-                        performerRepository.Add(new PerformerEntity
-                        {
-                            Name = model.Name,
-                            Artists = (model.Artists == null ? "" : model.Artists),
-                            Genre = genre,
-                            PerformerType = model.PerformerType,
-                            StartYear = model.StartYear
-
-                        });
-                    }
-                    else
-                    {
-                        return new OperationResult
-                        {
-                            ResultCode = ResultCode.FAIL,
-                            Message = "Genre doesn't exists"
-                        };
-                    }
-                }
-                else
+                if (genre == null)
                 {
                     return new OperationResult
                     {
-                        ResultCode = ResultCode.FAIL,
-                        Message = "Performer already exists"
+                        ResultCode = Constants.CODE_FAIL,
+                        Message = "Genre doesn't exists"
+                    };
+                }
+                if (user == null)
+                {
+                    return new OperationResult
+                    {
+                        ResultCode = Constants.CODE_FAIL,
+                        Message = "User doesn't exists"
                     };
                 }
                 
+                if(!user.Role.Equals(Constants.ROLE_ARTIST)) 
+                {
+                        return new OperationResult
+                        {
+                            ResultCode = Constants.CODE_FAIL,
+                            Message = "The associated user account is not from a performer"
+                        };
+                }
+                performerRepository.Add(new PerformerEntity
+                {
+                    UserInfo = user,
+                    Concerts = concerts.ToList(),
+                    Genre = genre,
+                    PerformerType = model.PerformerType,
+                    StartYear = model.StartYear
+
+                });
             }
             catch (RepositoryException ex)
             {
                 return new OperationResult
                 {
-                    ResultCode = ResultCode.FAIL,
+                    ResultCode = Constants.CODE_FAIL,
                     Message = ex.Message
                 };
             }
             return new OperationResult
             {
-                ResultCode = ResultCode.SUCCESS,
+                ResultCode = Constants.CODE_SUCCESS,
                 Message = "Performer successfully created"
             };
         }
@@ -90,7 +96,7 @@ namespace TicketPal.BusinessLogic.Services.Performers
                 performerRepository.Delete(id);
                 return new OperationResult
                 {
-                    ResultCode = ResultCode.SUCCESS,
+                    ResultCode = Constants.CODE_SUCCESS,
                     Message = "Performer removed successfully"
                 };
             }
@@ -98,7 +104,7 @@ namespace TicketPal.BusinessLogic.Services.Performers
             {
                 return new OperationResult
                 {
-                    ResultCode = ResultCode.FAIL,
+                    ResultCode = Constants.CODE_FAIL,
                     Message = ex.Message
                 };
             }
@@ -111,7 +117,7 @@ namespace TicketPal.BusinessLogic.Services.Performers
 
         public IEnumerable<Performer> GetPerformers()
         {
-            var performers = performerRepository.GetAll();
+            var performers = performerRepository.GetAll().ToList();
             return mapper.Map<IEnumerable<PerformerEntity>, IEnumerable<Performer>>(performers);
         }
 
@@ -119,15 +125,25 @@ namespace TicketPal.BusinessLogic.Services.Performers
         {
             try
             {
-                GenreEntity genre = genreRepository.Get(model.Genre);
+                var genre = genreRepository.Get(model.GenreId);
+                var user = userRepository.Get(model.UserId);
+                var artists = performerRepository.GetAll(a => model.ArtistsIds.Contains(a.Id));
+
+                if(!string.IsNullOrEmpty(model.PerformerType) && !Constants.ValidPerformerTypes.Contains(model.PerformerType))
+                {
+                    return new OperationResult
+                    {
+                        ResultCode = Constants.CODE_FAIL,
+                        Message = "The performer type is not valid"
+                    };
+                }
 
                 performerRepository.Update(new PerformerEntity
                 {
                     Id = model.Id,
-                    Name = model.Name,
-                    Artists = model.Artists,
-                    Genre = genre,
+                    UserInfo = user,
                     PerformerType = model.PerformerType,
+                    Genre = genre,
                     StartYear = model.StartYear
                 });
             }
@@ -135,15 +151,15 @@ namespace TicketPal.BusinessLogic.Services.Performers
             {
                 return new OperationResult
                 {
-                    ResultCode = ResultCode.FAIL,
+                    ResultCode = Constants.CODE_FAIL,
                     Message = ex.Message
                 };
             }
 
             return new OperationResult
             {
-                ResultCode = ResultCode.SUCCESS,
-                Message = "Concert updated successfully"
+                ResultCode = Constants.CODE_SUCCESS,
+                Message = "Performer updated successfully"
             };
         }
     }

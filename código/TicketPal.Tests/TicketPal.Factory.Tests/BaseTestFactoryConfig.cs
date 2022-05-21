@@ -6,7 +6,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using TicketPal.BusinessLogic.Services.Settings;
 using TicketPal.Interfaces.Factory;
-using TicketPal.Interfaces.Services.Settings;
 
 namespace TicketPal.Factory.Tests
 {
@@ -43,8 +42,8 @@ namespace TicketPal.Factory.Tests
             // Service collection mock setup
             this.services.AddSingleton<IServiceCollection>(s => this.services);
             this.services.AddSingleton<IMapper>(s => this.mockMapper.Object);
-            var mockOptions = new Mock<IOptions<IAppSettings>>(MockBehavior.Default);
-            this.services.AddSingleton<IOptions<IAppSettings>>(s => mockOptions.Object);
+            var mockOptions = new Mock<IOptions<AppSettings>>(MockBehavior.Default);
+            this.services.AddSingleton<IOptions<AppSettings>>(s => mockOptions.Object);
             // Init Factory
             this.factory = new ServiceFactory(
                 this.services,
