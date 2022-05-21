@@ -10,12 +10,12 @@ using TicketPal.Interfaces.Services.Users;
 
 namespace TicketPal.WebApi.Filters.Auth
 {
-    public class AuthFilter : Attribute, IAuthorizationFilter
+    public class AuthenticationFilter : Attribute, IAuthorizationFilter
     {
         private string[] args;
         private IUserService userService;
 
-        public AuthFilter(string arguments = "")
+        public AuthenticationFilter(string arguments = "")
         {
             this.args = arguments.Split(",");
         }

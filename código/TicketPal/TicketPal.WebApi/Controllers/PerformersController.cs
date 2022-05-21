@@ -19,7 +19,7 @@ namespace TicketPal.WebApi.Controllers
         }
 
         [HttpPost]
-        [AuthFilter(Constants.ROLE_ADMIN)]
+        [AuthenticationFilter(Constants.ROLE_ADMIN)]
         public IActionResult AddPerformer([FromBody] AddPerformerRequest request)
         {
             var result = performerService.AddPerformer(request);
@@ -35,7 +35,7 @@ namespace TicketPal.WebApi.Controllers
         }
 
         [HttpPut("{id}")]
-        [AuthFilter(Constants.ROLE_ADMIN)]
+        [AuthenticationFilter(Constants.ROLE_ADMIN)]
         public IActionResult UpdatePerformer([FromRoute]int id, [FromBody]UpdatePerformerRequest request)
         {
             request.Id = id;
@@ -52,7 +52,7 @@ namespace TicketPal.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        [AuthFilter(Constants.ROLE_ADMIN)]
+        [AuthenticationFilter(Constants.ROLE_ADMIN)]
         public IActionResult DeletePerformer([FromRoute]int id)
         {
             var result = performerService.DeletePerformer(id);
@@ -68,14 +68,14 @@ namespace TicketPal.WebApi.Controllers
         }
 
         [HttpGet("{id}")]
-        [AuthFilter(Constants.ROLE_ADMIN)]
+        [AuthenticationFilter(Constants.ROLE_ADMIN)]
         public IActionResult GetPerformer([FromRoute]int id)
         {
             return Ok(performerService.GetPerformer(id));
         }
 
         [HttpGet]
-        [AuthFilter(Constants.ROLE_ADMIN)]
+        [AuthenticationFilter(Constants.ROLE_ADMIN)]
         public IActionResult GetPerformers()
         {
             return Ok(performerService.GetPerformers());

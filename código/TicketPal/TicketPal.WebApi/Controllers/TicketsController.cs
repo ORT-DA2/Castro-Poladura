@@ -22,7 +22,7 @@ namespace TicketPal.WebApi.Controllers
         }
 
         [HttpPost("purchase/{eventId}")]
-        [AuthFilter(Constants.ROLE_SELLER + "," + Constants.ROLE_SPECTATOR + "," + Constants.ROLE_ADMIN)]
+        [AuthenticationFilter(Constants.ROLE_SELLER + "," + Constants.ROLE_SPECTATOR + "," + Constants.ROLE_ADMIN)]
         public IActionResult AddTicket([FromRoute] int eventId, [FromBody] AddTicketRequest request)
         {
             this.userService = this.HttpContext
@@ -52,7 +52,7 @@ namespace TicketPal.WebApi.Controllers
         }
 
         [HttpPut("{id}")]
-        [AuthFilter(Constants.ROLES_SUPERVISOR + "," + Constants.ROLE_ADMIN)]
+        [AuthenticationFilter(Constants.ROLES_SUPERVISOR + "," + Constants.ROLE_ADMIN)]
         public IActionResult UpdateTicket([FromRoute] int id, [FromBody] UpdateTicketRequest request)
         {
             request.Id = id;
@@ -69,7 +69,7 @@ namespace TicketPal.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        [AuthFilter(Constants.ROLE_ADMIN)]
+        [AuthenticationFilter(Constants.ROLE_ADMIN)]
         public IActionResult DeleteTicket([FromRoute] int id)
         {
             var result = ticketService.DeleteTicket(id);
@@ -85,14 +85,14 @@ namespace TicketPal.WebApi.Controllers
         }
 
         [HttpGet("{id}")]
-        [AuthFilter(Constants.ROLE_ADMIN)]
+        [AuthenticationFilter(Constants.ROLE_ADMIN)]
         public IActionResult GetTicket([FromRoute] int id)
         {
             return Ok(ticketService.GetTicket(id));
         }
 
         [HttpGet]
-        [AuthFilter(Constants.ROLE_ADMIN + "," + Constants.ROLE_SPECTATOR)]
+        [AuthenticationFilter(Constants.ROLE_ADMIN + "," + Constants.ROLE_SPECTATOR)]
         public IActionResult GetTickets()
         {
             this.userService = this.HttpContext

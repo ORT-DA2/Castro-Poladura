@@ -17,7 +17,7 @@ namespace TicketPal.WebApi.Tests.Filters
     [TestClass]
     public class AuthenticationFilterTest
     {
-        private AuthFilter filter;
+        private AuthenticationFilter filter;
         // Mock services
         private Mock<IUserService> mockUserService;
 
@@ -34,7 +34,7 @@ namespace TicketPal.WebApi.Tests.Filters
         {
             this.mockUserService.Setup(s => s.RetrieveUserFromToken(It.IsAny<string>())).Returns(null as User);
 
-            filter = new AuthFilter(
+            filter = new AuthenticationFilter(
                 Constants.ROLE_ADMIN
             );
 
@@ -73,7 +73,7 @@ namespace TicketPal.WebApi.Tests.Filters
                 }
             );
 
-            filter = new AuthFilter(
+            filter = new AuthenticationFilter(
                 Constants.ROLE_ADMIN
             );
 
