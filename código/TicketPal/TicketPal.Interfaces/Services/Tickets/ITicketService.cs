@@ -13,6 +13,7 @@ namespace TicketPal.Interfaces.Services.Tickets
         OperationResult AddTicket(AddTicketRequest model);
         OperationResult UpdateTicket(UpdateTicketRequest model);
         OperationResult DeleteTicket(int id);
+        IEnumerable<Ticket> GetUserTickets(int userId);
         IEnumerable<Ticket> GetTickets();
         Ticket GetTicket(int id);
     }

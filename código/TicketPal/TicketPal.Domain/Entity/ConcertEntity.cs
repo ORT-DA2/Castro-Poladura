@@ -1,8 +1,10 @@
-﻿namespace TicketPal.Domain.Entity
+﻿using System.Collections.Generic;
+
+namespace TicketPal.Domain.Entity
 {
     public class ConcertEntity : EventEntity
     {
         public string TourName { get; set; }
-        public PerformerEntity Artist { get; set; }
+        public List<PerformerEntity> Artists { get; set; }
     }
 }

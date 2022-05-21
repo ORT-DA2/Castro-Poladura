@@ -35,7 +35,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 Lastname = "Doe",
                 Email = "someone@example.com",
                 Password = BC.HashPassword(userPassword),
-                Role = UserRole.ADMIN.ToString(),
+                Role = Constants.ROLE_ADMIN,
                 ActiveAccount = true
             };
 
@@ -81,7 +81,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 Lastname = "Doe",
                 Email = "someone@example.com",
                 Password = BC.HashPassword(userPassword),
-                Role = UserRole.ADMIN.ToString(),
+                Role = Constants.ROLE_ADMIN,
                 ActiveAccount = true
             };
 
@@ -117,8 +117,8 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 Lastname = "Doe",
                 Email = "someone@example.com",
                 Password = BC.HashPassword(userPassword),
-                Role = UserRole.ADMIN.ToString(),
-                ActiveAccount= true
+                Role = Constants.ROLE_ADMIN,
+                ActiveAccount = true
             };
 
 
@@ -146,7 +146,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 Lastname = "Doe",
                 Email = "someone@example.com",
                 Password = "myTestEnteredPassword",
-                Role = UserRole.SPECTATOR.ToString(),
+                Role = Constants.ROLE_SPECTATOR,
             };
 
             this.mockUserRepo.Setup(r => r.Exists(It.IsAny<int>())).Returns(false);
@@ -163,7 +163,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
 
             OperationResult result = userService.SignUp(signInRequest);
 
-            Assert.IsTrue(result.ResultCode == ResultCode.SUCCESS);
+            Assert.IsTrue(result.ResultCode == Constants.CODE_SUCCESS);
         }
 
         [TestMethod]
@@ -175,7 +175,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 Lastname = "Doe",
                 Email = "someone@example.com",
                 Password = "myTestEnteredPassword",
-                Role = UserRole.SPECTATOR.ToString()
+                Role = Constants.ROLE_SPECTATOR
             };
 
             this.mockUserRepo.Setup(r => r.Exists(It.IsAny<int>())).Returns(false);
@@ -193,7 +193,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
 
             OperationResult result = userService.SignUp(signInRequest);
 
-            Assert.IsTrue(result.ResultCode == ResultCode.FAIL);
+            Assert.IsTrue(result.ResultCode == Constants.CODE_FAIL);
         }
 
 
@@ -202,10 +202,10 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
         {
             IEnumerable<UserEntity> dbAccounts = new List<UserEntity>()
             {
-                new UserEntity{Id=1,Firstname="Jennifer",Lastname="Garner",Email="user1@example.com",Role=UserRole.SPECTATOR.ToString()},
-                new UserEntity{Id=2,Firstname="John",Lastname="Doe",Email="user2@example.com",Role=UserRole.SPECTATOR.ToString()},
-                new UserEntity{Id=3,Firstname="Jane",Lastname="Doe",Email="user3@example.com",Role=UserRole.SPECTATOR.ToString()},
-                new UserEntity{Id=3,Firstname="Steve",Lastname="Black",Email="user4@example.com",Role=UserRole.SPECTATOR.ToString()}
+                new UserEntity{Id=1,Firstname="Jennifer",Lastname="Garner",Email="user1@example.com",Role=Constants.ROLE_SPECTATOR},
+                new UserEntity{Id=2,Firstname="John",Lastname="Doe",Email="user2@example.com",Role=Constants.ROLE_SPECTATOR},
+                new UserEntity{Id=3,Firstname="Jane",Lastname="Doe",Email="user3@example.com",Role=Constants.ROLE_SPECTATOR},
+                new UserEntity{Id=3,Firstname="Steve",Lastname="Black",Email="user4@example.com",Role=Constants.ROLE_SPECTATOR}
             };
 
             this.mockUserRepo.Setup(r => r.GetAll(It.IsAny<Expression<Func<UserEntity, bool>>>())).Returns(dbAccounts);
@@ -217,7 +217,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 this.options,
                 this.mapper
             );
-            IEnumerable<User> result = userService.GetUsers(UserRole.SPECTATOR.ToString());
+            IEnumerable<User> result = userService.GetUsers(Constants.ROLE_SPECTATOR);
 
             Assert.IsTrue(result.ToList().Count == 4);
         }
@@ -233,7 +233,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 Lastname = "Doe",
                 Email = "someone@example.com",
                 Password = BC.HashPassword(userPassword),
-                Role = UserRole.ADMIN.ToString(),
+                Role = Constants.ROLE_SPECTATOR,
                 ActiveAccount = true
             };
 
@@ -263,7 +263,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 Lastname = "Doe",
                 Email = "someone@example.com",
                 Password = BC.HashPassword(userPassword),
-                Role = UserRole.ADMIN.ToString(),
+                Role = Constants.ROLE_ADMIN,
                 ActiveAccount = true
             };
 
@@ -278,7 +278,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
             );
             OperationResult result = userService.DeleteUser(id);
 
-            Assert.IsTrue(result.ResultCode == ResultCode.SUCCESS);
+            Assert.IsTrue(result.ResultCode == Constants.CODE_SUCCESS);
         }
 
         [TestMethod]
@@ -302,9 +302,9 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 this.options,
                 this.mapper
             );
-            OperationResult expected = userService.UpdateUser(updateRequest,"SPECTATOR");
+            OperationResult expected = userService.UpdateUser(updateRequest, "SPECTATOR");
 
-            Assert.IsTrue(expected.ResultCode == ResultCode.SUCCESS);
+            Assert.IsTrue(expected.ResultCode == Constants.CODE_SUCCESS);
         }
 
         [TestMethod]
@@ -316,7 +316,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 Lastname = "Doe",
                 Password = BC.HashPassword(userPassword),
                 Email = "someone@example.com",
-                Role = UserRole.SELLER.ToString()
+                Role = Constants.ROLE_SELLER
             };
 
             this.mockUserRepo.Setup(p => p.Update(It.IsAny<UserEntity>())).Throws(new RepositoryException());
@@ -328,9 +328,9 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 this.options,
                 this.mapper
             );
-            OperationResult expected = userService.UpdateUser(updateRequest,"SPECTATOR");
+            OperationResult expected = userService.UpdateUser(updateRequest, "SPECTATOR");
 
-            Assert.IsTrue(expected.ResultCode == ResultCode.FAIL);
+            Assert.IsTrue(expected.ResultCode == Constants.CODE_FAIL);
         }
 
         [TestMethod]
@@ -342,7 +342,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
                 Lastname = "Doe",
                 Email = "someone@example.com",
                 Password = BC.HashPassword(userPassword),
-                Role = UserRole.SPECTATOR.ToString()
+                Role = Constants.ROLE_SPECTATOR
             };
             this.factoryMock.Setup(m => m.GetRepository(typeof(UserEntity)))
                 .Returns(this.mockUserRepo.Object);
@@ -354,7 +354,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
             );
             OperationResult expected = userService.UpdateUser(updateRequest, "SPECTATOR");
 
-            Assert.IsTrue(expected.ResultCode == ResultCode.SUCCESS);
+            Assert.IsTrue(expected.ResultCode == Constants.CODE_SUCCESS);
         }
 
         [TestMethod]
@@ -373,7 +373,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
             );
             OperationResult result = userService.DeleteUser(id);
 
-            Assert.IsTrue(result.ResultCode == ResultCode.FAIL);
+            Assert.IsTrue(result.ResultCode == Constants.CODE_FAIL);
         }
 
         [TestMethod]
@@ -396,6 +396,75 @@ namespace TicketPal.BusinessLogic.Tests.Services.Users
 
             Assert.IsNull(account);
 
+        }
+
+        [TestMethod]
+        public void RetrieveUserFromTokenIsNullToken()
+        {
+            this.userService = new UserService(
+                this.factoryMock.Object,
+                this.options,
+                this.mapper
+            );
+
+            var user = userService.RetrieveUserFromToken(null);
+            Assert.IsNull(user);
+        }
+
+        [TestMethod]
+        public void RetrieveUserFromTokenClaimNull()
+        {
+            this.mockJwtService.Setup(m => m.ClaimTokenValue(
+                It.IsAny<string>(),
+                It.IsAny<string>(),
+                "id"
+            )).Returns(null as string);
+
+            this.factoryMock.Setup(m => m.GetService(typeof(IJwtService)))
+                .Returns(this.mockJwtService.Object);
+
+            this.userService = new UserService(
+                this.factoryMock.Object,
+                this.options,
+                this.mapper
+            );
+            var user = userService.RetrieveUserFromToken("someToken");
+            Assert.IsNull(user);
+        }
+
+        [TestMethod]
+        public void RetrieveUserFromTokenOk()
+        {
+            var dbUser = new UserEntity
+            {
+                Id = 1,
+                Firstname = "John",
+                Lastname = "Doe",
+                Email = "someone@example.com",
+                Password = BC.HashPassword(userPassword),
+                Role = Constants.ROLE_ADMIN,
+                ActiveAccount = true
+            };
+
+            this.mockJwtService.Setup(m => m.ClaimTokenValue(
+                It.IsAny<string>(),
+                It.IsAny<string>(),
+                "id"
+            )).Returns("1");
+
+            this.mockUserRepo.Setup(r => r.Get(It.IsAny<int>())).Returns(dbUser);
+            this.factoryMock.Setup(m => m.GetRepository(typeof(UserEntity)))
+                .Returns(this.mockUserRepo.Object);
+            this.factoryMock.Setup(m => m.GetService(typeof(IJwtService)))
+                .Returns(this.mockJwtService.Object);
+
+            this.userService = new UserService(
+                this.factoryMock.Object,
+                this.options,
+                this.mapper
+            );
+            var user = userService.RetrieveUserFromToken("someToken");
+            Assert.IsNotNull(user);
         }
     }
 }

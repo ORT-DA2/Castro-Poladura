@@ -45,7 +45,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Genres
         {
             OperationResult result = genreService.AddGenre(genreRequest);
 
-            Assert.IsTrue(result.ResultCode == ResultCode.SUCCESS);
+            Assert.IsTrue(result.ResultCode == Constants.CODE_SUCCESS);
         }
 
         [TestMethod]
@@ -61,7 +61,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Genres
 
             OperationResult result = genreService.AddGenre(genreRequest);
 
-            Assert.IsTrue(result.ResultCode == ResultCode.FAIL);
+            Assert.IsTrue(result.ResultCode == Constants.CODE_FAIL);
         }
 
         [TestMethod]
@@ -80,7 +80,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Genres
             this.genreService = new GenreService(this.factoryMock.Object, this.mapper);
             OperationResult result = genreService.DeleteGenre(id);
 
-            Assert.IsTrue(result.ResultCode == ResultCode.SUCCESS);
+            Assert.IsTrue(result.ResultCode == Constants.CODE_SUCCESS);
         }
 
         [TestMethod]
@@ -94,7 +94,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Genres
             this.genreService = new GenreService(this.factoryMock.Object, this.mapper);
             OperationResult result = genreService.DeleteGenre(id);
 
-            Assert.IsTrue(result.ResultCode == ResultCode.FAIL);
+            Assert.IsTrue(result.ResultCode == Constants.CODE_FAIL);
         }
 
         [TestMethod]
@@ -112,7 +112,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Genres
             this.genreService = new GenreService(this.factoryMock.Object, this.mapper);
             OperationResult expected = genreService.UpdateGenre(updateRequest);
 
-            Assert.IsTrue(expected.ResultCode == ResultCode.SUCCESS);
+            Assert.IsTrue(expected.ResultCode == Constants.CODE_SUCCESS);
         }
 
         [TestMethod]

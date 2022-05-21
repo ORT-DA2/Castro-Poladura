@@ -33,18 +33,18 @@ namespace TicketPal.WebApi.Tests.Controllers
         {
             var request = new AddConcertRequest
             {
-                Artist = 2,
+                ArtistsIds = new List<int> { 2 },
                 Date = DateTime.Now,
                 AvailableTickets = 201,
-                EventType = EventType.CONCERT,
+                EventType = Constants.EVENT_CONCERT_TYPE,
                 TicketPrice = 197.8M,
-                CurrencyType = Domain.Constants.CurrencyType.USD,
+                CurrencyType = Constants.CURRENCY_US_DOLLARS,
                 TourName = "SomeTour"
             };
 
             var operationResult = new OperationResult
             {
-                ResultCode = ResultCode.SUCCESS,
+                ResultCode = Constants.CODE_SUCCESS,
                 Message = "success"
             };
 
@@ -62,18 +62,18 @@ namespace TicketPal.WebApi.Tests.Controllers
         {
             var request = new AddConcertRequest
             {
-                Artist = 2,
+                ArtistsIds = new List<int> { 2 },
                 Date = DateTime.Now,
                 AvailableTickets = 201,
-                EventType = EventType.CONCERT,
+                EventType = Constants.EVENT_CONCERT_TYPE,
                 TicketPrice = 197.8M,
-                CurrencyType = Domain.Constants.CurrencyType.USD,
+                CurrencyType = Constants.CURRENCY_US_DOLLARS,
                 TourName = "SomeTour"
             };
 
             var operationResult = new OperationResult
             {
-                ResultCode = ResultCode.FAIL,
+                ResultCode = Constants.CODE_FAIL,
                 Message = "error"
             };
 
@@ -92,18 +92,16 @@ namespace TicketPal.WebApi.Tests.Controllers
             var request = new UpdateConcertRequest
             {
                 Id = 1,
-                Artist = 2,
                 Date = DateTime.Now,
-                AvailableTickets = 201,
-                EventType = EventType.CONCERT,
+                EventType = Constants.EVENT_CONCERT_TYPE,
                 TicketPrice = 197.8M,
-                CurrencyType = Domain.Constants.CurrencyType.USD,
+                CurrencyType = Constants.CURRENCY_US_DOLLARS,
                 TourName = "SomeTour"
             };
 
             var operationResult = new OperationResult
             {
-                ResultCode = ResultCode.SUCCESS,
+                ResultCode = Constants.CODE_SUCCESS,
                 Message = "success"
             };
 
@@ -122,18 +120,16 @@ namespace TicketPal.WebApi.Tests.Controllers
             var request = new UpdateConcertRequest
             {
                 Id = 1,
-                Artist = 2,
                 Date = DateTime.Now,
-                AvailableTickets = 201,
-                EventType = EventType.CONCERT,
+                EventType = Constants.EVENT_CONCERT_TYPE,
                 TicketPrice = 197.8M,
-                CurrencyType = Domain.Constants.CurrencyType.USD,
+                CurrencyType = Constants.CURRENCY_US_DOLLARS,
                 TourName = "SomeTour"
             };
 
             var operationResult = new OperationResult
             {
-                ResultCode = ResultCode.FAIL,
+                ResultCode = Constants.CODE_FAIL,
                 Message = "error"
             };
 
@@ -152,7 +148,7 @@ namespace TicketPal.WebApi.Tests.Controllers
 
             var operationResult = new OperationResult
             {
-                ResultCode = ResultCode.SUCCESS,
+                ResultCode = Constants.CODE_SUCCESS,
                 Message = "success"
             };
 
@@ -171,7 +167,7 @@ namespace TicketPal.WebApi.Tests.Controllers
 
             var operationResult = new OperationResult
             {
-                ResultCode = ResultCode.FAIL,
+                ResultCode = Constants.CODE_FAIL,
                 Message = "error"
             };
 
@@ -199,14 +195,19 @@ namespace TicketPal.WebApi.Tests.Controllers
         [TestMethod]
         public void GetConcerts()
         {
-            mockService.Setup(s => s.GetConcerts(It.IsAny<Expression<Func<ConcertEntity, bool>>>(),false))
-                .Returns(concerts);
+            mockService.Setup(s => s.GetConcerts(
+                It.IsAny<string>(),
+                true,
+                It.IsAny<string>(),
+                It.IsAny<string>(),
+                It.IsAny<string>()
+            )).Returns(concerts);
 
             var result = controller.GetConcerts(
-                0,
+                Constants.EVENT_CONCERT_TYPE,
                 true,
-                "05/9/2022",
-                "05/12/2022",
+                DateTime.Now.ToString("dd/M/yyyy hh:mm"),
+                DateTime.Now.AddDays(30).ToString("dd/M/yyyy hh:mm"),
                 "Bono"
                 );
             var objectResult = result as ObjectResult;
@@ -216,6 +217,66 @@ namespace TicketPal.WebApi.Tests.Controllers
 
         }
 
+        [TestMethod]
+        public void GetConcertsWrongStartDate()
+        {
+            mockService.Setup(s => s.GetConcerts(
+                Constants.EVENT_CONCERT_TYPE,
+                false,
+                It.IsAny<string>(),
+                It.IsAny<string>(),
+                It.IsAny<string>()
+            )).Returns(concerts);
+
+            var result = controller.GetConcerts(
+                Constants.EVENT_CONCERT_TYPE,
+                true,
+                "3fewfsdd",
+                DateTime.Now.AddDays(30).ToString("dd/M/yyyy"),
+                "Bono"
+                );
+            var operationResult = new OperationResult
+            {
+                ResultCode = Constants.CODE_FAIL,
+                Message = "error"
+            };
+
+            var objectResult = result as ObjectResult;
+            var statusCode = objectResult.StatusCode;
+
+            Assert.AreEqual(400, statusCode);
+        }
+
+        [TestMethod]
+        public void GetConcertsWrongEndDate()
+        {
+            mockService.Setup(s => s.GetConcerts(
+                Constants.EVENT_CONCERT_TYPE,
+                false,
+                It.IsAny<string>(),
+                It.IsAny<string>(),
+                It.IsAny<string>()
+            )).Returns(concerts);
+
+            var result = controller.GetConcerts(
+                Constants.EVENT_CONCERT_TYPE,
+                true,
+                DateTime.Now.AddDays(30).ToString("dd/M/yyyy"),
+                "fdsf23fs",
+                "Bono"
+                );
+            var operationResult = new OperationResult
+            {
+                ResultCode = Constants.CODE_FAIL,
+                Message = "error"
+            };
+
+            var objectResult = result as ObjectResult;
+            var statusCode = objectResult.StatusCode;
+
+            Assert.AreEqual(400, statusCode);
+        }
+
         private List<Concert> SetupEvents()
         {
             return new List<Concert>
@@ -223,34 +284,31 @@ namespace TicketPal.WebApi.Tests.Controllers
                 new Concert
                 {
                     Id = 1,
-                    Artist = new Performer(),
                     Date = DateTime.Now,
                     AvailableTickets = 201,
-                    EventType = EventType.CONCERT,
+                    EventType = Constants.EVENT_CONCERT_TYPE,
                     TicketPrice = 197.8M,
-                    CurrencyType = Domain.Constants.CurrencyType.USD,
+                    CurrencyType = Constants.CURRENCY_US_DOLLARS,
                     TourName = "SomeTour"
                 },
                 new Concert
                 {
                     Id = 2,
-                    Artist = new Performer(),
                     Date = DateTime.Now,
                     AvailableTickets = 201,
-                    EventType = EventType.CONCERT,
+                    EventType = Constants.EVENT_CONCERT_TYPE,
                     TicketPrice = 197.8M,
-                    CurrencyType = Domain.Constants.CurrencyType.USD,
+                    CurrencyType = Constants.CURRENCY_US_DOLLARS,
                     TourName = "SomeTour"
                 },
                 new Concert
                 {
                     Id = 3,
-                    Artist = new Performer(),
                     Date = DateTime.Now,
                     AvailableTickets = 201,
-                    EventType = EventType.CONCERT,
+                    EventType = Constants.EVENT_CONCERT_TYPE,
                     TicketPrice = 197.8M,
-                    CurrencyType = Domain.Constants.CurrencyType.USD,
+                    CurrencyType = Constants.CURRENCY_US_DOLLARS,
                     TourName = "SomeTour"
                 },
             };

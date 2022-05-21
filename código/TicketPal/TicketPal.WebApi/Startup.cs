@@ -1,10 +1,12 @@
 
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using TicketPal.BusinessLogic.Services.Settings;
 using TicketPal.Factory;
 using TicketPal.Interfaces.Factory;
@@ -25,13 +27,16 @@ namespace TicketPal.WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
+            // Settings
+            var section = Configuration.GetSection("AppSettings");
+            services.Configure<AppSettings>(section);
+            // Filters
             services.AddScoped<AuthFilter>();
             services.AddMvcCore(options =>
             {
                 options.Filters.Add(typeof(ModelValidateFilter));
             });
-
+            //Factory
             IServiceFactory factory = new ServiceFactory(
                 services,
                 Configuration
@@ -40,9 +45,14 @@ namespace TicketPal.WebApi
             factory.RegisterRepositories();
             factory.RegisterServices();
             factory.BuildServices();
-            
+
             services.AddControllers();
-            
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "TicketPal.WebApi", Version = "v1" });
+            });
+
             services.Configure<ApiBehaviorOptions>(opt =>
             {
                 opt.SuppressModelStateInvalidFilter = true;
@@ -54,6 +64,14 @@ namespace TicketPal.WebApi
         {
             if (env.IsDevelopment())
             {
+                app.UseSwagger();
+                app.UseSwaggerUI(
+                    c => 
+                    {
+                        c.SwaggerEndpoint("/swagger/v1/swagger.json", "TicketPal.WebApi v1");
+                        c.RoutePrefix = string.Empty;
+                    }
+                );
                 app.UseDeveloperExceptionPage();
             }
 

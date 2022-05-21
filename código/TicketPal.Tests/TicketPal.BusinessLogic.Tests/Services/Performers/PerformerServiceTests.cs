@@ -1,7 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using TicketPal.BusinessLogic.Services.Performers;
 using TicketPal.Domain.Constants;
 using TicketPal.Domain.Entity;
@@ -15,7 +17,6 @@ namespace TicketPal.BusinessLogic.Tests.Services.Performers
     public class PerformerServiceTests : BaseServiceTests
     {
         private GenreEntity genre;
-        private string artists;
         private PerformerEntity performer;
         private AddPerformerRequest performerRequest;
         private PerformerService performerService;
@@ -29,35 +30,36 @@ namespace TicketPal.BusinessLogic.Tests.Services.Performers
                 GenreName = "Pop Rock"
             };
 
-            artists = "Chris Martin|Jon Buckland|Guy Berryman|Will Champion";
-
             performer = new PerformerEntity()
             {
                 Id = 1,
-                Name = "Coldplay",
-                PerformerType = Domain.Constants.PerformerType.BAND,
+                UserInfo = new UserEntity { Firstname = "Coldplay"},
+                PerformerType = Constants.PERFORMER_TYPE_BAND,
                 StartYear = "1996",
                 Genre = genre,
-                Artists = artists
+                Concerts = new List<ConcertEntity>()
             };
 
             performerRequest = new AddPerformerRequest()
             {
-                Artists = performer.Artists,
+                ConcertIds = new List<int>(),
                 Genre = genre.Id,
-                Name = performer.Name,
+                UserId = 1,
                 PerformerType = performer.PerformerType,
                 StartYear = performer.StartYear
             };
 
             this.mockPerformerRepo.Setup(m => m.Exists(It.IsAny<int>())).Returns(false);
             this.mockPerformerRepo.Setup(m => m.Add(It.IsAny<PerformerEntity>())).Verifiable();
-
+            this.mockUserRepo.Setup(u => u.Get(It.IsAny<int>())).Returns(new UserEntity { Role = Constants.ROLE_ARTIST});
+            this.mockConcertRepo.Setup(c => c.GetAll(It.IsAny<Expression<Func<ConcertEntity, bool>>>()))
+                .Returns(new List<ConcertEntity>());
             this.mockGenreRepo.Setup(m => m.Get(It.IsAny<int>())).Returns(genre);
 
             this.factoryMock.Setup(m => m.GetRepository(typeof(PerformerEntity))).Returns(this.mockPerformerRepo.Object);
             this.factoryMock.Setup(m => m.GetRepository(typeof(GenreEntity))).Returns(this.mockGenreRepo.Object);
-
+            this.factoryMock.Setup(m => m.GetRepository(typeof(UserEntity))).Returns(this.mockUserRepo.Object);
+            this.factoryMock.Setup(m => m.GetRepository(typeof(ConcertEntity))).Returns(this.mockConcertRepo.Object);
             this.performerService = new PerformerService(this.factoryMock.Object, this.mapper);
         }
 
@@ -66,7 +68,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Performers
         {
             OperationResult result = performerService.AddPerformer(performerRequest);
 
-            Assert.IsTrue(result.ResultCode == ResultCode.SUCCESS);
+            Assert.IsTrue(result.ResultCode == Constants.CODE_SUCCESS);
         }
 
         [TestMethod]
@@ -82,7 +84,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Performers
 
             OperationResult result = performerService.AddPerformer(performerRequest);
 
-            Assert.IsTrue(result.ResultCode == ResultCode.FAIL);
+            Assert.IsTrue(result.ResultCode == Constants.CODE_FAIL);
         }
 
         [TestMethod]
@@ -97,7 +99,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Performers
 
             OperationResult result = performerService.AddPerformer(performerRequest);
 
-            Assert.IsTrue(result.ResultCode == ResultCode.FAIL);
+            Assert.IsTrue(result.ResultCode == Constants.CODE_FAIL);
         }
 
         [TestMethod]
@@ -107,8 +109,8 @@ namespace TicketPal.BusinessLogic.Tests.Services.Performers
             var dbUser = new PerformerEntity
             {
                 Id = id,
-                Name = performer.Name,
-                Artists = performer.Artists,
+                UserInfo = performer.UserInfo,
+                Concerts = performer.Concerts,
                 Genre = performer.Genre,
                 PerformerType = performer.PerformerType,
                 StartYear = performer.StartYear
@@ -120,7 +122,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Performers
             this.performerService = new PerformerService(this.factoryMock.Object, this.mapper);
             OperationResult result = performerService.DeletePerformer(id);
 
-            Assert.IsTrue(result.ResultCode == ResultCode.SUCCESS);
+            Assert.IsTrue(result.ResultCode == Constants.CODE_SUCCESS);
         }
 
         [TestMethod]
@@ -134,7 +136,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Performers
             this.performerService = new PerformerService(this.factoryMock.Object, this.mapper);
             OperationResult result = performerService.DeletePerformer(id);
 
-            Assert.IsTrue(result.ResultCode == ResultCode.FAIL);
+            Assert.IsTrue(result.ResultCode == Constants.CODE_FAIL);
         }
 
         [TestMethod]
@@ -142,7 +144,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Performers
         {
             var updateRequest = new UpdatePerformerRequest
             {
-                Name = performer.Name
+                UserId = 1
             };
 
             this.mockPerformerRepo.Setup(m => m.Update(It.IsAny<PerformerEntity>())).Verifiable();
@@ -151,7 +153,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Performers
             this.performerService = new PerformerService(this.factoryMock.Object, this.mapper);
             OperationResult expected = performerService.UpdatePerformer(updateRequest);
 
-            Assert.IsTrue(expected.ResultCode == ResultCode.SUCCESS);
+            Assert.IsTrue(expected.ResultCode == Constants.CODE_SUCCESS);
         }
 
         [TestMethod]
@@ -161,8 +163,8 @@ namespace TicketPal.BusinessLogic.Tests.Services.Performers
             var dbUser = new PerformerEntity
             {
                 Id = id,
-                Name = performer.Name,
-                Artists = performer.Artists,
+                UserInfo = performer.UserInfo,
+                Concerts = performer.Concerts,
                 Genre = performer.Genre,
                 PerformerType = performer.PerformerType,
                 StartYear = performer.StartYear
@@ -203,8 +205,8 @@ namespace TicketPal.BusinessLogic.Tests.Services.Performers
                 new PerformerEntity
                 {
                     Id = 1,
-                    Name = performer.Name,
-                    Artists = performer.Artists,
+                    UserInfo = performer.UserInfo,
+                    Concerts = performer.Concerts,
                     Genre = performer.Genre,
                     PerformerType = performer.PerformerType,
                     StartYear = performer.StartYear
@@ -212,8 +214,8 @@ namespace TicketPal.BusinessLogic.Tests.Services.Performers
                 new PerformerEntity
                 {
                     Id = 2,
-                    Name = "The Party Band",
-                    Artists = "Geremy Cajtak|Marcelo López",
+                    UserInfo = new UserEntity {Firstname = "The Party Band"},
+                    Concerts = new List<ConcertEntity>(),
                     Genre = new GenreEntity(){ Id = 3, GenreName = "Pachanga"},
                     PerformerType = performer.PerformerType,
                     StartYear = performer.StartYear
@@ -221,9 +223,9 @@ namespace TicketPal.BusinessLogic.Tests.Services.Performers
                 new PerformerEntity
                 {
                     Id = 3,
-                    Name = "Pepito Perez",
+                    UserInfo = new UserEntity { Firstname = "Pepito Perez" },
                     Genre = performer.Genre,
-                    PerformerType = PerformerType.SOLO_ARTIST,
+                    PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                     StartYear = "1965"
                 },
             };

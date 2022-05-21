@@ -7,9 +7,10 @@ namespace TicketPal.Domain.Models.Response
     public class Ticket
     {
         public int Id { get; set; }
-        public TicketStatus Status { get; set; }
+        public string Status { get; set; }
         public DateTime PurchaseDate { get; set; }
         public string Code { get; set; }
-        public EventEntity Event { get; set; }
+        public Concert Event { get; set; }
+        public User Buyer {get; set;}
     }
 }

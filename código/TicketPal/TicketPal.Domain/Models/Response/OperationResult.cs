@@ -5,6 +5,6 @@ namespace TicketPal.Domain.Models.Response
     public class OperationResult
     {
         public string Message { get; set; }
-        public ResultCode ResultCode { get; set; }
+        public string ResultCode { get; set; }
     }
 }

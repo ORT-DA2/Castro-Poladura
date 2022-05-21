@@ -13,9 +13,8 @@ namespace TicketPal.DataAccess.Tests.Entity
         private UserEntity buyer;
         private DateTime purchaseDate;
         private ConcertEntity concert;
-        private PerformerEntity band;
-        private string artists;
-        private TicketStatus status;
+        private List<PerformerEntity> bands;
+        private string status;
         private string code;
 
         [TestInitialize]
@@ -33,20 +32,21 @@ namespace TicketPal.DataAccess.Tests.Entity
 
             purchaseDate = new DateTime(2022, 04, 04);
 
-            artists = "Freddie Mercury|Brian May|John Deacon|Roger Taylor";
-
-            band = new PerformerEntity
-            {
-                PerformerType = PerformerType.BAND,
-                Name = "Queen",
-                StartYear = "1970",
-                Genre = new GenreEntity
+            bands = new List<PerformerEntity> {
+                new PerformerEntity
                 {
-                    Id = 2,
-                    GenreName = "Rock"
-                },
-                Artists = artists
+                    PerformerType = Constants.PERFORMER_TYPE_BAND,
+                    UserInfo = new UserEntity{ Firstname = "Queen"},
+                    StartYear = "1970",
+                    Genre = new GenreEntity
+                    {
+                        Id = 2,
+                        GenreName = "Rock"
+                    },
+                    Concerts = new List<ConcertEntity>()
+                }
             };
+            
             concert = new ConcertEntity
             {
                 Id = 5,
@@ -54,15 +54,16 @@ namespace TicketPal.DataAccess.Tests.Entity
                 Date = new DateTime(2022, 11, 21),
                 AvailableTickets = 1981,
                 TicketPrice = 650,
-                CurrencyType = CurrencyType.USD,
-                EventType = EventType.CONCERT,
+                CurrencyType = Constants.CURRENCY_US_DOLLARS,
+                EventType = Constants.EVENT_CONCERT_TYPE,
                 TourName = "A Kind of Magic",
-                Artist = band
+                Artists = bands
             };
-            status = TicketStatus.PURCHASED;
+            status = Constants.TICKET_PURCHASED_STATUS;
             code = "p3q59gjnfjgo4uqfjDXNCLKMQP31foiqnvjdanv";
-        }
-
+        
+    }
+    
         [TestMethod]
         public void GetTicketTest()
         {
