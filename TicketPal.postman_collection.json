@@ -2,7 +2,8 @@
 	"info": {
 		"_postman_id": "a6af62a2-ce85-4052-8fae-e7b93850110a",
 		"name": "TicketPal",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "10728452"
 	},
 	"item": [
 		{
@@ -185,7 +186,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n  \"firstname\" : \"John\",\r\n  \"lastname\" : \"Doe\",\r\n  \"role\" : \"SPECTATOR\",\r\n  \"email\" : \"johndoe@example.com\",\r\n  \"password\" : \"somePassword\"\r\n}",
+									"raw": "{\r\n  \"firstname\" : \"Ed\",\r\n  \"lastname\" : \"Sheeran\",\r\n  \"role\" : \"ARTIST\",\r\n  \"email\" : \"edsheeran@example.com\",\r\n  \"password\" : \"sheeran1\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -226,7 +227,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n  \"firstname\" : \"Spectator\",\r\n  \"lastname\" : \"Test\",\r\n  \"role\" : \"SPECTATOR\",\r\n  \"email\" : \"spectator@example.com\",\r\n  \"password\" : \"spectator1\"\r\n}",
+									"raw": "{\r\n  \"firstname\": \"Bad\",\r\n  \"lastname\": \"Bunny\",\r\n  \"password\": \"badbunny11\",\r\n  \"email\": \"badbunny@example.com\",\r\n  \"role\": \"ARTIST\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -234,13 +235,13 @@
 									}
 								},
 								"url": {
-									"raw": "{{API_URL}}/users/3",
+									"raw": "{{API_URL}}/users/6",
 									"host": [
 										"{{API_URL}}"
 									],
 									"path": [
 										"users",
-										"3"
+										"6"
 									]
 								}
 							},
@@ -263,7 +264,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n  \"firstname\" : \"Spectator\",\r\n  \"lastname\" : \"Test\",\r\n  \"role\" : \"SPECTATOR\",\r\n  \"email\" : \"spectator@example.com\",\r\n  \"password\" : \"spectator1\"\r\n}",
+									"raw": "{\r\n  \"firstname\" : \"hola\",\r\n  \"lastname\" : \"Test\",\r\n  \"role\" : \"ADMIN\",\r\n  \"email\" : \"spectator@example.com\",\r\n  \"password\" : \"spectator1\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -304,13 +305,13 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{API_URL}}/users/",
+									"raw": "{{API_URL}}/users/6",
 									"host": [
 										"{{API_URL}}"
 									],
 									"path": [
 										"users",
-										""
+										"6"
 									]
 								}
 							},
@@ -332,7 +333,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{API_URL}}/users/",
+									"raw": "{{API_URL}}/users/?role=ARTIST",
 									"host": [
 										"{{API_URL}}"
 									],
@@ -360,6 +361,10 @@
 											"key": "role",
 											"value": "SUPERVISOR",
 											"disabled": true
+										},
+										{
+											"key": "role",
+											"value": "ARTIST"
 										}
 									]
 								}
@@ -423,7 +428,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"performerType\": 1,\r\n  \"name\" : \"Coldplay\",\r\n  \"startYear\" : \"1996\",\r\n  \"artists\" : \"Chris Martin | Guy Berryman | Phil Harvey | Will Champion | Jon Buckland\",\r\n  \"genre\" : 1\r\n}",
+							"raw": "{\r\n  \"performerType\": \"SOLO_ARTIST\",\r\n  \"userId\": 8,\r\n  \"startYear\": \"2010\",\r\n  \"genre\": 1,\r\n  \"concertIds\": [\r\n    0\r\n  ]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -459,7 +464,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"performerType\": 1,\r\n    \"name\" : \"DuaLipa\",\r\n    \"startYear\" : \"1996\",\r\n    \"artists\" : \"Chris Martin | Guy Berryman | Phil Harvey | Will Champion | Jon Buckland\",\r\n    \"genre\" : 1\r\n}",
+							"raw": "{\r\n  \"userId\": 0,\r\n  \"performerType\": \"SOLO_ARTIST\",\r\n  \"startYear\": \"2008\",\r\n  \"genreId\": 0,\r\n  \"artistsIds\": [\r\n    0\r\n  ]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -467,13 +472,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{API_URL}}/performers/1",
+							"raw": "{{API_URL}}/performers/6",
 							"host": [
 								"{{API_URL}}"
 							],
 							"path": [
 								"performers",
-								"1"
+								"6"
 							]
 						}
 					},
@@ -522,13 +527,41 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{API_URL}}/performers/1",
+							"raw": "{{API_URL}}/performers/6",
 							"host": [
 								"{{API_URL}}"
 							],
 							"path": [
 								"performers",
-								"1"
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetPerformerById",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL}}/performers/8",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"performers",
+								"8"
 							]
 						}
 					},
@@ -680,6 +713,359 @@
 							"path": [
 								"genres",
 								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Concerts",
+			"item": [
+				{
+					"name": "AddConcert",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"date\": \"2023-03-16T16:23:35.035Z\",\r\n  \"ticketPrice\": 156.8,\r\n  \"currencyType\": \"USD\",\r\n  \"eventType\": \"CONCERT\",\r\n  \"tourName\": \"Collaboration Project\",\r\n  \"artistsIds\": [\r\n    8\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL}}/events",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"events"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetConcerts",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL}}/events?type=CONCERT",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"events"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "CONCERT"
+								},
+								{
+									"key": "newest",
+									"value": "false",
+									"disabled": true
+								},
+								{
+									"key": "startDate",
+									"value": "20/05/2022 09:10",
+									"disabled": true
+								},
+								{
+									"key": "endDate",
+									"value": "19/05/2022 01:41",
+									"disabled": true
+								},
+								{
+									"key": "performerName",
+									"value": "Bunny",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetConcertById",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL}}/events/1",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"events",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateEvent",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"date\": \"2022-05-19T23:00:55.608Z\",\r\n  \"ticketPrice\": 106,\r\n  \"currencyType\": \"YEN\",\r\n  \"eventType\": \"CONCERT\",\r\n  \"tourName\": \"PINGITO\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL}}/events/1",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"events",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteEvent",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL}}/events/2",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"events",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Tickets",
+			"item": [
+				{
+					"name": "AddTicket",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"newUser\": {\n    \"firstName\": \"string\",\n    \"lastName\": \"string\",\n    \"email\": \"string\"\n  }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL}}/tickets/purchase/1",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"tickets",
+								"purchase",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateTicket",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"code\": \"string\",\n  \"status\": \"string\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL}}/api/tickets/1",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"api",
+								"tickets",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteTicket",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL}}/api/tickets/1",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"api",
+								"tickets",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetTickets",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL}}/api/Tickets",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"api",
+								"Tickets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetTicketById",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL}}/tickets/1",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"tickets",
+								"1"
 							]
 						}
 					},

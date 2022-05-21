@@ -20,7 +20,7 @@ namespace TicketPal.WebApi.Tests.Controllers
         private Mock<IUserService> mockUserService;
         private Mock<HttpContext> mockHttpContext;
         private List<Ticket> tickets;
-        private TicketController controller;
+        private TicketsController controller;
 
         [TestInitialize]
         public void TestSetup()
@@ -36,7 +36,7 @@ namespace TicketPal.WebApi.Tests.Controllers
             mockHttpContext.Setup(s => s.Request).Returns(mockHttpRequest.Object);
 
 
-            controller = new TicketController(mockTicketService.Object);
+            controller = new TicketsController(mockTicketService.Object);
 
             this.tickets = SetupTickets();
         }

@@ -11,12 +11,12 @@ namespace TicketPal.WebApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class TicketController : ControllerBase
+    public class TicketsController : ControllerBase
     {
         private ITicketService ticketService;
         private IUserService userService;
 
-        public TicketController(ITicketService service)
+        public TicketsController(ITicketService service)
         {
             this.ticketService = service;
         }
