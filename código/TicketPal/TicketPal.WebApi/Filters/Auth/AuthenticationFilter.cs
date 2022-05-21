@@ -14,14 +14,14 @@ using TicketPal.Interfaces.Services.Users;
 
 namespace TicketPal.WebApi.Filters.Auth
 {
-    public class AuthFilter : Attribute, IAuthorizationFilter
+    public class AuthenticationFilter : Attribute, IAuthorizationFilter
     {
         private string[] args;
         private IUserService userService;
         private AppSettings settingsService;
         private IJwtService jwtService;
 
-        public AuthFilter(string arguments="")
+        public AuthenticationFilter(string arguments="")
         {
             this.args = arguments.Split(",");
             this.settingsService = new AppSettings();

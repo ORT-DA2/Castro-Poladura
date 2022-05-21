@@ -20,7 +20,7 @@ namespace TicketPal.WebApi.Controllers
         }
 
         [HttpPost]
-        [AuthFilter(Roles.Admin)]
+        [AuthenticationFilter(Roles.Admin)]
         public IActionResult AddPerformer([FromBody] AddPerformerRequest request)
         {
             var result = performerService.AddPerformer(request);
@@ -36,7 +36,7 @@ namespace TicketPal.WebApi.Controllers
         }
 
         [HttpPut("{id}")]
-        [AuthFilter(Roles.Admin)]
+        [AuthenticationFilter(Roles.Admin)]
         public IActionResult UpdatePerformer([FromRoute]int id, [FromBody]UpdatePerformerRequest request)
         {
             request.Id = id;
@@ -53,7 +53,7 @@ namespace TicketPal.WebApi.Controllers
         }
 
         [HttpDelete("id")]
-        [AuthFilter(Roles.Admin)]
+        [AuthenticationFilter(Roles.Admin)]
         public IActionResult DeletePerformer([FromRoute]int id)
         {
             var result = performerService.DeletePerformer(id);

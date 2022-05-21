@@ -33,7 +33,7 @@ namespace TicketPal.WebApi.Controllers
         }
 
         [HttpPost]
-        [AuthFilter(Roles.Admin)]
+        [AuthenticationFilter(Roles.Admin)]
         public IActionResult Register([FromBody] SignUpRequest request)
         {
             var result = userService.SignUp(request);
@@ -49,7 +49,7 @@ namespace TicketPal.WebApi.Controllers
         }
 
         [HttpGet("{id}")]
-        [AuthFilter(Roles.Admin+","+Roles.Spectator)]
+        [AuthenticationFilter(Roles.Admin+","+Roles.Spectator)]
         public IActionResult GetUserAccount([FromRoute]int id)
         {
             var token = HttpContext.Request.Headers["Authorization"]
@@ -71,14 +71,14 @@ namespace TicketPal.WebApi.Controllers
         }
 
         [HttpGet]
-        [AuthFilter(Roles.Admin)]
+        [AuthenticationFilter(Roles.Admin)]
         public IActionResult GetUserAccounts([FromQuery(Name = "role")]string role)
         {
             return Ok(userService.GetUsers(role));
         }
 
         [HttpPut("{id}")]
-        [AuthFilter(Roles.Admin+","+Roles.Spectator)]
+        [AuthenticationFilter(Roles.Admin+","+Roles.Spectator)]
         public IActionResult Update([FromRoute]int id, [FromBody]UpdateUserRequest request)
         {
             
@@ -114,7 +114,7 @@ namespace TicketPal.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        [AuthFilter(Roles.Admin)]
+        [AuthenticationFilter(Roles.Admin)]
         public IActionResult DeleteAccount([FromRoute]int id)
         {
             var result = userService.DeleteUser(id);

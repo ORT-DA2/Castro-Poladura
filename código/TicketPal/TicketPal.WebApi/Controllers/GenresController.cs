@@ -20,7 +20,7 @@ namespace TicketPal.WebApi.Controllers
         }
 
         [HttpPost]
-        [AuthFilter(Roles.Admin)]
+        [AuthenticationFilter(Roles.Admin)]
         public IActionResult AddGenre(AddGenreRequest request)
         {
             var result = genreService.AddGenre(request);
@@ -34,7 +34,7 @@ namespace TicketPal.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        [AuthFilter(Roles.Admin)]
+        [AuthenticationFilter(Roles.Admin)]
         public IActionResult DeleteGenre([FromRoute]int id)
         {
             var result = genreService.DeleteGenre(id);
@@ -60,7 +60,7 @@ namespace TicketPal.WebApi.Controllers
         }
 
         [HttpPut("{id}")]
-        [AuthFilter(Roles.Admin)]
+        [AuthenticationFilter(Roles.Admin)]
         public IActionResult UpdateGenre([FromRoute]int id, UpdateGenreRequest request)
         {
             request.Id = id;

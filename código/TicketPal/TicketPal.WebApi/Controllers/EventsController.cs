@@ -23,7 +23,7 @@ namespace TicketPal.WebApi.Controllers
         }
 
         [HttpPost]
-        [AuthFilter(Roles.Admin)]
+        [AuthenticationFilter(Roles.Admin)]
         public IActionResult AddConcert([FromBody] AddConcertRequest request)
         {
             var result = eventService.AddConcert(request);
@@ -39,7 +39,7 @@ namespace TicketPal.WebApi.Controllers
         }
 
         [HttpPut("{id}")]
-        [AuthFilter(Roles.Admin)]
+        [AuthenticationFilter(Roles.Admin)]
         public IActionResult UpdateConcert([FromRoute] int id, [FromBody] UpdateConcertRequest request)
         {
             request.Id = id;
@@ -56,7 +56,7 @@ namespace TicketPal.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        [AuthFilter(Roles.Admin)]
+        [AuthenticationFilter(Roles.Admin)]
         public IActionResult DeleteConcert([FromRoute] int id)
         {
             var result = eventService.DeleteConcert(id);

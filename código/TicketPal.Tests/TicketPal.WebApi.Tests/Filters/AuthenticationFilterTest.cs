@@ -18,7 +18,7 @@ namespace TicketPal.WebApi.Tests.Filters
     [TestClass]
     public class AuthenticationFilterTest
     {
-        private AuthFilter filter;
+        private AuthenticationFilter filter;
         // Services
         private Mock<IUserService> mockUserService;
         private Mock<IJwtService> mockJwtService;
@@ -55,7 +55,7 @@ namespace TicketPal.WebApi.Tests.Filters
             mockFactoryService.Setup(s => s.GetService(typeof(IUserService)))
             .Returns(mockUserService.Object);
 
-            filter = new AuthFilter(
+            filter = new AuthenticationFilter(
                 UserRole.ADMIN.ToString()
             );
 
@@ -97,7 +97,7 @@ namespace TicketPal.WebApi.Tests.Filters
             mockFactoryService.Setup(s => s.GetService(typeof(IUserService)))
             .Returns(mockUserService.Object);
 
-            filter = new AuthFilter(
+            filter = new AuthenticationFilter(
                 UserRole.ADMIN.ToString()
             );
 
@@ -139,7 +139,7 @@ namespace TicketPal.WebApi.Tests.Filters
             mockFactoryService.Setup(s => s.GetService(typeof(IUserService)))
             .Returns(mockUserService.Object);
 
-            filter = new AuthFilter(
+            filter = new AuthenticationFilter(
                 UserRole.ADMIN.ToString()
             );
 
@@ -170,7 +170,7 @@ namespace TicketPal.WebApi.Tests.Filters
             mockFactoryService.Setup(s => s.GetService(typeof(IUserService)))
             .Returns(mockUserService.Object);
 
-            filter = new AuthFilter();
+            filter = new AuthenticationFilter();
 
             var mockHttpContext = new Mock<HttpContext>();
             mockHttpContext.Setup(x => x.Request.Headers["Authorization"]).Returns("token");
