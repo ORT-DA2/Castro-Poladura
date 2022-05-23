@@ -77,9 +77,9 @@ namespace TicketPal.Domain.Tests.Entity
             Assert.AreEqual(concert.Id, id);
             Assert.AreEqual(concert.EventType, eventType);
             Assert.AreEqual(concert.Date, eventDate);
-            Assert.AreEqual(concert.address,address);
-            Assert.AreEqual(concert.country,country);
-            Assert.AreEqual(concert.location,location);
+            Assert.AreEqual(concert.Address,address);
+            Assert.AreEqual(concert.Country,country);
+            Assert.AreEqual(concert.Location,location);
             Assert.AreEqual(concert.AvailableTickets, availableTickets);
             Assert.AreEqual(concert.TicketPrice, ticketPrice);
             Assert.AreEqual(concert.CurrencyType, currency);
