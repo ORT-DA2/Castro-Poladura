@@ -56,9 +56,9 @@ namespace TicketPal.Domain.Tests.Entity
             };
             concert.Id = id;
             concert.EventType = eventType;
-            concert.location = location;
-            concert.country = country;
-            concert.address = address;
+            concert.Location = location;
+            concert.Country = country;
+            concert.Address = address;
             concert.Date = eventDate;
             concert.AvailableTickets = availableTickets;
             concert.TicketPrice = ticketPrice;
