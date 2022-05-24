@@ -47,7 +47,10 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
                 EventType = Constants.EVENT_CONCERT_TYPE,
                 TicketPrice = 150,
                 CurrencyType = Constants.CURRENCY_US_DOLLARS,
-                TourName = "Fearless Tour"
+                TourName = "Fearless Tour",
+                Location = "Some Location",
+                Address = "Some address",
+                Country = "Country"
             };
 
             this.mockConcertRepo.Setup(m => m.Exists(It.IsAny<int>())).Returns(false);

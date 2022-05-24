@@ -44,7 +44,10 @@ namespace TicketPal.DataAccess.Tests.Respository
                 Date = DateTime.Now,
                 EventType = Constants.EVENT_CONCERT_TYPE,
                 TicketPrice = 100,
-                TourName = "someTour"
+                TourName = "someTour",
+                Location = "some location",
+                Address = "some address",
+                Country = "some country"
             };
 
             var repository = new ConcertRepository(dbContext);
