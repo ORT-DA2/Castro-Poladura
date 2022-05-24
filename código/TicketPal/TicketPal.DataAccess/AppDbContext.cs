@@ -26,11 +26,13 @@ namespace TicketPal.DataAccess
 
             builder.Entity<TicketEntity>()
                 .HasOne(t => t.Event);
-            
+
             builder.Entity<ConcertEntity>()
-                .HasMany(c => c.Artists)
-                .WithMany(a => a.Concerts);
-                
+                .HasMany(c => c.Artists);
+
+            builder.Entity<PerformerEntity>()
+                .HasMany(p => p.Members);
+
             //Default values for BD
             builder.Entity<UserEntity>()
                 .HasData(DbData.Users);

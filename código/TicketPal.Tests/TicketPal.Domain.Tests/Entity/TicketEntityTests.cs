@@ -40,12 +40,12 @@ namespace TicketPal.Domain.Tests.Entity
                     Genre = new GenreEntity
                     {
                         Id = 2,
-                        GenreName = "Rock"
+                        Name = "Rock"
                     },
-                    Concerts = new List<ConcertEntity>()
+                    Members = new List<UserEntity>()
                 }
             };
-            
+
             concert = new ConcertEntity
             {
                 Id = 5,
@@ -60,9 +60,9 @@ namespace TicketPal.Domain.Tests.Entity
             };
             status = Constants.Constants.TICKET_PURCHASED_STATUS;
             code = "p3q59gjnfjgo4uqfjDXNCLKMQP31foiqnvjdanv";
-        
-    }
-    
+
+        }
+
         [TestMethod]
         public void GetTicketTest()
         {

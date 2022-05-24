@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using TicketPal.Domain.Entity;
 
 namespace TicketPal.Domain.Models.Response
 {
@@ -9,6 +10,6 @@ namespace TicketPal.Domain.Models.Response
         public string PerformerType { get; set; }
         public string StartYear { get; set; }
         public Genre Genre { get; set; }
-        public IEnumerable<Concert> Concerts { get; set; }
+        public IEnumerable<UserEntity> Members { get; set; }
     }
 }

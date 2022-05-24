@@ -24,12 +24,12 @@ namespace TicketPal.BusinessLogic.Tests.Services.Genres
             genre = new GenreEntity()
             {
                 Id = 1,
-                GenreName = "Rock"
+                Name = "Rock"
             };
 
             genreRequest = new AddGenreRequest()
             {
-                GenreName = genre.GenreName
+                GenreName = genre.Name
             };
 
             this.mockGenreRepo.Setup(m => m.Exists(It.IsAny<int>())).Returns(false);
@@ -71,7 +71,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Genres
             var dbUser = new GenreEntity
             {
                 Id = id,
-                GenreName = genre.GenreName
+                Name = genre.Name
             };
 
             this.mockGenreRepo.Setup(m => m.Get(It.IsAny<int>())).Returns(dbUser);
@@ -122,7 +122,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Genres
             var dbUser = new GenreEntity
             {
                 Id = id,
-                GenreName = genre.GenreName
+                Name = genre.Name
             };
 
             this.mockGenreRepo.Setup(r => r.Get(It.IsAny<int>())).Returns(dbUser);
@@ -160,17 +160,17 @@ namespace TicketPal.BusinessLogic.Tests.Services.Genres
                 new GenreEntity
                 {
                     Id = 1,
-                    GenreName = genre.GenreName
+                    Name = genre.Name
                 },
                 new GenreEntity
                 {
                     Id = 2,
-                    GenreName = "Pop"
+                    Name = "Pop"
                 },
                 new GenreEntity
                 {
                     Id = 3,
-                    GenreName = "Blues"
+                    Name = "Blues"
                 },
             };
 

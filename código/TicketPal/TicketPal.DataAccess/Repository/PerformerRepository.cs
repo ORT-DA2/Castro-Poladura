@@ -20,13 +20,13 @@ namespace TicketPal.DataAccess.Repository
             {
                 throw new RepositoryException("The performer you are trying to add already exists");
             }
-            if(element.Concerts != null)
+            if (element.Members != null)
             {
-                foreach(ConcertEntity concert in element.Concerts)
+                foreach (UserEntity member in element.Members)
                 {
-                    if(concert != null && concert.Id != 0)
+                    if (member != null && member.Id != 0)
                     {
-                        dbContext.Attach(concert);
+                        dbContext.Attach(member);
                     }
                 }
             }
@@ -48,7 +48,7 @@ namespace TicketPal.DataAccess.Repository
             found.UserInfo = (element.UserInfo == null ? found.UserInfo : element.UserInfo);
             found.PerformerType = (element.PerformerType == null ? found.PerformerType : element.PerformerType);
             found.StartYear = (element.StartYear == null ? found.StartYear : element.StartYear);
-            found.Concerts = (element.Concerts == null ? found.Concerts : element.Concerts);
+            found.Members = (element.Members == null ? found.Members : element.Members);
             found.Genre = (element.Genre == null ? found.Genre : element.Genre);
             found.UpdatedAt = DateTime.Now;
 
@@ -61,8 +61,7 @@ namespace TicketPal.DataAccess.Repository
             return dbContext.Set<PerformerEntity>()
             .Include(p => p.UserInfo)
             .Include(p => p.Genre)
-            .Include(p => p.Concerts)
-            .ThenInclude(c => c.Artists)
+            .Include(p => p.Members)
             .FirstOrDefault(u => u.Id == id);
         }
 
@@ -71,8 +70,7 @@ namespace TicketPal.DataAccess.Repository
             return dbContext.Set<PerformerEntity>()
             .Include(p => p.UserInfo)
             .Include(p => p.Genre)
-            .Include(p => p.Concerts)
-            .ThenInclude(c => c.Artists)
+            .Include(p => p.Members)
             .FirstOrDefault(predicate);
         }
 
@@ -81,8 +79,7 @@ namespace TicketPal.DataAccess.Repository
             return dbContext.Set<PerformerEntity>()
             .Include(p => p.UserInfo)
             .Include(p => p.Genre)
-            .Include(p => p.Concerts)
-            .ThenInclude(c => c.Artists)
+            .Include(p => p.Members)
             .AsEnumerable();
         }
 
@@ -91,8 +88,7 @@ namespace TicketPal.DataAccess.Repository
             return dbContext.Set<PerformerEntity>()
             .Include(p => p.UserInfo)
             .Include(p => p.Genre)
-            .Include(p => p.Concerts)
-            .ThenInclude(c => c.Artists)
+            .Include(p => p.Members)
             .Where(predicate)
             .AsEnumerable();
         }

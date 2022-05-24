@@ -26,7 +26,7 @@ namespace TicketPal.Domain.Tests.Entity
             genre = new GenreEntity()
             {
                 Id = 1,
-                GenreName = "BossaNova"
+                Name = "BossaNova"
             };
         }
 
@@ -35,7 +35,7 @@ namespace TicketPal.Domain.Tests.Entity
         {
             performerEntity.Id = id;
             performerEntity.PerformerType = performerTypeEnum;
-            performerEntity.UserInfo = new UserEntity { Firstname = name};
+            performerEntity.UserInfo = new UserEntity { Firstname = name };
             performerEntity.StartYear = startDate;
             performerEntity.Genre = genre;
 
@@ -53,14 +53,14 @@ namespace TicketPal.Domain.Tests.Entity
             var performerType = Constants.Constants.PERFORMER_TYPE_BAND;
             string name = "Ataque77";
             string startYear = "1987";
-            genre.GenreName = "Punk Rock";
+            genre.Name = "Punk Rock";
 
             performerEntity.Id = id;
             performerEntity.PerformerType = performerType;
-            performerEntity.UserInfo = new UserEntity { Firstname = name};
+            performerEntity.UserInfo = new UserEntity { Firstname = name };
             performerEntity.StartYear = startYear;
             performerEntity.Genre = genre;
-            performerEntity.Concerts = new List<ConcertEntity>();
+            performerEntity.Members = new List<UserEntity>();
 
             Assert.AreEqual(performerEntity.Id, id);
             Assert.AreEqual(performerEntity.PerformerType, performerType);

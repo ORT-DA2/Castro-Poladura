@@ -34,7 +34,7 @@ namespace TicketPal.Domain.Tests.Entity
             eventDate = new DateTime(2022, 08, 08);
             availableTickets = 1384;
             ticketPrice = 1345;
-            currency = Constants.Constants.CURRENCY_URUGUAYAN_PESO; 
+            currency = Constants.Constants.CURRENCY_URUGUAYAN_PESO;
             tourName = "Carrousell";
             location = "some location";
             address = "some address";
@@ -50,7 +50,7 @@ namespace TicketPal.Domain.Tests.Entity
                     Genre = new GenreEntity()
                     {
                         Id = 7,
-                        GenreName = "Rock"
+                        Name = "Rock"
                     }
                 }
             };
@@ -77,14 +77,14 @@ namespace TicketPal.Domain.Tests.Entity
             Assert.AreEqual(concert.Id, id);
             Assert.AreEqual(concert.EventType, eventType);
             Assert.AreEqual(concert.Date, eventDate);
-            Assert.AreEqual(concert.Address,address);
-            Assert.AreEqual(concert.Country,country);
-            Assert.AreEqual(concert.Location,location);
+            Assert.AreEqual(concert.Address, address);
+            Assert.AreEqual(concert.Country, country);
+            Assert.AreEqual(concert.Location, location);
             Assert.AreEqual(concert.AvailableTickets, availableTickets);
             Assert.AreEqual(concert.TicketPrice, ticketPrice);
             Assert.AreEqual(concert.CurrencyType, currency);
             Assert.AreEqual(concert.TourName, tourName);
-            
+
             CollectionAssert.AreEqual(concert.Artists.ToList(), artists.ToList());
         }
     }

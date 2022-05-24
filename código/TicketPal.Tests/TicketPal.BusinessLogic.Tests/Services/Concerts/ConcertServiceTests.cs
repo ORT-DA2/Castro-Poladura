@@ -27,13 +27,13 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             genre = new GenreEntity()
             {
                 Id = 1,
-                GenreName = "Pop"
+                Name = "Pop"
             };
 
             artist = new PerformerEntity()
             {
                 Id = 1,
-                UserInfo = new UserEntity { Firstname = "Taylor Swift"},
+                UserInfo = new UserEntity { Firstname = "Taylor Swift" },
                 Genre = genre,
                 PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 StartYear = "2004"
@@ -75,7 +75,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
         [TestMethod]
         public void AddConcertTwiceFailsTest()
         {
-        
+
             this.mockConcertRepo.Setup(m => m.Exists(It.IsAny<int>())).Returns(true);
             this.mockConcertRepo.Setup(m => m.Add(It.IsAny<ConcertEntity>())).Throws(new RepositoryException());
             this.factoryMock.Setup(m => m.GetRepository(typeof(ConcertEntity))).Returns(this.mockConcertRepo.Object);
@@ -211,7 +211,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             {
                 Id = 2,
                 Genre = genre,
-                UserInfo = new UserEntity{ Firstname = "George Michael"},
+                UserInfo = new UserEntity { Firstname = "George Michael" },
                 PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 StartYear = "1981"
             };
@@ -220,7 +220,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             {
                 Id = 3,
                 Genre = genre,
-                UserInfo = new UserEntity {Firstname = "Boy George"},
+                UserInfo = new UserEntity { Firstname = "Boy George" },
                 PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 StartYear = "1981"
             };
@@ -282,7 +282,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             {
                 Id = 2,
                 Genre = genre,
-                UserInfo = new UserEntity {Firstname = "George Michael"},
+                UserInfo = new UserEntity { Firstname = "George Michael" },
                 PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 StartYear = "1981"
             };
@@ -435,7 +435,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             {
                 Id = 3,
                 Genre = genre,
-                UserInfo = new UserEntity {Firstname = "Boy George" },
+                UserInfo = new UserEntity { Firstname = "Boy George" },
                 PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 StartYear = "1981"
             };
@@ -498,7 +498,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             {
                 Id = 2,
                 Genre = genre,
-                UserInfo = new UserEntity {Firstname = "George Michael"},
+                UserInfo = new UserEntity { Firstname = "George Michael" },
                 PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 StartYear = "1981"
             };
@@ -507,7 +507,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             {
                 Id = 3,
                 Genre = genre,
-                UserInfo = new UserEntity { Firstname = "Boy George"},
+                UserInfo = new UserEntity { Firstname = "Boy George" },
                 PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 StartYear = "1981"
             };

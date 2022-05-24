@@ -27,13 +27,13 @@ namespace TicketPal.Domain.Tests.Entity
         public void GetGenreTest()
         {
             string genreName = "Rock";
-            genre.GenreName = genreName;
+            genre.Name = genreName;
             genre.Id = idGenre;
             genre.CreatedAt = createdAt;
             genre.UpdatedAt = updatedAt;
 
             Assert.AreEqual(genre.Id, idGenre);
-            Assert.AreEqual(genre.GenreName, genreName);
+            Assert.AreEqual(genre.Name, genreName);
         }
 
     }

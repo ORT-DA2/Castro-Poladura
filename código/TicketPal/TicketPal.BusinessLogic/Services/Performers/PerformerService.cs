@@ -18,7 +18,6 @@ namespace TicketPal.BusinessLogic.Services.Performers
         private readonly IMapper mapper;
         public IGenericRepository<PerformerEntity> performerRepository;
         public IGenericRepository<GenreEntity> genreRepository;
-        public IGenericRepository<ConcertEntity> concertRepository;
         public IGenericRepository<UserEntity> userRepository;
 
         public PerformerService(IServiceFactory factory, IMapper mapper)
@@ -26,7 +25,6 @@ namespace TicketPal.BusinessLogic.Services.Performers
             this.mapper = mapper;
             this.serviceFactory = factory;
             this.performerRepository = serviceFactory.GetRepository(typeof(PerformerEntity)) as IGenericRepository<PerformerEntity>;
-            this.concertRepository = serviceFactory.GetRepository(typeof(ConcertEntity)) as IGenericRepository<ConcertEntity>;
             this.userRepository = serviceFactory.GetRepository(typeof(UserEntity)) as IGenericRepository<UserEntity>;
             this.genreRepository = serviceFactory.GetRepository(typeof(GenreEntity)) as IGenericRepository<GenreEntity>;
         }
@@ -36,7 +34,7 @@ namespace TicketPal.BusinessLogic.Services.Performers
             try
             {
                 GenreEntity genre = genreRepository.Get(model.Genre);
-                var concerts = concertRepository.GetAll(c => model.ConcertIds.Contains(c.Id));
+                var members = userRepository.GetAll(c => model.MembersIds.Contains(c.Id));
                 var user = userRepository.Get(model.UserId);
 
                 if (genre == null)
@@ -55,19 +53,19 @@ namespace TicketPal.BusinessLogic.Services.Performers
                         Message = "User doesn't exists"
                     };
                 }
-                
-                if(!user.Role.Equals(Constants.ROLE_ARTIST)) 
+
+                if (!user.Role.Equals(Constants.ROLE_ARTIST))
                 {
-                        return new OperationResult
-                        {
-                            ResultCode = Constants.CODE_FAIL,
-                            Message = "The associated user account is not from a performer"
-                        };
+                    return new OperationResult
+                    {
+                        ResultCode = Constants.CODE_FAIL,
+                        Message = "The associated user account is not from a performer"
+                    };
                 }
                 performerRepository.Add(new PerformerEntity
                 {
                     UserInfo = user,
-                    Concerts = concerts.ToList(),
+                    Members = members.ToList(),
                     Genre = genre,
                     PerformerType = model.PerformerType,
                     StartYear = model.StartYear
@@ -129,7 +127,7 @@ namespace TicketPal.BusinessLogic.Services.Performers
                 var user = userRepository.Get(model.UserId);
                 var artists = performerRepository.GetAll(a => model.ArtistsIds.Contains(a.Id));
 
-                if(!string.IsNullOrEmpty(model.PerformerType) && !Constants.ValidPerformerTypes.Contains(model.PerformerType))
+                if (!string.IsNullOrEmpty(model.PerformerType) && !Constants.ValidPerformerTypes.Contains(model.PerformerType))
                 {
                     return new OperationResult
                     {

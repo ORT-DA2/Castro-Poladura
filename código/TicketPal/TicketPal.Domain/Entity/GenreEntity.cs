@@ -2,6 +2,6 @@
 {
     public class GenreEntity : BaseEntity
     {
-        public string GenreName { get; set; }
+        public string Name { get; set; }
     }
 }
