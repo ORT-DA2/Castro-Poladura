@@ -53,6 +53,9 @@ namespace TicketPal.DataAccess.Repository
             found.EventType = element.EventType == null ? found.EventType : element.EventType;
             found.UpdatedAt = DateTime.Now;
             found.TourName = element.TourName == null ? found.TourName : element.TourName;
+            found.Location = element.Location == null ? found.Location : element.Location;
+            found.Address = element.Address == null ? found.Address : element.Address;
+            found.Country = element.Country == null ? found.Country : element.Country;
 
             dbContext.SaveChanges();
             dbContext.Entry(found).State = EntityState.Modified;

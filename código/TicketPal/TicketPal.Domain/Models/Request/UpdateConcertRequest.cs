@@ -21,5 +21,11 @@ namespace TicketPal.Domain.Models.Request
         public string EventType { get; set; }
         [Required]
         public string TourName { get; set; }
+        [Required]
+        public string Location { get; set; }
+        [Required]
+        public string Address { get; set; }
+        [Required]
+        public string Country { get; set; }
     }
 }

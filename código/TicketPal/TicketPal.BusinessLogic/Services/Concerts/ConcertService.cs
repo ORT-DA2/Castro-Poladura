@@ -45,7 +45,10 @@ namespace TicketPal.BusinessLogic.Services.Concerts
                         Date = model.Date,
                         EventType = model.EventType,
                         TicketPrice = model.TicketPrice,
-                        TourName = model.TourName
+                        TourName = model.TourName,
+                        Location = model.Location,
+                        Country = model.Country,
+                        Address = model.Address
                     });
                 }
                 else
@@ -211,7 +214,10 @@ namespace TicketPal.BusinessLogic.Services.Concerts
                     Date = model.Date,
                     EventType = model.EventType,
                     TicketPrice = model.TicketPrice,
-                    TourName = model.TourName
+                    TourName = model.TourName,
+                    Location = model.Location,
+                    Address = model.Address,
+                    Country = model.Country
                 });
             }
             catch (RepositoryException ex)
