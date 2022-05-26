@@ -36,9 +36,10 @@ namespace TicketPal.WebApi.Controllers
 
         [HttpPut("{id}")]
         [AuthenticationFilter(Constants.ROLE_ADMIN)]
-        public IActionResult UpdatePerformer([FromRoute]int id, [FromBody]UpdatePerformerRequest request)
+        public IActionResult UpdatePerformer([FromRoute] int id, [FromBody] UpdatePerformerRequest request)
         {
             request.Id = id;
+            request.UserId = id;
             var result = performerService.UpdatePerformer(request);
 
             if (result.ResultCode == Constants.CODE_FAIL)
@@ -53,7 +54,7 @@ namespace TicketPal.WebApi.Controllers
 
         [HttpDelete("{id}")]
         [AuthenticationFilter(Constants.ROLE_ADMIN)]
-        public IActionResult DeletePerformer([FromRoute]int id)
+        public IActionResult DeletePerformer([FromRoute] int id)
         {
             var result = performerService.DeletePerformer(id);
 
@@ -69,7 +70,7 @@ namespace TicketPal.WebApi.Controllers
 
         [HttpGet("{id}")]
         [AuthenticationFilter(Constants.ROLE_ADMIN)]
-        public IActionResult GetPerformer([FromRoute]int id)
+        public IActionResult GetPerformer([FromRoute] int id)
         {
             return Ok(performerService.GetPerformer(id));
         }
