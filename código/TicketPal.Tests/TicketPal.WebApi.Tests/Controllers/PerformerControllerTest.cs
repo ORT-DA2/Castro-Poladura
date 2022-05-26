@@ -203,7 +203,7 @@ namespace TicketPal.WebApi.Tests.Controllers
                 {
                     Id = 1,
                     UserInfo = new User { Firstname = "someName"},
-                    Members = new List<UserEntity>(),
+                    Members = new List<Performer>(),
                     Genre = new Genre(),
                     PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                     StartYear = "12/03/1998"
@@ -212,7 +212,7 @@ namespace TicketPal.WebApi.Tests.Controllers
                 {
                     Id = 2,
                     UserInfo = new User { Firstname = "someName"},
-                    Members = new List<UserEntity>(),
+                    Members = new List<Performer>(),
                     Genre = new Genre(),
                     PerformerType = Constants.PERFORMER_TYPE_BAND,
                     StartYear = "12/03/1998"
@@ -221,7 +221,7 @@ namespace TicketPal.WebApi.Tests.Controllers
                 {
                     Id = 3,
                     UserInfo = new User { Firstname = "someName" },
-                    Members = new List<UserEntity>(),
+                    Members = new List<Performer>(),
                     Genre = new Genre(),
                     PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                     StartYear = "10/03/2000"

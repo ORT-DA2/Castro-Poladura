@@ -26,14 +26,14 @@ namespace TicketPal.DataAccess.Tests.Respository
                     PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                     StartYear = "1987",
                     Genre = genre,
-                    Members = new List<UserEntity>()
+                    Members = new List<PerformerEntity>()
                 },
                 new PerformerEntity {
                     UserInfo = new UserEntity { Firstname = "name2"},
                     PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                     StartYear = "2000",
                     Genre = genre,
-                    Members = new List<UserEntity>()
+                    Members = new List<PerformerEntity>()
                 }
             };
 

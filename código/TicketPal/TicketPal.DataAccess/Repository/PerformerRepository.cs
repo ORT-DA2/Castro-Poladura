@@ -20,16 +20,6 @@ namespace TicketPal.DataAccess.Repository
             {
                 throw new RepositoryException("The performer you are trying to add already exists");
             }
-            if (element.Members != null)
-            {
-                foreach (UserEntity member in element.Members)
-                {
-                    if (member != null && member.Id != 0)
-                    {
-                        dbContext.Attach(member);
-                    }
-                }
-            }
 
             dbContext.Set<PerformerEntity>().Add(element);
             element.CreatedAt = DateTime.Now;

@@ -30,13 +30,13 @@ namespace TicketPal.BusinessLogic.Services.Genres
         {
             try
             {
-                GenreEntity found = genreRepository.Get(g => g.Name == model.GenreName);
+                GenreEntity found = genreRepository.Get(g => g.Name == model.Name);
 
                 if (found == null)
                 {
                     genreRepository.Add(new GenreEntity
                     {
-                        Name = model.GenreName
+                        Name = model.Name
                     });
                 }
                 else
@@ -103,7 +103,7 @@ namespace TicketPal.BusinessLogic.Services.Genres
                 genreRepository.Update(new GenreEntity
                 {
                     Id = model.Id,
-                    Name = model.GenreName
+                    Name = model.Name
                 });
             }
             catch (RepositoryException ex)

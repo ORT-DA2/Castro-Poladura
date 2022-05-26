@@ -42,7 +42,7 @@ namespace TicketPal.Domain.Tests.Entity
                         Id = 2,
                         Name = "Rock"
                     },
-                    Members = new List<UserEntity>()
+                    Members = new List<PerformerEntity>()
                 }
             };
 

@@ -34,7 +34,7 @@ namespace TicketPal.BusinessLogic.Services.Performers
             try
             {
                 GenreEntity genre = genreRepository.Get(model.Genre);
-                var members = userRepository.GetAll(c => model.MembersIds.Contains(c.Id));
+                var members = performerRepository.GetAll(c => model.MembersIds.Contains(c.Id));
                 var user = userRepository.Get(model.UserId);
 
                 if (genre == null)
@@ -125,7 +125,9 @@ namespace TicketPal.BusinessLogic.Services.Performers
             {
                 var genre = genreRepository.Get(model.GenreId);
                 var user = userRepository.Get(model.UserId);
-                var artists = performerRepository.GetAll(a => model.ArtistsIds.Contains(a.Id));
+                var existingPerformers = user.Performer.Members;
+                var newArtists = performerRepository.GetAll(a => model.ArtistsIds.Contains(a.Id));
+                var resultingArtists = existingPerformers.Union(newArtists);
 
                 if (!string.IsNullOrEmpty(model.PerformerType) && !Constants.ValidPerformerTypes.Contains(model.PerformerType))
                 {
@@ -142,7 +144,8 @@ namespace TicketPal.BusinessLogic.Services.Performers
                     UserInfo = user,
                     PerformerType = model.PerformerType,
                     Genre = genre,
-                    StartYear = model.StartYear
+                    StartYear = model.StartYear,
+                    Members = resultingArtists.ToList()
                 });
             }
             catch (RepositoryException ex)

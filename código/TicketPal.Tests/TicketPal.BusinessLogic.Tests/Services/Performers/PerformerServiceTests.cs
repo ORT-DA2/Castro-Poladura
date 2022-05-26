@@ -37,7 +37,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Performers
                 PerformerType = Constants.PERFORMER_TYPE_BAND,
                 StartYear = "1996",
                 Genre = genre,
-                Members = new List<UserEntity>()
+                Members = new List<PerformerEntity>()
             };
 
             performerRequest = new AddPerformerRequest()
@@ -215,7 +215,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Performers
                 {
                     Id = 2,
                     UserInfo = new UserEntity {Firstname = "The Party Band"},
-                    Members = new List<UserEntity>(),
+                    Members = new List<PerformerEntity>(),
                     Genre = new GenreEntity(){ Id = 3, Name = "Pachanga"},
                     PerformerType = performer.PerformerType,
                     StartYear = performer.StartYear

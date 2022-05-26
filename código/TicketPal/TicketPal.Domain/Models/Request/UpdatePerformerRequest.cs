@@ -11,7 +11,7 @@ namespace TicketPal.Domain.Models.Request
     {
         [JsonIgnore]
         public int Id { get; set; }
-        [Required]
+        [JsonIgnore]
         public int UserId { get; set; }
         [Required]
         public string PerformerType { get; set; }

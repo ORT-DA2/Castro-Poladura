@@ -17,12 +17,11 @@ namespace TicketPal.DataAccess
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            //BD mapping rules
+            // BD mapping rules
             builder.Entity<UserEntity>()
-                .HasOne(p => p.Performer)
-                .WithOne(u => u.UserInfo)
-                .HasForeignKey<PerformerEntity>(p => p.Id)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasOne(u => u.Performer)
+                .WithOne(p => p.UserInfo)
+                .HasForeignKey<PerformerEntity>(p => p.Id);
 
             builder.Entity<TicketEntity>()
                 .HasOne(t => t.Event);
@@ -30,13 +29,9 @@ namespace TicketPal.DataAccess
             builder.Entity<ConcertEntity>()
                 .HasMany(c => c.Artists);
 
-            builder.Entity<PerformerEntity>()
-                .HasMany(p => p.Members);
-
             //Default values for BD
             builder.Entity<UserEntity>()
                 .HasData(DbData.Users);
-
         }
         public DbSet<UserEntity> Users { get; set; }
         public DbSet<GenreEntity> Genres { get; set; }

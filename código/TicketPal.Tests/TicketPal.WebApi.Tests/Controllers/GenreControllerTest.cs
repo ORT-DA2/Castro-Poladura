@@ -14,7 +14,7 @@ using TicketPal.WebApi.Controllers;
 
 namespace TicketPal.WebApi.Tests.Controllers
 {
-    
+
     [TestClass]
     public class GenreControllerTest
     {
@@ -35,7 +35,7 @@ namespace TicketPal.WebApi.Tests.Controllers
         {
             var request = new AddGenreRequest
             {
-                GenreName = "someName",
+                Name = "someName",
             };
 
             var operationResult = new OperationResult
@@ -50,7 +50,7 @@ namespace TicketPal.WebApi.Tests.Controllers
             var objectResult = result as ObjectResult;
             var statusCode = objectResult.StatusCode;
 
-            Assert.AreEqual(200, statusCode);   
+            Assert.AreEqual(200, statusCode);
         }
 
         [TestMethod]
@@ -58,7 +58,7 @@ namespace TicketPal.WebApi.Tests.Controllers
         {
             var request = new AddGenreRequest
             {
-                GenreName = "someName",
+                Name = "someName",
             };
 
             var operationResult = new OperationResult
@@ -73,7 +73,7 @@ namespace TicketPal.WebApi.Tests.Controllers
             var objectResult = result as ObjectResult;
             var statusCode = objectResult.StatusCode;
 
-            Assert.AreEqual(400, statusCode);   
+            Assert.AreEqual(400, statusCode);
         }
 
         [TestMethod]
@@ -91,7 +91,7 @@ namespace TicketPal.WebApi.Tests.Controllers
             var objectResult = result as ObjectResult;
             var statusCode = objectResult.StatusCode;
 
-            Assert.AreEqual(200, statusCode);   
+            Assert.AreEqual(200, statusCode);
         }
 
         [TestMethod]
@@ -109,14 +109,14 @@ namespace TicketPal.WebApi.Tests.Controllers
             var objectResult = result as ObjectResult;
             var statusCode = objectResult.StatusCode;
 
-            Assert.AreEqual(400, statusCode);   
+            Assert.AreEqual(400, statusCode);
         }
 
         [TestMethod]
         public void GetGenreOk()
         {
             mockService.Setup(s => s.GetGenre(It.IsAny<int>())).Returns(genres[0]);
-            
+
             var result = controller.GetGenre(It.IsAny<int>());
             var objectResult = result as ObjectResult;
             var statusCode = objectResult.StatusCode;
@@ -128,7 +128,7 @@ namespace TicketPal.WebApi.Tests.Controllers
         public void GetGenresOk()
         {
             mockService.Setup(s => s.GetGenres()).Returns(genres);
-            
+
             var result = controller.GetGenres();
             var objectResult = result as ObjectResult;
             var statusCode = objectResult.StatusCode;
@@ -138,11 +138,11 @@ namespace TicketPal.WebApi.Tests.Controllers
 
         [TestMethod]
         public void UpdateGenreOk()
-        {   
-            var request = new UpdateGenreRequest 
-            {   
+        {
+            var request = new UpdateGenreRequest
+            {
                 Id = 2,
-                GenreName = "newName"
+                Name = "newName"
             };
 
             var operationResult = new OperationResult
@@ -152,21 +152,21 @@ namespace TicketPal.WebApi.Tests.Controllers
             };
 
             mockService.Setup(s => s.UpdateGenre(request)).Returns(operationResult);
-            
-            var result = controller.UpdateGenre(It.IsAny<int>(),request);
+
+            var result = controller.UpdateGenre(It.IsAny<int>(), request);
             var objectResult = result as ObjectResult;
             var statusCode = objectResult.StatusCode;
 
-            Assert.AreEqual(200,statusCode);
+            Assert.AreEqual(200, statusCode);
         }
 
         [TestMethod]
         public void UpdateGenreBadRequest()
-        {   
-            var request = new UpdateGenreRequest 
-            {   
+        {
+            var request = new UpdateGenreRequest
+            {
                 Id = 2,
-                GenreName = "newName"
+                Name = "newName"
             };
 
             var operationResult = new OperationResult
@@ -176,37 +176,37 @@ namespace TicketPal.WebApi.Tests.Controllers
             };
 
             mockService.Setup(s => s.UpdateGenre(request)).Returns(operationResult);
-            
-            var result = controller.UpdateGenre(It.IsAny<int>(),request);
+
+            var result = controller.UpdateGenre(It.IsAny<int>(), request);
             var objectResult = result as ObjectResult;
             var statusCode = objectResult.StatusCode;
 
-            Assert.AreEqual(400,statusCode);
+            Assert.AreEqual(400, statusCode);
         }
 
         private List<Genre> SetupGenres()
         {
             return new List<Genre>
             {
-                new Genre 
+                new Genre
                 {
                     Id = 1,
-                    GenreName = "Pop"
+                    Name = "Pop"
                 },
-                new Genre 
+                new Genre
                 {
                     Id = 2,
-                    GenreName = "Rock"
+                    Name = "Rock"
                 },
-                new Genre 
+                new Genre
                 {
                     Id = 3,
-                    GenreName = "Soul"
+                    Name = "Soul"
                 },
-                new Genre 
+                new Genre
                 {
                     Id = 4,
-                    GenreName = "Music"
+                    Name = "Music"
                 },
             };
         }

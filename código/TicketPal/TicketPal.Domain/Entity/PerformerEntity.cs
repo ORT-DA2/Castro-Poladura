@@ -8,6 +8,6 @@ namespace TicketPal.Domain.Entity
         public UserEntity UserInfo { get; set; }
         public string StartYear { get; set; }
         public GenreEntity Genre { get; set; }
-        public List<UserEntity> Members { get; set; }
+        public List<PerformerEntity> Members { get; set; }
     }
 }

@@ -10,6 +10,6 @@ namespace TicketPal.Domain.Models.Response
         public string PerformerType { get; set; }
         public string StartYear { get; set; }
         public Genre Genre { get; set; }
-        public IEnumerable<UserEntity> Members { get; set; }
+        public IEnumerable<Performer> Members { get; set; }
     }
 }

@@ -29,7 +29,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Genres
 
             genreRequest = new AddGenreRequest()
             {
-                GenreName = genre.Name
+                Name = genre.Name
             };
 
             this.mockGenreRepo.Setup(m => m.Exists(It.IsAny<int>())).Returns(false);
@@ -103,7 +103,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Genres
             var genreName = "Salsa";
             var updateRequest = new UpdateGenreRequest
             {
-                GenreName = genreName
+                Name = genreName
             };
 
             this.mockGenreRepo.Setup(m => m.Update(It.IsAny<GenreEntity>())).Verifiable();

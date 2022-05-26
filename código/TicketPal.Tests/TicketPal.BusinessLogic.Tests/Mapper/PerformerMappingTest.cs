@@ -22,7 +22,7 @@ namespace TicketPal.BusinessLogic.Tests.Mapper
             {
                 Id = 1,
                 UserInfo = new UserEntity { Id = 1, Firstname = "someName" },
-                Members = new List<UserEntity>(),
+                Members = new List<PerformerEntity>(),
                 Genre = new GenreEntity { Name = "someGenre" },
                 PerformerType = Constants.PERFORMER_TYPE_BAND,
                 StartYear = "1968"

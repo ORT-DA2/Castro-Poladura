@@ -19,21 +19,6 @@ namespace TicketPal.DataAccess.Migrations
                 .HasAnnotation("ProductVersion", "5.0.15")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("ConcertEntityPerformerEntity", b =>
-                {
-                    b.Property<int>("ArtistsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ConcertsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ArtistsId", "ConcertsId");
-
-                    b.HasIndex("ConcertsId");
-
-                    b.ToTable("ConcertEntityPerformerEntity");
-                });
-
             modelBuilder.Entity("TicketPal.Domain.Entity.EventEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -41,8 +26,14 @@ namespace TicketPal.DataAccess.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("AvailableTickets")
                         .HasColumnType("int");
+
+                    b.Property<string>("Country")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -58,6 +49,9 @@ namespace TicketPal.DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("EventType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Location")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("TicketPrice")
@@ -83,7 +77,7 @@ namespace TicketPal.DataAccess.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("GenreName")
+                    b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UpdatedAt")
@@ -99,10 +93,16 @@ namespace TicketPal.DataAccess.Migrations
                     b.Property<int>("Id")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ConcertEntityId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("GenreId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PerformerEntityId")
                         .HasColumnType("int");
 
                     b.Property<string>("PerformerType")
@@ -116,7 +116,11 @@ namespace TicketPal.DataAccess.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ConcertEntityId");
+
                     b.HasIndex("GenreId");
+
+                    b.HasIndex("PerformerEntityId");
 
                     b.ToTable("Performers");
                 });
@@ -198,72 +202,72 @@ namespace TicketPal.DataAccess.Migrations
                         new
                         {
                             Id = 1,
-                            ActiveAccount = false,
+                            ActiveAccount = true,
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "lucas@example.com",
                             Firstname = "Lucas",
                             Lastname = "Castro",
-                            Password = "$2a$11$MqlrLtSou55KfTBtLQaAwOjYJCZWP5iU/15I6.fkmSSLT5yYGJ.ZK",
+                            Password = "$2a$11$W3rAdaU9MelpblF9OABROOfzei2G8KfzgGxXzXCnzKrIFPw8qDGsO",
                             Role = "ADMIN",
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 2,
-                            ActiveAccount = false,
+                            ActiveAccount = true,
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "ricardo@example.com",
                             Firstname = "Ricardo",
                             Lastname = "Poladura",
-                            Password = "$2a$11$zsBZ7MOu4I4yuDUnccCJz.oegI2BJyxPKZQ8II2Il3i/8EsX0e92y",
+                            Password = "$2a$11$RBxv5cImlotXD5N.RR5ISe2.fCBwLjnlSikGX9qD6GqviYSuxz0Wy",
                             Role = "ADMIN",
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 3,
-                            ActiveAccount = false,
+                            ActiveAccount = true,
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "spectator@example.com",
                             Firstname = "Spectator",
                             Lastname = "Test",
-                            Password = "$2a$11$TZPDtTy2GA8aWG2nVDhTcuzsEsTZfsjGFGuy42twjwj0ZkI4RFUXa",
+                            Password = "$2a$11$kW6OvNc663PJg1Roskzt7ODvuavB16wG/avSBcvq3sfj2XWochFb6",
                             Role = "SPECTATOR",
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 4,
-                            ActiveAccount = false,
+                            ActiveAccount = true,
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "seller@example.com",
                             Firstname = "Seller",
                             Lastname = "Test",
-                            Password = "$2a$11$bjY1KOya7Kf4/fpBpf.EpuoyJYyceisIVbtzesTjqutMdmSySAPE2",
+                            Password = "$2a$11$bcMKfdGnGo.MBS9lyThTQOHcQa4KGKokKYCa8siiPdTH2fl3F0j7a",
                             Role = "SELLER",
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 5,
-                            ActiveAccount = false,
+                            ActiveAccount = true,
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "supervisor@example.com",
                             Firstname = "Supervisor",
                             Lastname = "Test",
-                            Password = "$2a$11$cWMfgiHR0N6UKg.8UtIBAuMowwHEnqNDqxP4dY/DyfBh20I8K95.C",
+                            Password = "$2a$11$xjmsbqpU05gKnLz7FoF5i.46.UWc3AecgdLHs3BaWW8UoFUd1XZha",
                             Role = "SUPERVISOR",
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 6,
-                            ActiveAccount = false,
+                            ActiveAccount = true,
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "artist@example.com",
                             Firstname = "Artist",
                             Lastname = "Test",
-                            Password = "$2a$11$bd0itUL9uKb//1OHeB9pVO1I.kV.8QwQD2DWdpuCpTlCDafBnyOVS",
+                            Password = "$2a$11$ZPwITK9nGKED44d7kqrnwOWZn0ssh.VlXXxCqLfkZRsi.pdm2HjPW",
                             Role = "ARTIST",
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
@@ -279,23 +283,12 @@ namespace TicketPal.DataAccess.Migrations
                     b.HasDiscriminator().HasValue("ConcertEntity");
                 });
 
-            modelBuilder.Entity("ConcertEntityPerformerEntity", b =>
-                {
-                    b.HasOne("TicketPal.Domain.Entity.PerformerEntity", null)
-                        .WithMany()
-                        .HasForeignKey("ArtistsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TicketPal.Domain.Entity.ConcertEntity", null)
-                        .WithMany()
-                        .HasForeignKey("ConcertsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("TicketPal.Domain.Entity.PerformerEntity", b =>
                 {
+                    b.HasOne("TicketPal.Domain.Entity.ConcertEntity", null)
+                        .WithMany("Artists")
+                        .HasForeignKey("ConcertEntityId");
+
                     b.HasOne("TicketPal.Domain.Entity.GenreEntity", "Genre")
                         .WithMany()
                         .HasForeignKey("GenreId");
@@ -305,6 +298,10 @@ namespace TicketPal.DataAccess.Migrations
                         .HasForeignKey("TicketPal.Domain.Entity.PerformerEntity", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("TicketPal.Domain.Entity.PerformerEntity", null)
+                        .WithMany("Members")
+                        .HasForeignKey("PerformerEntityId");
 
                     b.Navigation("Genre");
 
@@ -326,9 +323,19 @@ namespace TicketPal.DataAccess.Migrations
                     b.Navigation("Event");
                 });
 
+            modelBuilder.Entity("TicketPal.Domain.Entity.PerformerEntity", b =>
+                {
+                    b.Navigation("Members");
+                });
+
             modelBuilder.Entity("TicketPal.Domain.Entity.UserEntity", b =>
                 {
                     b.Navigation("Performer");
+                });
+
+            modelBuilder.Entity("TicketPal.Domain.Entity.ConcertEntity", b =>
+                {
+                    b.Navigation("Artists");
                 });
 #pragma warning restore 612, 618
         }

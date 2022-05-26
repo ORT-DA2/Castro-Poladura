@@ -14,7 +14,7 @@ namespace TicketPal.DataAccess.Tests.Respository
     {
         private GenreEntity genre;
         private PerformerEntity performer;
-        private List<UserEntity> members;
+        private List<PerformerEntity> members;
 
         [TestInitialize]
         public void Init()
@@ -24,25 +24,27 @@ namespace TicketPal.DataAccess.Tests.Respository
                 Name = "Electropop"
             };
 
-            members = new List<UserEntity> {
-                new UserEntity {
-                    Performer = new PerformerEntity(),
-                    Firstname = "firstname1",
-                    Lastname = "lastname1",
-                    Email = "someEmail1"
+            members = new List<PerformerEntity> {
+                new PerformerEntity {
+                    UserInfo = new UserEntity { Firstname = "SomeName1" },
+                    StartYear = "1987",
+                    PerformerType = Constants.PERFORMER_TYPE_BAND,
+                    Genre = genre,
+                    Members = new List<PerformerEntity>()
                 },
-                new UserEntity {
-                    Performer = new PerformerEntity(),
-                    Firstname = "firstname2",
-                    Lastname = "lastname2",
-                    Email = "someEmail2"
+                new PerformerEntity {
+                    UserInfo = new UserEntity { Firstname = "SomeName2" },
+                    StartYear = "2000",
+                    PerformerType = Constants.PERFORMER_TYPE_BAND,
+                    Genre = genre,
+                    Members = new List<PerformerEntity>()
                 }
             };
 
             performer = new PerformerEntity
             {
                 UserInfo = new UserEntity { Firstname = "SomeName" },
-                StartYear = "1987",
+                StartYear = "1999",
                 PerformerType = Constants.PERFORMER_TYPE_BAND,
                 Genre = genre,
                 Members = members

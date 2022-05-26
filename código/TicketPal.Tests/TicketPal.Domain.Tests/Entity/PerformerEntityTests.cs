@@ -60,7 +60,7 @@ namespace TicketPal.Domain.Tests.Entity
             performerEntity.UserInfo = new UserEntity { Firstname = name };
             performerEntity.StartYear = startYear;
             performerEntity.Genre = genre;
-            performerEntity.Members = new List<UserEntity>();
+            performerEntity.Members = new List<PerformerEntity>();
 
             Assert.AreEqual(performerEntity.Id, id);
             Assert.AreEqual(performerEntity.PerformerType, performerType);
