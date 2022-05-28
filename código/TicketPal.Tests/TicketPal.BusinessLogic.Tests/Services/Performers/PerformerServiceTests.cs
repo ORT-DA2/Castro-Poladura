@@ -148,6 +148,11 @@ namespace TicketPal.BusinessLogic.Tests.Services.Performers
             };
 
             this.mockPerformerRepo.Setup(m => m.Update(It.IsAny<PerformerEntity>())).Verifiable();
+            this.mockUserRepo.Setup(r => r.Get(It.IsAny<int>())).Returns(new UserEntity
+            {
+                Performer = new PerformerEntity { Members = new List<PerformerEntity>() }
+            });
+            this.factoryMock.Setup(m => m.GetRepository(typeof(UserEntity))).Returns(this.mockUserRepo.Object);
             this.factoryMock.Setup(m => m.GetRepository(typeof(PerformerEntity))).Returns(this.mockPerformerRepo.Object);
 
             this.performerService = new PerformerService(this.factoryMock.Object, this.mapper);

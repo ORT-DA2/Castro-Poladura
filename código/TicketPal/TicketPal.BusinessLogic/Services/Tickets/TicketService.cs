@@ -93,7 +93,7 @@ namespace TicketPal.BusinessLogic.Services.Tickets
             return new OperationResult
             {
                 ResultCode = Constants.CODE_SUCCESS,
-                Message = "Concert successfully created"
+                Message = "Ticket successfully purchased"
             };
         }
 

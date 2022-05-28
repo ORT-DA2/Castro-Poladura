@@ -12,6 +12,5 @@ namespace TicketPal.Domain.Models.Request
         public TicketBuyer NewUser { get; set; }
         [JsonIgnore]
         public int LoggedUserId { get; set; }
-
     }
 }

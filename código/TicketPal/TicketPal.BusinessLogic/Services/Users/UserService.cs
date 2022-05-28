@@ -64,7 +64,7 @@ namespace TicketPal.BusinessLogic.Services.Users
 
         public IEnumerable<User> GetUsers(string role)
         {
-            if(string.IsNullOrEmpty(role))
+            if (string.IsNullOrEmpty(role))
             {
                 var users = repository.GetAll();
                 return mapper.Map<IEnumerable<UserEntity>, IEnumerable<User>>(users);
@@ -76,36 +76,45 @@ namespace TicketPal.BusinessLogic.Services.Users
         public User Login(AuthenticationRequest model)
         {
             var found = repository.Get(u => u.Email.Equals(model.Email));
-            if (found == null || !BC.Verify(model.Password, found.Password))
+            if (found == null)
             {
                 return null;
             }
-            var jwtService = this.factory.GetService(typeof(IJwtService)) as IJwtService;
+            if (found.Password != null && !BC.Verify(model.Password, found.Password))
+            {
+                return null;
+            }
+            if (found.ActiveAccount)
+            {
+                var jwtService = this.factory.GetService(typeof(IJwtService)) as IJwtService;
 
-            var token = jwtService.GenerateJwtToken(appSettings.JwtSecret, "id", found.Id.ToString());
-            var user = mapper.Map<User>(found);
-            user.Token = token;
+                var token = jwtService.GenerateJwtToken(appSettings.JwtSecret, "id", found.Id.ToString());
+                var user = mapper.Map<User>(found);
+                user.Token = token;
 
-            return user;
+                return user;
+            }
+            return null;
         }
 
         public User RetrieveUserFromToken(string token)
         {
-            if(!String.IsNullOrEmpty(token))
+            if (!String.IsNullOrEmpty(token))
             {
                 var jwtService = this.factory.GetService(typeof(IJwtService)) as IJwtService;
                 var claimToken = jwtService.ClaimTokenValue(this.appSettings.JwtSecret, token, "id");
-            
-                if(claimToken != null)
+
+                if (claimToken != null)
                 {
                     var accountId = int.Parse(claimToken);
                     return GetUser(accountId);
                 }
-                else 
+                else
                 {
                     return null;
                 }
-            }else
+            }
+            else
             {
                 return null;
             }

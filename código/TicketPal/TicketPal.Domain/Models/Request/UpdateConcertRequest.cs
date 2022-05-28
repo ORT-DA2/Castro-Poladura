@@ -27,5 +27,7 @@ namespace TicketPal.Domain.Models.Request
         public string Address { get; set; }
         [Required]
         public string Country { get; set; }
+        [Required]
+        public IEnumerable<int> ArtistsIds { get; set; }
     }
 }

@@ -35,6 +35,7 @@ namespace TicketPal.BusinessLogic.Services.Concerts
             {
                 var found = concertRepository.Get(c => c.TourName == model.TourName && c.Date == model.Date);
                 var artists = performerRepository.GetAll(a => model.ArtistsIds.Contains(a.UserInfo.Id));
+                
                 if (found == null)
                 {
                     concertRepository.Add(new ConcertEntity
@@ -206,6 +207,9 @@ namespace TicketPal.BusinessLogic.Services.Concerts
         {
             try
             {
+                var existingPerformers = concertRepository.Get(model.Id).Artists;
+                var newPerformers = performerRepository.GetAll(a => model.ArtistsIds.Contains(a.Id));
+                var resultingArtists = existingPerformers.Union(newPerformers);
 
                 concertRepository.Update(new ConcertEntity
                 {
@@ -217,7 +221,8 @@ namespace TicketPal.BusinessLogic.Services.Concerts
                     TourName = model.TourName,
                     Location = model.Location,
                     Address = model.Address,
-                    Country = model.Country
+                    Country = model.Country,
+                    Artists = resultingArtists.ToList()
                 });
             }
             catch (RepositoryException ex)

@@ -153,6 +153,9 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             };
 
             this.mockConcertRepo.Setup(m => m.Update(It.IsAny<ConcertEntity>())).Verifiable();
+            this.mockConcertRepo.Setup(c => c.Get(It.IsAny<int>())).Returns(
+                new ConcertEntity { Artists = new List<PerformerEntity>() }
+            );
             this.factoryMock.Setup(f => f.GetRepository(typeof(ConcertEntity))).Returns(this.mockConcertRepo.Object);
             this.factoryMock.Setup(f => f.GetRepository(typeof(PerformerEntity))).Returns(this.mockPerformerRepo.Object);
             this.concertService = new ConcertService(this.factoryMock.Object, this.mapper);
