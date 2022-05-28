@@ -33,7 +33,7 @@ namespace TicketPal.DataAccess.Repository
                 throw new RepositoryException(string.Format("Couldn't find item to update with id: {0} doesn't exist", element.Id));
             }
 
-            found.GenreName = (element.GenreName == null ? found.GenreName : element.GenreName);
+            found.Name = (element.Name == null ? found.Name : element.Name);
             found.UpdatedAt = DateTime.Now;
 
             dbContext.SaveChanges();

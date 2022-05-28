@@ -5,6 +5,6 @@ namespace TicketPal.Domain.Models.Request
     public class AddGenreRequest
     {
         [Required]
-        public string GenreName { get; set; }
+        public string Name { get; set; }
     }
 }

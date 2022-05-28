@@ -13,6 +13,6 @@ namespace TicketPal.Domain.Models.Request
         [JsonIgnore]
         public int Id { get; set; }
         [Required]
-        public string GenreName { get; set; }
+        public string Name { get; set; }
     }
 }

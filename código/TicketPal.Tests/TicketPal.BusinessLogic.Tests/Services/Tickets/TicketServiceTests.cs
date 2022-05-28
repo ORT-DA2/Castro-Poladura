@@ -55,7 +55,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Tickets
             genre = new GenreEntity()
             {
                 Id = 36,
-                GenreName = "Rock"
+                Name = "Rock"
             };
 
             artist = new PerformerEntity()

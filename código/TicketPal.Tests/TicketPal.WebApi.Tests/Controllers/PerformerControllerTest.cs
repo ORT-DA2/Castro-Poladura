@@ -29,10 +29,10 @@ namespace TicketPal.WebApi.Tests.Controllers
         [TestMethod]
         public void AddPerformerOk()
         {
-            var request = new AddPerformerRequest 
+            var request = new AddPerformerRequest
             {
                 UserId = 1,
-                ConcertIds = new List<int>(),
+                MembersIds = new List<int>(),
                 Genre = 2,
                 PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 StartYear = "12/03/1998"
@@ -43,23 +43,23 @@ namespace TicketPal.WebApi.Tests.Controllers
                 ResultCode = Constants.CODE_SUCCESS,
                 Message = "success"
             };
-            
+
             mockService.Setup(s => s.AddPerformer(request)).Returns(operationResult);
 
             var result = controller.AddPerformer(request);
             var objectResult = result as ObjectResult;
             var statusCode = objectResult.StatusCode;
 
-            Assert.AreEqual(200,statusCode);
+            Assert.AreEqual(200, statusCode);
         }
 
         [TestMethod]
         public void AddPerformerBadRequest()
         {
-            var request = new AddPerformerRequest 
+            var request = new AddPerformerRequest
             {
                 UserId = 1,
-                ConcertIds = new List<int>(),
+                MembersIds = new List<int>(),
                 Genre = 2,
                 PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 StartYear = "12/03/1998"
@@ -70,24 +70,24 @@ namespace TicketPal.WebApi.Tests.Controllers
                 ResultCode = Constants.CODE_FAIL,
                 Message = "error"
             };
-            
+
             mockService.Setup(s => s.AddPerformer(request)).Returns(operationResult);
 
             var result = controller.AddPerformer(request);
             var objectResult = result as ObjectResult;
             var statusCode = objectResult.StatusCode;
 
-            Assert.AreEqual(400,statusCode);
+            Assert.AreEqual(400, statusCode);
         }
 
         [TestMethod]
         public void UpdatePerfomerOk()
         {
-            var request = new UpdatePerformerRequest 
+            var request = new UpdatePerformerRequest
             {
                 Id = 2,
                 UserId = 1,
-                ArtistsIds = new List<int>{1,2,3},
+                ArtistsIds = new List<int> { 1, 2, 3 },
                 GenreId = 2,
                 StartYear = "12/03/1998"
             };
@@ -97,24 +97,24 @@ namespace TicketPal.WebApi.Tests.Controllers
                 ResultCode = Constants.CODE_SUCCESS,
                 Message = "success"
             };
-            
+
             mockService.Setup(s => s.UpdatePerformer(request)).Returns(operationResult);
 
-            var result = controller.UpdatePerformer(It.IsAny<int>(),request);
+            var result = controller.UpdatePerformer(It.IsAny<int>(), request);
             var objectResult = result as ObjectResult;
             var statusCode = objectResult.StatusCode;
 
-            Assert.AreEqual(200,statusCode);
+            Assert.AreEqual(200, statusCode);
         }
 
         [TestMethod]
         public void UpdatePerfomerBadRequest()
         {
-            var request = new UpdatePerformerRequest 
+            var request = new UpdatePerformerRequest
             {
                 Id = 2,
                 UserId = 2,
-                ArtistsIds = new List<int> {1,2},
+                ArtistsIds = new List<int> { 1, 2 },
                 GenreId = 2,
                 StartYear = "12/03/1998"
             };
@@ -124,14 +124,14 @@ namespace TicketPal.WebApi.Tests.Controllers
                 ResultCode = Constants.CODE_FAIL,
                 Message = "fail"
             };
-            
+
             mockService.Setup(s => s.UpdatePerformer(request)).Returns(operationResult);
 
-            var result = controller.UpdatePerformer(It.IsAny<int>(),request);
+            var result = controller.UpdatePerformer(It.IsAny<int>(), request);
             var objectResult = result as ObjectResult;
             var statusCode = objectResult.StatusCode;
 
-            Assert.AreEqual(400,statusCode);
+            Assert.AreEqual(400, statusCode);
         }
 
         [TestMethod]
@@ -149,7 +149,7 @@ namespace TicketPal.WebApi.Tests.Controllers
             var objectResult = result as ObjectResult;
             var statusCode = objectResult.StatusCode;
 
-            Assert.AreEqual(200,statusCode);
+            Assert.AreEqual(200, statusCode);
         }
 
         [TestMethod]
@@ -167,7 +167,7 @@ namespace TicketPal.WebApi.Tests.Controllers
             var objectResult = result as ObjectResult;
             var statusCode = objectResult.StatusCode;
 
-            Assert.AreEqual(400,statusCode);
+            Assert.AreEqual(400, statusCode);
         }
 
         [TestMethod]
@@ -179,7 +179,7 @@ namespace TicketPal.WebApi.Tests.Controllers
             var objectResult = result as ObjectResult;
             var statusCode = objectResult.StatusCode;
 
-            Assert.AreEqual(200,statusCode);
+            Assert.AreEqual(200, statusCode);
         }
 
         [TestMethod]
@@ -191,7 +191,7 @@ namespace TicketPal.WebApi.Tests.Controllers
             var objectResult = result as ObjectResult;
             var statusCode = objectResult.StatusCode;
 
-            Assert.AreEqual(200,statusCode);
+            Assert.AreEqual(200, statusCode);
         }
 
 
@@ -199,29 +199,29 @@ namespace TicketPal.WebApi.Tests.Controllers
         {
             return new List<Performer>
             {
-                new Performer 
+                new Performer
                 {
                     Id = 1,
                     UserInfo = new User { Firstname = "someName"},
-                    Concerts = new List<Concert>(),
+                    Members = new List<Performer>(),
                     Genre = new Genre(),
                     PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                     StartYear = "12/03/1998"
                 },
-                new Performer 
+                new Performer
                 {
                     Id = 2,
                     UserInfo = new User { Firstname = "someName"},
-                    Concerts = new List<Concert>(),
+                    Members = new List<Performer>(),
                     Genre = new Genre(),
                     PerformerType = Constants.PERFORMER_TYPE_BAND,
                     StartYear = "12/03/1998"
                 },
-                new Performer 
+                new Performer
                 {
                     Id = 3,
                     UserInfo = new User { Firstname = "someName" },
-                    Concerts = new List<Concert>(),
+                    Members = new List<Performer>(),
                     Genre = new Genre(),
                     PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                     StartYear = "10/03/2000"

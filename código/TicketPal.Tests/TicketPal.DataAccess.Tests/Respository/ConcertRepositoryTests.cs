@@ -14,10 +14,11 @@ namespace TicketPal.DataAccess.Tests.Respository
     {
         private IEnumerable<PerformerEntity> artists;
         private ConcertEntity concert;
-        
+
         [TestInitialize]
-        public void Init() {
-            var genre = new GenreEntity {GenreName="Pop"};
+        public void Init()
+        {
+            var genre = new GenreEntity { Name = "Pop" };
 
             artists = new List<PerformerEntity> {
                 new PerformerEntity {
@@ -25,14 +26,14 @@ namespace TicketPal.DataAccess.Tests.Respository
                     PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                     StartYear = "1987",
                     Genre = genre,
-                    Concerts = new List<ConcertEntity>()
+                    Members = new List<PerformerEntity>()
                 },
                 new PerformerEntity {
                     UserInfo = new UserEntity { Firstname = "name2"},
                     PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                     StartYear = "2000",
                     Genre = genre,
-                    Concerts = new List<ConcertEntity>()
+                    Members = new List<PerformerEntity>()
                 }
             };
 
@@ -44,7 +45,10 @@ namespace TicketPal.DataAccess.Tests.Respository
                 Date = DateTime.Now,
                 EventType = Constants.EVENT_CONCERT_TYPE,
                 TicketPrice = 100,
-                TourName = "someTour"
+                TourName = "someTour",
+                Location = "some location",
+                Address = "some address",
+                Country = "some country"
             };
 
             var repository = new ConcertRepository(dbContext);

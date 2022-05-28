@@ -22,8 +22,19 @@ namespace TicketPal.WebApi.Controllers
         [HttpPost("login")]
         public IActionResult Authenticate([FromBody] AuthenticationRequest request)
         {
-            var result = userService.Login(request);
-            return Ok(result);
+            var user = userService.Login(request);
+            if (user != null)
+            {
+                return Ok(user);
+            }
+            else
+            {
+                var forbidden = new ForbiddenError("Email or password incorrect.");
+                return new ObjectResult(forbidden)
+                {
+                    StatusCode = forbidden.StatusCode
+                };
+            }
         }
 
         [HttpPost]

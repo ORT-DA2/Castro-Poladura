@@ -2,10 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using TicketPal.Domain.Constants;
 using TicketPal.Domain.Entity;
 
-namespace TicketPal.DataAccess.Tests.Entity
+namespace TicketPal.Domain.Tests.Entity
 {
     [TestClass]
     public class ConcertEntityTests
@@ -21,6 +20,9 @@ namespace TicketPal.DataAccess.Tests.Entity
         private string tourName;
         private IEnumerable<PerformerEntity> artists;
         private string eventType;
+        private string location;
+        private string address;
+        private string country;
 
         [TestInitialize]
         public void Initialize()
@@ -32,25 +34,31 @@ namespace TicketPal.DataAccess.Tests.Entity
             eventDate = new DateTime(2022, 08, 08);
             availableTickets = 1384;
             ticketPrice = 1345;
-            currency = Constants.CURRENCY_URUGUAYAN_PESO; 
+            currency = Constants.Constants.CURRENCY_URUGUAYAN_PESO;
             tourName = "Carrousell";
-            eventType = Constants.EVENT_CONCERT_TYPE;
+            location = "some location";
+            address = "some address";
+            country = "some country";
+            eventType = Constants.Constants.EVENT_CONCERT_TYPE;
             artists = new List<PerformerEntity> {
                 new PerformerEntity()
                 {
-                    PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
+                    PerformerType = Constants.Constants.PERFORMER_TYPE_SOLO_ARTIST,
                     Id = 24,
                     UserInfo = new UserEntity { Firstname = "Tim", Lastname = "Collins"},
                     StartYear = "1999",
                     Genre = new GenreEntity()
                     {
                         Id = 7,
-                        GenreName = "Rock"
+                        Name = "Rock"
                     }
                 }
             };
             concert.Id = id;
             concert.EventType = eventType;
+            concert.Location = location;
+            concert.Country = country;
+            concert.Address = address;
             concert.Date = eventDate;
             concert.AvailableTickets = availableTickets;
             concert.TicketPrice = ticketPrice;
@@ -69,10 +77,14 @@ namespace TicketPal.DataAccess.Tests.Entity
             Assert.AreEqual(concert.Id, id);
             Assert.AreEqual(concert.EventType, eventType);
             Assert.AreEqual(concert.Date, eventDate);
+            Assert.AreEqual(concert.Address, address);
+            Assert.AreEqual(concert.Country, country);
+            Assert.AreEqual(concert.Location, location);
             Assert.AreEqual(concert.AvailableTickets, availableTickets);
             Assert.AreEqual(concert.TicketPrice, ticketPrice);
             Assert.AreEqual(concert.CurrencyType, currency);
             Assert.AreEqual(concert.TourName, tourName);
+
             CollectionAssert.AreEqual(concert.Artists.ToList(), artists.ToList());
         }
     }

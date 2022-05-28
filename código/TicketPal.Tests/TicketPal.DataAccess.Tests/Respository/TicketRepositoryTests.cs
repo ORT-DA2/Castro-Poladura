@@ -26,13 +26,13 @@ namespace TicketPal.DataAccess.Tests.Respository
             performer = new PerformerEntity()
             {
                 Id = 1,
-                UserInfo = new UserEntity {Firstname = "Berugo Carámbula"},
+                UserInfo = new UserEntity { Firstname = "Berugo Carámbula" },
                 StartYear = "1963",
                 PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 Genre = new GenreEntity()
                 {
                     Id = 1,
-                    GenreName = "Classic"
+                    Name = "Classic"
                 },
             };
 
@@ -130,7 +130,7 @@ namespace TicketPal.DataAccess.Tests.Respository
             var ticket = new TicketEntity()
             {
                 Id = 1,
-                Event = new ConcertEntity 
+                Event = new ConcertEntity
                 {
                     Id = 1,
                     Artists = new List<PerformerEntity>(),
@@ -140,7 +140,7 @@ namespace TicketPal.DataAccess.Tests.Respository
                     EventType = Constants.EVENT_CONCERT_TYPE,
                     TicketPrice = 1800,
                     TourName = "Solo de guitarra"
-                },  
+                },
                 Buyer = user,
                 PurchaseDate = DateTime.Now,
                 Code = idCode,
@@ -150,7 +150,7 @@ namespace TicketPal.DataAccess.Tests.Respository
             var eventRepository = new ConcertRepository(dbContext);
             eventRepository.Clear();
             eventRepository.Add(
-                new ConcertEntity 
+                new ConcertEntity
                 {
                     Id = 1,
                     Artists = new List<PerformerEntity>(),
@@ -226,7 +226,7 @@ namespace TicketPal.DataAccess.Tests.Respository
             Assert.AreEqual(ticket.Code, found.Code);
         }
 
-        
+
         [TestMethod]
         public void ShouldCreatedDateBeTheSameDay()
         {

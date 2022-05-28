@@ -18,6 +18,9 @@ namespace TicketPal.DataAccess.Migrations
                     TicketPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     CurrencyType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     EventType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Location = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Country = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TourName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -34,7 +37,7 @@ namespace TicketPal.DataAccess.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    GenreName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -71,6 +74,8 @@ namespace TicketPal.DataAccess.Migrations
                     PerformerType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     StartYear = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     GenreId = table.Column<int>(type: "int", nullable: true),
+                    ConcertEntityId = table.Column<int>(type: "int", nullable: true),
+                    PerformerEntityId = table.Column<int>(type: "int", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -78,9 +83,21 @@ namespace TicketPal.DataAccess.Migrations
                 {
                     table.PrimaryKey("PK_Performers", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_Performers_EventEntity_ConcertEntityId",
+                        column: x => x.ConcertEntityId,
+                        principalTable: "EventEntity",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_Performers_Genres_GenreId",
                         column: x => x.GenreId,
                         principalTable: "Genres",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Performers_Performers_PerformerEntityId",
+                        column: x => x.PerformerEntityId,
+                        principalTable: "Performers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -122,52 +139,33 @@ namespace TicketPal.DataAccess.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "ConcertEntityPerformerEntity",
-                columns: table => new
-                {
-                    ArtistsId = table.Column<int>(type: "int", nullable: false),
-                    ConcertsId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ConcertEntityPerformerEntity", x => new { x.ArtistsId, x.ConcertsId });
-                    table.ForeignKey(
-                        name: "FK_ConcertEntityPerformerEntity_EventEntity_ConcertsId",
-                        column: x => x.ConcertsId,
-                        principalTable: "EventEntity",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ConcertEntityPerformerEntity_Performers_ArtistsId",
-                        column: x => x.ArtistsId,
-                        principalTable: "Performers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "ActiveAccount", "CreatedAt", "Email", "Firstname", "Lastname", "Password", "Role", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "lucas@example.com", "Lucas", "Castro", "$2a$11$MqlrLtSou55KfTBtLQaAwOjYJCZWP5iU/15I6.fkmSSLT5yYGJ.ZK", "ADMIN", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 2, false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "ricardo@example.com", "Ricardo", "Poladura", "$2a$11$zsBZ7MOu4I4yuDUnccCJz.oegI2BJyxPKZQ8II2Il3i/8EsX0e92y", "ADMIN", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 3, false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "spectator@example.com", "Spectator", "Test", "$2a$11$TZPDtTy2GA8aWG2nVDhTcuzsEsTZfsjGFGuy42twjwj0ZkI4RFUXa", "SPECTATOR", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 4, false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "seller@example.com", "Seller", "Test", "$2a$11$bjY1KOya7Kf4/fpBpf.EpuoyJYyceisIVbtzesTjqutMdmSySAPE2", "SELLER", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 5, false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "supervisor@example.com", "Supervisor", "Test", "$2a$11$cWMfgiHR0N6UKg.8UtIBAuMowwHEnqNDqxP4dY/DyfBh20I8K95.C", "SUPERVISOR", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 6, false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "artist@example.com", "Artist", "Test", "$2a$11$bd0itUL9uKb//1OHeB9pVO1I.kV.8QwQD2DWdpuCpTlCDafBnyOVS", "ARTIST", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) }
+                    { 1, true, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "lucas@example.com", "Lucas", "Castro", "$2a$11$W3rAdaU9MelpblF9OABROOfzei2G8KfzgGxXzXCnzKrIFPw8qDGsO", "ADMIN", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 2, true, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "ricardo@example.com", "Ricardo", "Poladura", "$2a$11$RBxv5cImlotXD5N.RR5ISe2.fCBwLjnlSikGX9qD6GqviYSuxz0Wy", "ADMIN", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 3, true, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "spectator@example.com", "Spectator", "Test", "$2a$11$kW6OvNc663PJg1Roskzt7ODvuavB16wG/avSBcvq3sfj2XWochFb6", "SPECTATOR", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 4, true, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "seller@example.com", "Seller", "Test", "$2a$11$bcMKfdGnGo.MBS9lyThTQOHcQa4KGKokKYCa8siiPdTH2fl3F0j7a", "SELLER", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 5, true, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "supervisor@example.com", "Supervisor", "Test", "$2a$11$xjmsbqpU05gKnLz7FoF5i.46.UWc3AecgdLHs3BaWW8UoFUd1XZha", "SUPERVISOR", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 6, true, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "artist@example.com", "Artist", "Test", "$2a$11$ZPwITK9nGKED44d7kqrnwOWZn0ssh.VlXXxCqLfkZRsi.pdm2HjPW", "ARTIST", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) }
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ConcertEntityPerformerEntity_ConcertsId",
-                table: "ConcertEntityPerformerEntity",
-                column: "ConcertsId");
+                name: "IX_Performers_ConcertEntityId",
+                table: "Performers",
+                column: "ConcertEntityId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Performers_GenreId",
                 table: "Performers",
                 column: "GenreId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Performers_PerformerEntityId",
+                table: "Performers",
+                column: "PerformerEntityId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Tickets_BuyerId",
@@ -183,19 +181,16 @@ namespace TicketPal.DataAccess.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ConcertEntityPerformerEntity");
+                name: "Performers");
 
             migrationBuilder.DropTable(
                 name: "Tickets");
 
             migrationBuilder.DropTable(
-                name: "Performers");
+                name: "Genres");
 
             migrationBuilder.DropTable(
                 name: "EventEntity");
-
-            migrationBuilder.DropTable(
-                name: "Genres");
 
             migrationBuilder.DropTable(
                 name: "Users");

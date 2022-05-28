@@ -14,53 +14,47 @@ namespace TicketPal.DataAccess.Tests.Respository
     {
         private GenreEntity genre;
         private PerformerEntity performer;
-        private List<ConcertEntity> artists;
+        private List<PerformerEntity> members;
 
         [TestInitialize]
-        public void Init() 
+        public void Init()
         {
             genre = new GenreEntity()
             {
-                Id = 1,
-                GenreName = "Electropop"
+                Name = "Electropop"
             };
-            
-            artists = new List<ConcertEntity> {
-                new ConcertEntity {
-                    Id = 1,
-                    TourName = "tourname1",
-                    Artists = new List<PerformerEntity>(),
-                    Date = DateTime.Now,
-                    AvailableTickets = 15000,
-                    EventType = Constants.EVENT_CONCERT_TYPE
-                    
+
+            members = new List<PerformerEntity> {
+                new PerformerEntity {
+                    UserInfo = new UserEntity { Firstname = "SomeName1" },
+                    StartYear = "1987",
+                    PerformerType = Constants.PERFORMER_TYPE_BAND,
+                    Genre = genre,
+                    Members = new List<PerformerEntity>()
                 },
-                new ConcertEntity {
-                    Id = 2,
-                    TourName = "tourname2",
-                    Artists = new List<PerformerEntity>(),
-                    Date = DateTime.Now,
-                    AvailableTickets = 8000,
-                    EventType = Constants.EVENT_CONCERT_TYPE
+                new PerformerEntity {
+                    UserInfo = new UserEntity { Firstname = "SomeName2" },
+                    StartYear = "2000",
+                    PerformerType = Constants.PERFORMER_TYPE_BAND,
+                    Genre = genre,
+                    Members = new List<PerformerEntity>()
                 }
             };
 
-
             performer = new PerformerEntity
             {
-                Id = 1,
                 UserInfo = new UserEntity { Firstname = "SomeName" },
-                StartYear = "1987",
+                StartYear = "1999",
                 PerformerType = Constants.PERFORMER_TYPE_BAND,
                 Genre = genre,
-                Concerts = artists
+                Members = members
             };
 
             var repository = new PerformerRepository(dbContext);
             repository.Add(performer);
 
         }
-        
+
         [TestMethod]
         public void SavePerformerSuccessfully()
         {
@@ -81,19 +75,10 @@ namespace TicketPal.DataAccess.Tests.Respository
         [TestMethod]
         public void ClearRepositoryShouldReturnCountCero()
         {
-            
             var repository = new PerformerRepository(dbContext);
-            Assert.IsTrue(repository.GetAll().ToList().Count == 1);
+            Assert.IsTrue(repository.GetAll().ToList().Count == 3);
             repository.Clear();
             Assert.IsTrue(repository.GetAll().ToList().Count == 0);
-        }
-
-        [TestMethod]
-        public void ShouldRepositoryBeEmptyWhenPerformerDeleted()
-        {
-            var repository = new PerformerRepository(dbContext);
-            repository.Delete(performer.Id);
-            Assert.IsTrue(repository.IsEmpty());
         }
 
         [TestMethod]
@@ -139,8 +124,7 @@ namespace TicketPal.DataAccess.Tests.Respository
 
             var performer1 = new PerformerEntity
             {
-                Id = 2,
-                UserInfo = new UserEntity {Firstname = performerName1},
+                UserInfo = new UserEntity { Firstname = performerName1 },
                 StartYear = startYear1,
                 PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 Genre = genre

@@ -1,11 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using TicketPal.Domain.Constants;
 using TicketPal.Domain.Entity;
 
-namespace TicketPal.DataAccess.Tests.Entity
+namespace TicketPal.Domain.Tests.Entity
 {
     [TestClass]
     public class PerformerEntityTests
@@ -23,13 +20,13 @@ namespace TicketPal.DataAccess.Tests.Entity
             performerEntity = new PerformerEntity();
             int idTicket = 1;
             id = idTicket;
-            performerTypeEnum = Constants.PERFORMER_TYPE_SOLO_ARTIST;
+            performerTypeEnum = Constants.Constants.PERFORMER_TYPE_SOLO_ARTIST;
             name = "Roberto Carlos";
             startDate = "1958";
             genre = new GenreEntity()
             {
                 Id = 1,
-                GenreName = "BossaNova"
+                Name = "BossaNova"
             };
         }
 
@@ -38,7 +35,7 @@ namespace TicketPal.DataAccess.Tests.Entity
         {
             performerEntity.Id = id;
             performerEntity.PerformerType = performerTypeEnum;
-            performerEntity.UserInfo = new UserEntity { Firstname = name};
+            performerEntity.UserInfo = new UserEntity { Firstname = name };
             performerEntity.StartYear = startDate;
             performerEntity.Genre = genre;
 
@@ -53,17 +50,17 @@ namespace TicketPal.DataAccess.Tests.Entity
         public void GetBandPerformerTest()
         {
             int id = 77;
-            var performerType = Constants.PERFORMER_TYPE_BAND;
+            var performerType = Constants.Constants.PERFORMER_TYPE_BAND;
             string name = "Ataque77";
             string startYear = "1987";
-            genre.GenreName = "Punk Rock";
+            genre.Name = "Punk Rock";
 
             performerEntity.Id = id;
             performerEntity.PerformerType = performerType;
-            performerEntity.UserInfo = new UserEntity { Firstname = name};
+            performerEntity.UserInfo = new UserEntity { Firstname = name };
             performerEntity.StartYear = startYear;
             performerEntity.Genre = genre;
-            performerEntity.Concerts = new List<ConcertEntity>();
+            performerEntity.Members = new List<PerformerEntity>();
 
             Assert.AreEqual(performerEntity.Id, id);
             Assert.AreEqual(performerEntity.PerformerType, performerType);

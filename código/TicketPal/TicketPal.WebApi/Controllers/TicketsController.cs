@@ -33,9 +33,9 @@ namespace TicketPal.WebApi.Controllers
                 .FirstOrDefault()?.Split(" ").Last();
             var authenticatedUser = userService.RetrieveUserFromToken(token);
 
-            if (authenticatedUser != null)
+            if (authenticatedUser != null && authenticatedUser.Role.Equals(Constants.ROLE_SPECTATOR))
             {
-                request.UserLogged = authenticatedUser != null;
+                request.UserLogged = true;
                 request.LoggedUserId = authenticatedUser.Id;
             }
 

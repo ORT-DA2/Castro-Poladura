@@ -17,14 +17,14 @@ namespace TicketPal.DataAccess.Tests.Respository
             var genre = new GenreEntity
             {
                 Id = 1,
-                GenreName = genreName
+                Name = genreName
             };
-            
+
 
             var repository = new GenreRepository(dbContext);
             repository.Add(genre);
 
-            Assert.IsTrue(repository.GetAll().ToList().FirstOrDefault().GenreName == genreName);
+            Assert.IsTrue(repository.GetAll().ToList().FirstOrDefault().Name == genreName);
         }
 
         [TestMethod]
@@ -36,12 +36,12 @@ namespace TicketPal.DataAccess.Tests.Respository
             var genre1 = new GenreEntity
             {
                 Id = 1,
-                GenreName = genreName
+                Name = genreName
             };
             var genre2 = new GenreEntity
             {
                 Id = 1,
-                GenreName = genreName
+                Name = genreName
             };
 
             var repository = new GenreRepository(dbContext);
@@ -56,7 +56,7 @@ namespace TicketPal.DataAccess.Tests.Respository
             var genre = new GenreEntity
             {
                 Id = 1,
-                GenreName = "Classic"
+                Name = "Classic"
             };
 
             var repository = new GenreRepository(dbContext);
@@ -72,7 +72,7 @@ namespace TicketPal.DataAccess.Tests.Respository
             var genre = new GenreEntity
             {
                 Id = 1,
-                GenreName = "Disco"
+                Name = "Disco"
             };
 
             var repository = new GenreRepository(dbContext);
@@ -88,7 +88,7 @@ namespace TicketPal.DataAccess.Tests.Respository
             var genre = new GenreEntity
             {
                 Id = 1,
-                GenreName = "Funk"
+                Name = "Funk"
             };
 
             var repository = new GenreRepository(dbContext);
@@ -103,7 +103,7 @@ namespace TicketPal.DataAccess.Tests.Respository
             var genre = new GenreEntity
             {
                 Id = 1,
-                GenreName = "Metal"
+                Name = "Metal"
             };
 
             var repository = new GenreRepository(dbContext);
@@ -120,7 +120,7 @@ namespace TicketPal.DataAccess.Tests.Respository
             var genre = new GenreEntity
             {
                 Id = 1,
-                GenreName = "Folk"
+                Name = "Folk"
             };
 
             var repository = new GenreRepository(dbContext);
@@ -133,16 +133,16 @@ namespace TicketPal.DataAccess.Tests.Respository
             var genre = new GenreEntity
             {
                 Id = 1,
-                GenreName = "Jazz"
+                Name = "Jazz"
             };
 
             var repository = new GenreRepository(dbContext);
             repository.Add(genre);
 
-            GenreEntity found = repository.Get(g => g.GenreName.Equals(genre.GenreName));
+            GenreEntity found = repository.Get(g => g.Name.Equals(genre.Name));
 
             Assert.IsNotNull(found);
-            Assert.AreEqual(genre.GenreName, found.GenreName);
+            Assert.AreEqual(genre.Name, found.Name);
         }
 
         [TestMethod]
@@ -151,12 +151,12 @@ namespace TicketPal.DataAccess.Tests.Respository
             var genre1 = new GenreEntity
             {
                 Id = 1,
-                GenreName = "Salsa"
+                Name = "Salsa"
             };
             var genre2 = new GenreEntity
             {
                 Id = 2,
-                GenreName = "Blues"
+                Name = "Blues"
             };
 
             var repository = new GenreRepository(dbContext);
@@ -174,7 +174,7 @@ namespace TicketPal.DataAccess.Tests.Respository
             var genre = new GenreEntity
             {
                 Id = 1,
-                GenreName = "Reggae"
+                Name = "Reggae"
             };
 
             var repository = new GenreRepository(dbContext);
@@ -182,13 +182,13 @@ namespace TicketPal.DataAccess.Tests.Respository
 
             var newName = "Punk";
 
-            genre.GenreName = newName;
+            genre.Name = newName;
 
             repository.Update(genre);
 
             var updatedGenre = repository.Get(genre.Id);
 
-            Assert.IsTrue(updatedGenre.GenreName.Equals(newName));
+            Assert.IsTrue(updatedGenre.Name.Equals(newName));
         }
 
         [TestMethod]
@@ -197,18 +197,18 @@ namespace TicketPal.DataAccess.Tests.Respository
             var genre = new GenreEntity
             {
                 Id = 1,
-                GenreName = "Rock"
+                Name = "Rock"
             };
 
             var repository = new GenreRepository(dbContext);
             repository.Add(genre);
 
-            repository.Update(new GenreEntity { Id = genre.Id, GenreName = null });
+            repository.Update(new GenreEntity { Id = genre.Id, Name = null });
 
             var updatedGenre = repository.Get(genre.Id);
 
 
-            Assert.IsTrue(updatedGenre.GenreName.Equals(genre.GenreName));
+            Assert.IsTrue(updatedGenre.Name.Equals(genre.Name));
         }
     }
 }

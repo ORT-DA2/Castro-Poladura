@@ -4,24 +4,24 @@ using TicketPal.Domain.Models.Response;
 
 namespace TicketPal.BusinessLogic.Mapper
 {
-    public class AutoMapping: Profile
+    public class AutoMapping : Profile
     {
         public AutoMapping()
         {
             // User
-            CreateMap<UserEntity,User>();
+            CreateMap<UserEntity, User>();
             // Concert
-            CreateMap<ConcertEntity,Concert>();
+            CreateMap<ConcertEntity, Concert>();
             // Genre
-            CreateMap<GenreEntity,Genre>();
+            CreateMap<GenreEntity, Genre>();
             // Performer
-            CreateMap<PerformerEntity,Performer>()
+            CreateMap<PerformerEntity, Performer>()
             .ForMember(
-                    dest => dest.Concerts,
+                    dest => dest.Members,
                     opt => opt.MapFrom(
-                        src => src.Concerts));
+                        src => src.Members));
             // Ticket
-            CreateMap<TicketEntity,Ticket>();
+            CreateMap<TicketEntity, Ticket>();
         }
     }
 }

@@ -47,17 +47,17 @@ namespace TicketPal.DataAccess.Repository
 
         public override UserEntity Get(int id)
         {
-           return dbContext.Set<UserEntity>()
-            .Include(u => u.Performer)
-            .ThenInclude(p => p.Concerts)
-            .FirstOrDefault(u => u.Id == id);
+            return dbContext.Set<UserEntity>()
+             .Include(u => u.Performer)
+             .ThenInclude(p => p.Members)
+             .FirstOrDefault(u => u.Id == id);
         }
 
         public override UserEntity Get(Expression<Func<UserEntity, bool>> predicate)
         {
             return dbContext.Set<UserEntity>()
             .Include(u => u.Performer)
-            .ThenInclude(p => p.Concerts)
+            .ThenInclude(p => p.Members)
             .FirstOrDefault(predicate);
         }
 
@@ -65,7 +65,7 @@ namespace TicketPal.DataAccess.Repository
         {
             return dbContext.Set<UserEntity>()
             .Include(u => u.Performer)
-            .ThenInclude(p => p.Concerts)
+            .ThenInclude(p => p.Members)
             .AsEnumerable();
         }
 
@@ -73,7 +73,7 @@ namespace TicketPal.DataAccess.Repository
         {
             return dbContext.Set<UserEntity>()
             .Include(u => u.Performer)
-            .ThenInclude(p => p.Concerts)
+            .ThenInclude(p => p.Members)
             .Where(predicate)
             .AsEnumerable();
         }

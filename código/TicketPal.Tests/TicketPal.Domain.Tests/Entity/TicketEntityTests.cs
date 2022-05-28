@@ -1,10 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
-using TicketPal.Domain.Constants;
 using TicketPal.Domain.Entity;
 
-namespace TicketPal.DataAccess.Tests.Entity
+namespace TicketPal.Domain.Tests.Entity
 {
     [TestClass]
     public class TicketEntityTests
@@ -35,18 +34,18 @@ namespace TicketPal.DataAccess.Tests.Entity
             bands = new List<PerformerEntity> {
                 new PerformerEntity
                 {
-                    PerformerType = Constants.PERFORMER_TYPE_BAND,
+                    PerformerType = Constants.Constants.PERFORMER_TYPE_BAND,
                     UserInfo = new UserEntity{ Firstname = "Queen"},
                     StartYear = "1970",
                     Genre = new GenreEntity
                     {
                         Id = 2,
-                        GenreName = "Rock"
+                        Name = "Rock"
                     },
-                    Concerts = new List<ConcertEntity>()
+                    Members = new List<PerformerEntity>()
                 }
             };
-            
+
             concert = new ConcertEntity
             {
                 Id = 5,
@@ -54,16 +53,16 @@ namespace TicketPal.DataAccess.Tests.Entity
                 Date = new DateTime(2022, 11, 21),
                 AvailableTickets = 1981,
                 TicketPrice = 650,
-                CurrencyType = Constants.CURRENCY_US_DOLLARS,
-                EventType = Constants.EVENT_CONCERT_TYPE,
+                CurrencyType = Constants.Constants.CURRENCY_US_DOLLARS,
+                EventType = Constants.Constants.EVENT_CONCERT_TYPE,
                 TourName = "A Kind of Magic",
                 Artists = bands
             };
-            status = Constants.TICKET_PURCHASED_STATUS;
+            status = Constants.Constants.TICKET_PURCHASED_STATUS;
             code = "p3q59gjnfjgo4uqfjDXNCLKMQP31foiqnvjdanv";
-        
-    }
-    
+
+        }
+
         [TestMethod]
         public void GetTicketTest()
         {

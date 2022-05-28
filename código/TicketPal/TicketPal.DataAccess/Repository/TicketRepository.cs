@@ -13,7 +13,7 @@ namespace TicketPal.DataAccess.Repository
         public TicketRepository(DbContext context) : base(context)
         {
         }
-            
+
         public override void Add(TicketEntity element)
         {
             if (Exists(element.Id))
@@ -23,28 +23,28 @@ namespace TicketPal.DataAccess.Repository
 
             var containedEvent = dbContext.Set<EventEntity>().FirstOrDefault(e => e.Id == element.Event.Id);
 
-            if(containedEvent != null)
+            if (containedEvent != null)
             {
-                if(containedEvent.AvailableTickets > 0)
+                if (containedEvent.AvailableTickets > 0)
                 {
-                    if(element.Buyer != null && element.Buyer.Id != 0)
+                    if (element.Buyer != null && element.Buyer.Id != 0)
                     {
                         dbContext.Attach(element.Buyer);
                     }
                     containedEvent.AvailableTickets = containedEvent.AvailableTickets - 1;
-                    dbContext.Entry(containedEvent).State = EntityState.Modified; 
+                    dbContext.Entry(containedEvent).State = EntityState.Modified;
                     element.Event = containedEvent;
 
                     dbContext.Set<TicketEntity>().Add(element);
                     element.CreatedAt = DateTime.Now;
-                    dbContext.SaveChanges();  
+                    dbContext.SaveChanges();
                 }
                 else
                 {
                     throw new RepositoryException("No available tickets for this event.");
                 }
             }
-            else 
+            else
             {
                 throw new RepositoryException("No events found for this purchase.");
             }

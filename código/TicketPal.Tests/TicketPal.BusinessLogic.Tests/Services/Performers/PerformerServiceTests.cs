@@ -27,22 +27,22 @@ namespace TicketPal.BusinessLogic.Tests.Services.Performers
             genre = new GenreEntity()
             {
                 Id = 1,
-                GenreName = "Pop Rock"
+                Name = "Pop Rock"
             };
 
             performer = new PerformerEntity()
             {
                 Id = 1,
-                UserInfo = new UserEntity { Firstname = "Coldplay"},
+                UserInfo = new UserEntity { Firstname = "Coldplay" },
                 PerformerType = Constants.PERFORMER_TYPE_BAND,
                 StartYear = "1996",
                 Genre = genre,
-                Concerts = new List<ConcertEntity>()
+                Members = new List<PerformerEntity>()
             };
 
             performerRequest = new AddPerformerRequest()
             {
-                ConcertIds = new List<int>(),
+                MembersIds = new List<int>(),
                 Genre = genre.Id,
                 UserId = 1,
                 PerformerType = performer.PerformerType,
@@ -51,7 +51,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Performers
 
             this.mockPerformerRepo.Setup(m => m.Exists(It.IsAny<int>())).Returns(false);
             this.mockPerformerRepo.Setup(m => m.Add(It.IsAny<PerformerEntity>())).Verifiable();
-            this.mockUserRepo.Setup(u => u.Get(It.IsAny<int>())).Returns(new UserEntity { Role = Constants.ROLE_ARTIST});
+            this.mockUserRepo.Setup(u => u.Get(It.IsAny<int>())).Returns(new UserEntity { Role = Constants.ROLE_ARTIST });
             this.mockConcertRepo.Setup(c => c.GetAll(It.IsAny<Expression<Func<ConcertEntity, bool>>>()))
                 .Returns(new List<ConcertEntity>());
             this.mockGenreRepo.Setup(m => m.Get(It.IsAny<int>())).Returns(genre);
@@ -110,7 +110,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Performers
             {
                 Id = id,
                 UserInfo = performer.UserInfo,
-                Concerts = performer.Concerts,
+                Members = performer.Members,
                 Genre = performer.Genre,
                 PerformerType = performer.PerformerType,
                 StartYear = performer.StartYear
@@ -148,6 +148,11 @@ namespace TicketPal.BusinessLogic.Tests.Services.Performers
             };
 
             this.mockPerformerRepo.Setup(m => m.Update(It.IsAny<PerformerEntity>())).Verifiable();
+            this.mockUserRepo.Setup(r => r.Get(It.IsAny<int>())).Returns(new UserEntity
+            {
+                Performer = new PerformerEntity { Members = new List<PerformerEntity>() }
+            });
+            this.factoryMock.Setup(m => m.GetRepository(typeof(UserEntity))).Returns(this.mockUserRepo.Object);
             this.factoryMock.Setup(m => m.GetRepository(typeof(PerformerEntity))).Returns(this.mockPerformerRepo.Object);
 
             this.performerService = new PerformerService(this.factoryMock.Object, this.mapper);
@@ -164,7 +169,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Performers
             {
                 Id = id,
                 UserInfo = performer.UserInfo,
-                Concerts = performer.Concerts,
+                Members = performer.Members,
                 Genre = performer.Genre,
                 PerformerType = performer.PerformerType,
                 StartYear = performer.StartYear
@@ -206,7 +211,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Performers
                 {
                     Id = 1,
                     UserInfo = performer.UserInfo,
-                    Concerts = performer.Concerts,
+                    Members = performer.Members,
                     Genre = performer.Genre,
                     PerformerType = performer.PerformerType,
                     StartYear = performer.StartYear
@@ -215,8 +220,8 @@ namespace TicketPal.BusinessLogic.Tests.Services.Performers
                 {
                     Id = 2,
                     UserInfo = new UserEntity {Firstname = "The Party Band"},
-                    Concerts = new List<ConcertEntity>(),
-                    Genre = new GenreEntity(){ Id = 3, GenreName = "Pachanga"},
+                    Members = new List<PerformerEntity>(),
+                    Genre = new GenreEntity(){ Id = 3, Name = "Pachanga"},
                     PerformerType = performer.PerformerType,
                     StartYear = performer.StartYear
                 },
