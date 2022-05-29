@@ -1,6 +1,6 @@
 
-using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -27,6 +27,18 @@ namespace TicketPal.WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                var corsBuilder = new CorsPolicyBuilder();
+                var policy = corsBuilder
+                    .WithOrigins("http://localhost:4200")
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials()
+                    .Build();
+
+                options.AddPolicy("CorsPolicy", policy);
+            });
             // Settings
             var section = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(section);
@@ -74,16 +86,16 @@ namespace TicketPal.WebApi
                 );
                 app.UseDeveloperExceptionPage();
             }
-
-            app.UseHttpsRedirection();
-
             app.UseRouting();
+
+            app.UseCors("CorsPolicy");
 
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                endpoints.MapControllers()
+                    .RequireCors("CorsPolicy");
             });
         }
     }
