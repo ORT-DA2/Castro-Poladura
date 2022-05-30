@@ -8,7 +8,7 @@ import { ApiResponse } from 'src/app/models/response/apiResponse.model';
 import { User } from 'src/app/models/response/user.model';
 
 const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  headers: new HttpHeaders().set('Content-Type', 'application/json')
 };
 @Injectable({
   providedIn: 'root'
@@ -21,9 +21,10 @@ export class AuthService {
   ) { }
 
   login(request: UserLogin): Observable<User> {
-    return this.http.post<User>(`${this.endpoints.USERS}/login`, {
-      request
-    }, httpOptions);
+    return this.http.post<any>(`${this.endpoints.USERS}/login`,
+      request,
+      httpOptions
+    );
   }
 
   register(request: UserRegister): Observable<ApiResponse> {

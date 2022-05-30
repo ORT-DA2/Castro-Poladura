@@ -13,6 +13,9 @@ import { BoardSpectatorComponent } from './components/profile/board-spectator/bo
 import { BoardSellerComponent } from './components/profile/board-seller/board-seller.component';
 import { BoardSupervisorComponent } from './components/profile/board-supervisor/board-supervisor.component';
 import { authInterceptorProviders } from './helpers/auth/auth.interceptor';
+import { Endpoints } from './config/endpoints';
+import { DashboardComponent } from './home/dashboard/dashboard.component';
+import { AuthGuard } from './guards/authGuard.guard';
 
 @NgModule({
   declarations: [
@@ -23,7 +26,8 @@ import { authInterceptorProviders } from './helpers/auth/auth.interceptor';
     BoardAdminComponent,
     BoardSpectatorComponent,
     BoardSellerComponent,
-    BoardSupervisorComponent
+    BoardSupervisorComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,
@@ -31,7 +35,11 @@ import { authInterceptorProviders } from './helpers/auth/auth.interceptor';
     FormsModule,
     HttpClientModule
   ],
-  providers: [authInterceptorProviders],
+  providers: [
+    authInterceptorProviders,
+    Endpoints,
+    AuthGuard
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

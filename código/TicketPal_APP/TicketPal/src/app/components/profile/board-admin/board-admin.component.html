@@ -1,1 +1,15 @@
-<p>board-admin works!</p>
+<div class="container">
+    <header class="jumbotron">
+        <div *ngIf="fetchedUsers">
+            <strong>Users:</strong>
+            <ul>
+                <li *ngFor="let user of users">
+                    {{ user }}
+                </li>
+            </ul>
+        </div>
+    </header>
+</div>
+<div class="alert alert-danger" *ngIf="error">
+    {{ errorMessage }}
+</div>
