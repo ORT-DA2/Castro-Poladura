@@ -20,8 +20,9 @@ export class AppComponent {
 
   ngOnInit(): void {
     this.isLoggedIn = !!this.tokenService.getToken()
+
+    this.router.navigate(['home']);
     if (this.isLoggedIn) {
-      this.router.navigate(['home']);
       const user = this.tokenService.getUser()
       if (user?.role) {
         this.roles.push(user?.role)
