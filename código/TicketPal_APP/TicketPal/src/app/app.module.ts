@@ -14,8 +14,9 @@ import { BoardSellerComponent } from './components/profile/board-seller/board-se
 import { BoardSupervisorComponent } from './components/profile/board-supervisor/board-supervisor.component';
 import { authInterceptorProviders } from './helpers/auth/auth.interceptor';
 import { Endpoints } from './config/endpoints';
-import { DashboardComponent } from './home/dashboard/dashboard.component';
+import { DashboardComponent } from './components/home/dashboard/dashboard.component';
 import { AuthGuard } from './guards/authGuard.guard';
+import { EventsComponent } from './components/home/events/events.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { AuthGuard } from './guards/authGuard.guard';
     BoardSpectatorComponent,
     BoardSellerComponent,
     BoardSupervisorComponent,
-    DashboardComponent
+    DashboardComponent,
+    EventsComponent
   ],
   imports: [
     BrowserModule,

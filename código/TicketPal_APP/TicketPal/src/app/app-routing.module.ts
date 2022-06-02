@@ -4,7 +4,7 @@ import { LoginComponent } from './components/login/login.component';
 import { BoardAdminComponent } from './components/profile/board-admin/board-admin.component';
 import { ProfileComponent } from './components/profile/profile/profile.component';
 import { AuthGuard } from './guards/authGuard.guard';
-import { DashboardComponent } from './home/dashboard/dashboard.component';
+import { DashboardComponent } from './components/home/dashboard/dashboard.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
