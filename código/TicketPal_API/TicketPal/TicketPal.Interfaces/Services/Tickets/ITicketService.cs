@@ -10,11 +10,11 @@ namespace TicketPal.Interfaces.Services.Tickets
 {
     public interface ITicketService
     {
-        OperationResult AddTicket(AddTicketRequest model);
+        Task<OperationResult> AddTicket(AddTicketRequest model);
         OperationResult UpdateTicket(UpdateTicketRequest model);
         OperationResult DeleteTicket(int id);
-        IEnumerable<Ticket> GetUserTickets(int userId);
-        IEnumerable<Ticket> GetTickets();
-        Ticket GetTicket(int id);
+        Task<List<Ticket>> GetUserTickets(int userId);
+        Task<List<Ticket>> GetTickets();
+        Task<Ticket> GetTicket(int id);
     }
 }

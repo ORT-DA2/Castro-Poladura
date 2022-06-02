@@ -14,6 +14,7 @@ using TicketPal.Interfaces.Factory;
 using TicketPal.Interfaces.Services.Jwt;
 using TicketPal.BusinessLogic.Services.Settings;
 using System;
+using System.Threading.Tasks;
 
 namespace TicketPal.BusinessLogic.Services.Users
 {
@@ -57,25 +58,27 @@ namespace TicketPal.BusinessLogic.Services.Users
             }
         }
 
-        public User GetUser(int id)
+        public async Task<User> GetUser(int id)
         {
-            return mapper.Map<User>(repository.Get(id));
+            return mapper.Map<User>(await repository.Get(id));
         }
 
-        public IEnumerable<User> GetUsers(string role)
+        public async Task<List<User>> GetUsers(string role)
         {
             if (string.IsNullOrEmpty(role))
             {
-                var users = repository.GetAll();
-                return mapper.Map<IEnumerable<UserEntity>, IEnumerable<User>>(users);
+                var users = await repository.GetAll();
+                return mapper.Map<List<UserEntity>, List<User>>(users);
             }
-            return mapper.Map<IEnumerable<UserEntity>, IEnumerable<User>>(repository.GetAll(u => u.Role.Equals(role)));
+            return mapper.Map<List<UserEntity>, List<User>>(
+                await repository.GetAll(u => u.Role.Equals(role))
+                );
 
         }
 
-        public User Login(AuthenticationRequest model)
+        public async Task<User> Login(AuthenticationRequest model)
         {
-            var found = repository.Get(u => u.Email.Equals(model.Email));
+            var found = await repository.Get(u => u.Email.Equals(model.Email));
             if (found == null)
             {
                 return null;
@@ -97,7 +100,7 @@ namespace TicketPal.BusinessLogic.Services.Users
             return null;
         }
 
-        public User RetrieveUserFromToken(string token)
+        public async Task<User> RetrieveUserFromToken(string token)
         {
             if (!String.IsNullOrEmpty(token))
             {
@@ -107,7 +110,7 @@ namespace TicketPal.BusinessLogic.Services.Users
                 if (claimToken != null)
                 {
                     var accountId = int.Parse(claimToken);
-                    return GetUser(accountId);
+                    return await GetUser(accountId);
                 }
                 else
                 {

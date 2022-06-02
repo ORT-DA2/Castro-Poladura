@@ -6,12 +6,12 @@ using TicketPal.Domain.Entity;
 using TicketPal.Interfaces.Repository;
 using TicketPal.Domain.Exceptions;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace TicketPal.DataAccess.Repository
 {
     public abstract class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : BaseEntity
     {
-        private bool disposed;
         protected readonly DbContext dbContext;
         public GenericRepository(DbContext context)
         {
@@ -36,9 +36,9 @@ namespace TicketPal.DataAccess.Repository
             dbContext.SaveChanges();
         }
 
-        public void Delete(int id)
+        public async void Delete(int id)
         {
-            TEntity toDelete = Get(id);
+            TEntity toDelete = await Get(id);
 
             if (toDelete == null)
             {
@@ -54,26 +54,26 @@ namespace TicketPal.DataAccess.Repository
             return dbContext.Set<TEntity>().Any(item => item.Id == id);
         }
 
-        public virtual TEntity Get(int id)
+        public virtual Task<TEntity> Get(int id)
         {
-            return dbContext.Set<TEntity>().FirstOrDefault(u => u.Id == id);
+            return dbContext.Set<TEntity>().FirstOrDefaultAsync(u => u.Id == id);
         }
 
-        public virtual TEntity Get(Expression<Func<TEntity, bool>> predicate)
+        public virtual Task<TEntity> Get(Expression<Func<TEntity, bool>> predicate)
         {
-            return dbContext.Set<TEntity>().FirstOrDefault(predicate);
+            return dbContext.Set<TEntity>().FirstOrDefaultAsync(predicate);
         }
 
-        public virtual IEnumerable<TEntity> GetAll()
+        public virtual Task<List<TEntity>> GetAll()
         {
-            return dbContext.Set<TEntity>().AsEnumerable();
+            return dbContext.Set<TEntity>().ToListAsync();
         }
 
-        public virtual IEnumerable<TEntity> GetAll(Expression<Func<TEntity, bool>> predicate)
+        public virtual Task<List<TEntity>> GetAll(Expression<Func<TEntity, bool>> predicate)
         {
             return dbContext.Set<TEntity>()
                 .Where(predicate)
-                .AsEnumerable();
+                .ToListAsync();
         }
 
         public bool IsEmpty()
@@ -82,24 +82,5 @@ namespace TicketPal.DataAccess.Repository
         }
 
         public abstract void Update(TEntity element);
-
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposed)
-            {
-                if (disposing)
-                {
-                    dbContext.Dispose();
-                }
-            }
-            this.disposed = true;
-        }
-
-        public void Dispose()
-        {
-            Dispose(disposing: true);
-            GC.SuppressFinalize(this);
-        }
     }
 }

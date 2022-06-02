@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using TicketPal.Domain.Entity;
 using TicketPal.Domain.Exceptions;
 
@@ -46,41 +47,41 @@ namespace TicketPal.DataAccess.Repository
             dbContext.Entry(found).State = EntityState.Modified;
         }
 
-        public override PerformerEntity Get(int id)
+        public override Task<PerformerEntity> Get(int id)
         {
             return dbContext.Set<PerformerEntity>()
             .Include(p => p.UserInfo)
             .Include(p => p.Genre)
             .Include(p => p.Members)
-            .FirstOrDefault(u => u.Id == id);
+            .FirstOrDefaultAsync(u => u.Id == id);
         }
 
-        public override PerformerEntity Get(Expression<Func<PerformerEntity, bool>> predicate)
+        public override Task<PerformerEntity> Get(Expression<Func<PerformerEntity, bool>> predicate)
         {
             return dbContext.Set<PerformerEntity>()
             .Include(p => p.UserInfo)
             .Include(p => p.Genre)
             .Include(p => p.Members)
-            .FirstOrDefault(predicate);
+            .FirstOrDefaultAsync(predicate);
         }
 
-        public override IEnumerable<PerformerEntity> GetAll()
+        public override Task<List<PerformerEntity>> GetAll()
         {
             return dbContext.Set<PerformerEntity>()
             .Include(p => p.UserInfo)
             .Include(p => p.Genre)
             .Include(p => p.Members)
-            .AsEnumerable();
+            .ToListAsync();
         }
 
-        public override IEnumerable<PerformerEntity> GetAll(Expression<Func<PerformerEntity, bool>> predicate)
+        public override Task<List<PerformerEntity>> GetAll(Expression<Func<PerformerEntity, bool>> predicate)
         {
             return dbContext.Set<PerformerEntity>()
             .Include(p => p.UserInfo)
             .Include(p => p.Genre)
             .Include(p => p.Members)
             .Where(predicate)
-            .AsEnumerable();
+            .ToListAsync();
         }
     }
 }

@@ -20,12 +20,12 @@ namespace TicketPal.WebApi.Filters.Auth
             this.args = arguments.Split(",");
         }
 
-        public void OnAuthorization(AuthorizationFilterContext context)
+        public async void OnAuthorization(AuthorizationFilterContext context)
         {
             var token = context.HttpContext.Request.Headers["Authorization"]
                 .FirstOrDefault()?.Split(" ").Last();
-            this.userService = context.HttpContext.RequestServices.GetService(typeof(IUserService)) as IUserService;   
-            var user = userService.RetrieveUserFromToken(token);
+            this.userService = context.HttpContext.RequestServices.GetService(typeof(IUserService)) as IUserService;
+            var user = await userService.RetrieveUserFromToken(token);
 
             if (user == null)
             {
@@ -36,7 +36,7 @@ namespace TicketPal.WebApi.Filters.Auth
                 };
             }
             else
-            {                
+            {
                 if (!args.Contains(user.Role))
                 {
                     var forbidden = new ForbiddenError("No required authorization to access resource.");

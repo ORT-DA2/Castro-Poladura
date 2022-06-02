@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using TicketPal.Domain.Models.Request;
 using TicketPal.Domain.Models.Response;
 
@@ -6,10 +7,10 @@ namespace TicketPal.Interfaces.Services.Concerts
 {
     public interface IConcertService
     {
-        OperationResult AddConcert(AddConcertRequest model);
-        OperationResult UpdateConcert(UpdateConcertRequest model);
+        Task<OperationResult> AddConcert(AddConcertRequest model);
+        Task<OperationResult> UpdateConcert(UpdateConcertRequest model);
         OperationResult DeleteConcert(int id);
-        IEnumerable<Concert> GetConcerts(string type, bool newest, string startDate, string endDate, string artistName);
-        Concert GetConcert(int id);
+        Task<List<Concert>> GetConcerts(string type, bool newest, string startDate, string endDate, string artistName);
+        Task<Concert> GetConcert(int id);
     }
 }

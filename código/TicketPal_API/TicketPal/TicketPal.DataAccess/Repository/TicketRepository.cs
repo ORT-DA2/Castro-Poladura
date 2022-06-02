@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using TicketPal.Domain.Entity;
 using TicketPal.Domain.Exceptions;
 
@@ -71,37 +72,37 @@ namespace TicketPal.DataAccess.Repository
             dbContext.Entry(found).State = EntityState.Modified;
         }
 
-        public override TicketEntity Get(int id)
+        public override Task<TicketEntity> Get(int id)
         {
             return dbContext.Set<TicketEntity>()
             .Include(t => t.Buyer)
             .Include(t => t.Event)
-            .FirstOrDefault(u => u.Id == id);
+            .FirstOrDefaultAsync(u => u.Id == id);
         }
 
-        public override TicketEntity Get(Expression<Func<TicketEntity, bool>> predicate)
+        public override Task<TicketEntity> Get(Expression<Func<TicketEntity, bool>> predicate)
         {
             return dbContext.Set<TicketEntity>()
             .Include(t => t.Buyer)
             .Include(t => t.Event)
-            .FirstOrDefault(predicate);
+            .FirstOrDefaultAsync(predicate);
         }
 
-        public override IEnumerable<TicketEntity> GetAll()
+        public override Task<List<TicketEntity>> GetAll()
         {
             return dbContext.Set<TicketEntity>()
             .Include(t => t.Buyer)
             .Include(t => t.Event)
-            .AsEnumerable();
+            .ToListAsync();
         }
 
-        public override IEnumerable<TicketEntity> GetAll(Expression<Func<TicketEntity, bool>> predicate)
+        public override Task<List<TicketEntity>> GetAll(Expression<Func<TicketEntity, bool>> predicate)
         {
             return dbContext.Set<TicketEntity>()
             .Include(t => t.Buyer)
             .Include(t => t.Event)
             .Where(predicate)
-            .AsEnumerable();
+            .ToListAsync();
         }
     }
 }

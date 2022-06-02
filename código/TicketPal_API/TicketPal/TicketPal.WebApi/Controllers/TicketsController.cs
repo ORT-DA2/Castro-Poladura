@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using TicketPal.Domain.Constants;
 using TicketPal.Domain.Models.Request;
@@ -23,7 +24,7 @@ namespace TicketPal.WebApi.Controllers
 
         [HttpPost("purchase/{eventId}")]
         [AuthenticationFilter(Constants.ROLE_SELLER + "," + Constants.ROLE_SPECTATOR + "," + Constants.ROLE_ADMIN)]
-        public IActionResult AddTicket([FromRoute] int eventId, [FromBody] AddTicketRequest request)
+        public async Task<IActionResult> AddTicket([FromRoute] int eventId, [FromBody] AddTicketRequest request)
         {
             this.userService = this.HttpContext
                 .RequestServices
@@ -31,7 +32,7 @@ namespace TicketPal.WebApi.Controllers
             request.EventId = eventId;
             var token = HttpContext.Request.Headers["Authorization"]
                 .FirstOrDefault()?.Split(" ").Last();
-            var authenticatedUser = userService.RetrieveUserFromToken(token);
+            var authenticatedUser = await userService.RetrieveUserFromToken(token);
 
             if (authenticatedUser != null && authenticatedUser.Role.Equals(Constants.ROLE_SPECTATOR))
             {
@@ -39,7 +40,7 @@ namespace TicketPal.WebApi.Controllers
                 request.LoggedUserId = authenticatedUser.Id;
             }
 
-            var result = ticketService.AddTicket(request);
+            var result = await ticketService.AddTicket(request);
 
             if (result.ResultCode == Constants.CODE_FAIL)
             {
@@ -93,14 +94,14 @@ namespace TicketPal.WebApi.Controllers
 
         [HttpGet]
         [AuthenticationFilter(Constants.ROLE_ADMIN + "," + Constants.ROLE_SPECTATOR)]
-        public IActionResult GetTickets()
+        public async Task<IActionResult> GetTickets()
         {
             this.userService = this.HttpContext
                 .RequestServices
                 .GetService(typeof(IUserService)) as IUserService;
             var token = HttpContext.Request.Headers["Authorization"]
                 .FirstOrDefault()?.Split(" ").Last();
-            var authenticatedUser = userService.RetrieveUserFromToken(token);
+            var authenticatedUser = await userService.RetrieveUserFromToken(token);
 
             if (authenticatedUser.Role.Equals(Constants.ROLE_ADMIN))
             {

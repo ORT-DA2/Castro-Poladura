@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using TicketPal.Domain.Constants;
 using TicketPal.Domain.Models.Request;
@@ -20,11 +21,11 @@ namespace TicketPal.WebApi.Controllers
 
         [HttpPost]
         [AuthenticationFilter(Constants.ROLE_ADMIN)]
-        public IActionResult AddGenre(AddGenreRequest request)
+        public async Task<IActionResult> AddGenre(AddGenreRequest request)
         {
-            var result = genreService.AddGenre(request);
+            var result = await genreService.AddGenre(request);
 
-            if(result.ResultCode == Constants.CODE_FAIL)
+            if (result.ResultCode == Constants.CODE_FAIL)
             {
                 return BadRequest(new BadRequestError(result.Message));
             }
@@ -34,11 +35,11 @@ namespace TicketPal.WebApi.Controllers
 
         [HttpDelete("{id}")]
         [AuthenticationFilter(Constants.ROLE_ADMIN)]
-        public IActionResult DeleteGenre([FromRoute]int id)
+        public IActionResult DeleteGenre([FromRoute] int id)
         {
             var result = genreService.DeleteGenre(id);
 
-            if(result.ResultCode == Constants.CODE_FAIL)
+            if (result.ResultCode == Constants.CODE_FAIL)
             {
                 return BadRequest(new BadRequestError(result.Message));
             }
@@ -47,9 +48,9 @@ namespace TicketPal.WebApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetGenre([FromRoute]int id)
+        public async Task<IActionResult> GetGenre([FromRoute] int id)
         {
-            return Ok(genreService.GetGenre(id));
+            return Ok(await genreService.GetGenre(id));
         }
 
         [HttpGet]
@@ -60,16 +61,16 @@ namespace TicketPal.WebApi.Controllers
 
         [HttpPut("{id}")]
         [AuthenticationFilter(Constants.ROLE_ADMIN)]
-        public IActionResult UpdateGenre([FromRoute]int id, UpdateGenreRequest request)
+        public IActionResult UpdateGenre([FromRoute] int id, UpdateGenreRequest request)
         {
             request.Id = id;
             var result = genreService.UpdateGenre(request);
 
-            if(result.ResultCode == Constants.CODE_FAIL)
+            if (result.ResultCode == Constants.CODE_FAIL)
             {
                 return BadRequest(new BadRequestError(result.Message));
             }
-            
+
             return Ok(result);
         }
 

@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using TicketPal.Domain.Constants;
 using TicketPal.Domain.Models.Request;
@@ -20,9 +21,9 @@ namespace TicketPal.WebApi.Controllers
         }
 
         [HttpPost("login")]
-        public IActionResult Authenticate([FromBody] AuthenticationRequest request)
+        public async Task<IActionResult> Authenticate([FromBody] AuthenticationRequest request)
         {
-            var user = userService.Login(request);
+            var user = await userService.Login(request);
             if (user != null)
             {
                 return Ok(user);
@@ -55,11 +56,11 @@ namespace TicketPal.WebApi.Controllers
 
         [HttpGet("{id}")]
         [AuthenticationFilter(Constants.ROLE_ADMIN + "," + Constants.ROLE_SPECTATOR)]
-        public IActionResult GetUserAccount([FromRoute] int id)
+        public async Task<IActionResult> GetUserAccount([FromRoute] int id)
         {
             var token = HttpContext.Request.Headers["Authorization"]
                 .FirstOrDefault()?.Split(" ").Last();
-            var authenticatedUser = userService.RetrieveUserFromToken(token);
+            var authenticatedUser = await userService.RetrieveUserFromToken(token);
 
             if (authenticatedUser.Role != Constants.ROLE_ADMIN &&
                 authenticatedUser.Id != id)
@@ -76,18 +77,18 @@ namespace TicketPal.WebApi.Controllers
 
         [HttpGet]
         [AuthenticationFilter(Constants.ROLE_ADMIN)]
-        public IActionResult GetUserAccounts([FromQuery(Name = "role")] string role)
+        public async Task<IActionResult> GetUserAccounts([FromQuery(Name = "role")] string role)
         {
-            return Ok(userService.GetUsers(role));
+            return Ok(await userService.GetUsers(role));
         }
 
         [HttpPut("{id}")]
         [AuthenticationFilter(Constants.ROLE_ADMIN + "," + Constants.ROLE_SPECTATOR)]
-        public IActionResult Update([FromRoute] int id, [FromBody] UpdateUserRequest request)
+        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateUserRequest request)
         {
             var token = HttpContext.Request.Headers["Authorization"]
                 .FirstOrDefault()?.Split(" ").Last();
-            var authenticatedUser = userService.RetrieveUserFromToken(token);
+            var authenticatedUser = await userService.RetrieveUserFromToken(token);
 
             if (!authenticatedUser.Role.Equals(Constants.ROLE_ADMIN) &&
             !authenticatedUser.Role.Equals(request.Role) &&
