@@ -16,6 +16,12 @@ import { authInterceptorProviders } from './helpers/auth/auth.interceptor';
 import { Endpoints } from './config/endpoints';
 import { DashboardComponent } from './home/dashboard/dashboard.component';
 import { AuthGuard } from './guards/authGuard.guard';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatTabsModule } from '@angular/material/tabs';
+import { UsersComponent } from './components/tables/users/users.component';
+import { PerformersComponent } from './components/tables/performers/performers.component';
+import { GenresComponent } from './components/tables/genres/genres.component';
+import { ConcertsComponent } from './components/tables/concerts/concerts.component';
 
 @NgModule({
   declarations: [
@@ -27,13 +33,19 @@ import { AuthGuard } from './guards/authGuard.guard';
     BoardSpectatorComponent,
     BoardSellerComponent,
     BoardSupervisorComponent,
-    DashboardComponent
+    DashboardComponent,
+    UsersComponent,
+    PerformersComponent,
+    GenresComponent,
+    ConcertsComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule,
+    MatTabsModule
   ],
   providers: [
     authInterceptorProviders,

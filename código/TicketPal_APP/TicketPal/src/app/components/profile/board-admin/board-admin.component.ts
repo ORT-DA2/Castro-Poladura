@@ -16,18 +16,6 @@ export class BoardAdminComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.userService.getUsers().subscribe({
-      next: data => {
-        this.users = []
-        data.forEach(u => {
-          this.users?.push(`${u.firstname} ${u.lastname} - ${u.role}`)
-        })
-        this.fetchedUsers = true
-      },
-      error: err => {
-        this.errorMessage = err.error.message
-      }
-    })
   }
 
 }

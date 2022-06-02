@@ -45,7 +45,7 @@ namespace TicketPal.Factory
         public void AddDbContextService(string connectionString)
         {
             services.AddDbContext<DbContext, AppDbContext>
-                (options => options.UseSqlServer(connectionString));
+                (options => options.UseSqlServer(connectionString), ServiceLifetime.Transient);
         }
 
         public void RegisterRepositories()
