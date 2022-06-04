@@ -22,6 +22,7 @@ import { UsersComponent } from './components/tables/users/users.component';
 import { PerformersComponent } from './components/tables/performers/performers.component';
 import { GenresComponent } from './components/tables/genres/genres.component';
 import { ConcertsComponent } from './components/tables/concerts/concerts.component';
+import { TicketsComponent } from './components/tables/tickets/tickets.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { ConcertsComponent } from './components/tables/concerts/concerts.compone
     UsersComponent,
     PerformersComponent,
     GenresComponent,
-    ConcertsComponent
+    ConcertsComponent,
+    TicketsComponent
   ],
   imports: [
     BrowserModule,
