@@ -1,14 +1,14 @@
 <form>
-    <div class="mb-3 row">
-      <label for="table-filtering-search" class="col-xs-3 col-sm-auto col-form-label">Full text search:</label>
-      <!-- <div class="col-xs-3 col-sm-auto">
+  <div class="mb-3 row">
+    <label for="table-filtering-search" class="col-xs-3 col-sm-auto col-form-label">Full text search:</label>
+    <!-- <div class="col-xs-3 col-sm-auto">
          <input id="table-filtering-search" class="form-control" type="text" [formControl]="filter">
       </div> -->
-    </div>
-  </form>
-  
-  <table class="table table-striped">
-    <thead>
+  </div>
+</form>
+
+<table class="table table-striped">
+  <thead>
     <tr>
       <th scope="col">Id</th>
       <th scope="col">Name</th>
@@ -17,15 +17,15 @@
       <th scope="col">Genre</th>
       <th scope="col">Members</th>
     </tr>
-    </thead>
-    <tbody>
+  </thead>
+  <tbody>
     <tr *ngFor="let performer of performers">
       <th scope="row">{{ performer.id }}</th>
-      <td>{{performer.user.firstname}} + {{performer.user.lastname}}</td>
+      <td>{{performer.userInfo.firstname}} + {{performer.userInfo.lastname}}</td>
       <td>{{performer.performerType}}</td>
       <td>{{performer.year}}</td>
       <td>{{performer.genre.name}}</td>
       <td>{{performer.members}}</td> <!-- Cambiar para que se muestren nombres de artistas-->
     </tr>
-    </tbody>
-  </table>
+  </tbody>
+</table>

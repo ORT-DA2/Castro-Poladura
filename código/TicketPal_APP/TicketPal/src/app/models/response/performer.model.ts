@@ -3,9 +3,9 @@ import { User } from "./user.model";
 
 export class Performer {
     id: string;
-    user: User;
+    userInfo: User;
     performerType: string;
     year: string;
     genre: Genre;
-    members: Performer[]; 
+    members: Performer[];
 }

@@ -1,14 +1,14 @@
 <form>
-    <div class="mb-3 row">
-      <label for="table-filtering-search" class="col-xs-3 col-sm-auto col-form-label">Full text search:</label>
-      <!-- <div class="col-xs-3 col-sm-auto">
+  <div class="mb-3 row">
+    <label for="table-filtering-search" class="col-xs-3 col-sm-auto col-form-label">Full text search:</label>
+    <!-- <div class="col-xs-3 col-sm-auto">
          <input id="table-filtering-search" class="form-control" type="text" [formControl]="filter">
       </div> -->
-    </div>
-  </form>
-  
-  <table class="table table-striped">
-    <thead>
+  </div>
+</form>
+
+<table class="table table-striped">
+  <thead>
     <tr>
       <th scope="col">Id</th>
       <th scope="col">Date</th>
@@ -21,8 +21,8 @@
       <th scope="col">Address</th>
       <th scope="col">Country</th>
     </tr>
-    </thead>
-    <tbody>
+  </thead>
+  <tbody>
     <tr *ngFor="let concert of concerts">
       <th scope="row">{{ concert.id }}</th>
       <td>{{concert.date}}</td>
@@ -35,5 +35,5 @@
       <td>{{concert.address}}</td>
       <td>{{concert.country}}</td>
     </tr>
-    </tbody>
-  </table>
+  </tbody>
+</table>
