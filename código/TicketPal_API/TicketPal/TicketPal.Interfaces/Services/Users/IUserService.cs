@@ -12,8 +12,8 @@ namespace TicketPal.Interfaces.Services.Users
         Task<List<User>> GetUsers(string role);
         Task<User> GetUser(int id);
         Task<User> RetrieveUserFromToken(string token);
-        OperationResult SignUp(SignUpRequest model);
+        Task<OperationResult> SignUp(SignUpRequest model);
         OperationResult UpdateUser(UpdateUserRequest model, string authorization);
-        OperationResult DeleteUser(int id);
+        Task<OperationResult> DeleteUser(int id);
     }
 }

@@ -2,15 +2,15 @@ using System;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using TicketPal.BusinessLogic.Services.Settings;
+using Microsoft.AspNetCore.Http;
 using TicketPal.Domain.Models.Response.Error;
-using TicketPal.Interfaces.Factory;
-using TicketPal.Interfaces.Services.Jwt;
 using TicketPal.Interfaces.Services.Users;
+using Newtonsoft.Json;
+using System.Threading.Tasks;
 
 namespace TicketPal.WebApi.Filters.Auth
 {
-    public class AuthenticationFilter : Attribute, IAuthorizationFilter
+    public class AuthenticationFilter : Attribute, IAsyncAuthorizationFilter
     {
         private string[] args;
         private IUserService userService;
@@ -20,8 +20,9 @@ namespace TicketPal.WebApi.Filters.Auth
             this.args = arguments.Split(",");
         }
 
-        public async void OnAuthorization(AuthorizationFilterContext context)
+        public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
         {
+
             var token = context.HttpContext.Request.Headers["Authorization"]
                 .FirstOrDefault()?.Split(" ").Last();
             this.userService = context.HttpContext.RequestServices.GetService(typeof(IUserService)) as IUserService;
@@ -44,6 +45,11 @@ namespace TicketPal.WebApi.Filters.Auth
                     {
                         StatusCode = forbidden.StatusCode
                     };
+                }
+                else
+                {
+                    var json = JsonConvert.SerializeObject(user);
+                    context.HttpContext.Session.SetString("user", json);
                 }
             }
         }

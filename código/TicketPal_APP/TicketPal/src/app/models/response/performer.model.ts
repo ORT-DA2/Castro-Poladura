@@ -7,5 +7,5 @@ export class Performer {
     performerType: string;
     startYear: string;
     genre: Genre;
-    members: Performer[]; 
+    members: Performer[];
 }

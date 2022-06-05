@@ -15,7 +15,7 @@ namespace TicketPal.DataAccess.Repository
         {
         }
 
-        public override void Add(ConcertEntity element)
+        public override async Task Add(ConcertEntity element)
         {
             if (Exists(element.Id))
             {
@@ -33,7 +33,7 @@ namespace TicketPal.DataAccess.Repository
                 }
             }
 
-            dbContext.Set<ConcertEntity>().Add(element);
+            await dbContext.Set<ConcertEntity>().AddAsync(element);
             element.CreatedAt = DateTime.Now;
             dbContext.SaveChanges();
         }
@@ -62,33 +62,33 @@ namespace TicketPal.DataAccess.Repository
             dbContext.Entry(found).State = EntityState.Modified;
         }
 
-        public override Task<ConcertEntity> Get(int id)
+        public async override Task<ConcertEntity> Get(int id)
         {
-            return dbContext.Set<ConcertEntity>()
+            return await dbContext.Set<ConcertEntity>()
                 .Include(c => c.Artists)
                 .ThenInclude(a => a.UserInfo)
                 .FirstOrDefaultAsync(u => u.Id == id);
         }
 
-        public override Task<ConcertEntity> Get(Expression<Func<ConcertEntity, bool>> predicate)
+        public async override Task<ConcertEntity> Get(Expression<Func<ConcertEntity, bool>> predicate)
         {
-            return dbContext.Set<ConcertEntity>()
+            return await dbContext.Set<ConcertEntity>()
                 .Include(c => c.Artists)
                 .ThenInclude(a => a.UserInfo)
                 .FirstOrDefaultAsync(predicate);
         }
 
-        public override Task<List<ConcertEntity>> GetAll()
+        public async override Task<List<ConcertEntity>> GetAll()
         {
-            return dbContext.Set<ConcertEntity>()
+            return await dbContext.Set<ConcertEntity>()
                 .Include(c => c.Artists)
                 .ThenInclude(a => a.UserInfo)
                 .ToListAsync();
         }
 
-        public override Task<List<ConcertEntity>> GetAll(Expression<Func<ConcertEntity, bool>> predicate)
+        public async override Task<List<ConcertEntity>> GetAll(Expression<Func<ConcertEntity, bool>> predicate)
         {
-            return dbContext.Set<ConcertEntity>()
+            return await dbContext.Set<ConcertEntity>()
                 .Include(c => c.Artists)
                 .ThenInclude(a => a.UserInfo)
                 .Where(predicate)

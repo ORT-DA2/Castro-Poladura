@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using TicketPal.Domain.Entity;
 using TicketPal.Domain.Exceptions;
 
@@ -12,14 +13,14 @@ namespace TicketPal.DataAccess.Repository
         {
         }
 
-        public override void Add(GenreEntity element)
+        public override async Task Add(GenreEntity element)
         {
             if (Exists(element.Id))
             {
                 throw new RepositoryException("The genre you are trying to add already exists");
             }
 
-            dbContext.Set<GenreEntity>().Add(element);
+            await dbContext.Set<GenreEntity>().AddAsync(element);
             element.CreatedAt = DateTime.Now;
             dbContext.SaveChanges();
         }

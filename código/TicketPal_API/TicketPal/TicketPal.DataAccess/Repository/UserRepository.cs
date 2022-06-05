@@ -32,7 +32,7 @@ namespace TicketPal.DataAccess.Repository
             dbContext.Entry(found).State = EntityState.Modified;
         }
 
-        public override async void Add(UserEntity user)
+        public override async Task Add(UserEntity user)
         {
             var emails = await GetAll(u => u.Email.Equals(user.Email));
 
@@ -46,33 +46,33 @@ namespace TicketPal.DataAccess.Repository
             dbContext.SaveChanges();
         }
 
-        public override Task<UserEntity> Get(int id)
+        public async override Task<UserEntity> Get(int id)
         {
-            return dbContext.Set<UserEntity>()
+            return await dbContext.Set<UserEntity>()
              .Include(u => u.Performer)
              .ThenInclude(p => p.Members)
              .FirstOrDefaultAsync(u => u.Id == id);
         }
 
-        public override Task<UserEntity> Get(Expression<Func<UserEntity, bool>> predicate)
+        public async override Task<UserEntity> Get(Expression<Func<UserEntity, bool>> predicate)
         {
-            return dbContext.Set<UserEntity>()
+            return await dbContext.Set<UserEntity>()
             .Include(u => u.Performer)
             .ThenInclude(p => p.Members)
             .FirstOrDefaultAsync(predicate);
         }
 
-        public override Task<List<UserEntity>> GetAll()
+        public async override Task<List<UserEntity>> GetAll()
         {
-            return dbContext.Set<UserEntity>()
+            return await dbContext.Set<UserEntity>()
             .Include(u => u.Performer)
             .ThenInclude(p => p.Members)
             .ToListAsync();
         }
 
-        public override Task<List<UserEntity>> GetAll(Expression<Func<UserEntity, bool>> predicate)
+        public async override Task<List<UserEntity>> GetAll(Expression<Func<UserEntity, bool>> predicate)
         {
-            return dbContext.Set<UserEntity>()
+            return await dbContext.Set<UserEntity>()
             .Include(u => u.Performer)
             .ThenInclude(p => p.Members)
             .Where(predicate)

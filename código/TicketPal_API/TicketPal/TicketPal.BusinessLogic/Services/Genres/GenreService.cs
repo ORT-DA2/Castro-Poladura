@@ -35,7 +35,7 @@ namespace TicketPal.BusinessLogic.Services.Genres
 
                 if (found == null)
                 {
-                    genreRepository.Add(new GenreEntity
+                    await genreRepository.Add(new GenreEntity
                     {
                         Name = model.Name
                     });
@@ -65,11 +65,11 @@ namespace TicketPal.BusinessLogic.Services.Genres
             };
         }
 
-        public OperationResult DeleteGenre(int id)
+        public async Task<OperationResult> DeleteGenre(int id)
         {
             try
             {
-                genreRepository.Delete(id);
+                await genreRepository.Delete(id);
                 return new OperationResult
                 {
                     ResultCode = Constants.CODE_SUCCESS,

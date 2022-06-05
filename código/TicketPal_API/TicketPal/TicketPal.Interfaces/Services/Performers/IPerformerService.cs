@@ -9,7 +9,7 @@ namespace TicketPal.Interfaces.Services.Performers
     {
         Task<OperationResult> AddPerformer(AddPerformerRequest model);
         Task<OperationResult> UpdatePerformer(UpdatePerformerRequest model);
-        OperationResult DeletePerformer(int id);
+        Task<OperationResult> DeletePerformer(int id);
         Task<List<Performer>> GetPerformers();
         Task<Performer> GetPerformer(int id);
     }

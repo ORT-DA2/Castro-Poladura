@@ -39,7 +39,7 @@ namespace TicketPal.BusinessLogic.Services.Concerts
 
                 if (found == null)
                 {
-                    concertRepository.Add(new ConcertEntity
+                    await concertRepository.Add(new ConcertEntity
                     {
                         Artists = artists,
                         AvailableTickets = model.AvailableTickets,
@@ -77,11 +77,11 @@ namespace TicketPal.BusinessLogic.Services.Concerts
             };
         }
 
-        public OperationResult DeleteConcert(int id)
+        public async Task<OperationResult> DeleteConcert(int id)
         {
             try
             {
-                concertRepository.Delete(id);
+                await concertRepository.Delete(id);
                 return new OperationResult
                 {
                     ResultCode = Constants.CODE_SUCCESS,

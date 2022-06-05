@@ -55,9 +55,9 @@ namespace TicketPal.WebApi.Controllers
 
         [HttpDelete("{id}")]
         [AuthenticationFilter(Constants.ROLE_ADMIN)]
-        public IActionResult DeletePerformer([FromRoute] int id)
+        public async Task<IActionResult> DeletePerformer([FromRoute] int id)
         {
-            var result = performerService.DeletePerformer(id);
+            var result = await performerService.DeletePerformer(id);
 
             if (result.ResultCode == Constants.CODE_FAIL)
             {
@@ -71,9 +71,9 @@ namespace TicketPal.WebApi.Controllers
 
         [HttpGet("{id}")]
         [AuthenticationFilter(Constants.ROLE_ADMIN)]
-        public async Task<IActionResult> GetPerformer([FromRoute] int id)
+        public IActionResult GetPerformer([FromRoute] int id)
         {
-            return Ok(await performerService.GetPerformer(id));
+            return Ok(performerService.GetPerformer(id));
         }
 
         [HttpGet]

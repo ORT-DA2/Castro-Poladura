@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using Newtonsoft.Json;
 using TicketPal.Domain.Constants;
 using TicketPal.Domain.Models.Request;
 using TicketPal.Domain.Models.Response;
@@ -30,7 +33,7 @@ namespace TicketPal.WebApi.Tests.Controllers
         }
 
         [TestMethod]
-        public void UserLoginIsCorrect()
+        public async Task UserLoginIsCorrect()
         {
             var request = new AuthenticationRequest
             {
@@ -38,17 +41,17 @@ namespace TicketPal.WebApi.Tests.Controllers
                 Password = users[0].Password
             };
 
-            mockService.Setup(s => s.Login(request)).Returns(users[0]);
+            mockService.Setup(s => s.Login(request)).Returns(Task.FromResult(users[0]));
 
             var result = controller.Authenticate(request);
 
-            var objectResult = result as ObjectResult;
+            var objectResult = await result as ObjectResult;
             var statusCode = objectResult.StatusCode;
 
             Assert.AreEqual(200, statusCode);
         }
 
-        public void UserSignUpOk()
+        public async Task UserSignUpOk()
         {
             var request = new SignUpRequest
             {
@@ -65,9 +68,9 @@ namespace TicketPal.WebApi.Tests.Controllers
                 Message = "User registered successfully"
             };
 
-            mockService.Setup(s => s.SignUp(request)).Returns(operationResult);
+            mockService.Setup(s => s.SignUp(request)).Returns(Task.FromResult(operationResult));
 
-            var result = controller.Register(request);
+            var result = await controller.Register(request);
 
             var objectResult = result as ObjectResult;
             var statusCode = objectResult.StatusCode;
@@ -76,7 +79,7 @@ namespace TicketPal.WebApi.Tests.Controllers
         }
 
         [TestMethod]
-        public void RegisterUserBadRequest()
+        public async Task RegisterUserBadRequest()
         {
             var request = new SignUpRequest
             {
@@ -93,9 +96,9 @@ namespace TicketPal.WebApi.Tests.Controllers
                 Message = "Some error message"
             };
 
-            mockService.Setup(s => s.SignUp(request)).Returns(operationResult);
+            mockService.Setup(s => s.SignUp(request)).Returns(Task.FromResult(operationResult));
 
-            var result = controller.Register(request);
+            var result = await controller.Register(request);
 
             var objectResult = result as ObjectResult;
             var statusCode = objectResult.StatusCode;
@@ -107,16 +110,17 @@ namespace TicketPal.WebApi.Tests.Controllers
         public void GetAnyAccountAdminOk()
         {
             var mockHttpContext = new Mock<HttpContext>();
-            var mockHeaderHttp = new Mock<IHeaderDictionary>();
-            mockHeaderHttp.Setup(x => x[It.IsAny<string>()]).Returns("someHeader");
-            var mockHttpRequest = new Mock<HttpRequest>();
-            mockHttpRequest.Setup(s => s.Headers).Returns(mockHeaderHttp.Object);
-            var mockServiceProvider = new Mock<IServiceProvider>();
-            mockHttpContext.Setup(s => s.Request).Returns(mockHttpRequest.Object);
-            
-            controller.ControllerContext.HttpContext = mockHttpContext.Object;
+            var sessionMock = new Mock<ISession>();
+            var userJson = JsonConvert.SerializeObject(users[1]);
+            var value = Encoding.UTF8.GetBytes(userJson);
 
-            mockService.Setup(s => s.RetrieveUserFromToken(It.IsAny<string>())).Returns(users[0]);
+            sessionMock.Setup(_ => _.Set(It.IsAny<string>(), It.IsAny<byte[]>()))
+                .Callback<string, byte[]>((k, v) => value = v);
+            sessionMock.Setup(_ => _.TryGetValue(It.IsAny<string>(), out value))
+                .Returns(true);
+            mockHttpContext.Setup(s => s.Session).Returns(sessionMock.Object);
+
+            controller.ControllerContext.HttpContext = mockHttpContext.Object;
 
             var account = controller.GetUserAccount(users[1].Id);
 
@@ -130,16 +134,17 @@ namespace TicketPal.WebApi.Tests.Controllers
         public void GetAccountIfSameAccountOk()
         {
             var mockHttpContext = new Mock<HttpContext>();
-            var mockHeaderHttp = new Mock<IHeaderDictionary>();
-            mockHeaderHttp.Setup(x => x[It.IsAny<string>()]).Returns("someHeader");
-            var mockHttpRequest = new Mock<HttpRequest>();
-            mockHttpRequest.Setup(s => s.Headers).Returns(mockHeaderHttp.Object);
-            var mockServiceProvider = new Mock<IServiceProvider>();
-            mockHttpContext.Setup(s => s.Request).Returns(mockHttpRequest.Object);
-            
-            controller.ControllerContext.HttpContext = mockHttpContext.Object;
+            var sessionMock = new Mock<ISession>();
+            var userJson = JsonConvert.SerializeObject(users[3]);
+            var value = Encoding.UTF8.GetBytes(userJson);
 
-            mockService.Setup(s => s.RetrieveUserFromToken(It.IsAny<string>())).Returns(users[3]);
+            sessionMock.Setup(_ => _.Set(It.IsAny<string>(), It.IsAny<byte[]>()))
+                .Callback<string, byte[]>((k, v) => value = v);
+            sessionMock.Setup(_ => _.TryGetValue(It.IsAny<string>(), out value))
+                .Returns(true);
+            mockHttpContext.Setup(s => s.Session).Returns(sessionMock.Object);
+
+            controller.ControllerContext.HttpContext = mockHttpContext.Object;
 
             var account = controller.GetUserAccount(users[3].Id);
 
@@ -150,11 +155,11 @@ namespace TicketPal.WebApi.Tests.Controllers
         }
 
         [TestMethod]
-        public void GetAnyAccountsOk()
+        public async Task GetAnyAccountsOk()
         {
-            mockService.Setup(s => s.GetUsers(Constants.ROLE_SPECTATOR)).Returns(users);
+            mockService.Setup(s => s.GetUsers(Constants.ROLE_SPECTATOR)).Returns(Task.FromResult(users));
 
-            var account = controller.GetUserAccounts(Constants.ROLE_SPECTATOR);
+            var account = await controller.GetUserAccounts(Constants.ROLE_SPECTATOR);
 
             var objectResult = account as ObjectResult;
             var statusCode = objectResult.StatusCode;
@@ -166,13 +171,16 @@ namespace TicketPal.WebApi.Tests.Controllers
         public void UpdateAccountOk()
         {
             var mockHttpContext = new Mock<HttpContext>();
-            var mockHeaderHttp = new Mock<IHeaderDictionary>();
-            mockHeaderHttp.Setup(x => x[It.IsAny<string>()]).Returns("someHeader");
-            var mockHttpRequest = new Mock<HttpRequest>();
-            mockHttpRequest.Setup(s => s.Headers).Returns(mockHeaderHttp.Object);
-            var mockServiceProvider = new Mock<IServiceProvider>();
-            mockHttpContext.Setup(s => s.Request).Returns(mockHttpRequest.Object);
-            
+            var sessionMock = new Mock<ISession>();
+            var userJson = JsonConvert.SerializeObject(users[3]);
+            var value = Encoding.UTF8.GetBytes(userJson);
+
+            sessionMock.Setup(_ => _.Set(It.IsAny<string>(), It.IsAny<byte[]>()))
+                .Callback<string, byte[]>((k, v) => value = v);
+            sessionMock.Setup(_ => _.TryGetValue(It.IsAny<string>(), out value))
+                .Returns(true);
+            mockHttpContext.Setup(s => s.Session).Returns(sessionMock.Object);
+
             controller.ControllerContext.HttpContext = mockHttpContext.Object;
 
             var updateRequest = new UpdateUserRequest
@@ -191,7 +199,6 @@ namespace TicketPal.WebApi.Tests.Controllers
                 Message = "User updated successfully"
             };
 
-            mockService.Setup(s => s.RetrieveUserFromToken(It.IsAny<string>())).Returns(users[3]);
             mockService.Setup(s => s.UpdateUser(updateRequest, It.IsAny<string>()))
                 .Returns(operationResult);
 
@@ -207,13 +214,16 @@ namespace TicketPal.WebApi.Tests.Controllers
         public void UpdateSpectatorUserAccountBySameUserOk()
         {
             var mockHttpContext = new Mock<HttpContext>();
-            var mockHeaderHttp = new Mock<IHeaderDictionary>();
-            mockHeaderHttp.Setup(x => x[It.IsAny<string>()]).Returns("someHeader");
-            var mockHttpRequest = new Mock<HttpRequest>();
-            mockHttpRequest.Setup(s => s.Headers).Returns(mockHeaderHttp.Object);
-            var mockServiceProvider = new Mock<IServiceProvider>();
-            mockHttpContext.Setup(s => s.Request).Returns(mockHttpRequest.Object);            
-            
+            var sessionMock = new Mock<ISession>();
+            var userJson = JsonConvert.SerializeObject(users[3]);
+            var value = Encoding.UTF8.GetBytes(userJson);
+
+            sessionMock.Setup(_ => _.Set(It.IsAny<string>(), It.IsAny<byte[]>()))
+                .Callback<string, byte[]>((k, v) => value = v);
+            sessionMock.Setup(_ => _.TryGetValue(It.IsAny<string>(), out value))
+                .Returns(true);
+            mockHttpContext.Setup(s => s.Session).Returns(sessionMock.Object);
+
             controller.ControllerContext.HttpContext = mockHttpContext.Object;
 
             var updateRequest = new UpdateUserRequest
@@ -231,7 +241,6 @@ namespace TicketPal.WebApi.Tests.Controllers
                 Message = "User updated successfully"
             };
 
-            mockService.Setup(s => s.RetrieveUserFromToken(It.IsAny<string>())).Returns(users[3]);
             mockService.Setup(s => s.UpdateUser(updateRequest, It.IsAny<string>()))
                 .Returns(operationResult);
 
@@ -247,15 +256,18 @@ namespace TicketPal.WebApi.Tests.Controllers
         public void UpdateUserAccountBadRequest()
         {
             var mockHttpContext = new Mock<HttpContext>();
-            var mockHeaderHttp = new Mock<IHeaderDictionary>();
-            mockHeaderHttp.Setup(x => x[It.IsAny<string>()]).Returns("someHeader");
-            var mockHttpRequest = new Mock<HttpRequest>();
-            mockHttpRequest.Setup(s => s.Headers).Returns(mockHeaderHttp.Object);
-            var mockServiceProvider = new Mock<IServiceProvider>();
-            mockHttpContext.Setup(s => s.Request).Returns(mockHttpRequest.Object);            
-            
+            var sessionMock = new Mock<ISession>();
+            var userJson = JsonConvert.SerializeObject(users[4]);
+            var value = Encoding.UTF8.GetBytes(userJson);
+
+            sessionMock.Setup(_ => _.Set(It.IsAny<string>(), It.IsAny<byte[]>()))
+                .Callback<string, byte[]>((k, v) => value = v);
+            sessionMock.Setup(_ => _.TryGetValue(It.IsAny<string>(), out value))
+                .Returns(true);
+            mockHttpContext.Setup(s => s.Session).Returns(sessionMock.Object);
+
             controller.ControllerContext.HttpContext = mockHttpContext.Object;
-            
+
             var updateRequest = new UpdateUserRequest
             {
                 Firstname = "someName",
@@ -271,7 +283,6 @@ namespace TicketPal.WebApi.Tests.Controllers
                 Message = "some error message"
             };
 
-            mockService.Setup(s => s.RetrieveUserFromToken(It.IsAny<string>())).Returns(users[4]);
             mockService.Setup(s => s.UpdateUser(updateRequest, It.IsAny<string>()))
                 .Returns(operationResult);
 
@@ -284,7 +295,7 @@ namespace TicketPal.WebApi.Tests.Controllers
         }
 
         [TestMethod]
-        public void DeleteAccountOk()
+        public async Task DeleteAccountOk()
         {
             var operationResult = new OperationResult
             {
@@ -292,9 +303,9 @@ namespace TicketPal.WebApi.Tests.Controllers
                 Message = "User updated successfully"
             };
 
-            mockService.Setup(s => s.DeleteUser(It.IsAny<int>())).Returns(operationResult);
+            mockService.Setup(s => s.DeleteUser(It.IsAny<int>())).Returns(Task.FromResult(operationResult));
 
-            var account = controller.DeleteAccount(It.IsAny<int>());
+            var account = await controller.DeleteAccount(It.IsAny<int>());
 
             var objectResult = account as ObjectResult;
             var statusCode = objectResult.StatusCode;
@@ -303,7 +314,7 @@ namespace TicketPal.WebApi.Tests.Controllers
         }
 
         [TestMethod]
-        public void DeleteAccountBadRequest()
+        public async Task DeleteAccountBadRequest()
         {
             var operationResult = new OperationResult
             {
@@ -311,9 +322,9 @@ namespace TicketPal.WebApi.Tests.Controllers
                 Message = "some error message"
             };
 
-            mockService.Setup(s => s.DeleteUser(It.IsAny<int>())).Returns(operationResult);
+            mockService.Setup(s => s.DeleteUser(It.IsAny<int>())).Returns(Task.FromResult(operationResult));
 
-            var account = controller.DeleteAccount(It.IsAny<int>());
+            var account = await controller.DeleteAccount(It.IsAny<int>());
 
             var objectResult = account as ObjectResult;
             var statusCode = objectResult.StatusCode;

@@ -15,14 +15,14 @@ namespace TicketPal.DataAccess.Repository
         {
         }
 
-        public override void Add(PerformerEntity element)
+        public override async Task Add(PerformerEntity element)
         {
             if (Exists(element.Id))
             {
                 throw new RepositoryException("The performer you are trying to add already exists");
             }
 
-            dbContext.Set<PerformerEntity>().Add(element);
+            await dbContext.Set<PerformerEntity>().AddAsync(element);
             element.CreatedAt = DateTime.Now;
             dbContext.SaveChanges();
         }
@@ -47,36 +47,36 @@ namespace TicketPal.DataAccess.Repository
             dbContext.Entry(found).State = EntityState.Modified;
         }
 
-        public override Task<PerformerEntity> Get(int id)
+        public async override Task<PerformerEntity> Get(int id)
         {
-            return dbContext.Set<PerformerEntity>()
+            return await dbContext.Set<PerformerEntity>()
             .Include(p => p.UserInfo)
             .Include(p => p.Genre)
             .Include(p => p.Members)
             .FirstOrDefaultAsync(u => u.Id == id);
         }
 
-        public override Task<PerformerEntity> Get(Expression<Func<PerformerEntity, bool>> predicate)
+        public async override Task<PerformerEntity> Get(Expression<Func<PerformerEntity, bool>> predicate)
         {
-            return dbContext.Set<PerformerEntity>()
+            return await dbContext.Set<PerformerEntity>()
             .Include(p => p.UserInfo)
             .Include(p => p.Genre)
             .Include(p => p.Members)
             .FirstOrDefaultAsync(predicate);
         }
 
-        public override Task<List<PerformerEntity>> GetAll()
+        public async override Task<List<PerformerEntity>> GetAll()
         {
-            return dbContext.Set<PerformerEntity>()
+            return await dbContext.Set<PerformerEntity>()
             .Include(p => p.UserInfo)
             .Include(p => p.Genre)
             .Include(p => p.Members)
             .ToListAsync();
         }
 
-        public override Task<List<PerformerEntity>> GetAll(Expression<Func<PerformerEntity, bool>> predicate)
+        public async override Task<List<PerformerEntity>> GetAll(Expression<Func<PerformerEntity, bool>> predicate)
         {
-            return dbContext.Set<PerformerEntity>()
+            return await dbContext.Set<PerformerEntity>()
             .Include(p => p.UserInfo)
             .Include(p => p.Genre)
             .Include(p => p.Members)

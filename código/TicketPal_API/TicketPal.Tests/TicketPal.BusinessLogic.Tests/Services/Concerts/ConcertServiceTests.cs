@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using TicketPal.BusinessLogic.Services.Concerts;
 using TicketPal.Domain.Constants;
 using TicketPal.Domain.Entity;
@@ -56,24 +57,24 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             this.mockConcertRepo.Setup(m => m.Exists(It.IsAny<int>())).Returns(false);
             this.mockConcertRepo.Setup(m => m.Add(It.IsAny<ConcertEntity>())).Verifiable();
 
-            this.mockPerformerRepo.Setup(m => m.Get(It.IsAny<int>())).Returns(artist);
+            this.mockPerformerRepo.Setup(m => m.Get(It.IsAny<int>())).Returns(Task.FromResult(artist));
         }
 
         [TestMethod]
-        public void AddConcertSuccesfullyTest()
+        public async Task AddConcertSuccesfullyTest()
         {
             this.mockConcertRepo.Setup(m => m.Get(It.IsAny<Expression<Func<ConcertEntity, bool>>>()))
-                .Returns(It.IsAny<ConcertEntity>());
+                .Returns(Task.FromResult(It.IsAny<ConcertEntity>()));
             this.factoryMock.Setup(m => m.GetRepository(typeof(PerformerEntity))).Returns(this.mockPerformerRepo.Object);
             this.factoryMock.Setup(f => f.GetRepository(typeof(ConcertEntity))).Returns(this.mockConcertRepo.Object);
             this.concertService = new ConcertService(this.factoryMock.Object, this.mapper);
-            OperationResult result = concertService.AddConcert(concertRequest);
+            OperationResult result = await concertService.AddConcert(concertRequest);
 
             Assert.IsTrue(result.ResultCode == Constants.CODE_SUCCESS);
         }
 
         [TestMethod]
-        public void AddConcertTwiceFailsTest()
+        public async Task AddConcertTwiceFailsTest()
         {
 
             this.mockConcertRepo.Setup(m => m.Exists(It.IsAny<int>())).Returns(true);
@@ -82,28 +83,28 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             this.factoryMock.Setup(m => m.GetRepository(typeof(PerformerEntity))).Returns(this.mockPerformerRepo.Object);
             this.concertService = new ConcertService(this.factoryMock.Object, this.mapper);
 
-            OperationResult result = concertService.AddConcert(concertRequest);
+            OperationResult result = await concertService.AddConcert(concertRequest);
 
             Assert.IsTrue(result.ResultCode == Constants.CODE_FAIL);
         }
 
         [TestMethod]
-        public void AddConcertWithExistentArtistTest()
+        public async Task AddConcertWithExistentArtistTest()
         {
-            this.mockConcertRepo.Setup(m => m.Get(It.IsAny<Expression<Func<ConcertEntity, bool>>>())).Returns(new ConcertEntity());
+            this.mockConcertRepo.Setup(m => m.Get(It.IsAny<Expression<Func<ConcertEntity, bool>>>())).Returns(Task.FromResult(new ConcertEntity()));
 
             this.factoryMock.Setup(m => m.GetRepository(typeof(ConcertEntity))).Returns(this.mockConcertRepo.Object);
             this.factoryMock.Setup(m => m.GetRepository(typeof(PerformerEntity))).Returns(this.mockPerformerRepo.Object);
 
             this.concertService = new ConcertService(this.factoryMock.Object, this.mapper);
 
-            OperationResult result = concertService.AddConcert(concertRequest);
+            OperationResult result = await concertService.AddConcert(concertRequest);
 
             Assert.IsTrue(result.ResultCode == Constants.CODE_FAIL);
         }
 
         [TestMethod]
-        public void DeleteConcertSuccesfullyTest()
+        public async Task DeleteConcertSuccesfullyTest()
         {
             var id = 1;
             var dbUser = new ConcertEntity
@@ -118,29 +119,29 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
                 TourName = concertRequest.TourName
             };
 
-            this.mockConcertRepo.Setup(m => m.Get(It.IsAny<int>())).Returns(dbUser);
+            this.mockConcertRepo.Setup(m => m.Get(It.IsAny<int>())).Returns(Task.FromResult(dbUser));
             this.factoryMock.Setup(m => m.GetRepository(typeof(ConcertEntity))).Returns(this.mockConcertRepo.Object);
             this.concertService = new ConcertService(this.factoryMock.Object, this.mapper);
-            OperationResult result = concertService.DeleteConcert(id);
+            OperationResult result = await concertService.DeleteConcert(id);
 
             Assert.IsTrue(result.ResultCode == Constants.CODE_SUCCESS);
         }
 
         [TestMethod]
-        public void DeleteUnexistentConcertFailsTest()
+        public async Task DeleteUnexistentConcertFailsTest()
         {
             var id = 1;
 
             this.mockConcertRepo.Setup(m => m.Delete(It.IsAny<int>())).Throws(new RepositoryException());
             this.factoryMock.Setup(m => m.GetRepository(typeof(ConcertEntity))).Returns(this.mockConcertRepo.Object);
             this.concertService = new ConcertService(this.factoryMock.Object, this.mapper);
-            OperationResult result = concertService.DeleteConcert(id);
+            OperationResult result = await concertService.DeleteConcert(id);
 
             Assert.IsTrue(result.ResultCode == Constants.CODE_FAIL);
         }
 
         [TestMethod]
-        public void UpdateConcertSuccesfullyTest()
+        public async Task UpdateConcertSuccesfullyTest()
         {
             var tourName = "The Tour";
             var updateRequest = new UpdateConcertRequest
@@ -154,18 +155,20 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
 
             this.mockConcertRepo.Setup(m => m.Update(It.IsAny<ConcertEntity>())).Verifiable();
             this.mockConcertRepo.Setup(c => c.Get(It.IsAny<int>())).Returns(
-                new ConcertEntity { Artists = new List<PerformerEntity>() }
+                Task.FromResult(new ConcertEntity { Artists = new List<PerformerEntity>() })
             );
+            this.mockPerformerRepo.Setup(m => m.GetAll(It.IsAny<Expression<Func<PerformerEntity, bool>>>()))
+            .Returns(Task.FromResult(new List<PerformerEntity>()));
             this.factoryMock.Setup(f => f.GetRepository(typeof(ConcertEntity))).Returns(this.mockConcertRepo.Object);
             this.factoryMock.Setup(f => f.GetRepository(typeof(PerformerEntity))).Returns(this.mockPerformerRepo.Object);
             this.concertService = new ConcertService(this.factoryMock.Object, this.mapper);
-            OperationResult expected = concertService.UpdateConcert(updateRequest);
+            OperationResult expected = await concertService.UpdateConcert(updateRequest);
 
             Assert.IsTrue(expected.ResultCode == Constants.CODE_SUCCESS);
         }
 
         [TestMethod]
-        public void GetUserByIdTest()
+        public async Task GetUserByIdTest()
         {
             int id = 1;
             var dbUser = new ConcertEntity
@@ -180,35 +183,35 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
                 TourName = concertRequest.TourName
             };
 
-            this.mockConcertRepo.Setup(r => r.Get(It.IsAny<int>())).Returns(dbUser);
+            this.mockConcertRepo.Setup(r => r.Get(It.IsAny<int>())).Returns(Task.FromResult(dbUser));
             this.factoryMock.Setup(m => m.GetRepository(typeof(ConcertEntity))).Returns(this.mockConcertRepo.Object);
             this.concertService = new ConcertService(this.factoryMock.Object, this.mapper);
-            Concert concert = concertService.GetConcert(id);
+            var concert = await concertService.GetConcert(id);
 
             Assert.IsNotNull(concert);
             Assert.IsTrue(id == concert.Id);
         }
 
         [TestMethod]
-        public void GetConcertByNullIdTest()
+        public async Task GetConcertByNullIdTest()
         {
             int id = 1;
 
             ConcertEntity dbUser = null;
 
-            this.mockConcertRepo.Setup(r => r.Get(It.IsAny<int>())).Returns(dbUser);
+            this.mockConcertRepo.Setup(r => r.Get(It.IsAny<int>())).Returns(Task.FromResult(dbUser));
             this.factoryMock.Setup(m => m.GetRepository(typeof(ConcertEntity)))
                 .Returns(this.mockConcertRepo.Object);
 
             this.concertService = new ConcertService(this.factoryMock.Object, this.mapper);
-            Concert concert = concertService.GetConcert(id);
+            var concert = await concertService.GetConcert(id);
 
             Assert.IsNull(concert);
 
         }
 
         [TestMethod]
-        public void GetAllConcertsWithNoArtistTest()
+        public async Task GetAllConcertsWithNoArtistTest()
         {
             var artist2 = new PerformerEntity()
             {
@@ -265,10 +268,10 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
                 },
             };
 
-            this.mockConcertRepo.Setup(r => r.GetAll(It.IsAny<Expression<Func<ConcertEntity, bool>>>())).Returns(dbAccounts);
+            this.mockConcertRepo.Setup(r => r.GetAll(It.IsAny<Expression<Func<ConcertEntity, bool>>>())).Returns(Task.FromResult(dbAccounts.ToList()));
             this.factoryMock.Setup(m => m.GetRepository(typeof(ConcertEntity))).Returns(this.mockConcertRepo.Object);
             this.concertService = new ConcertService(this.factoryMock.Object, this.mapper);
-            IEnumerable<Concert> result = concertService.GetConcerts(
+            IEnumerable<Concert> result = await concertService.GetConcerts(
                 Constants.EVENT_CONCERT_TYPE,
                 true,
                 DateTime.Now.ToString("dd/M/yyyy hh:mm"),
@@ -279,7 +282,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             Assert.IsTrue(result.ToList().Count == 3);
         }
         [TestMethod]
-        public void GetAllNewestConcertsTest()
+        public async Task GetAllNewestConcertsTest()
         {
             var artist2 = new PerformerEntity()
             {
@@ -336,10 +339,10 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
                 },
             };
 
-            this.mockConcertRepo.Setup(r => r.GetAll(It.IsAny<Expression<Func<ConcertEntity, bool>>>())).Returns(dbAccounts);
+            this.mockConcertRepo.Setup(r => r.GetAll(It.IsAny<Expression<Func<ConcertEntity, bool>>>())).Returns(Task.FromResult(dbAccounts.ToList()));
             this.factoryMock.Setup(m => m.GetRepository(typeof(ConcertEntity))).Returns(this.mockConcertRepo.Object);
             this.concertService = new ConcertService(this.factoryMock.Object, this.mapper);
-            IEnumerable<Concert> result = concertService.GetConcerts(
+            IEnumerable<Concert> result = await concertService.GetConcerts(
                 Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 true,
                 DateTime.Now.ToString("dd/M/yyyy hh:mm"),
@@ -351,7 +354,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
         }
 
         [TestMethod]
-        public void GetAllOldestConcertsTest()
+        public async Task GetAllOldestConcertsTest()
         {
             var artist2 = new PerformerEntity()
             {
@@ -408,10 +411,10 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
                 },
             };
 
-            this.mockConcertRepo.Setup(r => r.GetAll(It.IsAny<Expression<Func<ConcertEntity, bool>>>())).Returns(dbAccounts);
+            this.mockConcertRepo.Setup(r => r.GetAll(It.IsAny<Expression<Func<ConcertEntity, bool>>>())).Returns(Task.FromResult(dbAccounts.ToList()));
             this.factoryMock.Setup(m => m.GetRepository(typeof(ConcertEntity))).Returns(this.mockConcertRepo.Object);
             this.concertService = new ConcertService(this.factoryMock.Object, this.mapper);
-            IEnumerable<Concert> result = concertService.GetConcerts(
+            IEnumerable<Concert> result = await concertService.GetConcerts(
                 Constants.EVENT_CONCERT_TYPE,
                 false,
                 DateTime.Now.ToString("dd/M/yyyy hh:mm"),
@@ -423,7 +426,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
         }
 
         [TestMethod]
-        public void GetAllConcertsWithNoArtistAndNoStartDateTest()
+        public async Task GetAllConcertsWithNoArtistAndNoStartDateTest()
         {
             var artist2 = new PerformerEntity()
             {
@@ -480,11 +483,11 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
                 },
             };
 
-            this.mockConcertRepo.Setup(r => r.GetAll(It.IsAny<Expression<Func<ConcertEntity, bool>>>())).Returns(dbAccounts);
+            this.mockConcertRepo.Setup(r => r.GetAll(It.IsAny<Expression<Func<ConcertEntity, bool>>>())).Returns(Task.FromResult(dbAccounts.ToList()));
             this.factoryMock.Setup(m => m.GetRepository(typeof(ConcertEntity))).Returns(this.mockConcertRepo.Object);
             this.concertService = new ConcertService(this.factoryMock.Object, this.mapper);
             var date = DateTime.Now.AddDays(30).ToString("dd/M/yyyy hh:mm");
-            IEnumerable<Concert> result = concertService.GetConcerts(
+            IEnumerable<Concert> result = await concertService.GetConcerts(
                 Constants.PERFORMER_TYPE_SOLO_ARTIST,
                 true,
                 null,
@@ -495,7 +498,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             Assert.IsTrue(result.ToList().Count == 3);
         }
         [TestMethod]
-        public void GetAllConcertsWithNoArtistAndNoEndDateTest()
+        public async Task GetAllConcertsWithNoArtistAndNoEndDateTest()
         {
             var artist2 = new PerformerEntity()
             {
@@ -552,10 +555,10 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
                 },
             };
 
-            this.mockConcertRepo.Setup(r => r.GetAll(It.IsAny<Expression<Func<ConcertEntity, bool>>>())).Returns(dbAccounts);
+            this.mockConcertRepo.Setup(r => r.GetAll(It.IsAny<Expression<Func<ConcertEntity, bool>>>())).Returns(Task.FromResult(dbAccounts.ToList()));
             this.factoryMock.Setup(m => m.GetRepository(typeof(ConcertEntity))).Returns(this.mockConcertRepo.Object);
             this.concertService = new ConcertService(this.factoryMock.Object, this.mapper);
-            IEnumerable<Concert> result = concertService.GetConcerts(
+            IEnumerable<Concert> result = await concertService.GetConcerts(
                 Constants.EVENT_CONCERT_TYPE,
                 true,
                 DateTime.Now.AddDays(30).ToString("dd/M/yyyy hh:mm"),
@@ -567,7 +570,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
         }
 
         [TestMethod]
-        public void GetAllConcertsOnlyType()
+        public async Task GetAllConcertsOnlyType()
         {
             var artist2 = new PerformerEntity()
             {
@@ -624,10 +627,10 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
                 },
             };
 
-            this.mockConcertRepo.Setup(r => r.GetAll(It.IsAny<Expression<Func<ConcertEntity, bool>>>())).Returns(dbAccounts);
+            this.mockConcertRepo.Setup(r => r.GetAll(It.IsAny<Expression<Func<ConcertEntity, bool>>>())).Returns(Task.FromResult(dbAccounts.ToList()));
             this.factoryMock.Setup(m => m.GetRepository(typeof(ConcertEntity))).Returns(this.mockConcertRepo.Object);
             this.concertService = new ConcertService(this.factoryMock.Object, this.mapper);
-            IEnumerable<Concert> result = concertService.GetConcerts(
+            IEnumerable<Concert> result = await concertService.GetConcerts(
                 Constants.EVENT_CONCERT_TYPE,
                 true,
                 null,

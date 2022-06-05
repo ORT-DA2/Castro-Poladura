@@ -18,14 +18,14 @@ namespace TicketPal.DataAccess.Repository
             dbContext = context;
         }
 
-        public virtual void Add(TEntity element)
+        public virtual async Task Add(TEntity element)
         {
             if (Exists(element.Id))
             {
                 throw new RepositoryException("The element that is being added already exists");
             }
 
-            dbContext.Set<TEntity>().Add(element);
+            await dbContext.Set<TEntity>().AddAsync(element);
             element.CreatedAt = DateTime.Now;
             dbContext.SaveChanges();
         }
@@ -36,7 +36,7 @@ namespace TicketPal.DataAccess.Repository
             dbContext.SaveChanges();
         }
 
-        public async void Delete(int id)
+        public async Task Delete(int id)
         {
             TEntity toDelete = await Get(id);
 
@@ -54,24 +54,24 @@ namespace TicketPal.DataAccess.Repository
             return dbContext.Set<TEntity>().Any(item => item.Id == id);
         }
 
-        public virtual Task<TEntity> Get(int id)
+        public async virtual Task<TEntity> Get(int id)
         {
-            return dbContext.Set<TEntity>().FirstOrDefaultAsync(u => u.Id == id);
+            return await dbContext.Set<TEntity>().FirstOrDefaultAsync(u => u.Id == id);
         }
 
-        public virtual Task<TEntity> Get(Expression<Func<TEntity, bool>> predicate)
+        public async virtual Task<TEntity> Get(Expression<Func<TEntity, bool>> predicate)
         {
-            return dbContext.Set<TEntity>().FirstOrDefaultAsync(predicate);
+            return await dbContext.Set<TEntity>().FirstOrDefaultAsync(predicate);
         }
 
-        public virtual Task<List<TEntity>> GetAll()
+        public async virtual Task<List<TEntity>> GetAll()
         {
-            return dbContext.Set<TEntity>().ToListAsync();
+            return await dbContext.Set<TEntity>().ToListAsync();
         }
 
-        public virtual Task<List<TEntity>> GetAll(Expression<Func<TEntity, bool>> predicate)
+        public async virtual Task<List<TEntity>> GetAll(Expression<Func<TEntity, bool>> predicate)
         {
-            return dbContext.Set<TEntity>()
+            return await dbContext.Set<TEntity>()
                 .Where(predicate)
                 .ToListAsync();
         }

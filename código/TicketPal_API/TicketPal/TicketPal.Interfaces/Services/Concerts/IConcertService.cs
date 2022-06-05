@@ -9,7 +9,7 @@ namespace TicketPal.Interfaces.Services.Concerts
     {
         Task<OperationResult> AddConcert(AddConcertRequest model);
         Task<OperationResult> UpdateConcert(UpdateConcertRequest model);
-        OperationResult DeleteConcert(int id);
+        Task<OperationResult> DeleteConcert(int id);
         Task<List<Concert>> GetConcerts(string type, bool newest, string startDate, string endDate, string artistName);
         Task<Concert> GetConcert(int id);
     }

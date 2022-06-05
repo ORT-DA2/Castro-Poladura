@@ -1,14 +1,14 @@
 <form>
-    <div class="mb-3 row">
-      <label for="table-filtering-search" class="col-xs-3 col-sm-auto col-form-label">Full text search:</label>
-      <!-- <div class="col-xs-3 col-sm-auto">
+  <div class="mb-3 row">
+    <label for="table-filtering-search" class="col-xs-3 col-sm-auto col-form-label">Full text search:</label>
+    <!-- <div class="col-xs-3 col-sm-auto">
          <input id="table-filtering-search" class="form-control" type="text" [formControl]="filter">
       </div> -->
-    </div>
-  </form>
-  
-  <table class="table table-striped">
-    <thead>
+  </div>
+</form>
+
+<table class="table table-striped">
+  <thead>
     <tr>
       <th scope="col">Id</th>
       <th scope="col">First Name</th>
@@ -17,8 +17,8 @@
       <th scope="col">Role</th>
       <th scope="col">Is Active</th>
     </tr>
-    </thead>
-    <tbody>
+  </thead>
+  <tbody>
     <tr *ngFor="let user of users">
       <th scope="row">{{ user.id }}</th>
       <td>{{user.firstname}}</td>
@@ -27,5 +27,5 @@
       <td>{{user.role}}</td>
       <td>{{user.activeAccount ? "Yes" : "No"}}</td>
     </tr>
-    </tbody>
-  </table>
+  </tbody>
+</table>
