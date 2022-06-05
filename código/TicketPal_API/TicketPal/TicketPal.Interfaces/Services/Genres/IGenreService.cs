@@ -9,7 +9,7 @@ namespace TicketPal.Interfaces.Services.Genres
     {
         Task<OperationResult> AddGenre(AddGenreRequest model);
         OperationResult UpdateGenre(UpdateGenreRequest model);
-        OperationResult DeleteGenre(int id);
+        Task<OperationResult> DeleteGenre(int id);
         Task<List<Genre>> GetGenres();
         Task<Genre> GetGenre(int id);
     }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -26,13 +27,13 @@ namespace TicketPal.WebApi.Tests.Filters
         {
             // Services mocks
             this.mockUserService = new Mock<IUserService>();
-            mockUserService.Setup(s => s.GetUser(It.IsAny<int>())).Returns(null as User);
+            mockUserService.Setup(s => s.GetUser(It.IsAny<int>())).Returns(Task.FromResult(null as User));
         }
 
         [TestMethod]
-        public void onFailedAuthenticationUserNotLoguedTest()
+        public async Task onFailedAuthenticationUserNotLoguedTest()
         {
-            this.mockUserService.Setup(s => s.RetrieveUserFromToken(It.IsAny<string>())).Returns(null as User);
+            this.mockUserService.Setup(s => s.RetrieveUserFromToken(It.IsAny<string>())).Returns(Task.FromResult(null as User));
 
             filter = new AuthenticationFilter(
                 Constants.ROLE_ADMIN
@@ -52,26 +53,27 @@ namespace TicketPal.WebApi.Tests.Filters
 
             var authContext = new AuthorizationFilterContext(actionContext, new List<IFilterMetadata>());
 
-            filter.OnAuthorization(authContext);
+            await filter.OnAuthorizationAsync(authContext);
 
             Assert.AreEqual(401, (authContext.Result as ObjectResult).StatusCode);
         }
 
         [TestMethod]
-        public void onFailedAuthenticationUserWithNoAuthorization()
+        public async Task onFailedAuthenticationUserWithNoAuthorization()
         {
             this.mockUserService.Setup(s => s.RetrieveUserFromToken(It.IsAny<string>())).Returns(
-                new User
-                {
-                    Id = 1,
-                    Firstname = "someName",
-                    Lastname = "someLastname",
-                    Email = "myaccount@example.com",
-                    Password = "myPassword",
-                    Token = "token",
-                    Role = ""
-                }
-            );
+                Task.FromResult(
+                    new User
+                    {
+                        Id = 1,
+                        Firstname = "someName",
+                        Lastname = "someLastname",
+                        Email = "myaccount@example.com",
+                        Password = "myPassword",
+                        Token = "token",
+                        Role = ""
+                    }
+            ));
 
             filter = new AuthenticationFilter(
                 Constants.ROLE_ADMIN
@@ -91,7 +93,7 @@ namespace TicketPal.WebApi.Tests.Filters
 
             var authContext = new AuthorizationFilterContext(actionContext, new List<IFilterMetadata>());
 
-            filter.OnAuthorization(authContext);
+            await filter.OnAuthorizationAsync(authContext);
 
             Assert.AreEqual(403, (authContext.Result as ObjectResult).StatusCode);
         }

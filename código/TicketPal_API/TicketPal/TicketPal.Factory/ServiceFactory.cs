@@ -50,11 +50,11 @@ namespace TicketPal.Factory
 
         public void RegisterRepositories()
         {
-            services.AddScoped(typeof(IGenericRepository<UserEntity>), typeof(UserRepository));
-            services.AddScoped(typeof(IGenericRepository<ConcertEntity>), typeof(ConcertRepository));
-            services.AddScoped(typeof(IGenericRepository<GenreEntity>), typeof(GenreRepository));
-            services.AddScoped(typeof(IGenericRepository<PerformerEntity>), typeof(PerformerRepository));
-            services.AddScoped(typeof(IGenericRepository<TicketEntity>), typeof(TicketRepository));
+            services.AddTransient(typeof(IGenericRepository<UserEntity>), typeof(UserRepository));
+            services.AddTransient(typeof(IGenericRepository<ConcertEntity>), typeof(ConcertRepository));
+            services.AddTransient(typeof(IGenericRepository<GenreEntity>), typeof(GenreRepository));
+            services.AddTransient(typeof(IGenericRepository<PerformerEntity>), typeof(PerformerRepository));
+            services.AddTransient(typeof(IGenericRepository<TicketEntity>), typeof(TicketRepository));
         }
 
         public void RegisterServices()

@@ -46,7 +46,7 @@ namespace TicketPal.BusinessLogic.Services.Tickets
                     {
                         var retrievedUser = await userRepository.Get(model.LoggedUserId);
 
-                        ticketRepository.Add(new TicketEntity
+                        await ticketRepository.Add(new TicketEntity
                         {
                             Buyer = retrievedUser,
                             PurchaseDate = DateTime.Now,
@@ -63,7 +63,7 @@ namespace TicketPal.BusinessLogic.Services.Tickets
                         buyer.Email = model.NewUser.Email;
                         buyer.ActiveAccount = false;
 
-                        ticketRepository.Add(new TicketEntity
+                        await ticketRepository.Add(new TicketEntity
                         {
                             Buyer = buyer,
                             PurchaseDate = DateTime.Now,
@@ -98,11 +98,11 @@ namespace TicketPal.BusinessLogic.Services.Tickets
             };
         }
 
-        public OperationResult DeleteTicket(int id)
+        public async Task<OperationResult> DeleteTicket(int id)
         {
             try
             {
-                ticketRepository.Delete(id);
+                await ticketRepository.Delete(id);
                 return new OperationResult
                 {
                     ResultCode = Constants.CODE_SUCCESS,

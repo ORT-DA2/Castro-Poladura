@@ -35,9 +35,9 @@ namespace TicketPal.WebApi.Controllers
 
         [HttpDelete("{id}")]
         [AuthenticationFilter(Constants.ROLE_ADMIN)]
-        public IActionResult DeleteGenre([FromRoute] int id)
+        public async Task<IActionResult> DeleteGenre([FromRoute] int id)
         {
-            var result = genreService.DeleteGenre(id);
+            var result = await genreService.DeleteGenre(id);
 
             if (result.ResultCode == Constants.CODE_FAIL)
             {
@@ -48,15 +48,15 @@ namespace TicketPal.WebApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetGenre([FromRoute] int id)
+        public IActionResult GetGenre([FromRoute] int id)
         {
-            return Ok(await genreService.GetGenre(id));
+            return Ok(genreService.GetGenre(id));
         }
 
         [HttpGet]
-        public IActionResult GetGenres()
+        public async Task<IActionResult> GetGenres()
         {
-            return Ok(genreService.GetGenres());
+            return Ok(await genreService.GetGenres());
         }
 
         [HttpPut("{id}")]

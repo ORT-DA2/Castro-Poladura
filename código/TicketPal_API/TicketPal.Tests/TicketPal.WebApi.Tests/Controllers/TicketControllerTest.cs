@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using Newtonsoft.Json;
 using TicketPal.Domain.Constants;
 using TicketPal.Domain.Models.Request;
 using TicketPal.Domain.Models.Response;
@@ -35,14 +38,13 @@ namespace TicketPal.WebApi.Tests.Controllers
             mockHttpRequest.Setup(s => s.Headers).Returns(mockHeaderHttp.Object);
             mockHttpContext.Setup(s => s.Request).Returns(mockHttpRequest.Object);
 
-
             controller = new TicketsController(mockTicketService.Object);
 
             this.tickets = SetupTickets();
         }
 
         [TestMethod]
-        public void AddTicketTestOk()
+        public async Task AddTicketTestOk()
         {
             var request = new AddTicketRequest
             {
@@ -56,13 +58,20 @@ namespace TicketPal.WebApi.Tests.Controllers
                 Message = "success"
             };
 
-            mockUserService.Setup(s => s.RetrieveUserFromToken(It.IsAny<string>())).Returns(tickets[0].Buyer);
-            mockHttpContext.Setup(x => x.RequestServices.GetService(typeof(IUserService)))
-                .Returns(mockUserService.Object);
-            mockTicketService.Setup(s => s.AddTicket(request)).Returns(operationResult);
+            var sessionMock = new Mock<ISession>();
+            var userJson = JsonConvert.SerializeObject(tickets[0].Buyer);
+            var value = Encoding.UTF8.GetBytes(userJson);
+
+            sessionMock.Setup(_ => _.Set(It.IsAny<string>(), It.IsAny<byte[]>()))
+                .Callback<string, byte[]>((k, v) => value = v);
+            sessionMock.Setup(_ => _.TryGetValue(It.IsAny<string>(), out value))
+                .Returns(true);
+            mockHttpContext.Setup(s => s.Session).Returns(sessionMock.Object);
+            mockTicketService.Setup(s => s.AddTicket(request)).Returns(Task.FromResult(operationResult));
+
             controller.ControllerContext.HttpContext = mockHttpContext.Object;
 
-            var result = controller.AddTicket(It.IsAny<int>(), request);
+            var result = await controller.AddTicket(It.IsAny<int>(), request);
             var objectResult = result as ObjectResult;
             var statusCode = objectResult.StatusCode;
 
@@ -70,7 +79,7 @@ namespace TicketPal.WebApi.Tests.Controllers
         }
 
         [TestMethod]
-        public void AddTicketTestBadRequest()
+        public async Task AddTicketTestBadRequest()
         {
             var request = new AddTicketRequest
             {
@@ -84,13 +93,20 @@ namespace TicketPal.WebApi.Tests.Controllers
                 Message = "error message"
             };
 
-            mockUserService.Setup(s => s.RetrieveUserFromToken(It.IsAny<string>())).Returns(tickets[0].Buyer);
-            mockHttpContext.Setup(x => x.RequestServices.GetService(typeof(IUserService)))
-                .Returns(mockUserService.Object);
-            mockTicketService.Setup(s => s.AddTicket(request)).Returns(operationResult);
+            var sessionMock = new Mock<ISession>();
+            var userJson = JsonConvert.SerializeObject(tickets[0].Buyer);
+            var value = Encoding.UTF8.GetBytes(userJson);
+
+            sessionMock.Setup(_ => _.Set(It.IsAny<string>(), It.IsAny<byte[]>()))
+                .Callback<string, byte[]>((k, v) => value = v);
+            sessionMock.Setup(_ => _.TryGetValue(It.IsAny<string>(), out value))
+                .Returns(true);
+            mockHttpContext.Setup(s => s.Session).Returns(sessionMock.Object);
+
+            mockTicketService.Setup(s => s.AddTicket(request)).Returns(Task.FromResult(operationResult));
             controller.ControllerContext.HttpContext = mockHttpContext.Object;
 
-            var result = controller.AddTicket(It.IsAny<int>(), request);
+            var result = await controller.AddTicket(It.IsAny<int>(), request);
             var objectResult = result as ObjectResult;
             var statusCode = objectResult.StatusCode;
 
@@ -148,7 +164,7 @@ namespace TicketPal.WebApi.Tests.Controllers
         }
 
         [TestMethod]
-        public void DeleteTicketTest()
+        public async Task DeleteTicketTest()
         {
             var operationResult = new OperationResult
             {
@@ -156,9 +172,9 @@ namespace TicketPal.WebApi.Tests.Controllers
                 Message = "success message"
             };
 
-            mockTicketService.Setup(s => s.DeleteTicket(It.IsAny<int>())).Returns(operationResult);
+            mockTicketService.Setup(s => s.DeleteTicket(It.IsAny<int>())).Returns(Task.FromResult(operationResult));
 
-            var account = controller.DeleteTicket(It.IsAny<int>());
+            var account = await controller.DeleteTicket(It.IsAny<int>());
 
             var objectResult = account as ObjectResult;
             var statusCode = objectResult.StatusCode;
@@ -166,7 +182,7 @@ namespace TicketPal.WebApi.Tests.Controllers
             Assert.AreEqual(200, statusCode);
         }
 
-        public void DeleteTicketBadRequestTest()
+        public async Task DeleteTicketBadRequestTest()
         {
             var operationResult = new OperationResult
             {
@@ -174,9 +190,9 @@ namespace TicketPal.WebApi.Tests.Controllers
                 Message = "some error"
             };
 
-            mockTicketService.Setup(s => s.DeleteTicket(It.IsAny<int>())).Returns(operationResult);
+            mockTicketService.Setup(s => s.DeleteTicket(It.IsAny<int>())).Returns(Task.FromResult(operationResult));
 
-            var account = controller.DeleteTicket(It.IsAny<int>());
+            var account = await controller.DeleteTicket(It.IsAny<int>());
 
             var objectResult = account as ObjectResult;
             var statusCode = objectResult.StatusCode;
@@ -194,17 +210,19 @@ namespace TicketPal.WebApi.Tests.Controllers
             var mockServiceProvider = new Mock<IServiceProvider>();
             mockHttpContext.Setup(s => s.Request).Returns(mockHttpRequest.Object);
             mockUserService.Setup(s => s.RetrieveUserFromToken(It.IsAny<string>())).Returns(
-                new User
-                {
-                    Role = Constants.ROLE_ADMIN,
-                    Id = 1,
-                });
+                Task.FromResult(
+                    new User
+                    {
+                        Role = Constants.ROLE_ADMIN,
+                        Id = 1,
+                    }
+                ));
             mockHttpContext.Setup(x => x.RequestServices.GetService(typeof(IUserService)))
                 .Returns(mockUserService.Object);
 
             controller.ControllerContext.HttpContext = mockHttpContext.Object;
 
-            mockTicketService.Setup(s => s.GetTickets()).Returns(tickets);
+            mockTicketService.Setup(s => s.GetTickets()).Returns(Task.FromResult(tickets));
 
             var account = controller.GetTickets();
 
@@ -223,13 +241,13 @@ namespace TicketPal.WebApi.Tests.Controllers
             mockHttpRequest.Setup(s => s.Headers).Returns(mockHeaderHttp.Object);
             var mockServiceProvider = new Mock<IServiceProvider>();
             mockHttpContext.Setup(s => s.Request).Returns(mockHttpRequest.Object);
-            mockUserService.Setup(s => s.RetrieveUserFromToken(It.IsAny<string>())).Returns(tickets[0].Buyer);
+            mockUserService.Setup(s => s.RetrieveUserFromToken(It.IsAny<string>())).Returns(Task.FromResult(tickets[0].Buyer));
             mockHttpContext.Setup(x => x.RequestServices.GetService(typeof(IUserService)))
                 .Returns(mockUserService.Object);
 
             controller.ControllerContext.HttpContext = mockHttpContext.Object;
 
-            mockTicketService.Setup(s => s.GetUserTickets(1)).Returns(tickets);
+            mockTicketService.Setup(s => s.GetUserTickets(1)).Returns(Task.FromResult(tickets));
 
             var account = controller.GetTickets();
 
@@ -241,7 +259,7 @@ namespace TicketPal.WebApi.Tests.Controllers
 
         public void GetTicketOkTest()
         {
-            mockTicketService.Setup(s => s.GetTicket(It.IsAny<int>())).Returns(tickets[0]);
+            mockTicketService.Setup(s => s.GetTicket(It.IsAny<int>())).Returns(Task.FromResult(tickets[0]));
 
             var account = controller.GetTicket(It.IsAny<int>());
 

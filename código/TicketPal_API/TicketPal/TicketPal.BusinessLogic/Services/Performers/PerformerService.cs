@@ -63,7 +63,7 @@ namespace TicketPal.BusinessLogic.Services.Performers
                         Message = "The associated user account is not from a performer"
                     };
                 }
-                performerRepository.Add(new PerformerEntity
+                await performerRepository.Add(new PerformerEntity
                 {
                     UserInfo = user,
                     Members = members,
@@ -88,11 +88,11 @@ namespace TicketPal.BusinessLogic.Services.Performers
             };
         }
 
-        public OperationResult DeletePerformer(int id)
+        public async Task<OperationResult> DeletePerformer(int id)
         {
             try
             {
-                performerRepository.Delete(id);
+                await performerRepository.Delete(id);
                 return new OperationResult
                 {
                     ResultCode = Constants.CODE_SUCCESS,

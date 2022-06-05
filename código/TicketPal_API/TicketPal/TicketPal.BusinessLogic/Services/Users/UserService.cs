@@ -37,11 +37,11 @@ namespace TicketPal.BusinessLogic.Services.Users
             this.repository = factory.GetRepository(typeof(UserEntity))
                 as IGenericRepository<UserEntity>;
         }
-        public OperationResult DeleteUser(int id)
+        public async Task<OperationResult> DeleteUser(int id)
         {
             try
             {
-                repository.Delete(id);
+                await repository.Delete(id);
                 return new OperationResult
                 {
                     ResultCode = Constants.CODE_SUCCESS,
@@ -110,7 +110,9 @@ namespace TicketPal.BusinessLogic.Services.Users
                 if (claimToken != null)
                 {
                     var accountId = int.Parse(claimToken);
-                    return await GetUser(accountId);
+                    var user = await GetUser(accountId);
+
+                    return user;
                 }
                 else
                 {
@@ -123,7 +125,7 @@ namespace TicketPal.BusinessLogic.Services.Users
             }
         }
 
-        public OperationResult SignUp(SignUpRequest model)
+        public async Task<OperationResult> SignUp(SignUpRequest model)
         {
             if (!Constants.ValidRoles.Contains(model.Role))
             {
@@ -136,7 +138,7 @@ namespace TicketPal.BusinessLogic.Services.Users
 
             try
             {
-                repository.Add(
+                await repository.Add(
                     new UserEntity
                     {
                         Firstname = model.Firstname,

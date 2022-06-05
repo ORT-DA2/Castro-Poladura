@@ -57,9 +57,9 @@ namespace TicketPal.WebApi.Controllers
 
         [HttpDelete("{id}")]
         [AuthenticationFilter(Constants.ROLE_ADMIN)]
-        public IActionResult DeleteConcert([FromRoute] int id)
+        public async Task<IActionResult> DeleteConcert([FromRoute] int id)
         {
-            var result = eventService.DeleteConcert(id);
+            var result = await eventService.DeleteConcert(id);
 
             if (result.ResultCode == Constants.CODE_FAIL)
             {

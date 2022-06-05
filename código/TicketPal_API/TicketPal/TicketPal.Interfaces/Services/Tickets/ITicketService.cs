@@ -12,7 +12,7 @@ namespace TicketPal.Interfaces.Services.Tickets
     {
         Task<OperationResult> AddTicket(AddTicketRequest model);
         OperationResult UpdateTicket(UpdateTicketRequest model);
-        OperationResult DeleteTicket(int id);
+        Task<OperationResult> DeleteTicket(int id);
         Task<List<Ticket>> GetUserTickets(int userId);
         Task<List<Ticket>> GetTickets();
         Task<Ticket> GetTicket(int id);

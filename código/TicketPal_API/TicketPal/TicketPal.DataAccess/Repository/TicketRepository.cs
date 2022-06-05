@@ -15,7 +15,7 @@ namespace TicketPal.DataAccess.Repository
         {
         }
 
-        public override void Add(TicketEntity element)
+        public override async Task Add(TicketEntity element)
         {
             if (Exists(element.Id))
             {
@@ -36,7 +36,7 @@ namespace TicketPal.DataAccess.Repository
                     dbContext.Entry(containedEvent).State = EntityState.Modified;
                     element.Event = containedEvent;
 
-                    dbContext.Set<TicketEntity>().Add(element);
+                    await dbContext.Set<TicketEntity>().AddAsync(element);
                     element.CreatedAt = DateTime.Now;
                     dbContext.SaveChanges();
                 }
@@ -72,33 +72,33 @@ namespace TicketPal.DataAccess.Repository
             dbContext.Entry(found).State = EntityState.Modified;
         }
 
-        public override Task<TicketEntity> Get(int id)
+        public async override Task<TicketEntity> Get(int id)
         {
-            return dbContext.Set<TicketEntity>()
+            return await dbContext.Set<TicketEntity>()
             .Include(t => t.Buyer)
             .Include(t => t.Event)
             .FirstOrDefaultAsync(u => u.Id == id);
         }
 
-        public override Task<TicketEntity> Get(Expression<Func<TicketEntity, bool>> predicate)
+        public async override Task<TicketEntity> Get(Expression<Func<TicketEntity, bool>> predicate)
         {
-            return dbContext.Set<TicketEntity>()
+            return await dbContext.Set<TicketEntity>()
             .Include(t => t.Buyer)
             .Include(t => t.Event)
             .FirstOrDefaultAsync(predicate);
         }
 
-        public override Task<List<TicketEntity>> GetAll()
+        public async override Task<List<TicketEntity>> GetAll()
         {
-            return dbContext.Set<TicketEntity>()
+            return await dbContext.Set<TicketEntity>()
             .Include(t => t.Buyer)
             .Include(t => t.Event)
             .ToListAsync();
         }
 
-        public override Task<List<TicketEntity>> GetAll(Expression<Func<TicketEntity, bool>> predicate)
+        public async override Task<List<TicketEntity>> GetAll(Expression<Func<TicketEntity, bool>> predicate)
         {
-            return dbContext.Set<TicketEntity>()
+            return await dbContext.Set<TicketEntity>()
             .Include(t => t.Buyer)
             .Include(t => t.Event)
             .Where(predicate)
