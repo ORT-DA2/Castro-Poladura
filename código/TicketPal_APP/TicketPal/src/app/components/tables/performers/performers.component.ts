@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Performer } from 'src/app/models/response/performer.model';
 import { PerformerService } from 'src/app/services/performer/performer.service';
-import { GenreService } from 'src/app/services/genre/genre.service';
 
 @Component({
   selector: 'app-performers',

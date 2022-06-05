@@ -25,7 +25,7 @@
       <td>{{performer.performerType}}</td>
       <td>{{performer.year}}</td>
       <td>{{performer.genre.name}}</td>
-      <td>{{performer.members}}</td> <!-- Cambiar para que se muestren nombres de artistas-->
+      <td>{{performer.members.join(', ')}}</td>
     </tr>
   </tbody>
 </table>
