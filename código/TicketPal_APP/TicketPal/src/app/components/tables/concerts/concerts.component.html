@@ -11,7 +11,7 @@
     <thead>
     <tr>
       <th scope="col">Id</th>
-      <th scope="col">Date</th>
+      <th scope="col" sortable="date" (sort)="onSort($event)">Date</th>
       <th scope="col">AvailableTickets</th>
       <th scope="col">TicketPrice</th>
       <th scope="col">CurrencyType</th>
