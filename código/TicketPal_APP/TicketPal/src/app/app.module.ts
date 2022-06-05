@@ -23,6 +23,7 @@ import { PerformersComponent } from './components/tables/performers/performers.c
 import { GenresComponent } from './components/tables/genres/genres.component';
 import { ConcertsComponent, NgbdSortableHeader } from './components/tables/concerts/concerts.component';
 import { TicketsComponent } from './components/tables/tickets/tickets.component';
+import { DatePickerComponent } from './components/date-picker/date-picker.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { TicketsComponent } from './components/tables/tickets/tickets.component'
     GenresComponent,
     ConcertsComponent,
     TicketsComponent,
-    NgbdSortableHeader
+    NgbdSortableHeader,
+    DatePickerComponent
   ],
   imports: [
     BrowserModule,

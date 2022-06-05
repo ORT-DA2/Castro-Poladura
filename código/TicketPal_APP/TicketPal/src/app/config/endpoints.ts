@@ -7,6 +7,6 @@ export class Endpoints {
     public readonly USERS: string = `${this.API_BASE_URL}/users`;
     public readonly PERFORMERS: string = `${this.API_BASE_URL}/performers`;
     public readonly GENRES: string = `${this.API_BASE_URL}/genres`;
-    public readonly CONCERTS: string = `${this.API_BASE_URL}/concerts`;
+    public readonly CONCERTS: string = `${this.API_BASE_URL}/events`;
     public readonly TICKETS: string = `${this.API_BASE_URL}/tickets`;
 }

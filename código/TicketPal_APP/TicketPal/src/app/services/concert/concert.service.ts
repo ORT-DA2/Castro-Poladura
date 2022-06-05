@@ -18,7 +18,8 @@ export class ConcertService {
   }
 
   getConcerts(): Observable<Concert[]> {
-    return this.http.get<Concert[]>(this.endpoints.CONCERTS)
+    var endpoint = this.endpoints.CONCERTS + '?type=TYPE_CONCERT';
+    return this.http.get<Concert[]>(endpoint)
   }
 
 }
