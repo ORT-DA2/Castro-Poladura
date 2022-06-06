@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using TicketPal.BusinessLogic.Utils.TicketCodes;
 using TicketPal.Domain.Constants;
 using TicketPal.Domain.Entity;
@@ -32,20 +33,20 @@ namespace TicketPal.BusinessLogic.Services.Tickets
             userRepository = serviceFactory.GetRepository(typeof(UserEntity)) as IGenericRepository<UserEntity>;
         }
 
-        public OperationResult AddTicket(AddTicketRequest model)
+        public async Task<OperationResult> AddTicket(AddTicketRequest model)
         {
             try
             {
-                var newEvent = concertRepository.Get(model.EventId);
+                var newEvent = await concertRepository.Get(model.EventId);
                 var ticketCode = serviceFactory.GetService(typeof(ITicketCode)) as ITicketCode;
 
                 if (newEvent != null)
                 {
                     if (model.UserLogged)
                     {
-                        var retrievedUser = userRepository.Get(model.LoggedUserId);
+                        var retrievedUser = await userRepository.Get(model.LoggedUserId);
 
-                        ticketRepository.Add(new TicketEntity
+                        await ticketRepository.Add(new TicketEntity
                         {
                             Buyer = retrievedUser,
                             PurchaseDate = DateTime.Now,
@@ -62,7 +63,7 @@ namespace TicketPal.BusinessLogic.Services.Tickets
                         buyer.Email = model.NewUser.Email;
                         buyer.ActiveAccount = false;
 
-                        ticketRepository.Add(new TicketEntity
+                        await ticketRepository.Add(new TicketEntity
                         {
                             Buyer = buyer,
                             PurchaseDate = DateTime.Now,
@@ -97,11 +98,11 @@ namespace TicketPal.BusinessLogic.Services.Tickets
             };
         }
 
-        public OperationResult DeleteTicket(int id)
+        public async Task<OperationResult> DeleteTicket(int id)
         {
             try
             {
-                ticketRepository.Delete(id);
+                await ticketRepository.Delete(id);
                 return new OperationResult
                 {
                     ResultCode = Constants.CODE_SUCCESS,
@@ -118,21 +119,21 @@ namespace TicketPal.BusinessLogic.Services.Tickets
             }
         }
 
-        public Ticket GetTicket(int id)
+        public async Task<Ticket> GetTicket(int id)
         {
-            return mapper.Map<Ticket>(ticketRepository.Get(id));
+            return mapper.Map<Ticket>(await ticketRepository.Get(id));
         }
 
-        public IEnumerable<Ticket> GetUserTickets(int userId)
+        public async Task<List<Ticket>> GetUserTickets(int userId)
         {
-            var ticket = ticketRepository.GetAll(t => t.Buyer.Id == userId);
-            return mapper.Map<IEnumerable<TicketEntity>, IEnumerable<Ticket>>(ticket);
+            var ticket = await ticketRepository.GetAll(t => t.Buyer.Id == userId);
+            return mapper.Map<List<TicketEntity>, List<Ticket>>(ticket);
         }
 
-        public IEnumerable<Ticket> GetTickets()
+        public async Task<List<Ticket>> GetTickets()
         {
-            var ticket = ticketRepository.GetAll();
-            return mapper.Map<IEnumerable<TicketEntity>, IEnumerable<Ticket>>(ticket);
+            var ticket = await ticketRepository.GetAll();
+            return mapper.Map<List<TicketEntity>, List<Ticket>>(ticket);
         }
         public OperationResult UpdateTicket(UpdateTicketRequest model)
         {

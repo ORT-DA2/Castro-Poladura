@@ -2,6 +2,7 @@
 using Moq;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using TicketPal.BusinessLogic.Services.Genres;
 using TicketPal.Domain.Constants;
 using TicketPal.Domain.Entity;
@@ -41,17 +42,17 @@ namespace TicketPal.BusinessLogic.Tests.Services.Genres
         }
 
         [TestMethod]
-        public void AddGenreSuccesfullyTest()
+        public async Task AddGenreSuccesfullyTest()
         {
-            OperationResult result = genreService.AddGenre(genreRequest);
+            OperationResult result = await genreService.AddGenre(genreRequest);
 
             Assert.IsTrue(result.ResultCode == Constants.CODE_SUCCESS);
         }
 
         [TestMethod]
-        public void AddGenreTwiceFailsTest()
+        public async Task AddGenreTwiceFailsTest()
         {
-            genreService.AddGenre(genreRequest);
+            await genreService.AddGenre(genreRequest);
 
             this.mockGenreRepo.Setup(m => m.Exists(It.IsAny<int>())).Returns(true);
             this.mockGenreRepo.Setup(m => m.Add(It.IsAny<GenreEntity>())).Throws(new RepositoryException());
@@ -59,13 +60,13 @@ namespace TicketPal.BusinessLogic.Tests.Services.Genres
 
             this.genreService = new GenreService(this.factoryMock.Object, this.mapper);
 
-            OperationResult result = genreService.AddGenre(genreRequest);
+            OperationResult result = await genreService.AddGenre(genreRequest);
 
             Assert.IsTrue(result.ResultCode == Constants.CODE_FAIL);
         }
 
         [TestMethod]
-        public void DeleteGenreSuccesfullyTest()
+        public async Task DeleteGenreSuccesfullyTest()
         {
             var id = 1;
             var dbUser = new GenreEntity
@@ -74,17 +75,17 @@ namespace TicketPal.BusinessLogic.Tests.Services.Genres
                 Name = genre.Name
             };
 
-            this.mockGenreRepo.Setup(m => m.Get(It.IsAny<int>())).Returns(dbUser);
+            this.mockGenreRepo.Setup(m => m.Get(It.IsAny<int>())).Returns(Task.FromResult(dbUser));
             this.factoryMock.Setup(m => m.GetRepository(typeof(GenreEntity))).Returns(this.mockGenreRepo.Object);
 
             this.genreService = new GenreService(this.factoryMock.Object, this.mapper);
-            OperationResult result = genreService.DeleteGenre(id);
+            OperationResult result = await genreService.DeleteGenre(id);
 
             Assert.IsTrue(result.ResultCode == Constants.CODE_SUCCESS);
         }
 
         [TestMethod]
-        public void DeleteUnexistentGenreFailsTest()
+        public async Task DeleteUnexistentGenreFailsTest()
         {
             var id = 1;
 
@@ -92,7 +93,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Genres
             this.factoryMock.Setup(m => m.GetRepository(typeof(GenreEntity))).Returns(this.mockGenreRepo.Object);
 
             this.genreService = new GenreService(this.factoryMock.Object, this.mapper);
-            OperationResult result = genreService.DeleteGenre(id);
+            OperationResult result = await genreService.DeleteGenre(id);
 
             Assert.IsTrue(result.ResultCode == Constants.CODE_FAIL);
         }
@@ -116,7 +117,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Genres
         }
 
         [TestMethod]
-        public void GetUserByIdTest()
+        public async Task GetGenreByIdTest()
         {
             int id = 1;
             var dbUser = new GenreEntity
@@ -125,35 +126,35 @@ namespace TicketPal.BusinessLogic.Tests.Services.Genres
                 Name = genre.Name
             };
 
-            this.mockGenreRepo.Setup(r => r.Get(It.IsAny<int>())).Returns(dbUser);
+            this.mockGenreRepo.Setup(r => r.Get(It.IsAny<int>())).Returns(Task.FromResult(dbUser));
             this.factoryMock.Setup(m => m.GetRepository(typeof(GenreEntity))).Returns(this.mockGenreRepo.Object);
 
             this.genreService = new GenreService(this.factoryMock.Object, this.mapper);
-            Genre concert = genreService.GetGenre(id);
+            Genre concert = await genreService.GetGenre(id);
 
             Assert.IsNotNull(concert);
             Assert.IsTrue(id == concert.Id);
         }
 
         [TestMethod]
-        public void GetGenreByNullIdTest()
+        public async Task GetGenreByNullIdTest()
         {
             int id = 1;
 
             GenreEntity dbUser = null;
 
-            this.mockGenreRepo.Setup(r => r.Get(It.IsAny<int>())).Returns(dbUser);
+            this.mockGenreRepo.Setup(r => r.Get(It.IsAny<int>())).Returns(Task.FromResult(dbUser));
             this.factoryMock.Setup(m => m.GetRepository(typeof(GenreEntity))).Returns(this.mockGenreRepo.Object);
 
             this.genreService = new GenreService(this.factoryMock.Object, this.mapper);
-            Genre concert = genreService.GetGenre(id);
+            Genre concert = await genreService.GetGenre(id);
 
             Assert.IsNull(concert);
 
         }
 
         [TestMethod]
-        public void GetAllGenresSuccesfullyTest()
+        public async Task GetAllGenresSuccesfullyTest()
         {
             IEnumerable<GenreEntity> dbAccounts = new List<GenreEntity>()
             {
@@ -174,11 +175,11 @@ namespace TicketPal.BusinessLogic.Tests.Services.Genres
                 },
             };
 
-            this.mockGenreRepo.Setup(r => r.GetAll()).Returns(dbAccounts);
+            this.mockGenreRepo.Setup(r => r.GetAll()).Returns(Task.FromResult(dbAccounts.ToList()));
             this.factoryMock.Setup(m => m.GetRepository(typeof(GenreEntity))).Returns(this.mockGenreRepo.Object);
 
             this.genreService = new GenreService(this.factoryMock.Object, this.mapper);
-            IEnumerable<Genre> result = genreService.GetGenres();
+            IEnumerable<Genre> result = await genreService.GetGenres();
 
             Assert.IsTrue(result.ToList().Count == 3);
         }

@@ -1,11 +1,13 @@
-using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using TicketPal.Domain.Constants;
+using Microsoft.AspNetCore.Http;
 using TicketPal.Domain.Models.Request;
 using TicketPal.Domain.Models.Response.Error;
 using TicketPal.Interfaces.Services.Tickets;
-using TicketPal.Interfaces.Services.Users;
 using TicketPal.WebApi.Filters.Auth;
+using Newtonsoft.Json;
+using TicketPal.Domain.Models.Response;
+using System.Threading.Tasks;
 
 namespace TicketPal.WebApi.Controllers
 {
@@ -14,7 +16,6 @@ namespace TicketPal.WebApi.Controllers
     public class TicketsController : ControllerBase
     {
         private ITicketService ticketService;
-        private IUserService userService;
 
         public TicketsController(ITicketService service)
         {
@@ -23,15 +24,11 @@ namespace TicketPal.WebApi.Controllers
 
         [HttpPost("purchase/{eventId}")]
         [AuthenticationFilter(Constants.ROLE_SELLER + "," + Constants.ROLE_SPECTATOR + "," + Constants.ROLE_ADMIN)]
-        public IActionResult AddTicket([FromRoute] int eventId, [FromBody] AddTicketRequest request)
+        public async Task<IActionResult> AddTicket([FromRoute] int eventId, [FromBody] AddTicketRequest request)
         {
-            this.userService = this.HttpContext
-                .RequestServices
-                .GetService(typeof(IUserService)) as IUserService;
             request.EventId = eventId;
-            var token = HttpContext.Request.Headers["Authorization"]
-                .FirstOrDefault()?.Split(" ").Last();
-            var authenticatedUser = userService.RetrieveUserFromToken(token);
+            var json = HttpContext.Session.GetString("user");
+            var authenticatedUser = JsonConvert.DeserializeObject<User>(json);
 
             if (authenticatedUser != null && authenticatedUser.Role.Equals(Constants.ROLE_SPECTATOR))
             {
@@ -39,7 +36,7 @@ namespace TicketPal.WebApi.Controllers
                 request.LoggedUserId = authenticatedUser.Id;
             }
 
-            var result = ticketService.AddTicket(request);
+            var result = await ticketService.AddTicket(request);
 
             if (result.ResultCode == Constants.CODE_FAIL)
             {
@@ -70,9 +67,9 @@ namespace TicketPal.WebApi.Controllers
 
         [HttpDelete("{id}")]
         [AuthenticationFilter(Constants.ROLE_ADMIN)]
-        public IActionResult DeleteTicket([FromRoute] int id)
+        public async Task<IActionResult> DeleteTicket([FromRoute] int id)
         {
-            var result = ticketService.DeleteTicket(id);
+            var result = await ticketService.DeleteTicket(id);
 
             if (result.ResultCode == Constants.CODE_FAIL)
             {
@@ -95,12 +92,8 @@ namespace TicketPal.WebApi.Controllers
         [AuthenticationFilter(Constants.ROLE_ADMIN + "," + Constants.ROLE_SPECTATOR)]
         public IActionResult GetTickets()
         {
-            this.userService = this.HttpContext
-                .RequestServices
-                .GetService(typeof(IUserService)) as IUserService;
-            var token = HttpContext.Request.Headers["Authorization"]
-                .FirstOrDefault()?.Split(" ").Last();
-            var authenticatedUser = userService.RetrieveUserFromToken(token);
+            var json = HttpContext.Session.GetString("user");
+            var authenticatedUser = JsonConvert.DeserializeObject<User>(json);
 
             if (authenticatedUser.Role.Equals(Constants.ROLE_ADMIN))
             {

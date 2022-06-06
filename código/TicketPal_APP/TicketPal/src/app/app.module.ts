@@ -17,6 +17,14 @@ import { Endpoints } from './config/endpoints';
 import { DashboardComponent } from './components/home/dashboard/dashboard.component';
 import { AuthGuard } from './guards/authGuard.guard';
 import { EventsComponent } from './components/home/events/events.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatTabsModule } from '@angular/material/tabs';
+import { UsersComponent } from './components/tables/users/users.component';
+import { PerformersComponent } from './components/tables/performers/performers.component';
+import { GenresComponent } from './components/tables/genres/genres.component';
+import { ConcertsComponent, NgbdSortableHeader } from './components/tables/concerts/concerts.component';
+import { TicketsComponent } from './components/tables/tickets/tickets.component';
+import { DatePickerComponent } from './components/date-picker/date-picker.component';
 
 @NgModule({
   declarations: [
@@ -29,13 +37,22 @@ import { EventsComponent } from './components/home/events/events.component';
     BoardSellerComponent,
     BoardSupervisorComponent,
     DashboardComponent,
-    EventsComponent
+    EventsComponent,
+    UsersComponent,
+    PerformersComponent,
+    GenresComponent,
+    ConcertsComponent,
+    TicketsComponent,
+    NgbdSortableHeader,
+    DatePickerComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule,
+    MatTabsModule
   ],
   providers: [
     authInterceptorProviders,

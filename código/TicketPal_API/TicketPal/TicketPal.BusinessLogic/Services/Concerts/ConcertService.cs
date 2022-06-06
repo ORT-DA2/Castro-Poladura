@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using TicketPal.Domain.Constants;
 using TicketPal.Domain.Entity;
 using TicketPal.Domain.Exceptions;
@@ -29,18 +30,18 @@ namespace TicketPal.BusinessLogic.Services.Concerts
             this.performerRepository = serviceFactory.GetRepository(typeof(PerformerEntity)) as IGenericRepository<PerformerEntity>;
         }
 
-        public OperationResult AddConcert(AddConcertRequest model)
+        public async Task<OperationResult> AddConcert(AddConcertRequest model)
         {
             try
             {
-                var found = concertRepository.Get(c => c.TourName == model.TourName && c.Date == model.Date);
-                var artists = performerRepository.GetAll(a => model.ArtistsIds.Contains(a.UserInfo.Id));
-                
+                var found = await concertRepository.Get(c => c.TourName == model.TourName && c.Date == model.Date);
+                var artists = await performerRepository.GetAll(a => model.ArtistsIds.Contains(a.UserInfo.Id));
+
                 if (found == null)
                 {
-                    concertRepository.Add(new ConcertEntity
+                    await concertRepository.Add(new ConcertEntity
                     {
-                        Artists = artists.ToList(),
+                        Artists = artists,
                         AvailableTickets = model.AvailableTickets,
                         CurrencyType = model.CurrencyType,
                         Date = model.Date,
@@ -76,11 +77,11 @@ namespace TicketPal.BusinessLogic.Services.Concerts
             };
         }
 
-        public OperationResult DeleteConcert(int id)
+        public async Task<OperationResult> DeleteConcert(int id)
         {
             try
             {
-                concertRepository.Delete(id);
+                await concertRepository.Delete(id);
                 return new OperationResult
                 {
                     ResultCode = Constants.CODE_SUCCESS,
@@ -97,21 +98,22 @@ namespace TicketPal.BusinessLogic.Services.Concerts
             }
         }
 
-        public Concert GetConcert(int id)
+        public async Task<Concert> GetConcert(int id)
         {
-            return mapper.Map<Concert>(concertRepository.Get(id));
+            var concert = await concertRepository.Get(id);
+            return mapper.Map<Concert>(concert);
         }
 
-        public IEnumerable<Concert> GetConcerts(string type, bool newest, string startDate, string endDate, string artistName)
+        public async Task<List<Concert>> GetConcerts(string type, bool newest, string startDate, string endDate, string artistName)
         {
-            IEnumerable<ConcertEntity> concerts = new List<ConcertEntity>();
+            List<ConcertEntity> concerts = new List<ConcertEntity>();
 
             if (String.IsNullOrEmpty(startDate)
                 && String.IsNullOrEmpty(endDate)
                 && String.IsNullOrEmpty(artistName)
                 )
             {
-                concerts = concertRepository.GetAll(
+                concerts = await concertRepository.GetAll(
                     c => c.EventType.Equals(type)
                 );
             }
@@ -125,7 +127,7 @@ namespace TicketPal.BusinessLogic.Services.Concerts
                        CultureInfo.InvariantCulture,
                        DateTimeStyles.None);
 
-                concerts = concertRepository.GetAll(
+                concerts = await concertRepository.GetAll(
                     c => c.EventType.Equals(type)
                         && c.Date >= dtStart
                 );
@@ -140,7 +142,7 @@ namespace TicketPal.BusinessLogic.Services.Concerts
                        CultureInfo.InvariantCulture,
                        DateTimeStyles.None);
 
-                concerts = concertRepository.GetAll(
+                concerts = await concertRepository.GetAll(
                     c => c.EventType.Equals(type)
                         && c.Date >= dtEnd
                 );
@@ -150,7 +152,7 @@ namespace TicketPal.BusinessLogic.Services.Concerts
             && !String.IsNullOrEmpty(artistName)
             )
             {
-                concerts = concertRepository.GetAll(
+                concerts = await concertRepository.GetAll(
                     c => c.Artists
                         .Any(a => a.UserInfo.Firstname.Equals(artistName) || a.UserInfo.Lastname.Equals(artistName))
                 );
@@ -168,7 +170,7 @@ namespace TicketPal.BusinessLogic.Services.Concerts
                        CultureInfo.InvariantCulture,
                        DateTimeStyles.None);
 
-                concerts = concertRepository.GetAll(
+                concerts = await concertRepository.GetAll(
                    c => c.EventType.Equals(type)
                        && (c.Date >= dtStart && c.Date <= dtEnd)
                );
@@ -184,7 +186,7 @@ namespace TicketPal.BusinessLogic.Services.Concerts
                        CultureInfo.InvariantCulture,
                        DateTimeStyles.None);
 
-                concerts = concertRepository.GetAll(
+                concerts = await concertRepository.GetAll(
                     c => c.EventType.Equals(type)
                         && (c.Date >= dtStart && c.Date <= dtEnd)
                         && c.Artists.Any(a => a.UserInfo.Firstname.Equals(artistName) || a.UserInfo.Lastname.Equals(artistName))
@@ -192,23 +194,23 @@ namespace TicketPal.BusinessLogic.Services.Concerts
             }
             if (!newest)
             {
-                return mapper.Map<IEnumerable<ConcertEntity>, IEnumerable<Concert>>(
-                    concerts.OrderBy(c => c.Date));
+                return mapper.Map<List<ConcertEntity>, List<Concert>>(
+                    concerts.OrderBy(c => c.Date).ToList());
             }
             else
             {
-                return mapper.Map<IEnumerable<ConcertEntity>, IEnumerable<Concert>>(
-                    concerts.OrderByDescending(c => c.Date));
+                return mapper.Map<List<ConcertEntity>, List<Concert>>(
+                    concerts.OrderByDescending(c => c.Date).ToList());
             }
 
         }
 
-        public OperationResult UpdateConcert(UpdateConcertRequest model)
+        public async Task<OperationResult> UpdateConcert(UpdateConcertRequest model)
         {
             try
             {
-                var existingPerformers = concertRepository.Get(model.Id).Artists;
-                var newPerformers = performerRepository.GetAll(a => model.ArtistsIds.Contains(a.Id));
+                var existingPerformers = (await concertRepository.Get(model.Id)).Artists;
+                var newPerformers = await performerRepository.GetAll(a => model.ArtistsIds.Contains(a.Id));
                 var resultingArtists = existingPerformers.Union(newPerformers);
 
                 concertRepository.Update(new ConcertEntity

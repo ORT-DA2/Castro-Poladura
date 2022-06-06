@@ -1,11 +1,12 @@
-
 export class Concert {
-    id: number
-    date: string
-    availableTickets: number
-    ticketPrice: number
-    tourName: string
-    location: string
-    address: string
-    country: string
+    id: string;
+    date: Date;
+    availableTickets: number;
+    ticketPrice: number;
+    currencyType: string;
+    eventType: string;
+    tourName: string;
+    location: string;
+    address: string;
+    country: string;
 }

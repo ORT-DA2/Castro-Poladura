@@ -39,6 +39,10 @@ namespace TicketPal.WebApi
 
                 options.AddPolicy("CorsPolicy", policy);
             });
+
+            services.AddDistributedMemoryCache();
+            services.AddSession();
+
             // Settings
             var section = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(section);
@@ -53,7 +57,7 @@ namespace TicketPal.WebApi
                 services,
                 Configuration
             );
-            factory.AddDbContextService(Configuration.GetConnectionString("TicketPal_SQL_SERVER"));
+            factory.AddDbContextService(Configuration.GetConnectionString("TicketPal_SQL_EXPRESS"));
             factory.RegisterRepositories();
             factory.RegisterServices();
             factory.BuildServices();
@@ -86,9 +90,12 @@ namespace TicketPal.WebApi
                 );
                 app.UseDeveloperExceptionPage();
             }
+
             app.UseRouting();
 
             app.UseCors("CorsPolicy");
+
+            app.UseSession();
 
             app.UseAuthorization();
 

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using TicketPal.BusinessLogic.Services.Performers;
 using TicketPal.Domain.Constants;
 using TicketPal.Domain.Entity;
@@ -51,10 +52,10 @@ namespace TicketPal.BusinessLogic.Tests.Services.Performers
 
             this.mockPerformerRepo.Setup(m => m.Exists(It.IsAny<int>())).Returns(false);
             this.mockPerformerRepo.Setup(m => m.Add(It.IsAny<PerformerEntity>())).Verifiable();
-            this.mockUserRepo.Setup(u => u.Get(It.IsAny<int>())).Returns(new UserEntity { Role = Constants.ROLE_ARTIST });
+            this.mockUserRepo.Setup(u => u.Get(It.IsAny<int>())).Returns(Task.FromResult(new UserEntity { Role = Constants.ROLE_ARTIST }));
             this.mockConcertRepo.Setup(c => c.GetAll(It.IsAny<Expression<Func<ConcertEntity, bool>>>()))
-                .Returns(new List<ConcertEntity>());
-            this.mockGenreRepo.Setup(m => m.Get(It.IsAny<int>())).Returns(genre);
+                .Returns(Task.FromResult(new List<ConcertEntity>()));
+            this.mockGenreRepo.Setup(m => m.Get(It.IsAny<int>())).Returns(Task.FromResult(genre));
 
             this.factoryMock.Setup(m => m.GetRepository(typeof(PerformerEntity))).Returns(this.mockPerformerRepo.Object);
             this.factoryMock.Setup(m => m.GetRepository(typeof(GenreEntity))).Returns(this.mockGenreRepo.Object);
@@ -64,17 +65,17 @@ namespace TicketPal.BusinessLogic.Tests.Services.Performers
         }
 
         [TestMethod]
-        public void AddPerformerSuccesfullyTest()
+        public async Task AddPerformerSuccesfullyTest()
         {
-            OperationResult result = performerService.AddPerformer(performerRequest);
+            OperationResult result = await performerService.AddPerformer(performerRequest);
 
             Assert.IsTrue(result.ResultCode == Constants.CODE_SUCCESS);
         }
 
         [TestMethod]
-        public void AddPerformerTwiceFailsTest()
+        public async Task AddPerformerTwiceFailsTest()
         {
-            performerService.AddPerformer(performerRequest);
+            await performerService.AddPerformer(performerRequest);
 
             this.mockPerformerRepo.Setup(m => m.Exists(It.IsAny<int>())).Returns(true);
             this.mockPerformerRepo.Setup(m => m.Add(It.IsAny<PerformerEntity>())).Throws(new RepositoryException());
@@ -82,13 +83,13 @@ namespace TicketPal.BusinessLogic.Tests.Services.Performers
 
             this.performerService = new PerformerService(this.factoryMock.Object, this.mapper);
 
-            OperationResult result = performerService.AddPerformer(performerRequest);
+            OperationResult result = await performerService.AddPerformer(performerRequest);
 
             Assert.IsTrue(result.ResultCode == Constants.CODE_FAIL);
         }
 
         [TestMethod]
-        public void AddPerformerWithNoExistentGenreTest()
+        public async Task AddPerformerWithNoExistentGenreTest()
         {
             this.mockGenreRepo.Setup(m => m.Get(It.IsAny<int>()));
 
@@ -97,13 +98,13 @@ namespace TicketPal.BusinessLogic.Tests.Services.Performers
 
             this.performerService = new PerformerService(this.factoryMock.Object, this.mapper);
 
-            OperationResult result = performerService.AddPerformer(performerRequest);
+            OperationResult result = await performerService.AddPerformer(performerRequest);
 
             Assert.IsTrue(result.ResultCode == Constants.CODE_FAIL);
         }
 
         [TestMethod]
-        public void DeletePerformerSuccesfullyTest()
+        public async Task DeletePerformerSuccesfullyTest()
         {
             var id = 1;
             var dbUser = new PerformerEntity
@@ -116,17 +117,17 @@ namespace TicketPal.BusinessLogic.Tests.Services.Performers
                 StartYear = performer.StartYear
             };
 
-            this.mockPerformerRepo.Setup(m => m.Get(It.IsAny<int>())).Returns(dbUser);
+            this.mockPerformerRepo.Setup(m => m.Get(It.IsAny<int>())).Returns(Task.FromResult(dbUser));
             this.factoryMock.Setup(m => m.GetRepository(typeof(PerformerEntity))).Returns(this.mockPerformerRepo.Object);
 
             this.performerService = new PerformerService(this.factoryMock.Object, this.mapper);
-            OperationResult result = performerService.DeletePerformer(id);
+            OperationResult result = await performerService.DeletePerformer(id);
 
             Assert.IsTrue(result.ResultCode == Constants.CODE_SUCCESS);
         }
 
         [TestMethod]
-        public void DeleteUnexistentPerformerFailsTest()
+        public async Task DeleteUnexistentPerformerFailsTest()
         {
             var id = 1;
 
@@ -134,13 +135,13 @@ namespace TicketPal.BusinessLogic.Tests.Services.Performers
             this.factoryMock.Setup(m => m.GetRepository(typeof(PerformerEntity))).Returns(this.mockPerformerRepo.Object);
 
             this.performerService = new PerformerService(this.factoryMock.Object, this.mapper);
-            OperationResult result = performerService.DeletePerformer(id);
+            OperationResult result = await performerService.DeletePerformer(id);
 
             Assert.IsTrue(result.ResultCode == Constants.CODE_FAIL);
         }
 
         [TestMethod]
-        public void UpdatePerformerSuccesfullyTest()
+        public async Task UpdatePerformerSuccesfullyTest()
         {
             var updateRequest = new UpdatePerformerRequest
             {
@@ -148,21 +149,26 @@ namespace TicketPal.BusinessLogic.Tests.Services.Performers
             };
 
             this.mockPerformerRepo.Setup(m => m.Update(It.IsAny<PerformerEntity>())).Verifiable();
-            this.mockUserRepo.Setup(r => r.Get(It.IsAny<int>())).Returns(new UserEntity
-            {
-                Performer = new PerformerEntity { Members = new List<PerformerEntity>() }
-            });
+            this.mockUserRepo.Setup(r => r.Get(It.IsAny<int>())).Returns(
+                Task.FromResult(
+                    new UserEntity
+                    {
+                        Performer = new PerformerEntity { Members = new List<PerformerEntity>() }
+                    })
+                );
+            this.mockPerformerRepo.Setup(m => m.GetAll(It.IsAny<Expression<Func<PerformerEntity, bool>>>()))
+            .Returns(Task.FromResult(new List<PerformerEntity>()));
             this.factoryMock.Setup(m => m.GetRepository(typeof(UserEntity))).Returns(this.mockUserRepo.Object);
             this.factoryMock.Setup(m => m.GetRepository(typeof(PerformerEntity))).Returns(this.mockPerformerRepo.Object);
 
             this.performerService = new PerformerService(this.factoryMock.Object, this.mapper);
-            OperationResult expected = performerService.UpdatePerformer(updateRequest);
+            OperationResult expected = await performerService.UpdatePerformer(updateRequest);
 
             Assert.IsTrue(expected.ResultCode == Constants.CODE_SUCCESS);
         }
 
         [TestMethod]
-        public void GetPerformerByIdTest()
+        public async Task GetPerformerByIdTest()
         {
             int id = 1;
             var dbUser = new PerformerEntity
@@ -175,35 +181,35 @@ namespace TicketPal.BusinessLogic.Tests.Services.Performers
                 StartYear = performer.StartYear
             };
 
-            this.mockPerformerRepo.Setup(r => r.Get(It.IsAny<int>())).Returns(dbUser);
+            this.mockPerformerRepo.Setup(r => r.Get(It.IsAny<int>())).Returns(Task.FromResult(dbUser));
             this.factoryMock.Setup(m => m.GetRepository(typeof(PerformerEntity))).Returns(this.mockPerformerRepo.Object);
 
             this.performerService = new PerformerService(this.factoryMock.Object, this.mapper);
-            Performer concert = performerService.GetPerformer(id);
+            Performer res = await performerService.GetPerformer(id);
 
-            Assert.IsNotNull(concert);
-            Assert.IsTrue(id == concert.Id);
+            Assert.IsNotNull(res);
+            Assert.IsTrue(id == res.Id);
         }
 
         [TestMethod]
-        public void GetPerformerByNullIdTest()
+        public async Task GetPerformerByNullIdTest()
         {
             int id = 1;
 
             PerformerEntity dbUser = null;
 
-            this.mockPerformerRepo.Setup(r => r.Get(It.IsAny<int>())).Returns(dbUser);
+            this.mockPerformerRepo.Setup(r => r.Get(It.IsAny<int>())).Returns(Task.FromResult(dbUser));
             this.factoryMock.Setup(m => m.GetRepository(typeof(PerformerEntity))).Returns(this.mockPerformerRepo.Object);
 
             this.performerService = new PerformerService(this.factoryMock.Object, this.mapper);
-            Performer concert = performerService.GetPerformer(id);
+            Performer concert = await performerService.GetPerformer(id);
 
             Assert.IsNull(concert);
 
         }
 
         [TestMethod]
-        public void GetAllPerformersSuccesfullyTest()
+        public async Task GetAllPerformersSuccesfullyTest()
         {
             IEnumerable<PerformerEntity> dbAccounts = new List<PerformerEntity>()
             {
@@ -235,11 +241,11 @@ namespace TicketPal.BusinessLogic.Tests.Services.Performers
                 },
             };
 
-            this.mockPerformerRepo.Setup(r => r.GetAll()).Returns(dbAccounts);
+            this.mockPerformerRepo.Setup(r => r.GetAll()).Returns(Task.FromResult(dbAccounts.ToList()));
             this.factoryMock.Setup(m => m.GetRepository(typeof(PerformerEntity))).Returns(this.mockPerformerRepo.Object);
 
             this.performerService = new PerformerService(this.factoryMock.Object, this.mapper);
-            IEnumerable<Performer> result = performerService.GetPerformers();
+            IEnumerable<Performer> result = await performerService.GetPerformers();
 
             Assert.IsTrue(result.ToList().Count == 3);
         }

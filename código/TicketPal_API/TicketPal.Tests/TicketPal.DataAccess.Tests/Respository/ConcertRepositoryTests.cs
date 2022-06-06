@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using TicketPal.DataAccess.Repository;
 using TicketPal.Domain.Constants;
 using TicketPal.Domain.Entity;
@@ -16,7 +17,7 @@ namespace TicketPal.DataAccess.Tests.Respository
         private ConcertEntity concert;
 
         [TestInitialize]
-        public void Init()
+        public async Task Init()
         {
             var genre = new GenreEntity { Name = "Pop" };
 
@@ -52,40 +53,40 @@ namespace TicketPal.DataAccess.Tests.Respository
             };
 
             var repository = new ConcertRepository(dbContext);
-            repository.Add(concert);
+            await repository.Add(concert);
         }
         [TestMethod]
-        public void CheckSavedEvent()
+        public async Task CheckSavedEvent()
         {
             var repository = new ConcertRepository(dbContext);
-            Assert.IsTrue(repository.GetAll().ToList().FirstOrDefault().TourName == "someTour");
+            Assert.IsTrue((await repository.GetAll()).ToList().FirstOrDefault().TourName == "someTour");
         }
 
         [TestMethod]
         [ExpectedException(typeof(RepositoryException))]
-        public void SaveDuplicateEventsShouldThrowException()
+        public async Task SaveDuplicateEventsShouldThrowException()
         {
             var repository = new ConcertRepository(dbContext);
-            repository.Add(concert);
+            await repository.Add(concert);
         }
 
 
         [TestMethod]
-        public void ClearRepositoryShouldReturnCountCero()
+        public async Task ClearRepositoryShouldReturnCountCero()
         {
             var repository = new ConcertRepository(dbContext);
 
-            Assert.IsTrue(repository.GetAll().ToList().Count == 1);
+            Assert.IsTrue((await repository.GetAll()).ToList().Count == 1);
             repository.Clear();
-            Assert.IsTrue(repository.GetAll().ToList().Count == 0);
+            Assert.IsTrue((await repository.GetAll()).ToList().Count == 0);
         }
 
         [TestMethod]
-        public void ShouldRepositoryBeEmptyWhenEventDeleted()
+        public async Task ShouldRepositoryBeEmptyWhenEventDeleted()
         {
 
             var repository = new ConcertRepository(dbContext);
-            repository.Delete(concert.Id);
+            await repository.Delete(concert.Id);
 
             Assert.IsTrue(repository.IsEmpty());
         }
@@ -98,35 +99,35 @@ namespace TicketPal.DataAccess.Tests.Respository
         }
 
         [TestMethod]
-        public void DeletedEventShouldNotExist()
+        public async Task DeletedEventShouldNotExist()
         {
             var repository = new ConcertRepository(dbContext);
-            repository.Delete(concert.Id);
+            await repository.Delete(concert.Id);
 
             Assert.IsFalse(repository.Exists(concert.Id));
         }
 
         [TestMethod]
         [ExpectedException(typeof(RepositoryException))]
-        public void DeleteNonExistentEventThrowsException()
+        public async Task DeleteNonExistentEventThrowsException()
         {
             var repository = new ConcertRepository(dbContext);
             repository.Clear();
-            repository.Delete(concert.Id);
+            await repository.Delete(concert.Id);
         }
 
         [TestMethod]
-        public void SearchEventByNameTestCorrect()
+        public async Task SearchEventByNameTestCorrect()
         {
             var repository = new ConcertRepository(dbContext);
-            ConcertEntity found = repository.Get(g => g.TourName.Equals(concert.TourName));
+            ConcertEntity found = await repository.Get(g => g.TourName.Equals(concert.TourName));
 
             Assert.IsNotNull(found);
             Assert.AreEqual(concert.TourName, found.TourName);
         }
 
         [TestMethod]
-        public void ShouldCreatedDateBeTheSameDay()
+        public async Task ShouldCreatedDateBeTheSameDay()
         {
             var concert1 = new ConcertEntity()
             {
@@ -141,7 +142,7 @@ namespace TicketPal.DataAccess.Tests.Respository
             };
 
             var repository = new ConcertRepository(dbContext);
-            repository.Add(concert1);
+            await repository.Add(concert1);
             Assert.IsTrue(
                 concert1.CreatedAt.Day.Equals(concert.CreatedAt.Day)
                 && concert1.CreatedAt.Year.Equals(concert.CreatedAt.Year)
@@ -149,7 +150,7 @@ namespace TicketPal.DataAccess.Tests.Respository
         }
 
         [TestMethod]
-        public void UpdateEntityValuesSuccessfully()
+        public async Task UpdateEntityValuesSuccessfully()
         {
             var repository = new ConcertRepository(dbContext);
             var newName = "10 Años de Buitres";
@@ -158,19 +159,19 @@ namespace TicketPal.DataAccess.Tests.Respository
 
             repository.Update(concert);
 
-            var updatedEvent = repository.Get(concert.Id);
+            var updatedEvent = await repository.Get(concert.Id);
 
             Assert.IsTrue(updatedEvent.TourName.Equals(newName));
         }
 
         [TestMethod]
-        public void UpdateEntityValuesNullThenShouldMantainPreviousValues()
+        public async Task UpdateEntityValuesNullThenShouldMantainPreviousValues()
         {
             var repository = new ConcertRepository(dbContext);
 
             repository.Update(new ConcertEntity { Id = concert.Id, TourName = null });
 
-            var updatedEvent = repository.Get(concert.Id);
+            var updatedEvent = await repository.Get(concert.Id);
 
 
             Assert.IsTrue(updatedEvent.TourName.Equals(concert.TourName));

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using TicketPal.Domain.Constants;
 using TicketPal.Domain.Entity;
 using TicketPal.Domain.Exceptions;
@@ -29,13 +30,13 @@ namespace TicketPal.BusinessLogic.Services.Performers
             this.genreRepository = serviceFactory.GetRepository(typeof(GenreEntity)) as IGenericRepository<GenreEntity>;
         }
 
-        public OperationResult AddPerformer(AddPerformerRequest model)
+        public async Task<OperationResult> AddPerformer(AddPerformerRequest model)
         {
             try
             {
-                GenreEntity genre = genreRepository.Get(model.Genre);
-                var members = performerRepository.GetAll(c => model.MembersIds.Contains(c.Id));
-                var user = userRepository.Get(model.UserId);
+                GenreEntity genre = await genreRepository.Get(model.Genre);
+                var members = await performerRepository.GetAll(c => model.MembersIds.Contains(c.Id));
+                var user = await userRepository.Get(model.UserId);
 
                 if (genre == null)
                 {
@@ -62,10 +63,10 @@ namespace TicketPal.BusinessLogic.Services.Performers
                         Message = "The associated user account is not from a performer"
                     };
                 }
-                performerRepository.Add(new PerformerEntity
+                await performerRepository.Add(new PerformerEntity
                 {
                     UserInfo = user,
-                    Members = members.ToList(),
+                    Members = members,
                     Genre = genre,
                     PerformerType = model.PerformerType,
                     StartYear = model.StartYear
@@ -87,11 +88,11 @@ namespace TicketPal.BusinessLogic.Services.Performers
             };
         }
 
-        public OperationResult DeletePerformer(int id)
+        public async Task<OperationResult> DeletePerformer(int id)
         {
             try
             {
-                performerRepository.Delete(id);
+                await performerRepository.Delete(id);
                 return new OperationResult
                 {
                     ResultCode = Constants.CODE_SUCCESS,
@@ -108,25 +109,25 @@ namespace TicketPal.BusinessLogic.Services.Performers
             }
         }
 
-        public Performer GetPerformer(int id)
+        public async Task<Performer> GetPerformer(int id)
         {
-            return mapper.Map<Performer>(performerRepository.Get(id));
+            return mapper.Map<Performer>(await performerRepository.Get(id));
         }
 
-        public IEnumerable<Performer> GetPerformers()
+        public async Task<List<Performer>> GetPerformers()
         {
-            var performers = performerRepository.GetAll().ToList();
-            return mapper.Map<IEnumerable<PerformerEntity>, IEnumerable<Performer>>(performers);
+            var performers = await performerRepository.GetAll();
+            return mapper.Map<List<PerformerEntity>, List<Performer>>(performers);
         }
 
-        public OperationResult UpdatePerformer(UpdatePerformerRequest model)
+        public async Task<OperationResult> UpdatePerformer(UpdatePerformerRequest model)
         {
             try
             {
-                var genre = genreRepository.Get(model.GenreId);
-                var user = userRepository.Get(model.UserId);
+                var genre = await genreRepository.Get(model.GenreId);
+                var user = await userRepository.Get(model.UserId);
                 var existingPerformers = user.Performer.Members;
-                var newArtists = performerRepository.GetAll(a => model.ArtistsIds.Contains(a.Id));
+                var newArtists = await performerRepository.GetAll(a => model.ArtistsIds.Contains(a.Id));
                 var resultingArtists = existingPerformers.Union(newArtists);
 
                 if (!string.IsNullOrEmpty(model.PerformerType) && !Constants.ValidPerformerTypes.Contains(model.PerformerType))

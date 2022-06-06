@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TicketPal.DataAccess.Repository;
 using TicketPal.Domain.Entity;
@@ -11,7 +12,7 @@ namespace TicketPal.DataAccess.Tests.Respository
     public class UserRepositoryTests : RepositoryBaseConfigTests
     {
         [TestMethod]
-        public void SaveTwoUserToDataBaseShouldReturnCountAsTwo()
+        public async Task SaveTwoUserToDataBaseShouldReturnCountAsTwo()
         {
             var user1 = new UserEntity
             {
@@ -31,10 +32,10 @@ namespace TicketPal.DataAccess.Tests.Respository
             };
 
             var repository = new UserRepository(dbContext);
-            repository.Add(user1);
-            repository.Add(user2);
+            await repository.Add(user1);
+            await repository.Add(user2);
 
-            var fetch = repository.GetAll().ToList();
+            var fetch = (await repository.GetAll()).ToList();
 
             Assert.IsTrue(fetch.Count == 2);
 
@@ -42,7 +43,7 @@ namespace TicketPal.DataAccess.Tests.Respository
 
         [TestMethod]
         [ExpectedException(typeof(RepositoryException))]
-        public void SaveUserWithDuplicateEmailShouldThrowException()
+        public async Task SaveUserWithDuplicateEmailShouldThrowException()
         {
             string email = "same@example.com";
 
@@ -64,15 +65,15 @@ namespace TicketPal.DataAccess.Tests.Respository
             };
 
             var repository = new UserRepository(dbContext);
-            repository.Add(user1);
-            repository.Add(user2);
+            await repository.Add(user1);
+            await repository.Add(user2);
 
 
         }
 
 
         [TestMethod]
-        public void ClearRepositoryShouldReturnCountCero()
+        public async Task ClearRepositoryShouldReturnCountCero()
         {
             var user = new UserEntity
             {
@@ -84,16 +85,16 @@ namespace TicketPal.DataAccess.Tests.Respository
             };
 
             var repository = new UserRepository(dbContext);
-            repository.Add(user);
+            await repository.Add(user);
             repository.Clear();
 
-            Assert.IsTrue(repository.GetAll().ToList().Count == 0);
+            Assert.IsTrue((await repository.GetAll()).Count == 0);
 
 
         }
 
         [TestMethod]
-        public void ShouldRepositoryBeEmptyWhenUserDeleted()
+        public async Task ShouldRepositoryBeEmptyWhenUserDeleted()
         {
             var user = new UserEntity
             {
@@ -106,8 +107,8 @@ namespace TicketPal.DataAccess.Tests.Respository
             };
 
             var repository = new UserRepository(dbContext);
-            repository.Add(user);
-            repository.Delete(user.Id);
+            await repository.Add(user);
+            await repository.Delete(user.Id);
 
             Assert.IsTrue(repository.IsEmpty());
 
@@ -115,7 +116,7 @@ namespace TicketPal.DataAccess.Tests.Respository
         }
 
         [TestMethod]
-        public void SaveUserAndShouldExistReturnTrue()
+        public async Task SaveUserAndShouldExistReturnTrue()
         {
             var user = new UserEntity
             {
@@ -127,7 +128,7 @@ namespace TicketPal.DataAccess.Tests.Respository
             };
 
             var repository = new UserRepository(dbContext);
-            repository.Add(user);
+            await repository.Add(user);
 
             Assert.IsTrue(repository.Exists(user.Id));
 
@@ -135,7 +136,7 @@ namespace TicketPal.DataAccess.Tests.Respository
         }
 
         [TestMethod]
-        public void ShouldGetSavedUserAndCompareEmail()
+        public async Task ShouldGetSavedUserAndCompareEmail()
         {
             var user = new UserEntity
             {
@@ -147,15 +148,15 @@ namespace TicketPal.DataAccess.Tests.Respository
             };
 
             var repository = new UserRepository(dbContext);
-            repository.Add(user);
+            await repository.Add(user);
 
-            Assert.IsTrue(repository.Get(user.Id).Email.Equals(user.Email));
+            Assert.IsTrue((await repository.Get(user.Id)).Email.Equals(user.Email));
 
 
         }
 
         [TestMethod]
-        public void AddUserAndDeleteShouldNotExist()
+        public async Task AddUserAndDeleteShouldNotExist()
         {
             var user = new UserEntity
             {
@@ -168,15 +169,15 @@ namespace TicketPal.DataAccess.Tests.Respository
             };
 
             var repository = new UserRepository(dbContext);
-            repository.Add(user);
-            repository.Delete(user.Id);
+            await repository.Add(user);
+            await repository.Delete(user.Id);
 
             Assert.IsFalse(repository.Exists(user.Id));
         }
 
         [TestMethod]
         [ExpectedException(typeof(RepositoryException))]
-        public void DeleteNonExistentUserThrowsException()
+        public async Task DeleteNonExistentUserThrowsException()
         {
             var user = new UserEntity
             {
@@ -188,11 +189,11 @@ namespace TicketPal.DataAccess.Tests.Respository
             };
 
             var repository = new UserRepository(dbContext);
-            repository.Delete(user.Id);
+            await repository.Delete(user.Id);
         }
 
         [TestMethod]
-        public void SearchUserByEmailTestCorrect()
+        public async Task SearchUserByEmailTestCorrect()
         {
             var user = new UserEntity
             {
@@ -204,16 +205,16 @@ namespace TicketPal.DataAccess.Tests.Respository
             };
 
             var repository = new UserRepository(dbContext);
-            repository.Add(user);
+            await repository.Add(user);
 
-            UserEntity found = repository.Get(u => u.Email.Equals(user.Email));
+            UserEntity found = await repository.Get(u => u.Email.Equals(user.Email));
 
             Assert.IsNotNull(found);
             Assert.AreEqual(user.Email, found.Email);
         }
 
         [TestMethod]
-        public void SearchUserByRoleCountShouldBeTwo()
+        public async Task SearchUserByRoleCountShouldBeTwo()
         {
             var role = "admin";
             var user1 = new UserEntity
@@ -239,18 +240,18 @@ namespace TicketPal.DataAccess.Tests.Respository
             };
 
             var repository = new UserRepository(dbContext);
-            repository.Add(user1);
-            repository.Add(user2);
-            repository.Add(user3);
+            await repository.Add(user1);
+            await repository.Add(user2);
+            await repository.Add(user3);
 
-            IEnumerable<UserEntity> found = repository.GetAll(u => u.Role.Equals(role));
+            IEnumerable<UserEntity> found = await repository.GetAll(u => u.Role.Equals(role));
 
             List<UserEntity> resultToList = found.ToList();
             Assert.IsTrue(resultToList.Count == 2);
         }
 
         [TestMethod]
-        public void ShouldCreatedDateBeTheSameDay()
+        public async Task ShouldCreatedDateBeTheSameDay()
         {
 
             var user1 = new UserEntity
@@ -267,8 +268,8 @@ namespace TicketPal.DataAccess.Tests.Respository
             };
 
             var repository = new UserRepository(dbContext);
-            repository.Add(user1);
-            repository.Add(user2);
+            await repository.Add(user1);
+            await repository.Add(user2);
             Assert.IsTrue(
                 user1.CreatedAt.Day.Equals(user2.CreatedAt.Day)
                 && user1.CreatedAt.Year.Equals(user2.CreatedAt.Year)
@@ -277,10 +278,8 @@ namespace TicketPal.DataAccess.Tests.Respository
         }
 
         [TestMethod]
-        public void ShouldUpdateEntityValuesBeUpdated()
+        public async Task ShouldUpdateEntityValuesBeUpdated()
         {
-
-
             var user = new UserEntity
             {
                 Id = 1,
@@ -293,7 +292,7 @@ namespace TicketPal.DataAccess.Tests.Respository
 
 
             var repository = new UserRepository(dbContext);
-            repository.Add(user);
+            await repository.Add(user);
 
             var newName = "newName";
             var newSurname = "newSurname";
@@ -307,7 +306,7 @@ namespace TicketPal.DataAccess.Tests.Respository
 
             repository.Update(user);
 
-            var updatedUser = repository.Get(user.Id);
+            var updatedUser = await repository.Get(user.Id);
 
             Assert.IsTrue(
                 updatedUser.Email.Equals(newEmail)
@@ -320,10 +319,8 @@ namespace TicketPal.DataAccess.Tests.Respository
         }
 
         [TestMethod]
-        public void ShouldUpdateEntityValuesNullThenShouldMantainPreviousValues()
+        public async Task ShouldUpdateEntityValuesNullThenShouldMantainPreviousValues()
         {
-
-
             var user = new UserEntity
             {
                 Id = 1,
@@ -336,12 +333,12 @@ namespace TicketPal.DataAccess.Tests.Respository
 
 
             var repository = new UserRepository(dbContext);
-            repository.Add(user);
+            await repository.Add(user);
 
 
             repository.Update(new UserEntity { Id = user.Id, Firstname = null, Lastname = null, Email = null, Password = null, Role = null });
 
-            var updatedUser = repository.Get(user.Id);
+            var updatedUser = await repository.Get(user.Id);
 
 
             Assert.IsTrue(

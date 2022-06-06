@@ -1,0 +1,29 @@
+<form>
+    <div class="mb-3 row">
+      <label for="table-filtering-search" class="col-xs-3 col-sm-auto col-form-label">Full text search:</label>
+      <!-- <div class="col-xs-3 col-sm-auto">
+         <input id="table-filtering-search" class="form-control" type="text" [formControl]="filter">
+      </div> -->
+    </div>
+  </form>
+  
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th scope="col">Id</th>
+      <th scope="col">Status</th>
+      <th scope="col">Purchase Date</th>
+      <th scope="col">Code</th>
+      <th scope="col">Concert</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let ticket of tickets">
+      <th scope="row">{{ ticket.id }}</th>
+      <td>{{ticket.status}}</td>
+      <td>{{ticket.purchaseDate}}</td>
+      <td>{{ticket.code}}</td>
+      <td>{{ticket.concert.tourName}}</td>
+    </tr>
+    </tbody>
+  </table>
