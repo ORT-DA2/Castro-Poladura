@@ -1,4 +1,4 @@
-import { Concert } from "./concert.model";
+import { IConcert } from "./concert.model";
 import { User } from "./user.model";
 
 export class Ticket {
@@ -6,6 +6,6 @@ export class Ticket {
     status: string;
     purchaseDate: Date;
     code: string;
-    concert: Concert;
-    buyer: User; 
+    concert: IConcert;
+    buyer: User;
 }

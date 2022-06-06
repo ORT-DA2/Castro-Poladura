@@ -1,11 +1,10 @@
 import { Component, Directive, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { Concert } from 'src/app/models/response/concert.model';
+import { IConcert } from 'src/app/models/response/concert.model';
 import { ConcertService } from 'src/app/services/concert/concert.service';
 
-export type SortColumn = keyof Concert | '';
+export type SortColumn = keyof IConcert | '';
 export type SortDirection = 'asc' | 'desc' | '';
-const rotate: {[key: string]: SortDirection} = { 'asc': 'desc', 'desc': '', '': 'asc' };
+const rotate: { [key: string]: SortDirection } = { 'asc': 'desc', 'desc': '', '': 'asc' };
 
 const compare = (v1: string | number | Date, v2: string | number | Date) => v1 < v2 ? -1 : v1 > v2 ? 1 : 0;
 
@@ -30,7 +29,7 @@ export class NgbdSortableHeader {
 
   rotate() {
     this.direction = rotate[this.direction];
-    this.sort.emit({column: this.sortable, direction: this.direction});
+    this.sort.emit({ column: this.sortable, direction: this.direction });
   }
 }
 
@@ -40,7 +39,7 @@ export class NgbdSortableHeader {
   styleUrls: ['./concerts.component.css']
 })
 export class ConcertsComponent implements OnInit {
-  concerts: Concert[];
+  concerts: IConcert[];
   fetchedConcerts = false;
   errorMessage: string;
 
@@ -54,7 +53,7 @@ export class ConcertsComponent implements OnInit {
     this.loadConcerts();
   }
 
-  onSort({column, direction}: SortEvent) {
+  onSort({ column, direction }: SortEvent) {
 
     // resetting other headers
     this.headers.forEach(header => {
@@ -74,7 +73,7 @@ export class ConcertsComponent implements OnInit {
     }
   }
 
-  loadConcerts(){
+  loadConcerts() {
     this.concerts = []
     this.concertService.getConcerts().subscribe(
       {

@@ -16,7 +16,7 @@ import { authInterceptorProviders } from './helpers/auth/auth.interceptor';
 import { Endpoints } from './config/endpoints';
 import { DashboardComponent } from './components/home/dashboard/dashboard.component';
 import { AuthGuard } from './guards/authGuard.guard';
-import { EventsComponent } from './components/home/events/events.component';
+import { EventComponent } from './components/home/events/event.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatTabsModule } from '@angular/material/tabs';
 import { UsersComponent } from './components/tables/users/users.component';
@@ -37,7 +37,7 @@ import { DatePickerComponent } from './components/date-picker/date-picker.compon
     BoardSellerComponent,
     BoardSupervisorComponent,
     DashboardComponent,
-    EventsComponent,
+    EventComponent,
     UsersComponent,
     PerformersComponent,
     GenresComponent,
