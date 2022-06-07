@@ -18,8 +18,8 @@ export class ConcertService {
   }
 
   getConcerts(): Observable<IConcert[]> {
-    var endpoint = this.endpoints.CONCERTS + '?type=TYPE_CONCERT';
-    return this.http.get<IConcert[]>(endpoint)
+    let params = new HttpParams().set('type', "TYPE_CONCERT");
+    return this.http.get<IConcert[]>(this.endpoints.CONCERTS, { params: params })
   }
 
 }

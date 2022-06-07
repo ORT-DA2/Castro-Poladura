@@ -1,16 +1,16 @@
-<div class="container d-flex flex-wrap align-items-center" style="padding-top: 80px;" *ngFor="let concert of concerts">
-    <div class="card">
+<div class="container text-center d-flex flex-wrap align-items-center justify-content-around" style="padding-top: 80px">
+    <div class="card mb-4" *ngFor="let concert of concerts">
         <div class="card-body">
             <h2 class="card-title">{{concert.tourName}}</h2>
             <h4 class="card-subtitle mb-2 text-muted">{{concert.date}}</h4>
             <p class="card-text">
-                {{concert.country}}
+                {{concert.address}}, {{concert.country}}
             </p>
             <div class="row">
                 <div class="col-sm-12"
                     style="display: flex; flex-direction: row;justify-content: center;align-items:center;">
                     <button id="btnDetails" href="#" class="btn btn-success btn-md mr-3">Details</button>
-                    <button id="btnBuy" href="#" class="btn btn-primary btn-md">Buy
+                    <button *ngIf="userLoggedIn" id="btnBuy" href="#" class="btn btn-primary btn-md">Buy
                         Ticket</button>
                 </div>
             </div>
