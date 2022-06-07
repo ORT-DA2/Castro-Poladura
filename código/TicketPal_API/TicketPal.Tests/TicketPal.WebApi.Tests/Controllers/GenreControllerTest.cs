@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -31,7 +32,7 @@ namespace TicketPal.WebApi.Tests.Controllers
         }
 
         [TestMethod]
-        public void RegisterGenreOk()
+        public async Task RegisterGenreOk()
         {
             var request = new AddGenreRequest
             {
@@ -44,9 +45,9 @@ namespace TicketPal.WebApi.Tests.Controllers
                 Message = "success"
             };
 
-            mockService.Setup(s => s.AddGenre(request)).Returns(operationResult);
+            mockService.Setup(s => s.AddGenre(request)).Returns(Task.FromResult(operationResult));
 
-            var result = controller.AddGenre(request);
+            var result = await controller.AddGenre(request);
             var objectResult = result as ObjectResult;
             var statusCode = objectResult.StatusCode;
 
@@ -54,7 +55,7 @@ namespace TicketPal.WebApi.Tests.Controllers
         }
 
         [TestMethod]
-        public void RegisterGenreBadRequest()
+        public async Task RegisterGenreBadRequest()
         {
             var request = new AddGenreRequest
             {
@@ -67,9 +68,9 @@ namespace TicketPal.WebApi.Tests.Controllers
                 Message = "fail"
             };
 
-            mockService.Setup(s => s.AddGenre(request)).Returns(operationResult);
+            mockService.Setup(s => s.AddGenre(request)).Returns(Task.FromResult(operationResult));
 
-            var result = controller.AddGenre(request);
+            var result = await controller.AddGenre(request);
             var objectResult = result as ObjectResult;
             var statusCode = objectResult.StatusCode;
 
@@ -77,7 +78,7 @@ namespace TicketPal.WebApi.Tests.Controllers
         }
 
         [TestMethod]
-        public void DeleteGenreOk()
+        public async Task DeleteGenreOk()
         {
             var operationResult = new OperationResult
             {
@@ -85,9 +86,9 @@ namespace TicketPal.WebApi.Tests.Controllers
                 Message = "success"
             };
 
-            mockService.Setup(s => s.DeleteGenre(It.IsAny<int>())).Returns(operationResult);
+            mockService.Setup(s => s.DeleteGenre(It.IsAny<int>())).Returns(Task.FromResult(operationResult));
 
-            var result = controller.DeleteGenre(It.IsAny<int>());
+            var result = await controller.DeleteGenre(It.IsAny<int>());
             var objectResult = result as ObjectResult;
             var statusCode = objectResult.StatusCode;
 
@@ -95,7 +96,7 @@ namespace TicketPal.WebApi.Tests.Controllers
         }
 
         [TestMethod]
-        public void DeleteGenreBadRequest()
+        public async Task DeleteGenreBadRequest()
         {
             var operationResult = new OperationResult
             {
@@ -103,9 +104,9 @@ namespace TicketPal.WebApi.Tests.Controllers
                 Message = "error"
             };
 
-            mockService.Setup(s => s.DeleteGenre(It.IsAny<int>())).Returns(operationResult);
+            mockService.Setup(s => s.DeleteGenre(It.IsAny<int>())).Returns(Task.FromResult(operationResult));
 
-            var result = controller.DeleteGenre(It.IsAny<int>());
+            var result = await controller.DeleteGenre(It.IsAny<int>());
             var objectResult = result as ObjectResult;
             var statusCode = objectResult.StatusCode;
 
@@ -113,11 +114,11 @@ namespace TicketPal.WebApi.Tests.Controllers
         }
 
         [TestMethod]
-        public void GetGenreOk()
+        public async Task GetGenreOk()
         {
-            mockService.Setup(s => s.GetGenre(It.IsAny<int>())).Returns(genres[0]);
+            mockService.Setup(s => s.GetGenre(It.IsAny<int>())).Returns(Task.FromResult(genres[0]));
 
-            var result = controller.GetGenre(It.IsAny<int>());
+            var result = await controller.GetGenre(It.IsAny<int>());
             var objectResult = result as ObjectResult;
             var statusCode = objectResult.StatusCode;
 
@@ -125,11 +126,11 @@ namespace TicketPal.WebApi.Tests.Controllers
         }
 
         [TestMethod]
-        public void GetGenresOk()
+        public async Task GetGenresOk()
         {
-            mockService.Setup(s => s.GetGenres()).Returns(genres);
+            mockService.Setup(s => s.GetGenres()).Returns(Task.FromResult(genres));
 
-            var result = controller.GetGenres();
+            var result = await controller.GetGenres();
             var objectResult = result as ObjectResult;
             var statusCode = objectResult.StatusCode;
 

@@ -7,5 +7,5 @@ export class User {
     password: string;
     token: string;
     role: string;
-    activeAccount: string;
+    activeAccount: boolean;
 }

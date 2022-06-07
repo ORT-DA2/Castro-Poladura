@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using TicketPal.Domain.Constants;
@@ -23,9 +24,9 @@ namespace TicketPal.WebApi.Controllers
 
         [HttpPost]
         [AuthenticationFilter(Constants.ROLE_ADMIN)]
-        public IActionResult AddConcert([FromBody] AddConcertRequest request)
+        public async Task<IActionResult> AddConcert([FromBody] AddConcertRequest request)
         {
-            var result = eventService.AddConcert(request);
+            var result = await eventService.AddConcert(request);
 
             if (result.ResultCode == Constants.CODE_FAIL)
             {
@@ -39,10 +40,10 @@ namespace TicketPal.WebApi.Controllers
 
         [HttpPut("{id}")]
         [AuthenticationFilter(Constants.ROLE_ADMIN)]
-        public IActionResult UpdateConcert([FromRoute] int id, [FromBody] UpdateConcertRequest request)
+        public async Task<IActionResult> UpdateConcert([FromRoute] int id, [FromBody] UpdateConcertRequest request)
         {
             request.Id = id;
-            var result = eventService.UpdateConcert(request);
+            var result = await eventService.UpdateConcert(request);
 
             if (result.ResultCode == Constants.CODE_FAIL)
             {
@@ -56,9 +57,9 @@ namespace TicketPal.WebApi.Controllers
 
         [HttpDelete("{id}")]
         [AuthenticationFilter(Constants.ROLE_ADMIN)]
-        public IActionResult DeleteConcert([FromRoute] int id)
+        public async Task<IActionResult> DeleteConcert([FromRoute] int id)
         {
-            var result = eventService.DeleteConcert(id);
+            var result = await eventService.DeleteConcert(id);
 
             if (result.ResultCode == Constants.CODE_FAIL)
             {
@@ -71,13 +72,13 @@ namespace TicketPal.WebApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetConcert([FromRoute] int id)
+        public async Task<IActionResult> GetConcert([FromRoute] int id)
         {
-            return Ok(eventService.GetConcert(id));
+            return Ok(await eventService.GetConcert(id));
         }
 
         [HttpGet]
-        public IActionResult GetConcerts(
+        public async Task<IActionResult> GetConcerts(
             [BindRequired][FromQuery] string type,
             [FromQuery(Name = "newest")] bool newest,
             [FromQuery(Name = "startDate")] string startDate,
@@ -107,7 +108,7 @@ namespace TicketPal.WebApi.Controllers
                 return BadRequest(new BadRequestError("End date not in: dd/M/yyyy hh:mm"));
             }
 
-            return Ok(eventService.GetConcerts(type,newest,startDate,endDate,performerName));
+            return Ok(await eventService.GetConcerts(type, newest, startDate, endDate, performerName));
         }
 
 

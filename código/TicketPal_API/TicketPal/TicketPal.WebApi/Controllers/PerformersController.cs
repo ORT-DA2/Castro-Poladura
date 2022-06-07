@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using TicketPal.Domain.Constants;
 using TicketPal.Domain.Models.Request;
@@ -20,9 +21,9 @@ namespace TicketPal.WebApi.Controllers
 
         [HttpPost]
         [AuthenticationFilter(Constants.ROLE_ADMIN)]
-        public IActionResult AddPerformer([FromBody] AddPerformerRequest request)
+        public async Task<IActionResult> AddPerformer([FromBody] AddPerformerRequest request)
         {
-            var result = performerService.AddPerformer(request);
+            var result = await performerService.AddPerformer(request);
 
             if (result.ResultCode == Constants.CODE_FAIL)
             {
@@ -36,11 +37,11 @@ namespace TicketPal.WebApi.Controllers
 
         [HttpPut("{id}")]
         [AuthenticationFilter(Constants.ROLE_ADMIN)]
-        public IActionResult UpdatePerformer([FromRoute] int id, [FromBody] UpdatePerformerRequest request)
+        public async Task<IActionResult> UpdatePerformer([FromRoute] int id, [FromBody] UpdatePerformerRequest request)
         {
             request.Id = id;
             request.UserId = id;
-            var result = performerService.UpdatePerformer(request);
+            var result = await performerService.UpdatePerformer(request);
 
             if (result.ResultCode == Constants.CODE_FAIL)
             {
@@ -54,9 +55,9 @@ namespace TicketPal.WebApi.Controllers
 
         [HttpDelete("{id}")]
         [AuthenticationFilter(Constants.ROLE_ADMIN)]
-        public IActionResult DeletePerformer([FromRoute] int id)
+        public async Task<IActionResult> DeletePerformer([FromRoute] int id)
         {
-            var result = performerService.DeletePerformer(id);
+            var result = await performerService.DeletePerformer(id);
 
             if (result.ResultCode == Constants.CODE_FAIL)
             {
@@ -70,16 +71,16 @@ namespace TicketPal.WebApi.Controllers
 
         [HttpGet("{id}")]
         [AuthenticationFilter(Constants.ROLE_ADMIN)]
-        public IActionResult GetPerformer([FromRoute] int id)
+        public async Task<IActionResult> GetPerformer([FromRoute] int id)
         {
-            return Ok(performerService.GetPerformer(id));
+            return Ok(await performerService.GetPerformer(id));
         }
 
         [HttpGet]
         [AuthenticationFilter(Constants.ROLE_ADMIN)]
-        public IActionResult GetPerformers()
+        public async Task<IActionResult> GetPerformers()
         {
-            return Ok(performerService.GetPerformers());
+            return Ok(await performerService.GetPerformers());
         }
 
     }

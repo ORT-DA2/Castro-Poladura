@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using TicketPal.Domain.Constants;
 using TicketPal.Domain.Entity;
 using TicketPal.Domain.Exceptions;
@@ -26,15 +27,15 @@ namespace TicketPal.BusinessLogic.Services.Genres
             this.genreRepository = serviceFactory.GetRepository(typeof(GenreEntity)) as IGenericRepository<GenreEntity>;
         }
 
-        public OperationResult AddGenre(AddGenreRequest model)
+        public async Task<OperationResult> AddGenre(AddGenreRequest model)
         {
             try
             {
-                GenreEntity found = genreRepository.Get(g => g.Name == model.Name);
+                GenreEntity found = await genreRepository.Get(g => g.Name == model.Name);
 
                 if (found == null)
                 {
-                    genreRepository.Add(new GenreEntity
+                    await genreRepository.Add(new GenreEntity
                     {
                         Name = model.Name
                     });
@@ -64,11 +65,11 @@ namespace TicketPal.BusinessLogic.Services.Genres
             };
         }
 
-        public OperationResult DeleteGenre(int id)
+        public async Task<OperationResult> DeleteGenre(int id)
         {
             try
             {
-                genreRepository.Delete(id);
+                await genreRepository.Delete(id);
                 return new OperationResult
                 {
                     ResultCode = Constants.CODE_SUCCESS,
@@ -85,15 +86,15 @@ namespace TicketPal.BusinessLogic.Services.Genres
             }
         }
 
-        public Genre GetGenre(int id)
+        public async Task<Genre> GetGenre(int id)
         {
-            return mapper.Map<Genre>(genreRepository.Get(id));
+            return mapper.Map<Genre>(await genreRepository.Get(id));
         }
 
-        public IEnumerable<Genre> GetGenres()
+        public async Task<List<Genre>> GetGenres()
         {
-            var genres = genreRepository.GetAll();
-            return mapper.Map<IEnumerable<GenreEntity>, IEnumerable<Genre>>(genres);
+            var genres = await genreRepository.GetAll();
+            return mapper.Map<List<GenreEntity>, List<Genre>>(genres);
         }
 
         public OperationResult UpdateGenre(UpdateGenreRequest model)

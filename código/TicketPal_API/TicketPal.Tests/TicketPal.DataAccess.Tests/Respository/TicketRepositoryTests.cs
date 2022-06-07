@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using TicketPal.DataAccess.Repository;
 using TicketPal.Domain.Constants;
 using TicketPal.Domain.Entity;
@@ -19,7 +20,7 @@ namespace TicketPal.DataAccess.Tests.Respository
         private string idCode;
 
         [TestInitialize]
-        public void SetUp()
+        public async Task SetUp()
         {
             idCode = "1270f7sdf897adfhlajbvlaaotoaweyoi2";
 
@@ -70,23 +71,23 @@ namespace TicketPal.DataAccess.Tests.Respository
 
             var eventRepository = new ConcertRepository(dbContext);
             eventRepository.Clear();
-            eventRepository.Add(concert);
+            await eventRepository.Add(concert);
         }
 
         [TestMethod]
-        public void SaveTicketSuccessfully()
+        public async Task SaveTicketSuccessfully()
         {
             var code = idCode;
             var repository = new TicketRepository(dbContext);
-            repository.Add(ticket);
+            await repository.Add(ticket);
 
-            Assert.IsTrue(repository.Get(ticket.Id).Event.AvailableTickets == ticket.Event.AvailableTickets);
-            Assert.IsTrue(repository.GetAll().ToList().FirstOrDefault().Code == code);
+            Assert.IsTrue((await repository.Get(ticket.Id)).Event.AvailableTickets == ticket.Event.AvailableTickets);
+            Assert.IsTrue((await repository.GetAll()).FirstOrDefault().Code == code);
         }
 
         [TestMethod]
         [ExpectedException(typeof(RepositoryException))]
-        public void SaveDuplicateTicketsShouldThrowException()
+        public async Task SaveDuplicateTicketsShouldThrowException()
         {
             var ticket2 = new TicketEntity()
             {
@@ -99,13 +100,13 @@ namespace TicketPal.DataAccess.Tests.Respository
             };
 
             var repository = new TicketRepository(dbContext);
-            repository.Add(ticket);
-            repository.Add(ticket2);
+            await repository.Add(ticket);
+            await repository.Add(ticket2);
         }
 
         [TestMethod]
         [ExpectedException(typeof(RepositoryException))]
-        public void SaveTicketWithNoEventsShouldThrowException()
+        public async Task SaveTicketWithNoEventsShouldThrowException()
         {
             var ticket2 = new TicketEntity()
             {
@@ -120,12 +121,12 @@ namespace TicketPal.DataAccess.Tests.Respository
             eventRepository.Clear();
 
             var repository = new TicketRepository(dbContext);
-            repository.Add(ticket);
+            await repository.Add(ticket);
         }
 
         [TestMethod]
         [ExpectedException(typeof(RepositoryException))]
-        public void SaveTicketForEventWithNoAvailableTicketsShouldThrowException()
+        public async Task SaveTicketForEventWithNoAvailableTicketsShouldThrowException()
         {
             var ticket = new TicketEntity()
             {
@@ -149,7 +150,7 @@ namespace TicketPal.DataAccess.Tests.Respository
 
             var eventRepository = new ConcertRepository(dbContext);
             eventRepository.Clear();
-            eventRepository.Add(
+            await eventRepository.Add(
                 new ConcertEntity
                 {
                     Id = 1,
@@ -163,64 +164,64 @@ namespace TicketPal.DataAccess.Tests.Respository
                 }
             );
             var repository = new TicketRepository(dbContext);
-            repository.Add(ticket);
+            await repository.Add(ticket);
         }
 
 
         [TestMethod]
-        public void ClearRepositoryShouldReturnCountCero()
+        public async Task ClearRepositoryShouldReturnCountCero()
         {
             var repository = new TicketRepository(dbContext);
-            repository.Add(ticket);
+            await repository.Add(ticket);
             repository.Clear();
 
-            Assert.IsTrue(repository.GetAll().ToList().Count == 0);
+            Assert.IsTrue((await repository.GetAll()).Count == 0);
         }
 
         [TestMethod]
-        public void ShouldRepositoryBeEmptyWhenEventDeleted()
+        public async Task ShouldRepositoryBeEmptyWhenEventDeleted()
         {
             var repository = new TicketRepository(dbContext);
-            repository.Add(ticket);
-            repository.Delete(ticket.Id);
+            await repository.Add(ticket);
+            await repository.Delete(ticket.Id);
 
             Assert.IsTrue(repository.IsEmpty());
         }
 
         [TestMethod]
-        public void ExistTicketByIdReturnsTrue()
+        public async Task ExistTicketByIdReturnsTrue()
         {
             var repository = new TicketRepository(dbContext);
-            repository.Add(ticket);
+            await repository.Add(ticket);
 
             Assert.IsTrue(repository.Exists(ticket.Id));
         }
 
         [TestMethod]
-        public void DeletedTicketShouldNotExist()
+        public async Task DeletedTicketShouldNotExist()
         {
             var repository = new TicketRepository(dbContext);
-            repository.Add(ticket);
-            repository.Delete(ticket.Id);
+            await repository.Add(ticket);
+            await repository.Delete(ticket.Id);
 
             Assert.IsFalse(repository.Exists(ticket.Id));
         }
 
         [TestMethod]
         [ExpectedException(typeof(RepositoryException))]
-        public void DeleteNonExistentTicketThrowsException()
+        public async Task DeleteNonExistentTicketThrowsException()
         {
             var repository = new TicketRepository(dbContext);
-            repository.Delete(ticket.Id);
+            await repository.Delete(ticket.Id);
         }
 
         [TestMethod]
-        public void SearchTicketByCodeTestCorrect()
+        public async Task SearchTicketByCodeTestCorrect()
         {
             var repository = new TicketRepository(dbContext);
-            repository.Add(ticket);
+            await repository.Add(ticket);
 
-            TicketEntity found = repository.Get(g => g.Code.Equals(ticket.Code));
+            TicketEntity found = await repository.Get(g => g.Code.Equals(ticket.Code));
 
             Assert.IsNotNull(found);
             Assert.AreEqual(ticket.Code, found.Code);
@@ -228,7 +229,7 @@ namespace TicketPal.DataAccess.Tests.Respository
 
 
         [TestMethod]
-        public void ShouldCreatedDateBeTheSameDay()
+        public async Task ShouldCreatedDateBeTheSameDay()
         {
             string idCode2 = "dfcnwru382w7ghqwrodugnvqpow34r8hg";
 
@@ -255,8 +256,8 @@ namespace TicketPal.DataAccess.Tests.Respository
             };
 
             var repository = new TicketRepository(dbContext);
-            repository.Add(ticket);
-            repository.Add(ticket2);
+            await repository.Add(ticket);
+            await repository.Add(ticket2);
             Assert.IsTrue(
                 ticket.CreatedAt.Day.Equals(ticket2.CreatedAt.Day)
                 && ticket.CreatedAt.Year.Equals(ticket2.CreatedAt.Year)
@@ -264,10 +265,10 @@ namespace TicketPal.DataAccess.Tests.Respository
         }
 
         [TestMethod]
-        public void UpdateEntityValuesSuccessfully()
+        public async Task UpdateEntityValuesSuccessfully()
         {
             var repository = new TicketRepository(dbContext);
-            repository.Add(ticket);
+            await repository.Add(ticket);
 
             var purchaseDate = new DateTime(2022, 04, 20);
 
@@ -275,20 +276,20 @@ namespace TicketPal.DataAccess.Tests.Respository
 
             repository.Update(ticket);
 
-            var updatedEvent = repository.Get(ticket.Id);
+            var updatedEvent = await repository.Get(ticket.Id);
 
             Assert.IsTrue(updatedEvent.PurchaseDate.Equals(purchaseDate));
         }
 
         [TestMethod]
-        public void UpdateEntityValuesNullThenShouldMantainPreviousValues()
+        public async Task UpdateEntityValuesNullThenShouldMantainPreviousValues()
         {
             var repository = new TicketRepository(dbContext);
-            repository.Add(ticket);
+            await repository.Add(ticket);
 
             repository.Update(new TicketEntity { Id = ticket.Id, Buyer = user, Event = concert, PurchaseDate = DateTime.Now, Status = Constants.TICKET_PURCHASED_STATUS, Code = null });
 
-            var updatedEvent = repository.Get(ticket.Id);
+            var updatedEvent = await repository.Get(ticket.Id);
 
 
             Assert.IsTrue(updatedEvent.Code.Equals(ticket.Code));

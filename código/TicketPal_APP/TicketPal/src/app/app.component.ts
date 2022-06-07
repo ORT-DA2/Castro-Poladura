@@ -11,6 +11,7 @@ export class AppComponent {
   private roles: string[] = []
   isLoggedIn = false
   showAdminBoard = false
+  showSpectatorBoard = false
   email?: string
 
   constructor(
@@ -28,6 +29,7 @@ export class AppComponent {
         this.roles.push(user?.role)
       }
       this.showAdminBoard = this.roles.includes('ADMIN')
+      this.showSpectatorBoard = this.roles.includes('SPECTATOR')
       this.email = user?.email
     }
   }

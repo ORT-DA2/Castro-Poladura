@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using TicketPal.Domain.Entity;
 using TicketPal.Domain.Exceptions;
 
@@ -14,25 +15,25 @@ namespace TicketPal.DataAccess.Repository
         {
         }
 
-        public override void Add(ConcertEntity element)
+        public override async Task Add(ConcertEntity element)
         {
             if (Exists(element.Id))
             {
                 throw new RepositoryException("The event you are trying to add already exists");
             }
 
-            if(element.Artists != null)
+            if (element.Artists != null)
             {
                 foreach (PerformerEntity i in element.Artists)
                 {
-                    if (i != null && i.Id != 0) 
+                    if (i != null && i.Id != 0)
                     {
-                         dbContext.Attach(i);
+                        dbContext.Attach(i);
                     }
                 }
             }
-            
-            dbContext.Set<ConcertEntity>().Add(element);
+
+            await dbContext.Set<ConcertEntity>().AddAsync(element);
             element.CreatedAt = DateTime.Now;
             dbContext.SaveChanges();
         }
@@ -61,37 +62,37 @@ namespace TicketPal.DataAccess.Repository
             dbContext.Entry(found).State = EntityState.Modified;
         }
 
-        public override ConcertEntity Get(int id)
+        public async override Task<ConcertEntity> Get(int id)
         {
-            return dbContext.Set<ConcertEntity>()
+            return await dbContext.Set<ConcertEntity>()
                 .Include(c => c.Artists)
                 .ThenInclude(a => a.UserInfo)
-                .FirstOrDefault(u => u.Id == id);
+                .FirstOrDefaultAsync(u => u.Id == id);
         }
 
-        public override ConcertEntity Get(Expression<Func<ConcertEntity, bool>> predicate)
+        public async override Task<ConcertEntity> Get(Expression<Func<ConcertEntity, bool>> predicate)
         {
-            return dbContext.Set<ConcertEntity>()
+            return await dbContext.Set<ConcertEntity>()
                 .Include(c => c.Artists)
                 .ThenInclude(a => a.UserInfo)
-                .FirstOrDefault(predicate);
+                .FirstOrDefaultAsync(predicate);
         }
 
-        public override IEnumerable<ConcertEntity> GetAll()
+        public async override Task<List<ConcertEntity>> GetAll()
         {
-            return dbContext.Set<ConcertEntity>()
+            return await dbContext.Set<ConcertEntity>()
                 .Include(c => c.Artists)
                 .ThenInclude(a => a.UserInfo)
-                .AsEnumerable();
+                .ToListAsync();
         }
 
-        public override IEnumerable<ConcertEntity> GetAll(Expression<Func<ConcertEntity, bool>> predicate)
+        public async override Task<List<ConcertEntity>> GetAll(Expression<Func<ConcertEntity, bool>> predicate)
         {
-            return dbContext.Set<ConcertEntity>()
+            return await dbContext.Set<ConcertEntity>()
                 .Include(c => c.Artists)
                 .ThenInclude(a => a.UserInfo)
                 .Where(predicate)
-                .AsEnumerable();
+                .ToListAsync();
         }
     }
 }

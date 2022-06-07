@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
+using System.Threading.Tasks;
 using TicketPal.DataAccess.Repository;
 using TicketPal.Domain.Entity;
 using TicketPal.Domain.Exceptions;
@@ -10,7 +11,7 @@ namespace TicketPal.DataAccess.Tests.Respository
     public class GenreRepositoryTests : RepositoryBaseConfigTests
     {
         [TestMethod]
-        public void SaveGenreSuccessfully()
+        public async Task SaveGenreSuccessfully()
         {
             string genreName = "Country";
 
@@ -22,14 +23,14 @@ namespace TicketPal.DataAccess.Tests.Respository
 
 
             var repository = new GenreRepository(dbContext);
-            repository.Add(genre);
+            await repository.Add(genre);
 
-            Assert.IsTrue(repository.GetAll().ToList().FirstOrDefault().Name == genreName);
+            Assert.IsTrue((await repository.GetAll()).ToList().FirstOrDefault().Name == genreName);
         }
 
         [TestMethod]
         [ExpectedException(typeof(RepositoryException))]
-        public void SaveDuplicateGenresShouldThrowException()
+        public async Task SaveDuplicateGenresShouldThrowException()
         {
             string genreName = "Pop";
 
@@ -45,13 +46,13 @@ namespace TicketPal.DataAccess.Tests.Respository
             };
 
             var repository = new GenreRepository(dbContext);
-            repository.Add(genre1);
-            repository.Add(genre2);
+            await repository.Add(genre1);
+            await repository.Add(genre2);
         }
 
 
         [TestMethod]
-        public void ClearRepositoryShouldReturnCountCero()
+        public async Task ClearRepositoryShouldReturnCountCero()
         {
             var genre = new GenreEntity
             {
@@ -60,14 +61,14 @@ namespace TicketPal.DataAccess.Tests.Respository
             };
 
             var repository = new GenreRepository(dbContext);
-            repository.Add(genre);
+            await repository.Add(genre);
             repository.Clear();
 
-            Assert.IsTrue(repository.GetAll().ToList().Count == 0);
+            Assert.IsTrue((await repository.GetAll()).Count == 0);
         }
 
         [TestMethod]
-        public void ShouldRepositoryBeEmptyWhenGenreDeleted()
+        public async Task ShouldRepositoryBeEmptyWhenGenreDeleted()
         {
             var genre = new GenreEntity
             {
@@ -76,14 +77,14 @@ namespace TicketPal.DataAccess.Tests.Respository
             };
 
             var repository = new GenreRepository(dbContext);
-            repository.Add(genre);
-            repository.Delete(genre.Id);
+            await repository.Add(genre);
+            await repository.Delete(genre.Id);
 
             Assert.IsTrue(repository.IsEmpty());
         }
 
         [TestMethod]
-        public void ExistGenreByIdReturnsTrue()
+        public async Task ExistGenreByIdReturnsTrue()
         {
             var genre = new GenreEntity
             {
@@ -92,13 +93,13 @@ namespace TicketPal.DataAccess.Tests.Respository
             };
 
             var repository = new GenreRepository(dbContext);
-            repository.Add(genre);
+            await repository.Add(genre);
 
             Assert.IsTrue(repository.Exists(genre.Id));
         }
 
         [TestMethod]
-        public void DeletedGenreShouldNotExist()
+        public async Task DeletedGenreShouldNotExist()
         {
             var genre = new GenreEntity
             {
@@ -107,15 +108,15 @@ namespace TicketPal.DataAccess.Tests.Respository
             };
 
             var repository = new GenreRepository(dbContext);
-            repository.Add(genre);
-            repository.Delete(genre.Id);
+            await repository.Add(genre);
+            await repository.Delete(genre.Id);
 
             Assert.IsFalse(repository.Exists(genre.Id));
         }
 
         [TestMethod]
         [ExpectedException(typeof(RepositoryException))]
-        public void DeleteNonExistentGenreThrowsException()
+        public async Task DeleteNonExistentGenreThrowsException()
         {
             var genre = new GenreEntity
             {
@@ -124,11 +125,11 @@ namespace TicketPal.DataAccess.Tests.Respository
             };
 
             var repository = new GenreRepository(dbContext);
-            repository.Delete(genre.Id);
+            await repository.Delete(genre.Id);
         }
 
         [TestMethod]
-        public void SearchGenreByNameTestCorrect()
+        public async Task SearchGenreByNameTestCorrect()
         {
             var genre = new GenreEntity
             {
@@ -137,16 +138,16 @@ namespace TicketPal.DataAccess.Tests.Respository
             };
 
             var repository = new GenreRepository(dbContext);
-            repository.Add(genre);
+            await repository.Add(genre);
 
-            GenreEntity found = repository.Get(g => g.Name.Equals(genre.Name));
+            GenreEntity found = await repository.Get(g => g.Name.Equals(genre.Name));
 
             Assert.IsNotNull(found);
             Assert.AreEqual(genre.Name, found.Name);
         }
 
         [TestMethod]
-        public void ShouldCreatedDateBeTheSameDay()
+        public async Task ShouldCreatedDateBeTheSameDay()
         {
             var genre1 = new GenreEntity
             {
@@ -160,8 +161,8 @@ namespace TicketPal.DataAccess.Tests.Respository
             };
 
             var repository = new GenreRepository(dbContext);
-            repository.Add(genre1);
-            repository.Add(genre2);
+            await repository.Add(genre1);
+            await repository.Add(genre2);
             Assert.IsTrue(
                 genre1.CreatedAt.Day.Equals(genre2.CreatedAt.Day)
                 && genre1.CreatedAt.Year.Equals(genre2.CreatedAt.Year)
@@ -169,7 +170,7 @@ namespace TicketPal.DataAccess.Tests.Respository
         }
 
         [TestMethod]
-        public void UpdateEntityValuesSuccessfully()
+        public async Task UpdateEntityValuesSuccessfully()
         {
             var genre = new GenreEntity
             {
@@ -178,7 +179,7 @@ namespace TicketPal.DataAccess.Tests.Respository
             };
 
             var repository = new GenreRepository(dbContext);
-            repository.Add(genre);
+            await repository.Add(genre);
 
             var newName = "Punk";
 
@@ -186,13 +187,13 @@ namespace TicketPal.DataAccess.Tests.Respository
 
             repository.Update(genre);
 
-            var updatedGenre = repository.Get(genre.Id);
+            var updatedGenre = await repository.Get(genre.Id);
 
             Assert.IsTrue(updatedGenre.Name.Equals(newName));
         }
 
         [TestMethod]
-        public void UpdateEntityValuesNullThenShouldMantainPreviousValues()
+        public async Task UpdateEntityValuesNullThenShouldMantainPreviousValues()
         {
             var genre = new GenreEntity
             {
@@ -201,11 +202,11 @@ namespace TicketPal.DataAccess.Tests.Respository
             };
 
             var repository = new GenreRepository(dbContext);
-            repository.Add(genre);
+            await repository.Add(genre);
 
             repository.Update(new GenreEntity { Id = genre.Id, Name = null });
 
-            var updatedGenre = repository.Get(genre.Id);
+            var updatedGenre = await repository.Get(genre.Id);
 
 
             Assert.IsTrue(updatedGenre.Name.Equals(genre.Name));

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -27,7 +28,7 @@ namespace TicketPal.WebApi.Tests.Controllers
         }
 
         [TestMethod]
-        public void AddPerformerOk()
+        public async Task AddPerformerOk()
         {
             var request = new AddPerformerRequest
             {
@@ -44,9 +45,9 @@ namespace TicketPal.WebApi.Tests.Controllers
                 Message = "success"
             };
 
-            mockService.Setup(s => s.AddPerformer(request)).Returns(operationResult);
+            mockService.Setup(s => s.AddPerformer(request)).Returns(Task.FromResult(operationResult));
 
-            var result = controller.AddPerformer(request);
+            var result = await controller.AddPerformer(request);
             var objectResult = result as ObjectResult;
             var statusCode = objectResult.StatusCode;
 
@@ -54,7 +55,7 @@ namespace TicketPal.WebApi.Tests.Controllers
         }
 
         [TestMethod]
-        public void AddPerformerBadRequest()
+        public async Task AddPerformerBadRequest()
         {
             var request = new AddPerformerRequest
             {
@@ -71,9 +72,9 @@ namespace TicketPal.WebApi.Tests.Controllers
                 Message = "error"
             };
 
-            mockService.Setup(s => s.AddPerformer(request)).Returns(operationResult);
+            mockService.Setup(s => s.AddPerformer(request)).Returns(Task.FromResult(operationResult));
 
-            var result = controller.AddPerformer(request);
+            var result = await controller.AddPerformer(request);
             var objectResult = result as ObjectResult;
             var statusCode = objectResult.StatusCode;
 
@@ -81,7 +82,7 @@ namespace TicketPal.WebApi.Tests.Controllers
         }
 
         [TestMethod]
-        public void UpdatePerfomerOk()
+        public async Task UpdatePerfomerOk()
         {
             var request = new UpdatePerformerRequest
             {
@@ -98,9 +99,9 @@ namespace TicketPal.WebApi.Tests.Controllers
                 Message = "success"
             };
 
-            mockService.Setup(s => s.UpdatePerformer(request)).Returns(operationResult);
+            mockService.Setup(s => s.UpdatePerformer(request)).Returns(Task.FromResult(operationResult));
 
-            var result = controller.UpdatePerformer(It.IsAny<int>(), request);
+            var result = await controller.UpdatePerformer(It.IsAny<int>(), request);
             var objectResult = result as ObjectResult;
             var statusCode = objectResult.StatusCode;
 
@@ -108,7 +109,7 @@ namespace TicketPal.WebApi.Tests.Controllers
         }
 
         [TestMethod]
-        public void UpdatePerfomerBadRequest()
+        public async Task UpdatePerfomerBadRequest()
         {
             var request = new UpdatePerformerRequest
             {
@@ -125,9 +126,9 @@ namespace TicketPal.WebApi.Tests.Controllers
                 Message = "fail"
             };
 
-            mockService.Setup(s => s.UpdatePerformer(request)).Returns(operationResult);
+            mockService.Setup(s => s.UpdatePerformer(request)).Returns(Task.FromResult(operationResult));
 
-            var result = controller.UpdatePerformer(It.IsAny<int>(), request);
+            var result = await controller.UpdatePerformer(It.IsAny<int>(), request);
             var objectResult = result as ObjectResult;
             var statusCode = objectResult.StatusCode;
 
@@ -135,7 +136,7 @@ namespace TicketPal.WebApi.Tests.Controllers
         }
 
         [TestMethod]
-        public void DeletePerformerOk()
+        public async Task DeletePerformerOk()
         {
             var operationResult = new OperationResult
             {
@@ -143,9 +144,9 @@ namespace TicketPal.WebApi.Tests.Controllers
                 Message = "success"
             };
 
-            mockService.Setup(s => s.DeletePerformer(It.IsAny<int>())).Returns(operationResult);
+            mockService.Setup(s => s.DeletePerformer(It.IsAny<int>())).Returns(Task.FromResult(operationResult));
 
-            var result = controller.DeletePerformer(It.IsAny<int>());
+            var result = await controller.DeletePerformer(It.IsAny<int>());
             var objectResult = result as ObjectResult;
             var statusCode = objectResult.StatusCode;
 
@@ -153,7 +154,7 @@ namespace TicketPal.WebApi.Tests.Controllers
         }
 
         [TestMethod]
-        public void DeletePerformerBadRequest()
+        public async Task DeletePerformerBadRequest()
         {
             var operationResult = new OperationResult
             {
@@ -161,9 +162,9 @@ namespace TicketPal.WebApi.Tests.Controllers
                 Message = "fail"
             };
 
-            mockService.Setup(s => s.DeletePerformer(It.IsAny<int>())).Returns(operationResult);
+            mockService.Setup(s => s.DeletePerformer(It.IsAny<int>())).Returns(Task.FromResult(operationResult));
 
-            var result = controller.DeletePerformer(It.IsAny<int>());
+            var result = await controller.DeletePerformer(It.IsAny<int>());
             var objectResult = result as ObjectResult;
             var statusCode = objectResult.StatusCode;
 
@@ -171,11 +172,11 @@ namespace TicketPal.WebApi.Tests.Controllers
         }
 
         [TestMethod]
-        public void GetPerformerOk()
+        public async Task GetPerformerOk()
         {
-            mockService.Setup(s => s.GetPerformer(It.IsAny<int>())).Returns(performers[0]);
+            mockService.Setup(s => s.GetPerformer(It.IsAny<int>())).Returns(Task.FromResult(performers[0]));
 
-            var result = controller.GetPerformer(It.IsAny<int>());
+            var result = await controller.GetPerformer(It.IsAny<int>());
             var objectResult = result as ObjectResult;
             var statusCode = objectResult.StatusCode;
 
@@ -183,11 +184,11 @@ namespace TicketPal.WebApi.Tests.Controllers
         }
 
         [TestMethod]
-        public void GetPerformersOk()
+        public async Task GetPerformersOk()
         {
-            mockService.Setup(s => s.GetPerformers()).Returns(performers);
+            mockService.Setup(s => s.GetPerformers()).Returns(Task.FromResult(performers));
 
-            var result = controller.GetPerformers();
+            var result = await controller.GetPerformers();
             var objectResult = result as ObjectResult;
             var statusCode = objectResult.StatusCode;
 
