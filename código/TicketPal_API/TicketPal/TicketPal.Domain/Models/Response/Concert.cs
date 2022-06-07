@@ -8,7 +8,7 @@ namespace TicketPal.Domain.Models.Response
     public class Concert
     {
         public int Id { get; set; }
-        public DateTime Date { get; set; }
+        public string Date { get; set; }
         public int AvailableTickets { get; set; }
         public decimal TicketPrice { get; set; }
         public string CurrencyType { get; set; }

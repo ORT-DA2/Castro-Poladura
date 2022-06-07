@@ -107,7 +107,7 @@ namespace TicketPal.WebApi.Tests.Controllers
         }
 
         [TestMethod]
-        public void GetAnyAccountAdminOk()
+        public async Task GetAnyAccountAdminOk()
         {
             var mockHttpContext = new Mock<HttpContext>();
             var sessionMock = new Mock<ISession>();
@@ -122,7 +122,7 @@ namespace TicketPal.WebApi.Tests.Controllers
 
             controller.ControllerContext.HttpContext = mockHttpContext.Object;
 
-            var account = controller.GetUserAccount(users[1].Id);
+            var account = await controller.GetUserAccount(users[1].Id);
 
             var objectResult = account as ObjectResult;
             var statusCode = objectResult.StatusCode;
@@ -131,7 +131,7 @@ namespace TicketPal.WebApi.Tests.Controllers
         }
 
         [TestMethod]
-        public void GetAccountIfSameAccountOk()
+        public async Task GetAccountIfSameAccountOk()
         {
             var mockHttpContext = new Mock<HttpContext>();
             var sessionMock = new Mock<ISession>();
@@ -146,7 +146,7 @@ namespace TicketPal.WebApi.Tests.Controllers
 
             controller.ControllerContext.HttpContext = mockHttpContext.Object;
 
-            var account = controller.GetUserAccount(users[3].Id);
+            var account = await controller.GetUserAccount(users[3].Id);
 
             var objectResult = account as ObjectResult;
             var statusCode = objectResult.StatusCode;

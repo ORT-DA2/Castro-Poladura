@@ -71,9 +71,9 @@ namespace TicketPal.WebApi.Controllers
 
         [HttpGet("{id}")]
         [AuthenticationFilter(Constants.ROLE_ADMIN)]
-        public IActionResult GetPerformer([FromRoute] int id)
+        public async Task<IActionResult> GetPerformer([FromRoute] int id)
         {
-            return Ok(performerService.GetPerformer(id));
+            return Ok(await performerService.GetPerformer(id));
         }
 
         [HttpGet]

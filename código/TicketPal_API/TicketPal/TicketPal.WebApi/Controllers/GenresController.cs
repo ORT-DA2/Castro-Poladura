@@ -48,9 +48,9 @@ namespace TicketPal.WebApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetGenre([FromRoute] int id)
+        public async Task<IActionResult> GetGenre([FromRoute] int id)
         {
-            return Ok(genreService.GetGenre(id));
+            return Ok(await genreService.GetGenre(id));
         }
 
         [HttpGet]

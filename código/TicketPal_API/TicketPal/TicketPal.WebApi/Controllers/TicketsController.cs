@@ -83,25 +83,25 @@ namespace TicketPal.WebApi.Controllers
 
         [HttpGet("{id}")]
         [AuthenticationFilter(Constants.ROLE_ADMIN)]
-        public IActionResult GetTicket([FromRoute] int id)
+        public async Task<IActionResult> GetTicket([FromRoute] int id)
         {
-            return Ok(ticketService.GetTicket(id));
+            return Ok(await ticketService.GetTicket(id));
         }
 
         [HttpGet]
         [AuthenticationFilter(Constants.ROLE_ADMIN + "," + Constants.ROLE_SPECTATOR)]
-        public IActionResult GetTickets()
+        public async Task<IActionResult> GetTickets()
         {
             var json = HttpContext.Session.GetString("user");
             var authenticatedUser = JsonConvert.DeserializeObject<User>(json);
 
             if (authenticatedUser.Role.Equals(Constants.ROLE_ADMIN))
             {
-                return Ok(ticketService.GetTickets());
+                return Ok(await ticketService.GetTickets());
             }
             else
             {
-                return Ok(ticketService.GetUserTickets(authenticatedUser.Id));
+                return Ok(await ticketService.GetUserTickets(authenticatedUser.Id));
             }
         }
 

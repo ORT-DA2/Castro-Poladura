@@ -59,7 +59,7 @@ namespace TicketPal.WebApi.Controllers
 
         [HttpGet("{id}")]
         [AuthenticationFilter(Constants.ROLE_ADMIN + "," + Constants.ROLE_SPECTATOR)]
-        public IActionResult GetUserAccount([FromRoute] int id)
+        public async Task<IActionResult> GetUserAccount([FromRoute] int id)
         {
             var json = HttpContext.Session.GetString("user");
             var authenticatedUser = JsonConvert.DeserializeObject<User>(json);
@@ -76,7 +76,7 @@ namespace TicketPal.WebApi.Controllers
             }
             else
             {
-                return Ok(userService.GetUser(id));
+                return Ok(await userService.GetUser(id));
             }
         }
 

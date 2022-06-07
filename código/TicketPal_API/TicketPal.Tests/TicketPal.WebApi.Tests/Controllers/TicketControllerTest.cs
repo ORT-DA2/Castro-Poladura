@@ -200,7 +200,7 @@ namespace TicketPal.WebApi.Tests.Controllers
             Assert.AreEqual(200, statusCode);
         }
 
-        public void GetTicketsIfAdminOkTest()
+        public async Task GetTicketsIfAdminOkTest()
         {
             var mockHttpContext = new Mock<HttpContext>();
             var mockHeaderHttp = new Mock<IHeaderDictionary>();
@@ -224,7 +224,7 @@ namespace TicketPal.WebApi.Tests.Controllers
 
             mockTicketService.Setup(s => s.GetTickets()).Returns(Task.FromResult(tickets));
 
-            var account = controller.GetTickets();
+            var account = await controller.GetTickets();
 
             var objectResult = account as ObjectResult;
             var statusCode = objectResult.StatusCode;
@@ -232,7 +232,7 @@ namespace TicketPal.WebApi.Tests.Controllers
             Assert.AreEqual(200, statusCode);
         }
 
-        public void GetTicketsIfSameUserOkTest()
+        public async Task GetTicketsIfSameUserOkTest()
         {
             var mockHttpContext = new Mock<HttpContext>();
             var mockHeaderHttp = new Mock<IHeaderDictionary>();
@@ -249,7 +249,7 @@ namespace TicketPal.WebApi.Tests.Controllers
 
             mockTicketService.Setup(s => s.GetUserTickets(1)).Returns(Task.FromResult(tickets));
 
-            var account = controller.GetTickets();
+            var account = await controller.GetTickets();
 
             var objectResult = account as ObjectResult;
             var statusCode = objectResult.StatusCode;
@@ -257,11 +257,11 @@ namespace TicketPal.WebApi.Tests.Controllers
             Assert.AreEqual(200, statusCode);
         }
 
-        public void GetTicketOkTest()
+        public async Task GetTicketOkTest()
         {
             mockTicketService.Setup(s => s.GetTicket(It.IsAny<int>())).Returns(Task.FromResult(tickets[0]));
 
-            var account = controller.GetTicket(It.IsAny<int>());
+            var account = await controller.GetTicket(It.IsAny<int>());
 
             var objectResult = account as ObjectResult;
             var statusCode = objectResult.StatusCode;
@@ -277,7 +277,7 @@ namespace TicketPal.WebApi.Tests.Controllers
                     Buyer = new User { Role = Constants.ROLE_SPECTATOR, Id = 1},
                     Event = new Concert{
                         Id = 1,
-                        Date = DateTime.Now,
+                        Date = "someDate",
                         AvailableTickets = 2,
                         TicketPrice = 200M,
                         CurrencyType = Constants.CURRENCY_URUGUAYAN_PESO,
@@ -289,7 +289,7 @@ namespace TicketPal.WebApi.Tests.Controllers
                     Buyer = new User { Role = Constants.ROLE_ADMIN, Id = 2},
                     Event = new Concert{
                         Id = 2,
-                        Date = DateTime.Now,
+                        Date = "someDate",
                         AvailableTickets = 6,
                         TicketPrice = 188M,
                         CurrencyType = Constants.CURRENCY_US_DOLLARS,

@@ -172,11 +172,11 @@ namespace TicketPal.WebApi.Tests.Controllers
         }
 
         [TestMethod]
-        public void GetPerformerOk()
+        public async Task GetPerformerOk()
         {
             mockService.Setup(s => s.GetPerformer(It.IsAny<int>())).Returns(Task.FromResult(performers[0]));
 
-            var result = controller.GetPerformer(It.IsAny<int>());
+            var result = await controller.GetPerformer(It.IsAny<int>());
             var objectResult = result as ObjectResult;
             var statusCode = objectResult.StatusCode;
 

@@ -181,11 +181,11 @@ namespace TicketPal.WebApi.Tests.Controllers
         }
 
         [TestMethod]
-        public void GetEventOk()
+        public async Task GetEventOk()
         {
             mockService.Setup(s => s.GetConcert(It.IsAny<int>())).Returns(Task.FromResult(concerts[0]));
 
-            var result = controller.GetConcert(It.IsAny<int>());
+            var result = await controller.GetConcert(It.IsAny<int>());
             var objectResult = result as ObjectResult;
             var statusCode = objectResult.StatusCode;
 
@@ -193,7 +193,7 @@ namespace TicketPal.WebApi.Tests.Controllers
         }
 
         [TestMethod]
-        public void GetConcerts()
+        public async Task GetConcerts()
         {
             mockService.Setup(s => s.GetConcerts(
                 It.IsAny<string>(),
@@ -203,7 +203,7 @@ namespace TicketPal.WebApi.Tests.Controllers
                 It.IsAny<string>()
             )).Returns(Task.FromResult(concerts));
 
-            var result = controller.GetConcerts(
+            var result = await controller.GetConcerts(
                 Constants.EVENT_CONCERT_TYPE,
                 true,
                 DateTime.Now.ToString("dd/M/yyyy hh:mm"),
@@ -218,7 +218,7 @@ namespace TicketPal.WebApi.Tests.Controllers
         }
 
         [TestMethod]
-        public void GetConcertsWrongStartDate()
+        public async Task GetConcertsWrongStartDate()
         {
             mockService.Setup(s => s.GetConcerts(
                 Constants.EVENT_CONCERT_TYPE,
@@ -228,7 +228,7 @@ namespace TicketPal.WebApi.Tests.Controllers
                 It.IsAny<string>()
             )).Returns(Task.FromResult(concerts));
 
-            var result = controller.GetConcerts(
+            var result = await controller.GetConcerts(
                 Constants.EVENT_CONCERT_TYPE,
                 true,
                 "3fewfsdd",
@@ -248,7 +248,7 @@ namespace TicketPal.WebApi.Tests.Controllers
         }
 
         [TestMethod]
-        public void GetConcertsWrongEndDate()
+        public async Task GetConcertsWrongEndDate()
         {
             mockService.Setup(s => s.GetConcerts(
                 Constants.EVENT_CONCERT_TYPE,
@@ -258,7 +258,7 @@ namespace TicketPal.WebApi.Tests.Controllers
                 It.IsAny<string>()
             )).Returns(Task.FromResult(concerts));
 
-            var result = controller.GetConcerts(
+            var result = await controller.GetConcerts(
                 Constants.EVENT_CONCERT_TYPE,
                 true,
                 DateTime.Now.AddDays(30).ToString("dd/M/yyyy"),
@@ -284,7 +284,7 @@ namespace TicketPal.WebApi.Tests.Controllers
                 new Concert
                 {
                     Id = 1,
-                    Date = DateTime.Now,
+                    Date = "someDate",
                     AvailableTickets = 201,
                     EventType = Constants.EVENT_CONCERT_TYPE,
                     TicketPrice = 197.8M,
@@ -294,7 +294,7 @@ namespace TicketPal.WebApi.Tests.Controllers
                 new Concert
                 {
                     Id = 2,
-                    Date = DateTime.Now,
+                    Date = "someDate",
                     AvailableTickets = 201,
                     EventType = Constants.EVENT_CONCERT_TYPE,
                     TicketPrice = 197.8M,
@@ -304,7 +304,7 @@ namespace TicketPal.WebApi.Tests.Controllers
                 new Concert
                 {
                     Id = 3,
-                    Date = DateTime.Now,
+                    Date = "someDate",
                     AvailableTickets = 201,
                     EventType = Constants.EVENT_CONCERT_TYPE,
                     TicketPrice = 197.8M,

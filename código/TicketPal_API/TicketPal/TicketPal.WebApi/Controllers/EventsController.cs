@@ -72,13 +72,13 @@ namespace TicketPal.WebApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetConcert([FromRoute] int id)
+        public async Task<IActionResult> GetConcert([FromRoute] int id)
         {
-            return Ok(eventService.GetConcert(id));
+            return Ok(await eventService.GetConcert(id));
         }
 
         [HttpGet]
-        public IActionResult GetConcerts(
+        public async Task<IActionResult> GetConcerts(
             [BindRequired][FromQuery] string type,
             [FromQuery(Name = "newest")] bool newest,
             [FromQuery(Name = "startDate")] string startDate,
@@ -108,7 +108,7 @@ namespace TicketPal.WebApi.Controllers
                 return BadRequest(new BadRequestError("End date not in: dd/M/yyyy hh:mm"));
             }
 
-            return Ok(eventService.GetConcerts(type, newest, startDate, endDate, performerName));
+            return Ok(await eventService.GetConcerts(type, newest, startDate, endDate, performerName));
         }
 
 

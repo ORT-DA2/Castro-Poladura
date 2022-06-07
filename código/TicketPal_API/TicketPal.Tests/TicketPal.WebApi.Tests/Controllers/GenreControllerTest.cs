@@ -114,11 +114,11 @@ namespace TicketPal.WebApi.Tests.Controllers
         }
 
         [TestMethod]
-        public void GetGenreOk()
+        public async Task GetGenreOk()
         {
             mockService.Setup(s => s.GetGenre(It.IsAny<int>())).Returns(Task.FromResult(genres[0]));
 
-            var result = controller.GetGenre(It.IsAny<int>());
+            var result = await controller.GetGenre(It.IsAny<int>());
             var objectResult = result as ObjectResult;
             var statusCode = objectResult.StatusCode;
 
