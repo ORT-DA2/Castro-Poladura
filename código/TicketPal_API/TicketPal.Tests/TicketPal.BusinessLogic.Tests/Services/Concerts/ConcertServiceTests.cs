@@ -346,6 +346,5 @@ namespace TicketPal.BusinessLogic.Tests.Services.Concerts
             );
             this.mockConcertRepo.Verify(r => r.GetAll(It.IsAny<Expression<Func<ConcertEntity, bool>>>()), () => Times.AtLeastOnce());
         }
-
     }
 }
