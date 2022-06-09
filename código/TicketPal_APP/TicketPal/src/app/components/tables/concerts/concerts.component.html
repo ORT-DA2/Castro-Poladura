@@ -11,7 +11,7 @@
   <thead>
     <tr>
       <th scope="col">Id</th>
-      <th scope="col" sortable="date" (sort)="onSort($event)">Date</th>
+      <th scope="col">Date</th>
       <th scope="col">AvailableTickets</th>
       <th scope="col">TicketPrice</th>
       <th scope="col">CurrencyType</th>
@@ -26,7 +26,10 @@
     <tr *ngFor="let concert of concerts">
       <th scope="row">{{ concert.id }}</th>
       <td>{{concert.date}}</td>
-      <td>{{concert.availableTickets}}</td>
+      <td *ngIf="concert.availableTickets != 0; else soldOutTemplate">{{concert.availableTickets}}</td>
+      <ng-template #soldOutTemplate>
+        SOLD OUT
+      </ng-template>
       <td>{{concert.ticketPrice}}</td>
       <td>{{concert.currencyType}}</td>
       <td>{{concert.eventType}}</td>

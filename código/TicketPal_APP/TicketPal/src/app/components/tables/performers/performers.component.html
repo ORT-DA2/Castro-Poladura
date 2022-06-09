@@ -1,3 +1,4 @@
+<script src="sweetalert2.all.min.js"></script>
 <form>
   <div class="mb-3 row">
     <label for="table-filtering-search" class="col-xs-3 col-sm-auto col-form-label">Full text search:</label>
@@ -25,7 +26,7 @@
       <td>{{performer.performerType}}</td>
       <td>{{performer.startYear}}</td>
       <td>{{performer.genre.name}}</td>
-      <td>{{performer.members.join(', ')}}</td>
+      <td><button id="{{ performer.id }}" (click)="showArtists(performer.id)" *ngIf="performer.members.length != 0">See members</button></td>
     </tr>
   </tbody>
 </table>
