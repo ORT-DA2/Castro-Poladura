@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Performer } from 'src/app/models/response/performer.model';
 import { PerformerService } from 'src/app/services/performer/performer.service';
+import Swal from 'sweetalert2'
 
 @Component({
   selector: 'app-performers',
@@ -31,5 +32,17 @@ export class PerformersComponent implements OnInit {
         }
       }
     )
+  }
+
+  showArtists(id: string): void {
+    var info = 'Members: ';
+    var performerSelected = this.performers.find(p => p.id == id);
+    performerSelected?.members.forEach(p => {
+      info += p.userInfo.firstname + ' ' + p.userInfo.lastname +  ',' + '\n'
+    });
+    info = info.substring(0, info.length - 2);
+    Swal.fire({
+      text: info,
+    })
   }
 }
