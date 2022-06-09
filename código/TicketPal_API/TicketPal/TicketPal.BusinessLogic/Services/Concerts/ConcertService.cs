@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using TicketPal.Domain.Constants;
 using TicketPal.Domain.Entity;
 using TicketPal.Domain.Exceptions;
+using TicketPal.Domain.Models.Param;
 using TicketPal.Domain.Models.Request;
 using TicketPal.Domain.Models.Response;
 using TicketPal.Interfaces.Factory;
@@ -104,95 +105,79 @@ namespace TicketPal.BusinessLogic.Services.Concerts
             return mapper.Map<Concert>(concert);
         }
 
-        public async Task<List<Concert>> GetConcerts(string type, bool newest, string startDate, string endDate, string artistName)
+        public async Task<List<Concert>> GetConcerts(ConcertSearchParam param)
         {
             List<ConcertEntity> concerts = new List<ConcertEntity>();
+            var dtStart = new DateTime();
+            var dtEnd = new DateTime();
+            var hasStartDate = !String.IsNullOrEmpty(param.StartDate);
+            var hasEndDate = !String.IsNullOrEmpty(param.EndDate);
+            var hasArtist = !String.IsNullOrEmpty(param.ArtistName);
+            var hasTourName = !String.IsNullOrEmpty(param.TourName);
 
-            if (String.IsNullOrEmpty(startDate)
-                && String.IsNullOrEmpty(endDate)
-                && String.IsNullOrEmpty(artistName)
-                )
+            if (!String.IsNullOrEmpty(param.StartDate))
             {
-                concerts = await concertRepository.GetAll(
-                    c => c.EventType.Equals(type)
-                );
-            }
-            else if (!String.IsNullOrEmpty(startDate)
-            && String.IsNullOrEmpty(endDate)
-            && String.IsNullOrEmpty(artistName)
-            )
-            {
-                var dtStart = DateTime.ParseExact(startDate,
-                       "dd/M/yyyy hh:mm",
+                dtStart = DateTime.ParseExact(param.StartDate,
+                       "dd/M/yyyy HH:mm",
                        CultureInfo.InvariantCulture,
                        DateTimeStyles.None);
-
-                concerts = await concertRepository.GetAll(
-                    c => c.EventType.Equals(type)
-                        && c.Date >= dtStart
-                );
             }
-            else if (String.IsNullOrEmpty(startDate)
-            && !String.IsNullOrEmpty(endDate)
-            && String.IsNullOrEmpty(artistName)
-            )
+            if (!String.IsNullOrEmpty(param.EndDate))
             {
-                var dtEnd = DateTime.ParseExact(endDate,
-                       "dd/M/yyyy hh:mm",
+                dtEnd = DateTime.ParseExact(param.EndDate,
+                       "dd/M/yyyy HH:mm",
                        CultureInfo.InvariantCulture,
                        DateTimeStyles.None);
+            }
 
-                concerts = await concertRepository.GetAll(
-                    c => c.EventType.Equals(type)
-                        && c.Date >= dtEnd
+            concerts = await concertRepository.GetAll(c => c.EventType.Equals(param.Type));
+
+            if (hasArtist)
+            {
+                concerts = concerts.FindAll(c =>
+                    c.EventType.Equals(param.Type)
+                && c.Artists.Any(a =>
+                    a.UserInfo.Firstname.ToLower()
+                        .Equals(param.ArtistName) ||
+                    a.UserInfo.Lastname.ToLower()
+                        .Equals(param.ArtistName))
                 );
             }
-            else if (String.IsNullOrEmpty(startDate)
-            && String.IsNullOrEmpty(endDate)
-            && !String.IsNullOrEmpty(artistName)
-            )
+
+            if (hasTourName)
             {
-                concerts = await concertRepository.GetAll(
-                    c => c.Artists
-                        .Any(a => a.UserInfo.Firstname.Equals(artistName) || a.UserInfo.Lastname.Equals(artistName))
+                concerts = concerts.FindAll(c =>
+                    c.TourName.ToLower().Equals(param.TourName.ToLower())
                 );
             }
-            else if (!String.IsNullOrEmpty(startDate)
-            && !String.IsNullOrEmpty(endDate)
-            && String.IsNullOrEmpty(artistName))
-            {
-                var dtStart = DateTime.ParseExact(startDate,
-                       "dd/M/yyyy hh:mm",
-                       CultureInfo.InvariantCulture,
-                       DateTimeStyles.None);
-                var dtEnd = DateTime.ParseExact(endDate,
-                       "dd/M/yyyy hh:mm",
-                       CultureInfo.InvariantCulture,
-                       DateTimeStyles.None);
 
-                concerts = await concertRepository.GetAll(
-                   c => c.EventType.Equals(type)
-                       && (c.Date >= dtStart && c.Date <= dtEnd)
-               );
+            if (hasEndDate && hasStartDate)
+            {
+                concerts = concerts.FindAll(c =>
+                    c.Date >= dtStart && c.Date <= dtEnd
+                );
             }
             else
             {
-                var dtStart = DateTime.ParseExact(startDate,
-                       "dd/M/yyyy hh:mm",
-                       CultureInfo.InvariantCulture,
-                       DateTimeStyles.None);
-                var dtEnd = DateTime.ParseExact(endDate,
-                       "dd/M/yyyy hh:mm",
-                       CultureInfo.InvariantCulture,
-                       DateTimeStyles.None);
-
-                concerts = await concertRepository.GetAll(
-                    c => c.EventType.Equals(type)
-                        && (c.Date >= dtStart && c.Date <= dtEnd)
-                        && c.Artists.Any(a => a.UserInfo.Firstname.Equals(artistName) || a.UserInfo.Lastname.Equals(artistName))
-                );
+                if (hasEndDate)
+                {
+                    concerts = concerts.FindAll(c =>
+                        c.Date.Day == dtEnd.Day
+                        && c.Date.Month == dtEnd.Month
+                        && c.Date.Year == dtEnd.Year
+                    );
+                }
+                else if (hasStartDate)
+                {
+                    concerts = concerts.FindAll(c =>
+                        c.Date.Day == dtStart.Day
+                        && c.Date.Month == dtStart.Month
+                        && c.Date.Year == dtStart.Year
+                    );
+                }
             }
-            if (!newest)
+
+            if (!param.Newest)
             {
                 return mapper.Map<List<ConcertEntity>, List<Concert>>(
                     concerts.OrderBy(c => c.Date).ToList());
@@ -202,7 +187,6 @@ namespace TicketPal.BusinessLogic.Services.Concerts
                 return mapper.Map<List<ConcertEntity>, List<Concert>>(
                     concerts.OrderByDescending(c => c.Date).ToList());
             }
-
         }
 
         public async Task<OperationResult> UpdateConcert(UpdateConcertRequest model)
