@@ -30,7 +30,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"email\":\"lucas@example.com\",\r\n    \"password\":\"lucas1\"\r\n}",
+									"raw": "{\r\n    \"email\":\"johnmcleane@example.com\",\r\n    \"password\":\"lucas1\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -186,7 +186,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n  \"firstname\" : \"Ed\",\r\n  \"lastname\" : \"Sheeran\",\r\n  \"role\" : \"ARTIST\",\r\n  \"email\" : \"edsheeran@example.com\",\r\n  \"password\" : \"sheeran1\"\r\n}",
+									"raw": "{\r\n  \"firstname\" : \"Justin\",\r\n  \"lastname\" : \"Bieber\",\r\n  \"role\" : \"ARTIST\",\r\n  \"email\" : \"justinbieber@example.com\",\r\n  \"password\" : \"justin1\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -305,13 +305,13 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{API_URL}}/users/6",
+									"raw": "{{API_URL}}/users/8",
 									"host": [
 										"{{API_URL}}"
 									],
 									"path": [
 										"users",
-										"6"
+										"8"
 									]
 								}
 							},
@@ -333,7 +333,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{API_URL}}/users/?role=ARTIST",
+									"raw": "{{API_URL}}/users/",
 									"host": [
 										"{{API_URL}}"
 									],
@@ -364,7 +364,8 @@
 										},
 										{
 											"key": "role",
-											"value": "ARTIST"
+											"value": "ARTIST",
+											"disabled": true
 										}
 									]
 								}
@@ -428,7 +429,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"performerType\": \"SOLO_ARTIST\",\r\n  \"userId\": 8,\r\n  \"startYear\": \"2010\",\r\n  \"genre\": 1,\r\n  \"concertIds\": [\r\n    0\r\n  ]\r\n}",
+							"raw": "{\r\n  \"performerType\": \"SOLO_ARTIST\",\r\n  \"userId\": 8,\r\n  \"startYear\": \"2009\",\r\n  \"genre\": 1,\r\n  \"membersIds\": [\r\n    0\r\n  ]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -464,7 +465,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"userId\": 0,\r\n  \"performerType\": \"SOLO_ARTIST\",\r\n  \"startYear\": \"2008\",\r\n  \"genreId\": 0,\r\n  \"artistsIds\": [\r\n    0\r\n  ]\r\n}",
+							"raw": "{\r\n  \"userId\": 7,\r\n  \"performerType\": \"SOLO_ARTIST\",\r\n  \"startYear\": \"2010\",\r\n  \"genreId\": 1,\r\n  \"artistsIds\": [\r\n    6\r\n  ]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -472,13 +473,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{API_URL}}/performers/6",
+							"raw": "{{API_URL}}/performers/7",
 							"host": [
 								"{{API_URL}}"
 							],
 							"path": [
 								"performers",
-								"6"
+								"7"
 							]
 						}
 					},
@@ -527,13 +528,13 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{API_URL}}/performers/6",
+							"raw": "{{API_URL}}/performers/7",
 							"host": [
 								"{{API_URL}}"
 							],
 							"path": [
 								"performers",
-								"6"
+								"7"
 							]
 						}
 					},
@@ -589,7 +590,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"genreName\":\"Pop\"\r\n}",
+							"raw": "{\r\n    \"Name\":\"Pop\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -625,7 +626,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"genreName\":\"Pop\"\r\n}",
+							"raw": "{\r\n    \"Name\":\"Pop\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -775,7 +776,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{API_URL}}/events?type=CONCERT",
+							"raw": "{{API_URL}}/events?type=TYPE_CONCERT",
 							"host": [
 								"{{API_URL}}"
 							],
@@ -785,7 +786,7 @@
 							"query": [
 								{
 									"key": "type",
-									"value": "CONCERT"
+									"value": "TYPE_CONCERT"
 								},
 								{
 									"key": "newest",
@@ -911,7 +912,7 @@
 			"name": "Tickets",
 			"item": [
 				{
-					"name": "AddTicket",
+					"name": "PurchaseTicket",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -927,7 +928,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"newUser\": {\n    \"firstName\": \"string\",\n    \"lastName\": \"string\",\n    \"email\": \"string\"\n  }\n}",
+							"raw": "{\n  \"newUser\": {\n    \"firstName\": \"Mike\",\n    \"lastName\": \"Wazoski\",\n    \"email\": \"wazoski@example.com\"\n  }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -973,12 +974,11 @@
 							}
 						},
 						"url": {
-							"raw": "{{API_URL}}/api/tickets/1",
+							"raw": "{{API_URL}}/tickets/1",
 							"host": [
 								"{{API_URL}}"
 							],
 							"path": [
-								"api",
 								"tickets",
 								"1"
 							]
@@ -1002,14 +1002,13 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{API_URL}}/api/tickets/1",
+							"raw": "{{API_URL}}/tickets/2",
 							"host": [
 								"{{API_URL}}"
 							],
 							"path": [
-								"api",
 								"tickets",
-								"1"
+								"2"
 							]
 						}
 					},
@@ -1031,13 +1030,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{API_URL}}/api/Tickets",
+							"raw": "{{API_URL}}/tickets",
 							"host": [
 								"{{API_URL}}"
 							],
 							"path": [
-								"api",
-								"Tickets"
+								"tickets"
 							]
 						}
 					},
