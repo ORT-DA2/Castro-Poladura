@@ -1,1 +1,24 @@
-<p>board-seller works!</p>
+<table class="table table-striped">
+    <thead>
+        <h3>Purchased Tickets:</h3>
+    <tr>
+      <th scope="col">Id</th>
+      <th scope="col">Concert Name</th>
+      <th scope="col">Buyer's Name</th>
+      <th scope="col">Buyer's Email</th>
+      <th scope="col">Ticket Code</th>
+      <th scope="col">Status</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let ticket of tickets">
+      <th scope="row">{{ ticket.id }}</th>
+      <td>{{ticket.event.tourName}}</td>
+      <td>{{ticket.buyer.firstname}} {{ticket.buyer.lastname}}</td>
+      <td>{{ticket.buyer.email}}</td>
+      <td>{{ticket.code}}</td>
+      <td>{{ticket.status}}</td>
+      <!-- <td> <button (click)="registerPurchase(ticket.id)">Register purchase</button></td> -->
+    </tr>
+    </tbody>
+  </table>

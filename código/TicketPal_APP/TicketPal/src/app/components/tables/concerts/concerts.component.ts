@@ -1,8 +1,8 @@
 import { Component, Directive, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
-import { IConcert } from 'src/app/models/response/concert.model';
+import { Concert } from 'src/app/models/response/concert.model';
 import { ConcertService } from 'src/app/services/concert/concert.service';
 
-export type SortColumn = keyof IConcert | '';
+export type SortColumn = keyof Concert | '';
 export type SortDirection = 'asc' | 'desc' | '';
 const rotate: { [key: string]: SortDirection } = { 'asc': 'desc', 'desc': '', '': 'asc' };
 
@@ -39,7 +39,7 @@ export class NgbdSortableHeader {
   styleUrls: ['./concerts.component.css']
 })
 export class ConcertsComponent implements OnInit {
-  concerts: IConcert[];
+  concerts: Concert[];
   fetchedConcerts = false;
   errorMessage: string;
 

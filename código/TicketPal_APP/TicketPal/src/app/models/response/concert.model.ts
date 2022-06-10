@@ -1,4 +1,4 @@
-export interface IConcert {
+export class Concert {
     id: string
     date: string
     availableTickets: number

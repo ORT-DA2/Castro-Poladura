@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { IConcert } from 'src/app/models/response/concert.model';
+import { Concert } from 'src/app/models/response/concert.model';
 import { TokenStorageService } from 'src/app/services/storage/token-storage.service';
 import Swal from 'sweetalert2';
 
@@ -12,7 +12,7 @@ export class EventComponent implements OnInit {
 
   userLoggedIn = false
 
-  @Input() concerts: IConcert[]
+  @Input() concerts: Concert[]
 
   constructor(
     private tokenService: TokenStorageService,
