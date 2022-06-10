@@ -9,7 +9,7 @@
             <div class="row">
                 <div class="col-sm-12"
                     style="display: flex; flex-direction: row;justify-content: center;align-items:center;">
-                    <button id="btnDetails" href="#" class="btn btn-success btn-md mr-3">Details</button>
+                    <button id="btnDetails" href="#" class="btn btn-success btn-md mr-3" (click)="showConcertDetails(concert.id)">Details</button>
                     <button *ngIf="userLoggedIn" id="btnBuy" href="#" class="btn btn-primary btn-md">Buy
                         Ticket</button>
                 </div>
