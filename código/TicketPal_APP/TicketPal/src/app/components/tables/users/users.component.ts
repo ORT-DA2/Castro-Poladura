@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { User } from 'src/app/models/response/user.model';
+import { IUser } from 'src/app/models/response/user.model';
 import { TokenStorageService } from 'src/app/services/storage/token-storage.service';
 import { UserService } from 'src/app/services/user/user.service';
 import Swal from 'sweetalert2';
@@ -10,7 +10,7 @@ import Swal from 'sweetalert2';
   styleUrls: ['./users.component.css']
 })
 export class UsersComponent implements OnInit {
-  users: User[];
+  users: IUser[];
   fetchedUsers = false;
   errorMessage: string;
   adminLoggedIn = false

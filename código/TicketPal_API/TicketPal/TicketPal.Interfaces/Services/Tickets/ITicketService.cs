@@ -16,5 +16,6 @@ namespace TicketPal.Interfaces.Services.Tickets
         Task<List<Ticket>> GetUserTickets(int userId);
         Task<List<Ticket>> GetTickets();
         Task<Ticket> GetTicket(int id);
+        Task<Ticket> GetTicketByCode(string code);
     }
 }

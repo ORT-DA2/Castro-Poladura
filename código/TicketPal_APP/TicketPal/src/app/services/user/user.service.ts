@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Endpoints } from 'src/app/config/endpoints';
-import { User } from 'src/app/models/response/user.model';
+import { IUser } from 'src/app/models/response/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,17 +13,17 @@ export class UserService {
     private endpoints: Endpoints
   ) { }
 
-  getUser(id: number): Observable<User> {
-    return this.http.get<User>(`${this.endpoints.USERS}/${id}`)
+  getUser(id: number): Observable<IUser> {
+    return this.http.get<IUser>(`${this.endpoints.USERS}/${id}`)
   }
 
-  getUsers(role?: string): Observable<User[]> {
+  getUsers(role?: string): Observable<IUser[]> {
 
     if (role !== undefined) {
       let params = new HttpParams().set('role', role);
-      return this.http.get<User[]>(this.endpoints.USERS, { params: params })
+      return this.http.get<IUser[]>(this.endpoints.USERS, { params: params })
     }
-    return this.http.get<User[]>(this.endpoints.USERS)
+    return this.http.get<IUser[]>(this.endpoints.USERS)
   }
 
 }

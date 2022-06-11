@@ -269,6 +269,18 @@ namespace TicketPal.WebApi.Tests.Controllers
             Assert.AreEqual(200, statusCode);
         }
 
+        public async Task GetTicketByCodeOkTest()
+        {
+            mockTicketService.Setup(s => s.GetTicketByCode(It.IsAny<string>())).Returns(Task.FromResult(tickets[0]));
+
+            var account = await controller.GetTicketByCode(It.IsAny<string>());
+
+            var objectResult = account as ObjectResult;
+            var statusCode = objectResult.StatusCode;
+
+            Assert.AreEqual(200, statusCode);
+        }
+
         private List<Ticket> SetupTickets()
         {
             return new List<Ticket>

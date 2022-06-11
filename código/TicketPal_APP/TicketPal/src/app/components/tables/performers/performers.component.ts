@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Performer } from 'src/app/models/response/performer.model';
+import { IPerformer } from 'src/app/models/response/performer.model';
 import { User } from 'src/app/models/response/user.model';
 import { PerformerService } from 'src/app/services/performer/performer.service';
 import { TokenStorageService } from 'src/app/services/storage/token-storage.service';
@@ -11,7 +11,7 @@ import Swal from 'sweetalert2'
   styleUrls: ['./performers.component.css']
 })
 export class PerformersComponent implements OnInit {
-  performers: Performer[];
+  performers: IPerformer[];
   fetchedPerformers = false;
   errorMessage: string;
   adminLoggedIn = false
@@ -43,7 +43,7 @@ export class PerformersComponent implements OnInit {
     var info = 'Members: ';
     var performerSelected = this.performers.find(p => p.id == id);
     performerSelected?.members.forEach(p => {
-      info += p.userInfo.firstname + ' ' + p.userInfo.lastname +  ',' + '\n'
+      info += p.userInfo.firstname + ' ' + p.userInfo.lastname + ',' + '\n'
     });
     info = info.substring(0, info.length - 2);
     Swal.fire({

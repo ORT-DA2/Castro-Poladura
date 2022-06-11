@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { User } from 'src/app/models/response/user.model';
+import { IUser } from 'src/app/models/response/user.model';
 import { TokenStorageService } from 'src/app/services/storage/token-storage.service';
 
 @Component({
@@ -8,7 +8,7 @@ import { TokenStorageService } from 'src/app/services/storage/token-storage.serv
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-  currentUser: User | null
+  currentUser: IUser | null
   sellerLoggedIn = false
 
   constructor(

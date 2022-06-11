@@ -1,4 +1,4 @@
-export class Genre {
+export interface IGenre {
     id: string;
     name: string; 
 }

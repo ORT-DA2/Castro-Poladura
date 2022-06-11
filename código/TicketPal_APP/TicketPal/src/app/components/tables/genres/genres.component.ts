@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Genre } from 'src/app/models/response/genre.model';
+import { FormControl } from '@angular/forms';
+import { IGenre } from 'src/app/models/response/genre.model';
 import { User } from 'src/app/models/response/user.model';
 import { GenreService } from 'src/app/services/genre/genre.service';
 import { TokenStorageService } from 'src/app/services/storage/token-storage.service';
@@ -11,7 +12,7 @@ import Swal from 'sweetalert2';
   styleUrls: ['./genres.component.css']
 })
 export class GenresComponent implements OnInit {
-  genres: Genre[];
+  genres: IGenre[];
   fetchedGenres = false;
   errorMessage: string;
   adminLoggedIn = false

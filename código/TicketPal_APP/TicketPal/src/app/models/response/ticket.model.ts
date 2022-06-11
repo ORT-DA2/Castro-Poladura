@@ -1,11 +1,11 @@
-import { Concert } from "./concert.model";
-import { User } from "./user.model";
+import { IConcert } from "./concert.model";
+import { IUser } from "./user.model";
 
-export class Ticket {
+export interface ITicket {
     id: string;
     status: string;
     purchaseDate: Date;
     code: string;
-    event: Concert;
-    buyer: User;
+    event: IConcert;
+    buyer: IUser;
 }

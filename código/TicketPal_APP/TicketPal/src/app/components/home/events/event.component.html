@@ -1,4 +1,9 @@
 <div class="container text-center d-flex flex-wrap align-items-center justify-content-around" style="padding-top: 80px">
+    <div style="display: none;">
+        <div #purchaseView>
+            <app-purchase [concert]="selectedConcert"></app-purchase>
+        </div>
+    </div>
     <div class="card mb-4" *ngFor="let concert of concerts">
         <div class="card-body">
             <h2 class="card-title">{{concert.tourName}}</h2>
@@ -10,8 +15,7 @@
                 <div class="col-sm-12"
                     style="display: flex; flex-direction: row;justify-content: center;align-items:center;">
                     <button id="btnDetails" href="#" class="btn btn-success btn-md mr-3" (click)="showConcertDetails(concert.id)">Details</button>
-                    <button *ngIf="userLoggedIn" id="btnBuy" href="#" class="btn btn-primary btn-md">Buy
-                        Ticket</button>
+                    <button *ngIf="userLoggedIn" (click)="onPurchaseClicked(concert)" id="btnBuy" href="#" class="btn btn-primary btn-md">Buy Ticket</button>
                 </div>
             </div>
         </div>
