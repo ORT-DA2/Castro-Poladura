@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using TicketPal.Domain.Constants;
-using TicketPal.Domain.Entity;
 using TicketPal.Domain.Models.Request;
 using TicketPal.Domain.Models.Response;
 using TicketPal.Interfaces.Services.Performers;

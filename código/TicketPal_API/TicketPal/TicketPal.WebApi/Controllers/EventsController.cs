@@ -2,7 +2,6 @@ using System;
 using System.Globalization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using TicketPal.Domain.Constants;
 using TicketPal.Domain.Models.Param;
 using TicketPal.Domain.Models.Request;
@@ -83,21 +82,22 @@ namespace TicketPal.WebApi.Controllers
         {
             DateTime dtEnd;
             var parseStartDate = DateTime.TryParseExact(param.StartDate,
-                       "dd/M/yyyy HH:mm",
-                       CultureInfo.InvariantCulture,
-                       DateTimeStyles.None,
-                       out dtEnd);
+                "dd/M/yyyy HH:mm",
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.None,
+                out dtEnd);
             DateTime dtStart;
             var parseEndDate = DateTime.TryParseExact(param.EndDate,
-                       "dd/M/yyyy HH:mm",
-                       CultureInfo.InvariantCulture,
-                       DateTimeStyles.None,
-                       out dtStart);
+                "dd/M/yyyy HH:mm",
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.None,
+                out dtStart);
 
             if (!String.IsNullOrEmpty(param.StartDate) && !parseStartDate)
             {
                 return BadRequest(new BadRequestError("Start date not in: dd/M/yyyy HH:mm"));
             }
+
             if (!String.IsNullOrEmpty(param.EndDate) && !parseEndDate)
             {
                 return BadRequest(new BadRequestError("End date not in: dd/M/yyyy HH:mm"));
@@ -105,7 +105,5 @@ namespace TicketPal.WebApi.Controllers
 
             return Ok(await eventService.GetConcerts(param));
         }
-
-
     }
 }

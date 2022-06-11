@@ -10,6 +10,7 @@ import { TokenStorageService } from 'src/app/services/storage/token-storage.serv
 export class ProfileComponent implements OnInit {
   currentUser: IUser | null
   sellerLoggedIn = false
+  artistLoggedIn = false
 
   constructor(
     private token: TokenStorageService
@@ -17,11 +18,16 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentUser = this.token.getUser(),
-    this.sellerLoggedIn = this.isSellerLogged()
+    this.sellerLoggedIn = this.isSellerLogged(),
+    this.artistLoggedIn = this.isArtistLogged()
   }
 
   isSellerLogged(): boolean{
     return this.sellerLoggedIn = (this.currentUser?.role == "SELLER")
+  }
+
+  isArtistLogged(): boolean{
+    return this.artistLoggedIn = (this.currentUser?.role == "ARTIST")
   }
 
 }

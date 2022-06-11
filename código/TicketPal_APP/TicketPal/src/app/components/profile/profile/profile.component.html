@@ -21,6 +21,7 @@
     </ul>
 </div>
 <app-board-seller *ngIf="sellerLoggedIn"></app-board-seller>
+<app-concerts *ngIf="artistLoggedIn"></app-concerts>
 <ng-template #loggedOut>
     Please login.
 </ng-template>

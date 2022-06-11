@@ -135,8 +135,7 @@ namespace TicketPal.BusinessLogic.Services.Concerts
             if (hasArtist)
             {
                 concerts = concerts.FindAll(c =>
-                    c.EventType.Equals(param.Type)
-                && c.Artists.Any(a =>
+                    c.Artists.Any(a =>
                     a.UserInfo.Firstname.ToLower()
                         .Equals(param.ArtistName) ||
                     a.UserInfo.Lastname.ToLower()

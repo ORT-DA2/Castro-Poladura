@@ -9,6 +9,7 @@ namespace TicketPal.Domain.Models.Param
         public string EndDate { get; set; }
         public string ArtistName { get; set; }
         public string TourName { get; set; }
+        public string PerformerId { get; set; }
 
     }
 }

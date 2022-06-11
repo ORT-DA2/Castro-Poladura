@@ -32,7 +32,7 @@ export class EventComponent implements OnInit {
 
   showConcertDetails(id: string): void {
     var concertSelected = this.concerts.find(c => c.id == id);
-    var info = 'Tour name: ' + concertSelected?.tourName + '. Event type: ' + concertSelected?.eventType 
+    var info = 'Tour name: ' + concertSelected?.tourName + 'Artist: ' +  + '. Event type: ' + concertSelected?.eventType 
     + '. Date: ' + concertSelected?.date + '. Available tickets: ' + concertSelected?.availableTickets 
     + '. Ticket price: ' + concertSelected?.currencyType + ' ' + concertSelected?.ticketPrice 
     + '. Location: ' + concertSelected?.address + ', ' + concertSelected?.location + ' - ' + concertSelected?.country + '.';
@@ -41,6 +41,7 @@ export class EventComponent implements OnInit {
       text: info,
     })
   }
+
   onPurchaseClicked(concert: IConcert) {
     this.selectedConcert = concert
     Swal.fire({

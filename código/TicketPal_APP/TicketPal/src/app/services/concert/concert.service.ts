@@ -13,7 +13,7 @@ export class ConcertService {
     private endpoints: Endpoints
   ) { }
 
-  getConcert(id: number): Observable<IConcert> {
+  getConcert(id: string): Observable<IConcert> {
     return this.http.get<IConcert>(`${this.endpoints.CONCERTS}/${id}`)
   }
 
@@ -21,14 +21,19 @@ export class ConcertService {
     let params = new HttpParams().set('type', "TYPE_CONCERT");
     return this.http.get<IConcert[]>(this.endpoints.CONCERTS, { params: params })
   }
+
+  getConcertsByPerformer(name: string){
+    let params = new HttpParams().set('artistName', name).set('type', "TYPE_CONCERT");
+    return this.http.get<IConcert[]>(this.endpoints.CONCERTS, { params: params })
+  }
+
   //REVISAR ESTE METODO
-  updateConcerts(id: string): Observable<IConcert[]> {
+  updateConcert(id: string): Observable<IConcert[]> {
     let params = new HttpParams().set('type', id);
     return this.http.put<IConcert[]>(this.endpoints.CONCERTS, { params: params })
   }
   //REVISAR ESTE METODO
-  deleteConcert(id: string): Observable<IConcert[]> {
-    //let params = new HttpParams().set('type', id);
-    return this.http.delete<IConcert[]>(this.endpoints.CONCERTS + '/' + id)
+  deleteConcert(id: string): Observable<IConcert> {
+    return this.http.delete<IConcert>(`${this.endpoints.CONCERTS}/${id}`)
   }
 } 

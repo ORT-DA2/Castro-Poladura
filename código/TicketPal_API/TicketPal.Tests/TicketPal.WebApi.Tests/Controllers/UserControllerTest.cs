@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,8 +9,6 @@ using Newtonsoft.Json;
 using TicketPal.Domain.Constants;
 using TicketPal.Domain.Models.Request;
 using TicketPal.Domain.Models.Response;
-using TicketPal.Interfaces.Factory;
-using TicketPal.Interfaces.Services.Jwt;
 using TicketPal.Interfaces.Services.Users;
 using TicketPal.WebApi.Controllers;
 

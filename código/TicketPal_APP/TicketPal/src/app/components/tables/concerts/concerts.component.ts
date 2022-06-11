@@ -31,6 +31,20 @@ export class ConcertsComponent implements OnInit {
 
   loadConcerts() {
     this.concerts = []
+    if (this.currentUser?.role == "ARTIST"){
+      this.concertService.getConcertsByPerformer(this.currentUser.firstname).subscribe(
+        {
+          next: data => {
+            this.concerts = data
+            this.fetchedConcerts = true
+          }
+          ,
+          error: err => {
+            this.errorMessage = err.error.message
+          }
+        }
+      )
+    }
     this.concertService.getConcerts().subscribe(
       {
         next: data => {
@@ -73,7 +87,7 @@ export class ConcertsComponent implements OnInit {
           'The concert has been deleted.',
           'success'
         )
-        //this.concertService.deleteConcert(id)
+        this.concertService.deleteConcert(id)
       }
     })
   }

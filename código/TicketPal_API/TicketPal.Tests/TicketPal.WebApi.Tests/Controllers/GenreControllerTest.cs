@@ -1,16 +1,12 @@
-using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using TicketPal.Domain.Constants;
-using TicketPal.Domain.Entity;
 using TicketPal.Domain.Models.Request;
 using TicketPal.Domain.Models.Response;
 using TicketPal.Interfaces.Services.Genres;
-using TicketPal.Interfaces.Services.Users;
 using TicketPal.WebApi.Controllers;
 
 namespace TicketPal.WebApi.Tests.Controllers
