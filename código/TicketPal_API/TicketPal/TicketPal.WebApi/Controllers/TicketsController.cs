@@ -24,7 +24,7 @@ namespace TicketPal.WebApi.Controllers
 
         [HttpPost("purchase/{eventId}")]
         [AuthenticationFilter(Constants.ROLE_SELLER + "," + Constants.ROLE_SPECTATOR + "," + Constants.ROLE_ADMIN)]
-        public async Task<IActionResult> AddTicket([FromRoute] int eventId, [FromBody] AddTicketRequest request)
+        public async Task<IActionResult> AddTicket([FromRoute] int eventId, [FromBody] AddTicketRequest request = null)
         {
             request.EventId = eventId;
             var json = HttpContext.Session.GetString("user");
@@ -86,6 +86,12 @@ namespace TicketPal.WebApi.Controllers
         public async Task<IActionResult> GetTicket([FromRoute] int id)
         {
             return Ok(await ticketService.GetTicket(id));
+        }
+
+        [HttpGet("code/{code}")]
+        public async Task<IActionResult> GetTicketByCode([FromRoute] string code)
+        {
+            return Ok(await ticketService.GetTicketByCode(code));
         }
 
         [HttpGet]

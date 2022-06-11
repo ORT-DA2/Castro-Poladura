@@ -35,6 +35,7 @@ namespace TicketPal.BusinessLogic.Services.Tickets
 
         public async Task<OperationResult> AddTicket(AddTicketRequest model)
         {
+            var addedTicketCode = "";
             try
             {
                 var newEvent = await concertRepository.Get(model.EventId);
@@ -45,15 +46,16 @@ namespace TicketPal.BusinessLogic.Services.Tickets
                     if (model.UserLogged)
                     {
                         var retrievedUser = await userRepository.Get(model.LoggedUserId);
-
-                        await ticketRepository.Add(new TicketEntity
+                        var toAdd = new TicketEntity
                         {
                             Buyer = retrievedUser,
                             PurchaseDate = DateTime.Now,
                             Status = Constants.TICKET_PURCHASED_STATUS,
                             Code = ticketCode.GenerateTicketCode(),
                             Event = newEvent
-                        });
+                        };
+                        await ticketRepository.Add(toAdd);
+                        addedTicketCode = toAdd.Code;
                     }
                     else
                     {
@@ -94,7 +96,7 @@ namespace TicketPal.BusinessLogic.Services.Tickets
             return new OperationResult
             {
                 ResultCode = Constants.CODE_SUCCESS,
-                Message = "Ticket successfully purchased"
+                Message = addedTicketCode
             };
         }
 
@@ -160,6 +162,13 @@ namespace TicketPal.BusinessLogic.Services.Tickets
                 ResultCode = Constants.CODE_SUCCESS,
                 Message = "Ticket updated successfully"
             };
+        }
+
+        public async Task<Ticket> GetTicketByCode(string code)
+        {
+            return mapper.Map<Ticket>(await ticketRepository.Get(
+                t => t.Code.Equals(code)
+            ));
         }
     }
 }

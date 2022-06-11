@@ -1,0 +1,46 @@
+<div class="container">
+    <div class="card shopping-cart">
+        <div class="card-header bg-dark text-light">
+            <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+            Purchase Review
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="text-md-left ml-2 text-justify">
+                    <h2 class="product-name" style="line-height: 0px;">
+                        <strong>
+                            {{concert.tourName}}
+                        </strong>
+                    </h2>
+                    <h4 class="card-subtitle mb-2 text-muted">
+                        {{concert.date}}
+                    </h4>
+                    <small style="line-height: 2;">
+                        {{concert.location}}, {{concert.address}}.
+                    </small>
+                    <small>
+                        {{concert.country}}
+                    </small>
+                    <br>
+                    <h4>
+                        Available Tickets: {{concert.availableTickets}}
+                    </h4>
+                </div>
+                <div class="col-3 col-sm-3 col-md-6 text-md-right" style="padding-top: 5px">
+                    <h1>
+                        <strong>{{concert.ticketPrice | currency}}
+                            <span class="text-muted">{{concert.currencyType}}</span>
+                        </strong>
+                    </h1>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="pull-right" style="margin: 10px">
+                <div class="pull-right" style="margin: 5px">
+                    Total price: <b>{{concert.ticketPrice | currency}}</b>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

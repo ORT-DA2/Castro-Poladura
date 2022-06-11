@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Genre } from 'src/app/models/response/genre.model';
+import { IGenre } from 'src/app/models/response/genre.model';
 import { GenreService } from 'src/app/services/genre/genre.service';
 
 @Component({
@@ -9,7 +9,7 @@ import { GenreService } from 'src/app/services/genre/genre.service';
   styleUrls: ['./genres.component.css']
 })
 export class GenresComponent implements OnInit {
-  genres: Genre[];
+  genres: IGenre[];
   fetchedGenres = false;
   errorMessage: string;
 
