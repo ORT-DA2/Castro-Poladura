@@ -26,6 +26,10 @@ namespace TicketPal.WebApi.Controllers
         [AuthenticationFilter(Constants.ROLE_SELLER + "," + Constants.ROLE_SPECTATOR + "," + Constants.ROLE_ADMIN)]
         public async Task<IActionResult> AddTicket([FromRoute] int eventId, [FromBody] AddTicketRequest request = null)
         {
+            if (request.NewUser == null)
+            {
+                request.NewUser = new TicketBuyer();
+            }
             request.EventId = eventId;
             var json = HttpContext.Session.GetString("user");
             var authenticatedUser = JsonConvert.DeserializeObject<User>(json);

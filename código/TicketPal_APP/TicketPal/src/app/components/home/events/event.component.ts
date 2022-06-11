@@ -13,6 +13,7 @@ import Swal from 'sweetalert2';
 export class EventComponent implements OnInit {
 
   userLoggedIn = false
+  isUserSpectator = false
 
   @Input() concerts: IConcert[]
   @ViewChild('purchaseView', { static: false })
@@ -28,6 +29,9 @@ export class EventComponent implements OnInit {
   ngOnInit(): void {
     this.selectedConcert = <IConcert>{}
     this.userLoggedIn = !!this.tokenService.getToken()
+    if (this.tokenService.getUser() !== null) {
+      this.isUserSpectator = this.tokenService.getUser()?.role === 'SPECTATOR'
+    }
   }
 
   onPurchaseClicked(concert: IConcert) {
@@ -63,6 +67,10 @@ export class EventComponent implements OnInit {
                   confirmButtonText:
                     '<i class="fa fa-thumbs-up"></i> Close',
                   confirmButtonAriaLabel: 'Thumbs up, great!'
+                }).then(function (isConfirm) {
+                  if (isConfirm) {
+                    window.location.reload();
+                  }
                 })
               },
               error: err => {

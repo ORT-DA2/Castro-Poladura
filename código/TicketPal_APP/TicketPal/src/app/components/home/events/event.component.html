@@ -15,9 +15,12 @@
                 <div class="col-sm-12"
                     style="display: flex; flex-direction: row;justify-content: center;align-items:center;">
                     <button id="btnDetails" href="#" class="btn btn-success btn-md mr-3">Details</button>
-                    <button *ngIf="userLoggedIn" (click)="onPurchaseClicked(concert)" id="btnBuy" href="#"
-                        class="btn btn-primary btn-md">Buy
+                    <button *ngIf="userLoggedIn && isUserSpectator && concert.availableTickets > 0"
+                        (click)="onPurchaseClicked(concert)" id="btnBuy" href="#" class="btn btn-primary btn-md">Buy
                         Ticket</button>
+                    <span *ngIf="concert.availableTickets == 0" class="border border-danger">
+                        SOLD OUT
+                    </span>
                 </div>
             </div>
         </div>
