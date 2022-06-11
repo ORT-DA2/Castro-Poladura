@@ -21,5 +21,14 @@ export class ConcertService {
     let params = new HttpParams().set('type', "TYPE_CONCERT");
     return this.http.get<Concert[]>(this.endpoints.CONCERTS, { params: params })
   }
-
-}
+  //REVISAR ESTE METODO
+  updateConcerts(id: string): Observable<Concert[]> {
+    let params = new HttpParams().set('type', id);
+    return this.http.put<Concert[]>(this.endpoints.CONCERTS, { params: params })
+  }
+  //REVISAR ESTE METODO
+  deleteConcert(id: string): Observable<Concert[]> {
+    //let params = new HttpParams().set('type', id);
+    return this.http.delete<Concert[]>(this.endpoints.CONCERTS + '/' + id)
+  }
+} 

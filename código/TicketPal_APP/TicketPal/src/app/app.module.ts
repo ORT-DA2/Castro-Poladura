@@ -22,7 +22,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { UsersComponent } from './components/tables/users/users.component';
 import { PerformersComponent } from './components/tables/performers/performers.component';
 import { GenresComponent } from './components/tables/genres/genres.component';
-import { ConcertsComponent, NgbdSortableHeader } from './components/tables/concerts/concerts.component';
+import { ConcertsComponent } from './components/tables/concerts/concerts.component';
 import { TicketsComponent } from './components/tables/tickets/tickets.component';
 import { DatePickerComponent } from './components/date-picker/date-picker.component';
 
@@ -43,7 +43,6 @@ import { DatePickerComponent } from './components/date-picker/date-picker.compon
     GenresComponent,
     ConcertsComponent,
     TicketsComponent,
-    NgbdSortableHeader,
     DatePickerComponent
   ],
   imports: [

@@ -1,37 +1,9 @@
-import { Component, Directive, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Concert } from 'src/app/models/response/concert.model';
+import { User } from 'src/app/models/response/user.model';
 import { ConcertService } from 'src/app/services/concert/concert.service';
-
-export type SortColumn = keyof Concert | '';
-export type SortDirection = 'asc' | 'desc' | '';
-const rotate: { [key: string]: SortDirection } = { 'asc': 'desc', 'desc': '', '': 'asc' };
-
-const compare = (v1: string | number | Date, v2: string | number | Date) => v1 < v2 ? -1 : v1 > v2 ? 1 : 0;
-
-export interface SortEvent {
-  column: SortColumn;
-  direction: SortDirection;
-}
-
-@Directive({
-  selector: 'th[sortable]',
-  host: {
-    '[class.asc]': 'direction === "asc"',
-    '[class.desc]': 'direction === "desc"',
-    '(click)': 'rotate()'
-  }
-})
-export class NgbdSortableHeader {
-
-  @Input() sortable: SortColumn = '';
-  @Input() direction: SortDirection = '';
-  @Output() sort = new EventEmitter<SortEvent>();
-
-  rotate() {
-    this.direction = rotate[this.direction];
-    this.sort.emit({ column: this.sortable, direction: this.direction });
-  }
-}
+import { TokenStorageService } from 'src/app/services/storage/token-storage.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-concerts',
@@ -42,35 +14,19 @@ export class ConcertsComponent implements OnInit {
   concerts: Concert[];
   fetchedConcerts = false;
   errorMessage: string;
-
-  @ViewChildren(NgbdSortableHeader) headers: QueryList<NgbdSortableHeader>;
+  adminLoggedIn = false
+  currentUser: User | null
+  editedConcert: Concert
+  newConcert: Concert
 
   constructor(
-    private concertService: ConcertService
+    private concertService: ConcertService, private tokenService: TokenStorageService
   ) { }
 
   ngOnInit(): void {
+    this.currentUser = this.tokenService.getUser(),
+    this.adminLoggedIn = (this.currentUser?.role == "ADMIN"),
     this.loadConcerts();
-  }
-
-  onSort({ column, direction }: SortEvent) {
-
-    // resetting other headers
-    this.headers.forEach(header => {
-      if (header.sortable !== column) {
-        header.direction = '';
-      }
-    });
-
-    // sorting countries
-    if (direction === '' || column === '') {
-      this.loadConcerts();
-    } else {
-      this.concerts = [...this.concerts].sort((a, b) => {
-        const res = compare(a[column], b[column]);
-        return direction === 'asc' ? res : -res;
-      });
-    }
   }
 
   loadConcerts() {
@@ -89,4 +45,37 @@ export class ConcertsComponent implements OnInit {
     )
   }
 
+  addConcert(){
+    
+  }
+
+  editConcert(id: string){
+    var concertSelected = this.concerts.find(c => c.id == id);
+  }
+
+  deleteConcert(id: string){
+    /* var concertSelected = this.concerts.find(c => c.id == id);
+    if(confirm("Are you sure to delete this concert: " + concertSelected?.tourName)) {
+      this.concertService.deleteConcert(id)
+    } */
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire(
+          'Deleted!',
+          'The concert has been deleted.',
+          'success'
+        )
+        this.concertService.deleteConcert(id)
+      }
+    })
+  }
 }
+

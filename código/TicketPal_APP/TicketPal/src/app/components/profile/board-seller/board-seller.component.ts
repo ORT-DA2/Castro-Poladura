@@ -32,8 +32,8 @@ export class BoardSellerComponent implements OnInit {
     )
   }
 
-  registerPurchase(id: string){
+  /* registerPurchase(id: string){
     
-  }
+  } */
 
 }

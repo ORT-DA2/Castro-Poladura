@@ -20,7 +20,7 @@
         </li>
     </ul>
 </div>
-<app-board-seller></app-board-seller>
+<app-board-seller *ngIf="sellerLoggedIn"></app-board-seller>
 <ng-template #loggedOut>
     Please login.
 </ng-template>
