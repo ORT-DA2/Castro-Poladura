@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { IPerformer } from 'src/app/models/response/performer.model';
-import { User } from 'src/app/models/response/user.model';
+import { IUser } from 'src/app/models/response/user.model';
 import { PerformerService } from 'src/app/services/performer/performer.service';
 import { TokenStorageService } from 'src/app/services/storage/token-storage.service';
 import Swal from 'sweetalert2'
@@ -15,7 +15,7 @@ export class PerformersComponent implements OnInit {
   fetchedPerformers = false;
   errorMessage: string;
   adminLoggedIn = false
-  currentUser: User | null
+  currentUser: IUser | null
 
   constructor(
     private performerService: PerformerService, private tokenService: TokenStorageService

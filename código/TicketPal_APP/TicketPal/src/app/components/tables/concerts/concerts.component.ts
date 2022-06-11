@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Concert } from 'src/app/models/response/concert.model';
-import { User } from 'src/app/models/response/user.model';
+import { IConcert } from 'src/app/models/response/concert.model';
+import { IUser } from 'src/app/models/response/user.model';
 import { ConcertService } from 'src/app/services/concert/concert.service';
 import { TokenStorageService } from 'src/app/services/storage/token-storage.service';
 import Swal from 'sweetalert2';
@@ -11,13 +11,13 @@ import Swal from 'sweetalert2';
   styleUrls: ['./concerts.component.css']
 })
 export class ConcertsComponent implements OnInit {
-  concerts: Concert[];
+  concerts: IConcert[];
   fetchedConcerts = false;
   errorMessage: string;
   adminLoggedIn = false
-  currentUser: User | null
-  editedConcert: Concert
-  newConcert: Concert
+  currentUser: IUser | null
+  editedConcert: IConcert
+  newConcert: IConcert
 
   constructor(
     private concertService: ConcertService, private tokenService: TokenStorageService
@@ -46,7 +46,7 @@ export class ConcertsComponent implements OnInit {
   }
 
   addConcert(){
-    
+
   }
 
   editConcert(id: string){
@@ -73,7 +73,7 @@ export class ConcertsComponent implements OnInit {
           'The concert has been deleted.',
           'success'
         )
-        this.concertService.deleteConcert(id)
+        //this.concertService.deleteConcert(id)
       }
     })
   }

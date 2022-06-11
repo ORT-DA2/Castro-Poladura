@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Ticket } from 'src/app/models/response/ticket.model';
+import { ITicket } from 'src/app/models/response/ticket.model';
 import { TicketService } from 'src/app/services/ticket/ticket.service';
 
 @Component({
@@ -8,7 +8,7 @@ import { TicketService } from 'src/app/services/ticket/ticket.service';
   styleUrls: ['./board-seller.component.css']
 })
 export class BoardSellerComponent implements OnInit {
-  tickets: Ticket[];
+  tickets: ITicket[];
   fetchedTickets = false;
   errorMessage: string;
 

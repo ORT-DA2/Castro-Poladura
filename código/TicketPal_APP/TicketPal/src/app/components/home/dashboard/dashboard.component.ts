@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Concert } from 'src/app/models/response/concert.model';
+import { IConcert } from 'src/app/models/response/concert.model';
 import { ConcertService } from 'src/app/services/concert/concert.service';
 
 @Component({
@@ -8,7 +8,7 @@ import { ConcertService } from 'src/app/services/concert/concert.service';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-  concerts: Concert[]
+  concerts: IConcert[]
 
   constructor(
     private concertService: ConcertService

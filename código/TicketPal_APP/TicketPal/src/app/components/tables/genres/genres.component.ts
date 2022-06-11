@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
 import { IGenre } from 'src/app/models/response/genre.model';
-import { User } from 'src/app/models/response/user.model';
+import { IUser } from 'src/app/models/response/user.model';
 import { GenreService } from 'src/app/services/genre/genre.service';
 import { TokenStorageService } from 'src/app/services/storage/token-storage.service';
 import Swal from 'sweetalert2';
@@ -16,7 +15,7 @@ export class GenresComponent implements OnInit {
   fetchedGenres = false;
   errorMessage: string;
   adminLoggedIn = false
-  currentUser: User | null
+  currentUser: IUser | null
 
   constructor(
     private genreService: GenreService, private tokenService: TokenStorageService

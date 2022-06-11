@@ -14,7 +14,7 @@ export class UsersComponent implements OnInit {
   fetchedUsers = false;
   errorMessage: string;
   adminLoggedIn = false
-  currentUser: User | null
+  currentUser: IUser | null
 
   constructor(
     private userService: UserService, private tokenService: TokenStorageService
