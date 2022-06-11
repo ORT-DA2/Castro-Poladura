@@ -22,9 +22,9 @@ export class ConcertService {
     return this.http.get<IConcert[]>(this.endpoints.CONCERTS, { params: params })
   }
 
-  getConcertsByPerformer(name: string){
-    let params = new HttpParams().set('artistName', name).set('type', "TYPE_CONCERT");
-    return this.http.get<IConcert[]>(this.endpoints.CONCERTS, { params: params })
+  getConcertsByPerformer(id: string){
+    let params = new HttpParams().set('performerId', id).set('type', "TYPE_CONCERT");
+    return this.http.get<IConcert[]>(this.endpoints.CONCERTSBYPERFORMER, { params: params })
   }
 
   //REVISAR ESTE METODO

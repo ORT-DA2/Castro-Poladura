@@ -105,5 +105,12 @@ namespace TicketPal.WebApi.Controllers
 
             return Ok(await eventService.GetConcerts(param));
         }
+
+        [HttpGet("performer")]
+        public async Task<IActionResult> GetConcertsByPerformerId([FromQuery] ConcertSearchParam param)
+        {
+            return Ok(await eventService.GetConcertsByPerformerId(param));
+        }
+
     }
 }

@@ -10,6 +10,5 @@ namespace TicketPal.Domain.Models.Param
         public string ArtistName { get; set; }
         public string TourName { get; set; }
         public string PerformerId { get; set; }
-
     }
 }

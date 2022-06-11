@@ -32,7 +32,7 @@ export class ConcertsComponent implements OnInit {
   loadConcerts() {
     this.concerts = []
     if (this.currentUser?.role == "ARTIST"){
-      this.concertService.getConcertsByPerformer(this.currentUser.firstname).subscribe(
+      this.concertService.getConcertsByPerformer(this.currentUser.id).subscribe(
         {
           next: data => {
             this.concerts = data

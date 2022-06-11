@@ -13,5 +13,6 @@ namespace TicketPal.Interfaces.Services.Concerts
         Task<OperationResult> DeleteConcert(int id);
         Task<List<Concert>> GetConcerts(ConcertSearchParam param);
         Task<Concert> GetConcert(int id);
+        Task<List<Concert>> GetConcertsByPerformerId(ConcertSearchParam param);
     }
 }
