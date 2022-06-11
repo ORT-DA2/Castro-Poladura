@@ -1,11 +1,11 @@
-import { Genre } from "./genre.model";
-import { User } from "./user.model";
+import { IGenre } from "./genre.model";
+import { IUser } from "./user.model";
 
-export class Performer {
+export interface IPerformer {
     id: string;
-    userInfo: User;
+    userInfo: IUser;
     performerType: string;
     startYear: string;
-    genre: Genre;
-    members: Performer[];
+    genre: IGenre;
+    members: IPerformer[];
 }

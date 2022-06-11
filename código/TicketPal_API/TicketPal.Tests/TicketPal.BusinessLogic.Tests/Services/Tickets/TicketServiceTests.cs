@@ -246,6 +246,30 @@ namespace TicketPal.BusinessLogic.Tests.Services.Tickets
         }
 
         [TestMethod]
+        public async Task GetTicketByCodeTest()
+        {
+            int id = 1;
+            var dbTicket = new TicketEntity
+            {
+                Id = id,
+                Buyer = this.ticket.Buyer,
+                Code = this.ticket.Code,
+                Event = this.ticket.Event,
+                PurchaseDate = this.ticket.PurchaseDate,
+                Status = this.ticket.Status
+            };
+
+            this.mockTicketRepo.Setup(r => r.Get(It.IsAny<Expression<Func<TicketEntity, bool>>>())).Returns(Task.FromResult(dbTicket));
+            this.factoryMock.Setup(m => m.GetRepository(typeof(TicketEntity))).Returns(this.mockTicketRepo.Object);
+
+            this.ticketService = new TicketService(this.factoryMock.Object, this.mapper);
+            Ticket ticket = await ticketService.GetTicketByCode("someCode");
+
+            Assert.IsNotNull(ticket);
+            Assert.IsTrue(id == ticket.Id);
+        }
+
+        [TestMethod]
         public async Task GetTicketByNullIdTest()
         {
             int id = 1;
