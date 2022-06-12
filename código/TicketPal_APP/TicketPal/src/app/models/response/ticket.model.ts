@@ -6,6 +6,6 @@ export interface ITicket {
     status: string;
     purchaseDate: Date;
     code: string;
-    concert: IConcert;
+    event: IConcert;
     buyer: IUser;
 }

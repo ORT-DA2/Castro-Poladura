@@ -5,7 +5,7 @@
       <li class="nav-item">
         <a href="/home" class="nav-link" routerLink="home">Home </a>
       </li>
-      <li class="nav-item" *ngIf="showAdminBoard">
+      <li class="nav-item" *ngIf="adminLogged">
         <a href="/admin" class="nav-link" routerLink="admin">Admin Board</a>
       </li>
     </ul>
@@ -22,6 +22,7 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" href="/profile" routerLink="profile">My Profile</a>
+          <a *ngIf="spectatorLogged" class="dropdown-item" href="/purchases" routerLink="purchases">My Purchases</a>
         </div>
       </li>
       <li class="nav-item">

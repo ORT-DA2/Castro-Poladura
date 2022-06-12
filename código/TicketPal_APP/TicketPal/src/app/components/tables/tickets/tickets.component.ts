@@ -1,5 +1,7 @@
+import { HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ITicket } from 'src/app/models/response/ticket.model';
+import { TokenStorageService } from 'src/app/services/storage/token-storage.service';
 import { TicketService } from 'src/app/services/ticket/ticket.service';
 
 @Component({
@@ -13,12 +15,17 @@ export class TicketsComponent implements OnInit {
   errorMessage: string;
 
   constructor(
-    private ticketService: TicketService
+    private ticketService: TicketService,
+    private tokenService: TokenStorageService
   ) { }
 
   ngOnInit(): void {
     this.tickets = []
-    this.ticketService.getTickets().subscribe(
+    this.ticketService.getTickets(
+      new HttpHeaders()
+        .set('Content-Type', 'application/json')
+        .set('Authorization', `Bearer ${this.tokenService.getToken()}`)
+    ).subscribe(
       {
         next: data => {
           this.tickets = data
