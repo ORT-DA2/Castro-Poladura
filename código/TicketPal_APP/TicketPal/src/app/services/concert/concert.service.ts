@@ -27,6 +27,10 @@ export class ConcertService {
     return this.http.get<IConcert[]>(this.endpoints.CONCERTSBYPERFORMER, { params: params })
   }
 
+  /* addConcert(): Observable<IConcert[]> {
+    
+  } */
+
   //REVISAR ESTE METODO
   updateConcert(id: string): Observable<IConcert[]> {
     let params = new HttpParams().set('type', id);

@@ -27,6 +27,9 @@ import { TicketsComponent } from './components/tables/tickets/tickets.component'
 import { DatePickerComponent } from './components/date-picker/date-picker.component';
 import { ReviewPurchaseComponent } from './components/ticket/purchase/reviewPurchase.component';
 import { ConcertModalComponent } from './components/tables/concerts/concert-modal/concert-modal.component';
+import { GenreModalComponent } from './components/tables/genres/genre-modal/genre-modal.component';
+import { PerformerModalComponent } from './components/tables/performers/performer-modal/performer-modal.component';
+import { UserModalComponent } from './components/tables/users/user-modal/user-modal.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +50,10 @@ import { ConcertModalComponent } from './components/tables/concerts/concert-moda
     TicketsComponent,
     DatePickerComponent,
     ReviewPurchaseComponent,
-    ConcertModalComponent
+    ConcertModalComponent,
+    GenreModalComponent,
+    PerformerModalComponent,
+    UserModalComponent
   ],
   imports: [
     BrowserModule,

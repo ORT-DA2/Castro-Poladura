@@ -82,19 +82,169 @@ export class ConcertsComponent implements OnInit {
     }
   }
 
-  addConcert(){
-
+  async addConcert(){
+    var result = await Swal.fire({
+      html:
+      '<h2>Concert: </h2>' +
+      '<form>' +
+          '<div class="form-group row">' +
+              '<label for="inputTourName" class="col-sm-2 col-form-label">Tour Name</label>' +
+              '<div class="col-sm-10">' +
+                '<input type="text" class="form-control" placeholder="Tour name" id="inputTourName" #tourName>' +
+              '</div>' +
+            '</div>' +
+            '<div class="form-group row">' +
+              '<label for="inputDate" class="col-sm-2 col-form-label">Date</label>' +
+              '<div class="col-sm-10">' +
+                '<input type="date" class="form-control" id="inputDate" #date>' +
+              '</div>' +
+            '</div>' +
+          '<div class="form-group row">' +
+          '<label for="inputTicketPrice" class="col-sm-2 col-form-label">Ticket price</label>' +
+          '<div class="col-sm-10">' +
+              '<input type="text" class="form-control" placeholder="0" id="inputTicketPrice" #ticketPrice>' +
+          '</div>' +
+          '</div>' +
+          '<div class="form-group row">' +
+              '<label for="inputCurrencyType" class="col-sm-2 col-form-label">Currency type</label>' +
+              '<div class="col-sm-10">' +
+                '<input type="text" class="form-control" placeholder="UYU" id="inputCurrencyType" #currencyType>' +
+              '</div>' +
+          '</div>' +
+          '<div class="form-group row">' +
+              '<label for="inputAddress" class="col-sm-2 col-form-label">Address</label>' +
+              '<div class="col-sm-10">' +
+                  '<input type="text" class="form-control" placeholder="Address" id="inputAddress" #address>' +
+              '</div>' +
+          '</div>' +
+          '<div class="form-group row">' +
+              '<label for="inputLocation" class="col-sm-2 col-form-label">Location</label>' +
+              '<div class="col-sm-10">' +
+                  '<input type="text" class="form-control" placeholder="Location" id="inputLocation" #location>' +
+              '</div>' +
+          '</div>' +
+          '<div class="form-group row">' +
+              '<label for="inputCountry" class="col-sm-2 col-form-label">Country</label>' +
+              '<div class="col-sm-10">' +
+                  '<input type="text" class="form-control" placeholder="Country" id="inputCountry" #country>' +
+              '</div>' +
+          '</div>' +
+       '</form>',
+      focusConfirm: false,
+      showConfirmButton: true,
+      showDenyButton: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.loadConcerts("",""),
+        Swal.fire('Saved!', '', 'success')
+        return [
+          document.getElementById('inputTourName')?.ariaValueText,
+          document.getElementById('inputDate')?.ariaValueText,
+          document.getElementById('inputTicketPrice')?.ariaValueText,
+          document.getElementById('inputCurrencyType')?.ariaValueText,
+          document.getElementById('inputAddress')?.ariaValueText,
+          document.getElementById('inputLocation')?.ariaValueText,
+          document.getElementById('inputCountry')?.ariaValueText,
+        ]
+      } else if (result.isDenied) {
+        Swal.fire('Changes are not saved', '', 'info')
+        return null;
+      }
+      else{
+        return null;
+      }
+    })
   }
 
-  editConcert(id: string){
+  async editConcert(id: string){
     var concertSelected = this.concerts.find(c => c.id == id);
-    Swal.fire({
-      html: '<div><app-concert-modal></app-concert-modal></div>'
+    var result = await Swal.fire({
+      html:
+      '<h2>Concert: </h2>' +
+      '<form>' +
+          '<div class="form-group row">' +
+              '<label for="inputTourName" class="col-sm-2 col-form-label">Tour Name</label>' +
+              '<div class="col-sm-10">' +
+                '<input type="text" class="form-control" placeholder="Tour name" id="inputTourName" #tourName>' +
+              '</div>' +
+            '</div>' +
+            '<div class="form-group row">' +
+              '<label for="inputDate" class="col-sm-2 col-form-label">Date</label>' +
+              '<div class="col-sm-10">' +
+                '<input type="date" class="form-control" id="inputDate" #date>' +
+              '</div>' +
+            '</div>' +
+          '<div class="form-group row">' +
+          '<label for="inputTicketPrice" class="col-sm-2 col-form-label">Ticket price</label>' +
+          '<div class="col-sm-10">' +
+              '<input type="text" class="form-control" placeholder="0" id="inputTicketPrice" #ticketPrice>' +
+          '</div>' +
+          '</div>' +
+          '<div class="form-group row">' +
+              '<label for="inputCurrencyType" class="col-sm-2 col-form-label">Currency type</label>' +
+              '<div class="col-sm-10">' +
+                '<input type="text" class="form-control" placeholder="UYU" id="inputCurrencyType" #currencyType>' +
+              '</div>' +
+          '</div>' +
+          '<div class="form-group row">' +
+              '<label for="inputAddress" class="col-sm-2 col-form-label">Address</label>' +
+              '<div class="col-sm-10">' +
+                  '<input type="text" class="form-control" placeholder="Address" id="inputAddress" #address>' +
+              '</div>' +
+          '</div>' +
+          '<div class="form-group row">' +
+              '<label for="inputLocation" class="col-sm-2 col-form-label">Location</label>' +
+              '<div class="col-sm-10">' +
+                  '<input type="text" class="form-control" placeholder="Location" id="inputLocation" #location>' +
+              '</div>' +
+          '</div>' +
+          '<div class="form-group row">' +
+              '<label for="inputCountry" class="col-sm-2 col-form-label">Country</label>' +
+              '<div class="col-sm-10">' +
+                  '<input type="text" class="form-control" placeholder="Country" id="inputCountry" #country>' +
+              '</div>' +
+          '</div>' +
+          /* '<button id="saveButton" type="button" class="btn btn-primary" (click)="saveChanges(tourName.value, date.value, ticketPrice.value, currencyType.value, address.value, location.value, country.value)"> Save </button><button type="cancel" class="btn btn-danger">Cancel</button>' + */
+       '</form>',
+      focusConfirm: false,
+      showConfirmButton: true,
+      showDenyButton: true,
+      /* preConfirm: () => {
+        return [
+          document.getElementById('inputTourName')?.ariaValueText,
+          document.getElementById('inputDate')?.ariaValueText,
+          document.getElementById('inputTicketPrice')?.ariaValueText,
+          document.getElementById('inputCurrencyType')?.ariaValueText,
+          document.getElementById('inputAddress')?.ariaValueText,
+          document.getElementById('inputLocation')?.ariaValueText,
+          document.getElementById('inputCountry')?.ariaValueText,
+        ]
+      } */
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.loadConcerts("",""),
+        Swal.fire('Saved!', '', 'success')
+        return [
+          document.getElementById('inputTourName')?.ariaValueText,
+          document.getElementById('inputDate')?.ariaValueText,
+          document.getElementById('inputTicketPrice')?.ariaValueText,
+          document.getElementById('inputCurrencyType')?.ariaValueText,
+          document.getElementById('inputAddress')?.ariaValueText,
+          document.getElementById('inputLocation')?.ariaValueText,
+          document.getElementById('inputCountry')?.ariaValueText,
+        ]
+      } else if (result.isDenied) {
+        Swal.fire('Changes are not saved', '', 'info')
+        return null;
+      }
+      else{
+        return null;
+      }
     })
   }
 
   deleteConcert(id: string){
-    /* var concertSelected = this.concerts.find(c => c.id == id);
+    /*var concertSelected = this.concerts.find(c => c.id == id);
     if(confirm("Are you sure to delete this concert: " + concertSelected?.tourName)) {
       this.concertService.deleteConcert(id)
     } */
@@ -108,12 +258,13 @@ export class ConcertsComponent implements OnInit {
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.isConfirmed) {
+        this.concertService.deleteConcert(id).subscribe(),
+        this.loadConcerts("",""),
         Swal.fire(
           'Deleted!',
           'The concert has been deleted.',
           'success'
         )
-        this.concertService.deleteConcert(id)
       }
     })
   }

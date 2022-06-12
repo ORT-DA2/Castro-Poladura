@@ -24,6 +24,10 @@ export class GenresComponent implements OnInit {
   ngOnInit(): void {
     this.currentUser = this.tokenService.getUser(),
     this.adminLoggedIn = (this.currentUser?.role == "ADMIN"),
+    this.loadGenres();
+  }
+
+  loadGenres(): void{
     this.genres = []
     this.genreService.getGenres().subscribe(
       {
@@ -39,12 +43,69 @@ export class GenresComponent implements OnInit {
     )
   }
 
-  addGenre(){
-
+  async addGenre(){
+    var result = await Swal.fire({
+      html:
+      '<h2>Genre: </h2>' +
+      '<form>' +
+          '<div class="form-group row">' +
+              '<label for="inputName" class="col-sm-2 col-form-label">Genre Name</label>' +
+              '<div class="col-sm-10">' +
+                '<input type="text" class="form-control" placeholder="Genre name" id="inputName" #genreName>' +
+              '</div>' +
+            '</div>' +
+        '</form>',
+      focusConfirm: false,
+      showConfirmButton: true,
+      showDenyButton: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.loadGenres(),
+        Swal.fire('Saved!', '', 'success')
+        return [
+          document.getElementById('inputName')?.ariaValueText,
+        ]
+      } else if (result.isDenied) {
+        Swal.fire('Changes are not saved', '', 'info')
+        return null;
+      }
+      else{
+        return null;
+      }
+    })
   }
 
-  editGenre(id: string){
-
+  async editGenre(id: string){
+    var genreSelected = this.genres.find(g => g.id == id);
+    var result = await Swal.fire({
+      html:
+      '<h2>Genre: </h2>' +
+      '<form>' +
+          '<div class="form-group row">' +
+              '<label for="inputName" class="col-sm-2 col-form-label">Genre Name</label>' +
+              '<div class="col-sm-10">' +
+                '<input type="text" class="form-control" placeholder="Genre name" id="inputName" #genreName>' +
+              '</div>' +
+            '</div>' +
+        '</form>',
+      focusConfirm: false,
+      showConfirmButton: true,
+      showDenyButton: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.loadGenres(),
+        Swal.fire('Saved!', '', 'success')
+        return [
+          document.getElementById('inputName')?.ariaValueText,
+        ]
+      } else if (result.isDenied) {
+        Swal.fire('Changes are not saved', '', 'info')
+        return null;
+      }
+      else{
+        return null;
+      }
+    })
   }
 
   deleteGenre(id: string) {
@@ -58,12 +119,13 @@ export class GenresComponent implements OnInit {
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.isConfirmed) {
+        this.genreService.deleteGenre(id).subscribe(),
+        this.loadGenres(),
         Swal.fire(
           'Deleted!',
           'The genre has been deleted.',
           'success'
         )
-        //this.genreService.deleteGenre(id)
       }
     })
   }

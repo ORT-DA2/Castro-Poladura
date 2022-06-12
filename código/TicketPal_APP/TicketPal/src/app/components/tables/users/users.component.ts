@@ -23,6 +23,10 @@ export class UsersComponent implements OnInit {
   ngOnInit(): void {
     this.currentUser = this.tokenService.getUser(),
     this.adminLoggedIn = (this.currentUser?.role == "ADMIN"),
+    this.loadUsers();
+  }
+
+  loadUsers(): void {
     this.users = []
     this.userService.getUsers().subscribe(
       {
@@ -38,12 +42,125 @@ export class UsersComponent implements OnInit {
     )
   }
 
-  addUser(){
-
+  async addUser(){
+    var result = await Swal.fire({
+      html:
+      '<h2>User: </h2>'+
+      '<form>'+
+          '<div class="form-group row">'+
+              '<label for="inputFirstName" class="col-sm-2 col-form-label">First Name</label>'+
+              '<div class="col-sm-10">'+
+                '<input type="text" class="form-control" placeholder="First name" id="inputFirstName" #firstName>'+
+              '</div>'+
+            '</div>'+
+            '<div class="form-group row">'+
+              '<label for="inputLastName" class="col-sm-2 col-form-label">Last Name</label>'+
+              '<div class="col-sm-10">'+
+                '<input type="text" class="form-control" placeholder="Last name" id="inputLastName" #lastName>'+
+              '</div>'+
+            '</div>'+
+          '<div class="form-group row">'+
+          '<label for="inputEmail" class="col-sm-2 col-form-label">Email</label>'+
+          '<div class="col-sm-10">'+
+              '<input type="text" class="form-control" placeholder="example@example.com" id="inputEmail" #email>'+
+          '</div>'+
+          '</div>'+
+          '<div class="form-group row">'+
+              '<label for="inputPassword" class="col-sm-2 col-form-label">Password</label>'+
+              '<div class="col-sm-10">'+
+                '<input type="text" class="form-control" placeholder="Password" id="inputPassword" #password>'+
+              '</div>'+
+          '</div>'+
+          '<div class="form-group row">'+
+              '<label for="inputRole" class="col-sm-2 col-form-label">Role</label>'+
+              '<select class="form-control" id="inputRole" #role>'+
+                  '<option>ADMIN</option>'+
+                  '<option>SELLER</option>'+
+                  '<option>SUPERVISOR</option>'+
+                  '<option>ARTIST</option>'+
+                  '<option>SPECTATOR</option>'+
+              '</select>'+
+          '</div>'+
+        '</form>',
+      focusConfirm: false,
+      showConfirmButton: true,
+      showDenyButton: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.loadUsers(),
+        Swal.fire('Saved!', '', 'success')
+        return [
+          document.getElementById('inputName')?.ariaValueText,
+        ]
+      } else if (result.isDenied) {
+        Swal.fire('Changes are not saved', '', 'info')
+        return null;
+      }
+      else{
+        return null;
+      }
+    })
   }
 
-  editUser(id: string){
-
+  async editUser(id: string){
+    var userSelected = this.users.find(u => u.id == id);
+    var result = await Swal.fire({
+      html:
+      '<h2>User: </h2>'+
+      '<form>'+
+          '<div class="form-group row">'+
+              '<label for="inputFirstName" class="col-sm-2 col-form-label">First Name</label>'+
+              '<div class="col-sm-10">'+
+                '<input type="text" class="form-control" placeholder="First name" id="inputFirstName" #firstName>'+
+              '</div>'+
+            '</div>'+
+            '<div class="form-group row">'+
+              '<label for="inputLastName" class="col-sm-2 col-form-label">Last Name</label>'+
+              '<div class="col-sm-10">'+
+                '<input type="text" class="form-control" placeholder="Last name" id="inputLastName" #lastName>'+
+              '</div>'+
+            '</div>'+
+          '<div class="form-group row">'+
+          '<label for="inputEmail" class="col-sm-2 col-form-label">Email</label>'+
+          '<div class="col-sm-10">'+
+              '<input type="text" class="form-control" placeholder="example@example.com" id="inputEmail" #email>'+
+          '</div>'+
+          '</div>'+
+          '<div class="form-group row">'+
+              '<label for="inputPassword" class="col-sm-2 col-form-label">Password</label>'+
+              '<div class="col-sm-10">'+
+                '<input type="text" class="form-control" placeholder="Password" id="inputPassword" #password>'+
+              '</div>'+
+          '</div>'+
+          '<div class="form-group row">'+
+              '<label for="inputRole" class="col-sm-2 col-form-label">Role</label>'+
+              '<select class="form-control" id="inputRole" #role>'+
+                  '<option>ADMIN</option>'+
+                  '<option>SELLER</option>'+
+                  '<option>SUPERVISOR</option>'+
+                  '<option>ARTIST</option>'+
+                  '<option>SPECTATOR</option>'+
+              '</select>'+
+          '</div>'+
+        '</form>',
+      focusConfirm: false,
+      showConfirmButton: true,
+      showDenyButton: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.loadUsers(),
+        Swal.fire('Saved!', '', 'success')
+        return [
+          document.getElementById('inputName')?.ariaValueText,
+        ]
+      } else if (result.isDenied) {
+        Swal.fire('Changes are not saved', '', 'info')
+        return null;
+      }
+      else{
+        return null;
+      }
+    })
   }
 
   deleteUser(id: string) {
@@ -57,12 +174,13 @@ export class UsersComponent implements OnInit {
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.isConfirmed) {
+        //this.userService.deleteUser(id).suscribe(),
+        this.loadUsers(),
         Swal.fire(
           'Deleted!',
           'The user has been deleted.',
           'success'
         )
-        //this.userService.deleteUser(id)
       }
     })
   }
