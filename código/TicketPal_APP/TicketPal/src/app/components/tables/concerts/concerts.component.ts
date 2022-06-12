@@ -88,6 +88,9 @@ export class ConcertsComponent implements OnInit {
 
   editConcert(id: string){
     var concertSelected = this.concerts.find(c => c.id == id);
+    Swal.fire({
+      html: '<div><app-concert-modal></app-concert-modal></div>'
+    })
   }
 
   deleteConcert(id: string){
