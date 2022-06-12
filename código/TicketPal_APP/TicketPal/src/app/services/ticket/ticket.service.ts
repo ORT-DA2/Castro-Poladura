@@ -21,7 +21,7 @@ export class TicketService {
     return this.http.get<ITicket>(`${this.endpoints.TICKETS}/${id}`)
   }
 
-  getTickets(role?: string): Observable<ITicket[]> {
+  getTickets(headers?: HttpHeaders): Observable<ITicket[]> {
     return this.http.get<ITicket[]>(this.endpoints.TICKETS)
   }
 
