@@ -20,12 +20,11 @@ namespace TicketPal.DataAccess.Repository
             {
                 throw new RepositoryException(string.Format("Couldn't find item to update with id: {0} doesn't exist", element.Id));
             }
-
-            found.Role = (element.Role == null ? found.Role : element.Role);
-            found.Firstname = (element.Firstname == null ? found.Firstname : element.Firstname);
-            found.Lastname = (element.Lastname == null ? found.Lastname : element.Lastname);
-            found.Email = (element.Email == null ? found.Email : element.Email);
-            found.Password = (element.Password == null ? found.Password : element.Password);
+            found.Role = (String.IsNullOrEmpty(element.Role) ? found.Role : element.Role);
+            found.Firstname = (String.IsNullOrEmpty(element.Firstname) ? found.Firstname : element.Firstname);
+            found.Lastname = (String.IsNullOrEmpty(element.Lastname) ? found.Lastname : element.Lastname);
+            found.Email = (String.IsNullOrEmpty(element.Email) ? found.Email : element.Email);
+            found.Password = (String.IsNullOrEmpty(element.Password) ? found.Password : element.Password);
             found.UpdatedAt = DateTime.Now;
 
             dbContext.SaveChanges();
