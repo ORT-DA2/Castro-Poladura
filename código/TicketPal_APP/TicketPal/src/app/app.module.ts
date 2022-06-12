@@ -2,12 +2,11 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
-import { ProfileComponent } from './components/profile/profile/profile.component';
 import { BoardAdminComponent } from './components/profile/board-admin/board-admin.component';
 import { BoardSpectatorComponent } from './components/profile/board-spectator/board-spectator.component';
 import { BoardSellerComponent } from './components/profile/board-seller/board-seller.component';
@@ -26,6 +25,7 @@ import { ConcertsComponent } from './components/tables/concerts/concerts.compone
 import { TicketsComponent } from './components/tables/tickets/tickets.component';
 import { DatePickerComponent } from './components/date-picker/date-picker.component';
 import { ReviewPurchaseComponent } from './components/ticket/purchase/reviewPurchase.component';
+import { ProfileComponent } from './components/profile/profile/profile.component';
 import { ConcertModalComponent } from './components/tables/concerts/concert-modal/concert-modal.component';
 import { GenreModalComponent } from './components/tables/genres/genre-modal/genre-modal.component';
 import { PerformerModalComponent } from './components/tables/performers/performer-modal/performer-modal.component';
@@ -36,7 +36,6 @@ import { UserModalComponent } from './components/tables/users/user-modal/user-mo
     AppComponent,
     LoginComponent,
     RegisterComponent,
-    ProfileComponent,
     BoardAdminComponent,
     BoardSpectatorComponent,
     BoardSellerComponent,
@@ -44,6 +43,7 @@ import { UserModalComponent } from './components/tables/users/user-modal/user-mo
     DashboardComponent,
     EventComponent,
     UsersComponent,
+    ProfileComponent,
     PerformersComponent,
     GenresComponent,
     ConcertsComponent,
@@ -61,12 +61,15 @@ import { UserModalComponent } from './components/tables/users/user-modal/user-mo
     FormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    MatTabsModule
+    MatTabsModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [
     authInterceptorProviders,
     Endpoints,
-    AuthGuard
+    AuthGuard,
+    FormBuilder
   ],
   bootstrap: [AppComponent]
 })

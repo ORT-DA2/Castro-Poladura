@@ -168,33 +168,29 @@ namespace TicketPal.BusinessLogic.Services.Users
         {
             try
             {
+                var toUpdate = new UserEntity
+                {
+                    Id = model.Id,
+                    Firstname = model.Firstname,
+                    Lastname = model.Lastname,
+                    Email = model.Email,
+                    ActiveAccount = model.ActiveAccount
+                };
+                if (!String.IsNullOrEmpty(model.Password))
+                {
+                    toUpdate.Password = BC.HashPassword(model.Password);
+                }
+
                 if (authorization.Equals(Constants.ROLE_SPECTATOR))
                 {
-                    repository.Update(
-                        new UserEntity
-                        {
-                            Id = model.Id,
-                            Firstname = model.Firstname,
-                            Lastname = model.Lastname,
-                            Email = model.Email,
-                            ActiveAccount = model.ActiveAccount
-                        });
+                    repository.Update(toUpdate);
                 }
                 else if (authorization.Equals(Constants.ROLE_ADMIN))
                 {
                     if (Constants.ValidRoles.Contains(model.Role))
                     {
-                        repository.Update(
-                            new UserEntity
-                            {
-                                Id = model.Id,
-                                Firstname = model.Firstname,
-                                Lastname = model.Lastname,
-                                Password = BC.HashPassword(model.Password),
-                                Email = model.Email,
-                                Role = model.Role,
-                                ActiveAccount = model.ActiveAccount
-                            });
+                        toUpdate.Role = model.Role;
+                        repository.Update(toUpdate);
                     }
                     else
                     {

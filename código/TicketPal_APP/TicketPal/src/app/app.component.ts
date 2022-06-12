@@ -10,9 +10,9 @@ import { TokenStorageService } from './services/storage/token-storage.service';
 export class AppComponent {
   private roles: string[] = []
   isLoggedIn = false
-  showAdminBoard = false
-  showSpectatorBoard = false
-  showSellerBoard = false
+  adminLogged = false
+  spectatorLogged = false
+  sellerLogged = false
   email?: string
 
   constructor(
@@ -29,9 +29,9 @@ export class AppComponent {
       if (user?.role) {
         this.roles.push(user?.role)
       }
-      this.showAdminBoard = this.roles.includes('ADMIN')
-      this.showSpectatorBoard = this.roles.includes('SPECTATOR')
-      this.showSellerBoard = this.roles.includes('SELLER')
+      this.adminLogged = this.roles.includes('ADMIN')
+      this.spectatorLogged = this.roles.includes('SPECTATOR')
+      this.sellerLogged = this.roles.includes('SELLER')
       this.email = user?.email
     }
   }

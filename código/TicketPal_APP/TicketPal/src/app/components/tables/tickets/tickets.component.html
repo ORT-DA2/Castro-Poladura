@@ -1,20 +1,18 @@
 <table class="table table-striped">
-    <thead>
+  <thead>
     <tr>
-      <th scope="col">Id</th>
       <th scope="col">Status</th>
       <th scope="col">Purchase Date</th>
       <th scope="col">Code</th>
       <th scope="col">Concert</th>
     </tr>
-    </thead>
-    <tbody>
+  </thead>
+  <tbody>
     <tr *ngFor="let ticket of tickets">
-      <th scope="row">{{ ticket.id }}</th>
       <td>{{ticket.status}}</td>
       <td>{{ticket.purchaseDate}}</td>
       <td>{{ticket.code}}</td>
       <td>{{ticket.event.tourName}}</td>
     </tr>
-    </tbody>
-  </table>
+  </tbody>
+</table>

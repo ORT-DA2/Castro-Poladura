@@ -1,3 +1,4 @@
+import { HttpHeaders } from '@angular/common/http';
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { IBuyer } from 'src/app/models/request/ticketPurchase/buyer.model';
 import { IConcert } from 'src/app/models/response/concert.model';
@@ -63,7 +64,13 @@ export class EventComponent implements OnInit {
       showLoaderOnConfirm: true,
       backdrop: true,
       preConfirm: (login) => {
-        return this.ticketService.purchaseTicket(concert.id, {} as IBuyer)
+        return this.ticketService.purchaseTicket(
+          concert.id,
+          {} as IBuyer,
+          new HttpHeaders()
+            .set('Content-Type', 'application/json')
+            .set('Authorization', `Bearer ${this.tokenService.getToken()}`)
+        )
           .subscribe(
             {
               next: data => {
