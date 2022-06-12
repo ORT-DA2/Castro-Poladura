@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { IConcert } from 'src/app/models/response/concert.model';
 import { IUser } from 'src/app/models/response/user.model';
 import { ConcertService } from 'src/app/services/concert/concert.service';
@@ -18,20 +19,24 @@ export class ConcertsComponent implements OnInit {
   currentUser: IUser | null
   editedConcert: IConcert
   newConcert: IConcert
+  notHome = false;
+  @Input() fromDate: string;
+  @Input() toDate: string;
 
   constructor(
-    private concertService: ConcertService, private tokenService: TokenStorageService
+    private concertService: ConcertService, private tokenService: TokenStorageService, private router: Router
   ) { }
 
   ngOnInit(): void {
-    this.currentUser = this.tokenService.getUser(),
-    this.adminLoggedIn = (this.currentUser?.role == "ADMIN"),
-    this.loadConcerts();
+    this.currentUser = this.tokenService.getUser();
+    this.adminLoggedIn = (this.currentUser?.role == "ADMIN");
+    this.notHome = this.router.url != '/home';
+    this.loadConcerts(this.fromDate, this.toDate);
   }
 
-  loadConcerts() {
+  loadConcerts(startDate: string, endDate: string) {
     this.concerts = []
-    if (this.currentUser?.role == "ARTIST"){
+    if (this.currentUser?.role == "ARTIST" && this.notHome){
       this.concertService.getConcertsByPerformer(this.currentUser.id).subscribe(
         {
           next: data => {
@@ -45,18 +50,36 @@ export class ConcertsComponent implements OnInit {
         }
       )
     }
-    this.concertService.getConcerts().subscribe(
-      {
-        next: data => {
-          this.concerts = data
-          this.fetchedConcerts = true
+    else if (startDate != undefined && startDate != ""){
+      var formattedStartDate = this.parseDate(startDate);
+      var formattedEndDate = this.parseDate(endDate);
+      this.concertService.getConcerts(formattedStartDate, formattedEndDate).subscribe(
+        {
+          next: data => {
+            this.concerts = data
+            this.fetchedConcerts = true
+          }
+          ,
+          error: err => {
+            this.errorMessage = err.error.message
+          }
         }
-        ,
-        error: err => {
-          this.errorMessage = err.error.message
+      )
+    }
+    else {
+      this.concertService.getConcerts("", "").subscribe(
+        {
+          next: data => {
+            this.concerts = data
+            this.fetchedConcerts = true
+          }
+          ,
+          error: err => {
+            this.errorMessage = err.error.message
+          }
         }
-      }
-    )
+      )
+    }
   }
 
   addConcert(){
@@ -90,6 +113,16 @@ export class ConcertsComponent implements OnInit {
         this.concertService.deleteConcert(id)
       }
     })
+  }
+
+  onSearch(startDate: string, endDate: string | null){
+    this.loadConcerts(this.fromDate, this.toDate)
+  }
+
+  parseDate(date: string){
+    const [year, month, day] = date.split('-');
+    var newDate = day + '/' + month + '/' + year + ' ' + '00:00';
+    return newDate;
   }
 }
 

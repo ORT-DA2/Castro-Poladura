@@ -59,6 +59,17 @@ namespace TicketPal.BusinessLogic.Services.Tickets
                     }
                     else
                     {
+                        if (String.IsNullOrEmpty(model.NewUser.FirstName)
+                            || String.IsNullOrEmpty(model.NewUser.FirstName)
+                            || String.IsNullOrEmpty(model.NewUser.FirstName))
+                        {
+                            return new OperationResult
+                            {
+                                ResultCode = Constants.CODE_FAIL,
+                                Message = "Some of the fields entered are empty."
+                            };
+                        }
+
                         var buyer = new UserEntity();
                         buyer.Firstname = model.NewUser.FirstName;
                         buyer.Lastname = model.NewUser.LastName;

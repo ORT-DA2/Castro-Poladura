@@ -13,6 +13,7 @@ import Swal from 'sweetalert2';
 export class EventComponent implements OnInit {
 
   userLoggedIn = false
+  isUserSpectator = false
 
   @Input() concerts: IConcert[]
   @ViewChild('purchaseView', { static: false })
@@ -28,11 +29,14 @@ export class EventComponent implements OnInit {
   ngOnInit(): void {
     this.selectedConcert = <IConcert>{}
     this.userLoggedIn = !!this.tokenService.getToken()
+    if (this.tokenService.getUser() !== null) {
+      this.isUserSpectator = this.tokenService.getUser()?.role === 'SPECTATOR'
+    }
   }
 
   showConcertDetails(id: string): void {
     var concertSelected = this.concerts.find(c => c.id == id);
-    var info = 'Tour name: ' + concertSelected?.tourName + 'Artist: ' +  + '. Event type: ' + concertSelected?.eventType 
+    var info = 'Tour name: ' + concertSelected?.tourName + '. Event type: ' + concertSelected?.eventType 
     + '. Date: ' + concertSelected?.date + '. Available tickets: ' + concertSelected?.availableTickets 
     + '. Ticket price: ' + concertSelected?.currencyType + ' ' + concertSelected?.ticketPrice 
     + '. Location: ' + concertSelected?.address + ', ' + concertSelected?.location + ' - ' + concertSelected?.country + '.';
@@ -75,6 +79,10 @@ export class EventComponent implements OnInit {
                   confirmButtonText:
                     '<i class="fa fa-thumbs-up"></i> Close',
                   confirmButtonAriaLabel: 'Thumbs up, great!'
+                }).then(function (isConfirm) {
+                  if (isConfirm) {
+                    window.location.reload();
+                  }
                 })
               },
               error: err => {
