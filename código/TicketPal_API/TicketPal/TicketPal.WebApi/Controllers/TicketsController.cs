@@ -99,13 +99,13 @@ namespace TicketPal.WebApi.Controllers
         }
 
         [HttpGet]
-        [AuthenticationFilter(Constants.ROLE_ADMIN + "," + Constants.ROLE_SPECTATOR)]
+        [AuthenticationFilter(Constants.ROLE_ADMIN + "," + Constants.ROLE_SPECTATOR + "," + Constants.ROLE_SELLER)]
         public async Task<IActionResult> GetTickets()
         {
             var json = HttpContext.Session.GetString("user");
             var authenticatedUser = JsonConvert.DeserializeObject<User>(json);
 
-            if (authenticatedUser.Role.Equals(Constants.ROLE_ADMIN))
+            if (authenticatedUser.Role.Equals(Constants.ROLE_ADMIN) || authenticatedUser.Role.Equals(Constants.ROLE_SELLER))
             {
                 return Ok(await ticketService.GetTickets());
             }

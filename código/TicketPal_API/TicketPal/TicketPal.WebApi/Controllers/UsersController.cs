@@ -58,7 +58,10 @@ namespace TicketPal.WebApi.Controllers
         }
 
         [HttpGet("{id}")]
-        [AuthenticationFilter(Constants.ROLE_ADMIN + "," + Constants.ROLE_SPECTATOR)]
+        [AuthenticationFilter(Constants.ROLE_ADMIN + "," + Constants.ROLE_SPECTATOR + ","
+                              + Constants.ROLES_SUPERVISOR + ","
+                              + Constants.ROLE_ARTIST + ","
+                              + Constants.ROLE_SELLER)]
         public async Task<IActionResult> GetUserAccount([FromRoute] int id)
         {
             var json = HttpContext.Session.GetString("user");
@@ -88,7 +91,10 @@ namespace TicketPal.WebApi.Controllers
         }
 
         [HttpPut("{id}")]
-        [AuthenticationFilter(Constants.ROLE_ADMIN + "," + Constants.ROLE_SPECTATOR)]
+        [AuthenticationFilter(Constants.ROLE_ADMIN + "," + Constants.ROLE_SPECTATOR + "," 
+                              + Constants.ROLES_SUPERVISOR + "," 
+                              + Constants.ROLE_ARTIST + "," 
+                              + Constants.ROLE_SELLER)]
         public IActionResult Update([FromRoute] int id, [FromBody] UpdateUserRequest request)
         {
             var json = HttpContext.Session.GetString("user");

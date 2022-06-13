@@ -1,5 +1,4 @@
 
-using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
@@ -32,7 +31,7 @@ namespace TicketPal.WebApi
             {
                 var corsBuilder = new CorsPolicyBuilder();
                 var policy = corsBuilder
-                    .SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost")
+                    .WithOrigins("http://localhost:4200")
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .AllowCredentials()

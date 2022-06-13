@@ -21,11 +21,15 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { UsersComponent } from './components/tables/users/users.component';
 import { PerformersComponent } from './components/tables/performers/performers.component';
 import { GenresComponent } from './components/tables/genres/genres.component';
-import { ConcertsComponent, NgbdSortableHeader } from './components/tables/concerts/concerts.component';
+import { ConcertsComponent } from './components/tables/concerts/concerts.component';
 import { TicketsComponent } from './components/tables/tickets/tickets.component';
 import { DatePickerComponent } from './components/date-picker/date-picker.component';
 import { ReviewPurchaseComponent } from './components/ticket/purchase/reviewPurchase.component';
 import { ProfileComponent } from './components/profile/profile/profile.component';
+import { ConcertModalComponent } from './components/tables/concerts/concert-modal/concert-modal.component';
+import { GenreModalComponent } from './components/tables/genres/genre-modal/genre-modal.component';
+import { PerformerModalComponent } from './components/tables/performers/performer-modal/performer-modal.component';
+import { UserModalComponent } from './components/tables/users/user-modal/user-modal.component';
 
 @NgModule({
   declarations: [
@@ -44,9 +48,12 @@ import { ProfileComponent } from './components/profile/profile/profile.component
     GenresComponent,
     ConcertsComponent,
     TicketsComponent,
-    NgbdSortableHeader,
     DatePickerComponent,
-    ReviewPurchaseComponent
+    ReviewPurchaseComponent,
+    ConcertModalComponent,
+    GenreModalComponent,
+    PerformerModalComponent,
+    UserModalComponent
   ],
   imports: [
     BrowserModule,

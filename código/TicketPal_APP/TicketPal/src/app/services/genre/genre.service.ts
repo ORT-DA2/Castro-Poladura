@@ -1,7 +1,9 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Endpoints } from 'src/app/config/endpoints';
+import { IUpdateGenre } from 'src/app/models/request/genre/updateGenre.model';
+import { IApiResponse } from 'src/app/models/response/apiResponse.model';
 import { IGenre } from 'src/app/models/response/genre.model';
 
 @Injectable({
@@ -19,6 +21,24 @@ export class GenreService {
 
   getGenres(): Observable<IGenre[]> {
     return this.http.get<IGenre[]>(this.endpoints.GENRES)
+  }
+
+  addGenre(request: IUpdateGenre, headers?: HttpHeaders): Observable<IApiResponse> {
+    return this.http.post<IApiResponse>(`${this.endpoints.GENRES}`,
+      request,
+      { headers }
+    )
+  }
+
+  updateGenre(id: string, request: IUpdateGenre, headers?: HttpHeaders): Observable<IApiResponse> {
+    return this.http.put<IApiResponse>(`${this.endpoints.GENRES}/${id}`,
+      request,
+      { headers }
+    )
+  }
+
+  deleteGenre(id: string): Observable<IApiResponse> {
+    return this.http.delete<IApiResponse>(`${this.endpoints.GENRES}/${id}`)
   }
 
 }

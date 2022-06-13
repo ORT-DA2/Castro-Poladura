@@ -181,11 +181,7 @@ namespace TicketPal.BusinessLogic.Services.Users
                     toUpdate.Password = BC.HashPassword(model.Password);
                 }
 
-                if (authorization.Equals(Constants.ROLE_SPECTATOR))
-                {
-                    repository.Update(toUpdate);
-                }
-                else if (authorization.Equals(Constants.ROLE_ADMIN))
+                if (authorization.Equals(Constants.ROLE_ADMIN))
                 {
                     if (Constants.ValidRoles.Contains(model.Role))
                     {
@@ -200,6 +196,10 @@ namespace TicketPal.BusinessLogic.Services.Users
                             Message = $"Can't validate role: {model.Role}"
                         };
                     }
+                }
+                else
+                {
+                    repository.Update(toUpdate);
                 }
             }
             catch (RepositoryException ex)
