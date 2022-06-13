@@ -119,12 +119,22 @@ export class GenresComponent implements OnInit {
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.genreService.deleteGenre(id).subscribe(),
-        this.loadGenres(),
-        Swal.fire(
-          'Deleted!',
-          'The genre has been deleted.',
-          'success'
+        this.genreService.deleteGenre(id).subscribe(
+          {
+            next: data => {
+              Swal.fire({
+                icon: 'success',
+                text: data.message,
+              })
+              this.loadGenres()
+            },
+            error: err => {
+              Swal.fire({
+                icon: 'error',
+                text: err.error.message,
+              })
+            }
+          }
         )
       }
     })

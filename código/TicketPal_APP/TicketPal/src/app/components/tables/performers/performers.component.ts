@@ -190,12 +190,22 @@ export class PerformersComponent implements OnInit {
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.isConfirmed) {
-        //this.performerService.deletePerformer(id).suscribe(),
-        this.loadPerformers(),
-        Swal.fire(
-          'Deleted!',
-          'The performer has been deleted.',
-          'success'
+        this.performerService.deletePerformer(id).subscribe(
+          {
+            next: data => {
+              Swal.fire({
+                icon: 'success',
+                text: data.message,
+              })
+              this.loadPerformers()
+            },
+            error: err => {
+              Swal.fire({
+                icon: 'error',
+                text: err.error.message,
+              })
+            }
+          }
         )
       }
     })

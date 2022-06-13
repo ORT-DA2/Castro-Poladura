@@ -244,10 +244,6 @@ export class ConcertsComponent implements OnInit {
   }
 
   deleteConcert(id: string){
-    /*var concertSelected = this.concerts.find(c => c.id == id);
-    if(confirm("Are you sure to delete this concert: " + concertSelected?.tourName)) {
-      this.concertService.deleteConcert(id)
-    } */
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
@@ -258,12 +254,22 @@ export class ConcertsComponent implements OnInit {
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.concertService.deleteConcert(id).subscribe(),
-        this.loadConcerts("",""),
-        Swal.fire(
-          'Deleted!',
-          'The concert has been deleted.',
-          'success'
+        this.concertService.deleteConcert(id).subscribe(
+          {
+            next: data => {
+              Swal.fire({
+                icon: 'success',
+                text: data.message,
+              })
+              this.loadConcerts("","")
+            },
+            error: err => {
+              Swal.fire({
+                icon: 'error',
+                text: err.error.message,
+              })
+            }
+          }
         )
       }
     })

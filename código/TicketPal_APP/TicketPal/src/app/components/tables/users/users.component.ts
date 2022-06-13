@@ -174,12 +174,22 @@ export class UsersComponent implements OnInit {
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.isConfirmed) {
-        //this.userService.deleteUser(id).suscribe(),
-        this.loadUsers(),
-        Swal.fire(
-          'Deleted!',
-          'The user has been deleted.',
-          'success'
+        this.userService.deleteUser(id).subscribe(
+          {
+            next: data => {
+              Swal.fire({
+                icon: 'success',
+                text: data.message,
+              })
+              this.loadUsers()
+            },
+            error: err => {
+              Swal.fire({
+                icon: 'error',
+                text: err.error.message,
+              })
+            }
+          }
         )
       }
     })
