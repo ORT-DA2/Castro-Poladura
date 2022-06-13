@@ -1,6 +1,6 @@
 import { HttpHeaders } from '@angular/common/http';
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { IBuyer } from 'src/app/models/request/ticketPurchase/buyer.model';
+import { IBuyer } from 'src/app/models/request/ticket/buyer.model';
 import { IConcert } from 'src/app/models/response/concert.model';
 import { TokenStorageService } from 'src/app/services/storage/token-storage.service';
 import { TicketService } from 'src/app/services/ticket/ticket.service';
