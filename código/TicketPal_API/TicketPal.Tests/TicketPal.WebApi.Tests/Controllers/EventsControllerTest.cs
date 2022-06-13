@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -313,7 +312,7 @@ namespace TicketPal.WebApi.Tests.Controllers
                     EventType = Constants.EVENT_CONCERT_TYPE,
                     TicketPrice = 197.8M,
                     CurrencyType = Constants.CURRENCY_US_DOLLARS,
-                    TourName = "SomeTour"
+                    TourName = "SomeTour",
                 },
                 new Concert
                 {
@@ -336,6 +335,45 @@ namespace TicketPal.WebApi.Tests.Controllers
                     TourName = "SomeTour"
                 },
             };
+        }
+
+        [TestMethod]
+        public async Task GetConcertsByPerformerIdTest()
+        {
+            var newConcertList = concerts;
+            var deleteConcert = concerts.Find(c => c.Id == 1);
+            newConcertList.Remove(deleteConcert);
+            deleteConcert = concerts.Find(c => c.Id == 2);
+            newConcertList.Remove(deleteConcert);
+            mockService.Setup(s => s.GetConcertsByPerformerId(
+                new ConcertSearchParam
+                {
+                    Type = It.IsAny<string>(),
+                    Newest = false,
+                    StartDate = null,
+                    EndDate = null,
+                    ArtistName = null,
+                    TourName = null,
+                    PerformerId = "1"
+                }
+            )).Returns(Task.FromResult(newConcertList));
+
+            var result = await controller.GetConcertsByPerformerId(
+                new ConcertSearchParam
+                {
+                    Type = Constants.EVENT_CONCERT_TYPE,
+                    Newest = false,
+                    StartDate = null,
+                    EndDate = null,
+                    ArtistName = null,
+                    TourName = null,
+                    PerformerId = "1"
+                });
+            var objectResult = result as ObjectResult;
+            var statusCode = objectResult.StatusCode;
+
+            Assert.AreEqual(200, statusCode);
+
         }
 
     }

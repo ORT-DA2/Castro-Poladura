@@ -1,1 +1,31 @@
-<p>board-seller works!</p>
+<h3>Register Purchase: </h3>
+<form>
+    <div class="form-group row">
+        <label for="inputFirstName" class="col-sm-2 col-form-label">First Name</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" placeholder="First name" id="inputFirstName" #firstname>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="inputLastName" class="col-sm-2 col-form-label">Last Name</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" placeholder="Last name" id="inputLastName" #lastname>
+        </div>
+      </div>
+    <div class="form-group row">
+      <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" placeholder="example@example.com" id="inputEmail" #email>
+      </div>
+    </div>
+    <div class="form-group row">
+        <label for="inputConcertId" class="col-sm-2 col-form-label">Concert Id</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" placeholder="Concert id" id="inputConcertId" #concertId>
+        </div>
+      </div>
+    <button type="button" class="btn btn-success" (click)="registerPurchase(concertId.value, firstname.value, lastname.value, email.value)"> Purchase ticket </button> <button type="reset" class="btn btn-secondary">Reset</button>
+  </form> <br><br>
+
+<h3>List of Concerts:</h3>
+<app-concerts></app-concerts>

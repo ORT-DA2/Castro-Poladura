@@ -232,6 +232,38 @@ namespace TicketPal.WebApi.Tests.Controllers
             Assert.AreEqual(200, statusCode);
         }
 
+        public async Task GetTicketsIfSellerOkTest()
+        {
+            var mockHttpContext = new Mock<HttpContext>();
+            var mockHeaderHttp = new Mock<IHeaderDictionary>();
+            mockHeaderHttp.Setup(x => x[It.IsAny<string>()]).Returns("someHeader");
+            var mockHttpRequest = new Mock<HttpRequest>();
+            mockHttpRequest.Setup(s => s.Headers).Returns(mockHeaderHttp.Object);
+            var mockServiceProvider = new Mock<IServiceProvider>();
+            mockHttpContext.Setup(s => s.Request).Returns(mockHttpRequest.Object);
+            mockUserService.Setup(s => s.RetrieveUserFromToken(It.IsAny<string>())).Returns(
+                Task.FromResult(
+                    new User
+                    {
+                        Role = Constants.ROLE_SELLER,
+                        Id = 1,
+                    }
+                ));
+            mockHttpContext.Setup(x => x.RequestServices.GetService(typeof(IUserService)))
+                .Returns(mockUserService.Object);
+
+            controller.ControllerContext.HttpContext = mockHttpContext.Object;
+
+            mockTicketService.Setup(s => s.GetTickets()).Returns(Task.FromResult(tickets));
+
+            var account = await controller.GetTickets();
+
+            var objectResult = account as ObjectResult;
+            var statusCode = objectResult.StatusCode;
+
+            Assert.AreEqual(200, statusCode);
+        }
+
         public async Task GetTicketsIfSameUserOkTest()
         {
             var mockHttpContext = new Mock<HttpContext>();

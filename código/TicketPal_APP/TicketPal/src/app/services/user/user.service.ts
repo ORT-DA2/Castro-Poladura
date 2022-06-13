@@ -38,4 +38,15 @@ export class UserService {
     )
   }
 
+  addUser(request: IUpdateUser, headers?: HttpHeaders): Observable<IApiResponse> {
+    return this.http.post<IApiResponse>(`${this.endpoints.USERS}`,
+      request,
+      { headers }
+    )
+  }
+
+  deleteUser(id: string): Observable<IApiResponse> {
+    return this.http.delete<IApiResponse>(`${this.endpoints.USERS}/${id}`)
+  }
+
 }

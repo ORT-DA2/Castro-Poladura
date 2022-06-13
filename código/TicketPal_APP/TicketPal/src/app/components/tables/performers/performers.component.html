@@ -1,13 +1,3 @@
-<script src="sweetalert2.all.min.js"></script>
-<form>
-  <div class="mb-3 row">
-    <label for="table-filtering-search" class="col-xs-3 col-sm-auto col-form-label">Full text search:</label>
-    <!-- <div class="col-xs-3 col-sm-auto">
-         <input id="table-filtering-search" class="form-control" type="text" [formControl]="filter">
-      </div> -->
-  </div>
-</form>
-
 <table class="table table-striped">
   <thead>
     <tr>
@@ -26,7 +16,10 @@
       <td>{{performer.performerType}}</td>
       <td>{{performer.startYear}}</td>
       <td>{{performer.genre.name}}</td>
-      <td><button id="{{ performer.id }}" (click)="showArtists(performer.id)" *ngIf="performer.members.length != 0">See members</button></td>
+      <td><button type="button" class="btn btn-info" (click)="showArtists(performer.id)" *ngIf="performer.members.length != 0">See members</button></td>
+      <td><button type="button" class="btn btn-primary" (click)="editPerformer(performer.id)" *ngIf="adminLoggedIn">Edit</button></td>
+      <td><button type="button" class="btn btn-danger" (click)="deletePerformer(performer.id)" *ngIf="adminLoggedIn">Delete</button></td>
     </tr>
   </tbody>
 </table>
+<div><button type="button" class="btn btn-success" (click)="addPerformer()" *ngIf="adminLoggedIn">Add Performer</button></div>

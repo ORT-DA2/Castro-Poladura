@@ -7,6 +7,7 @@ import { DashboardComponent } from './components/home/dashboard/dashboard.compon
 import { ProfileComponent } from './components/profile/profile/profile.component';
 import { TicketsComponent } from './components/tables/tickets/tickets.component';
 import { BoardSupervisorComponent } from './components/profile/board-supervisor/board-supervisor.component';
+import { BoardSellerComponent } from './components/profile/board-seller/board-seller.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -15,6 +16,7 @@ const routes: Routes = [
   { path: 'home', component: DashboardComponent },
   { path: 'purchases', component: TicketsComponent, canActivate: [AuthGuard] },
   { path: 'supervisor', component: BoardSupervisorComponent, canActivate: [AuthGuard] },
+  { path: 'seller', component: BoardSellerComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: 'home' }
 ];
 

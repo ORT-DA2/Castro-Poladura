@@ -135,8 +135,7 @@ namespace TicketPal.BusinessLogic.Services.Concerts
             if (hasArtist)
             {
                 concerts = concerts.FindAll(c =>
-                    c.EventType.Equals(param.Type)
-                && c.Artists.Any(a =>
+                    c.Artists.Any(a =>
                     a.UserInfo.Firstname.ToLower()
                         .Equals(param.ArtistName) ||
                     a.UserInfo.Lastname.ToLower()
@@ -225,6 +224,17 @@ namespace TicketPal.BusinessLogic.Services.Concerts
                 ResultCode = Constants.CODE_SUCCESS,
                 Message = "Concert updated successfully"
             };
+        }
+
+        public async Task<List<Concert>> GetConcertsByPerformerId(ConcertSearchParam param)
+        {
+            List<ConcertEntity> concerts = new List<ConcertEntity>();
+            int id = Convert.ToInt32(param.PerformerId);
+            concerts = await concertRepository.GetAll(c =>
+                c.EventType.Equals(param.Type) &&
+                c.Artists.FirstOrDefault(p => p.Id == id).Id == id);
+
+            return mapper.Map<List<ConcertEntity>, List<Concert>>(concerts.OrderByDescending(c => c.Date).ToList());
         }
     }
 }
