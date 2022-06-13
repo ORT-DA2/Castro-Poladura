@@ -59,9 +59,9 @@ namespace TicketPal.BusinessLogic.Services.Tickets
                     }
                     else
                     {
-                        if (String.IsNullOrEmpty(model.NewUser.FirstName)
-                            || String.IsNullOrEmpty(model.NewUser.FirstName)
-                            || String.IsNullOrEmpty(model.NewUser.FirstName))
+                        if (String.IsNullOrEmpty(model.FirstName)
+                            || String.IsNullOrEmpty(model.FirstName)
+                            || String.IsNullOrEmpty(model.FirstName))
                         {
                             return new OperationResult
                             {
@@ -71,9 +71,9 @@ namespace TicketPal.BusinessLogic.Services.Tickets
                         }
 
                         var buyer = new UserEntity();
-                        buyer.Firstname = model.NewUser.FirstName;
-                        buyer.Lastname = model.NewUser.LastName;
-                        buyer.Email = model.NewUser.Email;
+                        buyer.Firstname = model.FirstName;
+                        buyer.Lastname = model.LastName;
+                        buyer.Email = model.Email;
                         buyer.ActiveAccount = false;
 
                         await ticketRepository.Add(new TicketEntity

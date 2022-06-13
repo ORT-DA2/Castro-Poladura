@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { ITicket } from 'src/app/models/response/ticket.model';
 import { IUser } from 'src/app/models/response/user.model';
 import { TokenStorageService } from 'src/app/services/storage/token-storage.service';
+import { TicketService } from 'src/app/services/ticket/ticket.service';
 import { UserService } from 'src/app/services/user/user.service';
 import Swal from 'sweetalert2';
 
@@ -11,19 +13,22 @@ import Swal from 'sweetalert2';
 })
 export class UsersComponent implements OnInit {
   users: IUser[];
+  tickets: ITicket[];
+  userHasTickets: boolean;
   fetchedUsers = false;
   errorMessage: string;
   adminLoggedIn = false
   currentUser: IUser | null
 
   constructor(
-    private userService: UserService, private tokenService: TokenStorageService
+    private userService: UserService, private tokenService: TokenStorageService, private ticketService: TicketService
   ) { }
 
   ngOnInit(): void {
     this.currentUser = this.tokenService.getUser(),
     this.adminLoggedIn = (this.currentUser?.role == "ADMIN"),
     this.loadUsers();
+    this.loadTickets();
   }
 
   loadUsers(): void {
@@ -32,6 +37,22 @@ export class UsersComponent implements OnInit {
       {
         next: data => {
           this.users = data
+          this.fetchedUsers = true
+        }
+        ,
+        error: err => {
+          this.errorMessage = err.error.message
+        }
+      }
+    )
+  }
+
+  loadTickets(): void{
+    this.tickets = []
+    this.ticketService.getTickets().subscribe(
+      {
+        next: data => {
+          this.tickets = data
           this.fetchedUsers = true
         }
         ,
@@ -184,10 +205,18 @@ export class UsersComponent implements OnInit {
               this.loadUsers()
             },
             error: err => {
-              Swal.fire({
-                icon: 'error',
-                text: err.error.message,
-              })
+              if(this.tickets.find(t => t.buyer.id == id)){
+                Swal.fire({
+                  icon: 'error',
+                  text: 'No se puede eliminar este usuario porque tiene tickets asociados',
+                })
+              }
+              else {
+                Swal.fire({
+                  icon: 'error',
+                  text: err.error.message,
+                })
+              }
             }
           }
         )

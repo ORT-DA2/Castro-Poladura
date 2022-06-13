@@ -113,12 +113,10 @@ namespace TicketPal.BusinessLogic.Tests.Services.Tickets
         [TestMethod]
         public async Task AddTicketSuccesfullyTest()
         {
-            ticketRequest.NewUser = new TicketBuyer
-            {
-                FirstName = "SomeBuyerName",
-                LastName = "SomeBuyerLastname",
-                Email = "buyer@email.com"
-            };
+            ticketRequest.FirstName = "SomeBuyerName";
+            ticketRequest.LastName = "SomeBuyerLastname";
+            ticketRequest.Email = "buyer@email.com";
+
 
             OperationResult result = await ticketService.AddTicket(ticketRequest);
 
@@ -128,12 +126,9 @@ namespace TicketPal.BusinessLogic.Tests.Services.Tickets
         [TestMethod]
         public async Task AddTicketTwiceFailsTest()
         {
-            ticketRequest.NewUser = new TicketBuyer
-            {
-                FirstName = "SomeBuyerName",
-                LastName = "SomeBuyerLastname",
-                Email = "buyer@email.com"
-            };
+            ticketRequest.FirstName = "SomeBuyerName";
+            ticketRequest.LastName = "SomeBuyerLastname";
+            ticketRequest.Email = "buyer@email.com";
 
             await ticketService.AddTicket(ticketRequest);
 

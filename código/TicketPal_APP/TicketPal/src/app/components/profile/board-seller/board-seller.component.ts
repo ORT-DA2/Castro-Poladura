@@ -1,7 +1,9 @@
 import { InputModalityDetector } from '@angular/cdk/a11y';
+import { HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { IBuyer } from 'src/app/models/request/ticket/buyer.model';
 import { ITicket } from 'src/app/models/response/ticket.model';
+import { TokenStorageService } from 'src/app/services/storage/token-storage.service';
 import { TicketService } from 'src/app/services/ticket/ticket.service';
 import Swal from 'sweetalert2';
 
@@ -17,7 +19,7 @@ export class BoardSellerComponent implements OnInit {
   newBuyer: IBuyer = { firstname: '', lastName: '', email: '' };
 
   constructor(
-    private ticketService: TicketService
+    private ticketService: TicketService, private tokenService: TokenStorageService
   ) { }
 
   ngOnInit(): void {
@@ -52,7 +54,10 @@ export class BoardSellerComponent implements OnInit {
       confirmButtonText: 'Yes, buy it!'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.ticketService.purchaseTicket(id, this.newBuyer as IBuyer).subscribe({
+        this.ticketService.purchaseTicket(id, this.newBuyer, 
+          new HttpHeaders()
+            .set('Content-Type', 'application/json')
+            .set('Authorization', `Bearer ${this.tokenService.getToken()}`)).subscribe({
           next: data => {
             Swal.fire({
               title: `Your purchase code:`
@@ -69,6 +74,7 @@ export class BoardSellerComponent implements OnInit {
             }).then(function (isConfirm) {
               if (isConfirm) {
                 window.location.reload();
+                
               }
             })
           },
