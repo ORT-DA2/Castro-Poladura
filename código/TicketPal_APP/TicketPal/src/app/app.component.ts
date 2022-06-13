@@ -14,6 +14,7 @@ export class AppComponent {
   spectatorLogged = false
   supervisorLogged = false
   sellerLogged = false
+  artistLogged = false
   email?: string
 
   constructor(
@@ -34,6 +35,7 @@ export class AppComponent {
       this.spectatorLogged = this.roles.includes('SPECTATOR')
       this.supervisorLogged = this.roles.includes('SUPERVISOR')
       this.sellerLogged = this.roles.includes('SELLER')
+      this.artistLogged = this.roles.includes('ARTIST')
       this.email = user?.email
     }
   }
