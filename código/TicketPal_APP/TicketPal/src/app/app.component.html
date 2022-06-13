@@ -28,6 +28,7 @@
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" href="/profile" routerLink="profile">My Profile</a>
           <a *ngIf="spectatorLogged" class="dropdown-item" href="/purchases" routerLink="purchases">My Purchases</a>
+          <a *ngIf="artistLogged" class="dropdown-item" href="/concerts" routerLink="concerts">My Concerts</a>
         </div>
       </li>
       <li class="nav-item">
