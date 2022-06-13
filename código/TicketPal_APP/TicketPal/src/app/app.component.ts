@@ -12,7 +12,7 @@ export class AppComponent {
   isLoggedIn = false
   adminLogged = false
   spectatorLogged = false
-  showSpectatorBoard = false
+  supervisorLogged = false
   email?: string
 
   constructor(
@@ -31,6 +31,7 @@ export class AppComponent {
       }
       this.adminLogged = this.roles.includes('ADMIN')
       this.spectatorLogged = this.roles.includes('SPECTATOR')
+      this.supervisorLogged = this.roles.includes('SUPERVISOR')
       this.email = user?.email
     }
   }

@@ -66,24 +66,23 @@ export class ProfileComponent implements OnInit {
                 this.userService.getUser(
                   this.currentUser.id,
                   headers
-                )
-                  .subscribe(
-                    {
-                      next: data => {
-                        this.token.saveUser(
-                          {
-                            id: this.currentUser?.id,
-                            firstname: data.firstname,
-                            lastname: data.lastname,
-                            password: data.password,
-                            role: this.currentUser?.role,
-                            activeAccount: this.currentUser?.activeAccount,
-                            email: this.currentUser?.email
-                          } as IUser
-                        )
-                      }
+                ).subscribe(
+                  {
+                    next: data => {
+                      this.token.saveUser(
+                        {
+                          id: this.currentUser?.id,
+                          firstname: data.firstname,
+                          lastname: data.lastname,
+                          password: data.password,
+                          role: this.currentUser?.role,
+                          activeAccount: this.currentUser?.activeAccount,
+                          email: this.currentUser?.email
+                        } as IUser
+                      )
                     }
-                  )
+                  }
+                )
               }
             },
             error: err => {
