@@ -21,8 +21,9 @@ export class PerformerService {
     return this.http.get<IPerformer>(`${this.endpoints.PERFORMERS}/${id}`)
   }
 
-  getPerformers(): Observable<IPerformer[]> {
-    return this.http.get<IPerformer[]>(this.endpoints.PERFORMERS)
+  getPerformers(performerName: string): Observable<IPerformer[]> {
+    let params = new HttpParams().set('performerName', performerName)
+    return this.http.get<IPerformer[]>(this.endpoints.PERFORMERS, { params: params })
   }
 
   addPerformer(request: IAddPerformer, headers?: HttpHeaders): Observable<IApiResponse> {

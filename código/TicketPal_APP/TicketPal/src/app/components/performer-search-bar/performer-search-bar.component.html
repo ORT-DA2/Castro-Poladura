@@ -1,0 +1,10 @@
+<h2>Search artist by name:</h2>
+<form>
+    <div class="form-group row">
+        <label for="inputSearchName" class="col-sm-2 col-form-label"> Artist Name </label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" placeholder="Artist or Band name" id="inputSearchName" (change)="loadPerformerName(searchPerformerName.value)" #searchPerformerName>
+        </div>
+    </div>
+  </form>
+  <app-performers [performerName]="searchPerformerName.value"></app-performers>

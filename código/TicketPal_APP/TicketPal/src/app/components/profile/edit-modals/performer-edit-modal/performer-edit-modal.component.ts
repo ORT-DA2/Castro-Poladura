@@ -54,7 +54,7 @@ export class PerformerEditModalComponent implements OnInit {
         }
       }
     )
-    this.performerService.getPerformers().subscribe(
+    this.performerService.getPerformers("").subscribe(
       {
         next: data => {
           this.members = data

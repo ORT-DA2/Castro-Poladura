@@ -29,6 +29,8 @@ import { ConcertEditModalComponent } from './components/profile/edit-modals/conc
 import { GenreEditModalComponent } from './components/profile/edit-modals/genre-edit-modal/genre-edit-modal.component';
 import { PerformerEditModalComponent } from './components/profile/edit-modals/performer-edit-modal/performer-edit-modal.component';
 import { UserEditModalComponent } from './components/profile/edit-modals/user-edit-modal/user-edit-modal.component';
+import { ConcertSearchBarComponent } from './components/concert-search-bar/concert-search-bar.component';
+import { PerformerSearchBarComponent } from './components/performer-search-bar/performer-search-bar.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +53,9 @@ import { UserEditModalComponent } from './components/profile/edit-modals/user-ed
     ConcertEditModalComponent,
     GenreEditModalComponent,
     PerformerEditModalComponent,
-    UserEditModalComponent
+    UserEditModalComponent,
+    ConcertSearchBarComponent,
+    PerformerSearchBarComponent
   ],
   imports: [
     BrowserModule,

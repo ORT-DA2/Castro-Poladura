@@ -14,7 +14,6 @@ endDate: string | null = null;
   }
  
   ngOnInit(): void {
-
   }
 
   loadDates(startDate: string, endDate: string){
