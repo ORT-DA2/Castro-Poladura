@@ -60,8 +60,12 @@ export class BoardSellerComponent implements OnInit {
               .set('Authorization', `Bearer ${this.tokenService.getToken()}`)).subscribe({
             next: data => {
               Swal.fire({
+                title: `Your purchase code:`
+              })
+              Swal.fire({
                 title: 'Ticket Purchased',
                 icon: 'success',
+                html: `<h2>Purchase Code:</h2><br><strong><u>${data.message}</u></strong>`,
                 showCloseButton: true,
                 focusConfirm: false,
                 confirmButtonText:
