@@ -9,6 +9,7 @@ using TicketPal.BusinessLogic.Services.Performers;
 using TicketPal.Domain.Constants;
 using TicketPal.Domain.Entity;
 using TicketPal.Domain.Exceptions;
+using TicketPal.Domain.Models.Param;
 using TicketPal.Domain.Models.Request;
 using TicketPal.Domain.Models.Response;
 
@@ -34,7 +35,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Performers
             performer = new PerformerEntity()
             {
                 Id = 1,
-                UserInfo = new UserEntity { Firstname = "Coldplay" },
+                UserInfo = new UserEntity { Firstname = "Coldplay", Lastname = ""},
                 PerformerType = Constants.PERFORMER_TYPE_BAND,
                 StartYear = "1996",
                 Genre = genre,
@@ -225,7 +226,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Performers
                 new PerformerEntity
                 {
                     Id = 2,
-                    UserInfo = new UserEntity {Firstname = "The Party Band"},
+                    UserInfo = new UserEntity {Firstname = "The Party Band", Lastname = ""},
                     Members = new List<PerformerEntity>(),
                     Genre = new GenreEntity(){ Id = 3, Name = "Pachanga"},
                     PerformerType = performer.PerformerType,
@@ -234,20 +235,52 @@ namespace TicketPal.BusinessLogic.Tests.Services.Performers
                 new PerformerEntity
                 {
                     Id = 3,
-                    UserInfo = new UserEntity { Firstname = "Pepito Perez" },
+                    UserInfo = new UserEntity { Firstname = "Pepito", Lastname = "Perez"},
                     Genre = performer.Genre,
                     PerformerType = Constants.PERFORMER_TYPE_SOLO_ARTIST,
                     StartYear = "1965"
                 },
             };
 
+            var param = new PerformerSearchParam();
+
             this.mockPerformerRepo.Setup(r => r.GetAll()).Returns(Task.FromResult(dbAccounts.ToList()));
             this.factoryMock.Setup(m => m.GetRepository(typeof(PerformerEntity))).Returns(this.mockPerformerRepo.Object);
 
             this.performerService = new PerformerService(this.factoryMock.Object, this.mapper);
-            IEnumerable<Performer> result = await performerService.GetPerformers();
+            IEnumerable<Performer> result = await performerService.GetPerformers(param);
 
             Assert.IsTrue(result.ToList().Count == 3);
+        }
+
+        [TestMethod]
+        public async Task GetPerformerByNameSuccesfullyTest()
+        {
+            IEnumerable<PerformerEntity> dbAccounts = new List<PerformerEntity>()
+            {
+                new PerformerEntity
+                {
+                    Id = 1,
+                    UserInfo = performer.UserInfo,
+                    Members = performer.Members,
+                    Genre = performer.Genre,
+                    PerformerType = performer.PerformerType,
+                    StartYear = performer.StartYear
+                },
+            };
+
+            var param = new PerformerSearchParam()
+            {
+                PerformerName = performer.UserInfo.Firstname + " " + performer.UserInfo.Lastname
+            };
+
+            this.mockPerformerRepo.Setup(r => r.GetAll()).Returns(Task.FromResult(dbAccounts.ToList()));
+            this.factoryMock.Setup(m => m.GetRepository(typeof(PerformerEntity))).Returns(this.mockPerformerRepo.Object);
+
+            this.performerService = new PerformerService(this.factoryMock.Object, this.mapper);
+            IEnumerable<Performer> result = await performerService.GetPerformers(param);
+
+            Assert.IsTrue(result.ToList().Count == 1);
         }
     }
 }

@@ -34,13 +34,13 @@ export class PerformersComponent implements OnInit {
     this.notHome = this.router.url != '/home';
     if (this.notHome){
       this.loadPerformers(this.performerName);
-      this.loadGenres();
     }
+    this.loadGenres();
   }
 
   loadPerformers(performerName: string): void{
     this.performers = []
-    if (this.performerName != undefined && this.performerName != ""){
+    if (performerName != undefined && performerName != ""){
       this.performerService.getPerformers(performerName).subscribe(
         {
           next: data => {

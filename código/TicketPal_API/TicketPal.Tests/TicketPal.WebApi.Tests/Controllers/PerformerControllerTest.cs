@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using TicketPal.Domain.Constants;
+using TicketPal.Domain.Models.Param;
 using TicketPal.Domain.Models.Request;
 using TicketPal.Domain.Models.Response;
 using TicketPal.Interfaces.Services.Performers;
@@ -187,7 +188,7 @@ namespace TicketPal.WebApi.Tests.Controllers
         {
             mockService.Setup(s => s.GetPerformers(It.IsAny<PerformerSearchParam>())).Returns(Task.FromResult(performers));
 
-            var result = await controller.GetPerformers();
+            var result = await controller.GetPerformers(null);
             var objectResult = result as ObjectResult;
             var statusCode = objectResult.StatusCode;
 
@@ -222,7 +223,7 @@ namespace TicketPal.WebApi.Tests.Controllers
             };
             var request = new PerformerSearchParam()
             {
-                performerName = performer.UserInfo.Firstname + " " + performer.UserInfo.Lastname,
+                PerformerName = performer.UserInfo.Firstname + " " + performer.UserInfo.Lastname
             };
 
             List<Performer> performers = new List<Performer>();
@@ -265,7 +266,7 @@ namespace TicketPal.WebApi.Tests.Controllers
             };
             var request = new PerformerSearchParam()
             {
-                performerName = performer.UserInfo.Firstname + " " + performer.UserInfo.Lastname,
+                PerformerName = performer.UserInfo.Firstname + " " + performer.UserInfo.Lastname
             };
 
             List<Performer> performers = new List<Performer>();
