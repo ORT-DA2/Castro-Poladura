@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Endpoints } from 'src/app/config/endpoints';
+import { IAddUser } from 'src/app/models/request/user/addUser.model';
 import { IUpdateUser } from 'src/app/models/request/user/updateUser.model';
 import { IApiResponse } from 'src/app/models/response/apiResponse.model';
 import { IUser } from 'src/app/models/response/user.model';
@@ -38,7 +39,7 @@ export class UserService {
     )
   }
 
-  addUser(request: IUpdateUser, headers?: HttpHeaders): Observable<IApiResponse> {
+  addUser(request: IAddUser, headers?: HttpHeaders): Observable<IApiResponse> {
     return this.http.post<IApiResponse>(`${this.endpoints.USERS}`,
       request,
       { headers }

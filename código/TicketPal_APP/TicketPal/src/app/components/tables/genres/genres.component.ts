@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { IGenre } from 'src/app/models/response/genre.model';
 import { IUser } from 'src/app/models/response/user.model';
 import { GenreService } from 'src/app/services/genre/genre.service';
@@ -11,31 +11,43 @@ import Swal from 'sweetalert2';
   styleUrls: ['./genres.component.css']
 })
 export class GenresComponent implements OnInit {
-  genres: IGenre[];
-  fetchedGenres = false;
-  errorMessage: string;
+  genres: IGenre[]
+  fetchedGenres = false
+  errorMessage: string
   adminLoggedIn = false
   currentUser: IUser | null
 
+  @ViewChild('editGenreView', { static: false })
+  genreEditPopup: ElementRef;
+
+  selectedGenreToEdit: IGenre
+  show = false
+  add = false
+
   constructor(
-    private genreService: GenreService, private tokenService: TokenStorageService
+    private genreService: GenreService,
+    private tokenService: TokenStorageService
   ) { }
 
   ngOnInit(): void {
-    this.currentUser = this.tokenService.getUser(),
-    this.adminLoggedIn = (this.currentUser?.role == "ADMIN"),
+    this.currentUser = this.tokenService.getUser()
+    this.adminLoggedIn = (this.currentUser?.role == "ADMIN")
     this.loadGenres();
   }
 
-  loadGenres(): void{
+  refresh = (): void => {
+    this.loadGenres()
+    Swal.close()
+  }
+
+  loadGenres(): void {
     this.genres = []
     this.genreService.getGenres().subscribe(
       {
         next: data => {
           this.genres = data
           this.fetchedGenres = true
-        }
-        ,
+        },
         error: err => {
           this.errorMessage = err.error.message
         }
@@ -43,67 +55,42 @@ export class GenresComponent implements OnInit {
     )
   }
 
-  async addGenre(){
-    var result = await Swal.fire({
-      html:
-      '<h2>Genre: </h2>' +
-      '<form>' +
-          '<div class="form-group row">' +
-              '<label for="inputName" class="col-sm-2 col-form-label">Genre Name</label>' +
-              '<div class="col-sm-10">' +
-                '<input type="text" class="form-control" placeholder="Genre name" id="inputName" #genreName>' +
-              '</div>' +
-            '</div>' +
-        '</form>',
+  addGenre() {
+    this.add = true
+    this.show = true
+    this.selectedGenreToEdit = {} as IGenre;
+    Swal.fire({
+      html: this.genreEditPopup.nativeElement,
       focusConfirm: false,
-      showConfirmButton: true,
-      showDenyButton: true,
+      showConfirmButton: false,
+      showDenyButton: false,
+      allowOutsideClick: true,
+      backdrop: true
     }).then((result) => {
-      if (result.isConfirmed) {
-        this.loadGenres(),
-        Swal.fire('Saved!', '', 'success')
-        return [
-          document.getElementById('inputName')?.ariaValueText,
-        ]
-      } else if (result.isDenied) {
-        Swal.fire('Changes are not saved', '', 'info')
-        return null;
-      }
-      else{
-        return null;
+      if (result.isDismissed) {
+        this.selectedGenreToEdit = {} as IGenre
+        this.show = false
+        this.add = false
       }
     })
   }
 
-  async editGenre(id: string){
-    var genreSelected = this.genres.find(g => g.id == id);
-    var result = await Swal.fire({
-      html:
-      '<h2>Genre: </h2>' +
-      '<form>' +
-          '<div class="form-group row">' +
-              '<label for="inputName" class="col-sm-2 col-form-label">Genre Name</label>' +
-              '<div class="col-sm-10">' +
-                '<input type="text" class="form-control" placeholder="Genre name" id="inputName" #genreName>' +
-              '</div>' +
-            '</div>' +
-        '</form>',
+  editGenre(selected: IGenre) {
+    this.show = true
+    this.add = false
+    this.selectedGenreToEdit = selected;
+
+    Swal.fire({
+      html: this.genreEditPopup.nativeElement,
       focusConfirm: false,
-      showConfirmButton: true,
-      showDenyButton: true,
+      showConfirmButton: false,
+      showDenyButton: false,
+      allowOutsideClick: true,
+      backdrop: true
     }).then((result) => {
-      if (result.isConfirmed) {
-        this.loadGenres(),
-        Swal.fire('Saved!', '', 'success')
-        return [
-          document.getElementById('inputName')?.ariaValueText,
-        ]
-      } else if (result.isDenied) {
-        Swal.fire('Changes are not saved', '', 'info')
-        return null;
-      }
-      else{
-        return null;
+      if (result.isDismissed) {
+        this.selectedGenreToEdit = {} as IGenre
+        this.show = false
       }
     })
   }

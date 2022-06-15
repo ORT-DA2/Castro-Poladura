@@ -1,0 +1,74 @@
+<div class="wrapper bg-white mt-sm-5">
+  <form [formGroup]="editForm">
+    <h4 class="pb-4 border-bottom">{{add ? "Create Performer" : "Update Performer"}}</h4>
+    <div class="py-2">
+      <div class="row py-2">
+        <div class="col-md-6">
+          <label for="performerType">Performer Type</label>
+          <input formControlName="performerType" type="text" class="bg-light form-control" placeholder="Performer Type">
+        </div>
+        <div class="col-md-6 pt-md-0 pt-3">
+          <label for="startYear">Start Year</label>
+          <input formControlName="startYear" tyqpe="text" class="bg-light form-control" placeholder="Start Year">
+        </div>
+      </div>
+      <div class="row py-2">
+        <div class="col-md-6 pt-md-0 pt-3" *ngIf="add">
+          <label for="account">Account</label>
+          <select class="bg-light form-control" formControlName="selectedAccount">
+            <option *ngFor="let acc of accounts">
+              {{acc.email}}
+            </option>
+          </select>
+        </div>
+        <div class="col-md-6 pt-md-0 pt-3">
+          <label for="genre">Genre</label>
+          <select formControlName="selectedGenre" class="bg-light form-control">
+            <option *ngFor="let genre of genres" [ngValue]="genre">
+              {{genre.name}}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="row py-1">
+        <div class="col-md-6 pt-md-0 pt-3">
+          <label for="members">Members</label>
+          <select class="bg-light form-control" formControlName="selectedMember">
+            <option *ngFor="let member of members" [ngValue]="member">
+              {{member.userInfo.email}}
+            </option>
+          </select>
+          <span>
+            <button type="button" class="btn btn-light" (click)="addMember()">Add</button>
+          </span>
+        </div>
+        <div class="col-md-6 pt-md-0 pt-3">
+          <h5 class='text-content' *ngFor="let member of tempMembers">
+            {{member.userInfo.email}}
+            <span>
+              <button type="button" class="btn btn-light" (click)="removeMember(member)">X</button>
+            </span>
+          </h5>
+        </div>
+      </div>
+      <div class="py-3 pb-4 border-bottom">
+        <button class="btn btn-primary mr-3" (click)="onSubmitClicked()">
+          {{add ? "Create Performer" : "Update Performer"}}
+        </button>
+      </div>
+      <div class="row" *ngIf="isResponse() && error">
+        <div class="alert alert-danger" role="alert">
+          {{ responseMessage }}
+        </div>
+      </div>
+      <div class="row" *ngIf="isResponse() && !error">
+        <div class="alert alert-success" role="alert">
+          {{ responseMessage }}
+        </div>
+      </div>
+    </div>
+  </form>
+  <div class="container">
+    <router-outlet></router-outlet>
+  </div>
+</div>

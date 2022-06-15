@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ITicket } from 'src/app/models/response/ticket.model';
 import { IUser } from 'src/app/models/response/user.model';
 import { TokenStorageService } from 'src/app/services/storage/token-storage.service';
 import { TicketService } from 'src/app/services/ticket/ticket.service';
 import { UserService } from 'src/app/services/user/user.service';
-import Swal from 'sweetalert2';
+import Swal, { SweetAlertResult } from 'sweetalert2';
 
 @Component({
   selector: 'app-users',
@@ -20,15 +20,28 @@ export class UsersComponent implements OnInit {
   adminLoggedIn = false
   currentUser: IUser | null
 
+  @ViewChild('editUserView', { static: false })
+  userEditPopup: ElementRef;
+
+  selectedUserToEdit: IUser
+  show = false
+  add = false
+
   constructor(
-    private userService: UserService, private tokenService: TokenStorageService, private ticketService: TicketService
+    private userService: UserService,
+    private tokenService: TokenStorageService,
+    private ticketService: TicketService
   ) { }
 
   ngOnInit(): void {
-    this.currentUser = this.tokenService.getUser(),
-    this.adminLoggedIn = (this.currentUser?.role == "ADMIN"),
+    this.currentUser = this.tokenService.getUser()
+    this.adminLoggedIn = (this.currentUser?.role == "ADMIN")
     this.loadUsers();
-    this.loadTickets();
+  }
+
+  refresh = (): void => {
+    this.loadUsers()
+    Swal.close()
   }
 
   loadUsers(): void {
@@ -47,144 +60,47 @@ export class UsersComponent implements OnInit {
     )
   }
 
-  loadTickets(): void{
-    this.tickets = []
-    this.ticketService.getTickets().subscribe(
-      {
-        next: data => {
-          this.tickets = data
-          this.fetchedUsers = true
-        }
-        ,
-        error: err => {
-          this.errorMessage = err.error.message
-        }
-      }
-    )
-  }
-
-  async addUser(){
-    var result = await Swal.fire({
-      html:
-      '<h2>User: </h2>'+
-      '<form>'+
-          '<div class="form-group row">'+
-              '<label for="inputFirstName" class="col-sm-2 col-form-label">First Name</label>'+
-              '<div class="col-sm-10">'+
-                '<input type="text" class="form-control" placeholder="First name" id="inputFirstName" #firstName>'+
-              '</div>'+
-            '</div>'+
-            '<div class="form-group row">'+
-              '<label for="inputLastName" class="col-sm-2 col-form-label">Last Name</label>'+
-              '<div class="col-sm-10">'+
-                '<input type="text" class="form-control" placeholder="Last name" id="inputLastName" #lastName>'+
-              '</div>'+
-            '</div>'+
-          '<div class="form-group row">'+
-          '<label for="inputEmail" class="col-sm-2 col-form-label">Email</label>'+
-          '<div class="col-sm-10">'+
-              '<input type="text" class="form-control" placeholder="example@example.com" id="inputEmail" #email>'+
-          '</div>'+
-          '</div>'+
-          '<div class="form-group row">'+
-              '<label for="inputPassword" class="col-sm-2 col-form-label">Password</label>'+
-              '<div class="col-sm-10">'+
-                '<input type="text" class="form-control" placeholder="Password" id="inputPassword" #password>'+
-              '</div>'+
-          '</div>'+
-          '<div class="form-group row">'+
-              '<label for="inputRole" class="col-sm-2 col-form-label">Role</label>'+
-              '<select class="form-control" id="inputRole" #role>'+
-                  '<option>ADMIN</option>'+
-                  '<option>SELLER</option>'+
-                  '<option>SUPERVISOR</option>'+
-                  '<option>ARTIST</option>'+
-                  '<option>SPECTATOR</option>'+
-              '</select>'+
-          '</div>'+
-        '</form>',
+  addUser() {
+    this.add = true
+    this.show = true
+    this.selectedUserToEdit = {} as IUser;
+    Swal.fire({
+      html: this.userEditPopup.nativeElement,
       focusConfirm: false,
-      showConfirmButton: true,
-      showDenyButton: true,
+      showConfirmButton: false,
+      showDenyButton: false,
+      allowOutsideClick: true,
+      backdrop: true
     }).then((result) => {
-      if (result.isConfirmed) {
-        this.loadUsers(),
-        Swal.fire('Saved!', '', 'success')
-        return [
-          document.getElementById('inputName')?.ariaValueText,
-        ]
-      } else if (result.isDenied) {
-        Swal.fire('Changes are not saved', '', 'info')
-        return null;
-      }
-      else{
-        return null;
+      if (result.isDismissed) {
+        this.selectedUserToEdit = {} as IUser
+        this.show = false
+        this.add = false
       }
     })
   }
 
-  async editUser(id: string){
-    var userSelected = this.users.find(u => u.id == id);
-    var result = await Swal.fire({
-      html:
-      '<h2>User: </h2>'+
-      '<form>'+
-          '<div class="form-group row">'+
-              '<label for="inputFirstName" class="col-sm-2 col-form-label">First Name</label>'+
-              '<div class="col-sm-10">'+
-                '<input type="text" class="form-control" placeholder="First name" id="inputFirstName" #firstName>'+
-              '</div>'+
-            '</div>'+
-            '<div class="form-group row">'+
-              '<label for="inputLastName" class="col-sm-2 col-form-label">Last Name</label>'+
-              '<div class="col-sm-10">'+
-                '<input type="text" class="form-control" placeholder="Last name" id="inputLastName" #lastName>'+
-              '</div>'+
-            '</div>'+
-          '<div class="form-group row">'+
-          '<label for="inputEmail" class="col-sm-2 col-form-label">Email</label>'+
-          '<div class="col-sm-10">'+
-              '<input type="text" class="form-control" placeholder="example@example.com" id="inputEmail" #email>'+
-          '</div>'+
-          '</div>'+
-          '<div class="form-group row">'+
-              '<label for="inputPassword" class="col-sm-2 col-form-label">Password</label>'+
-              '<div class="col-sm-10">'+
-                '<input type="text" class="form-control" placeholder="Password" id="inputPassword" #password>'+
-              '</div>'+
-          '</div>'+
-          '<div class="form-group row">'+
-              '<label for="inputRole" class="col-sm-2 col-form-label">Role</label>'+
-              '<select class="form-control" id="inputRole" #role>'+
-                  '<option>ADMIN</option>'+
-                  '<option>SELLER</option>'+
-                  '<option>SUPERVISOR</option>'+
-                  '<option>ARTIST</option>'+
-                  '<option>SPECTATOR</option>'+
-              '</select>'+
-          '</div>'+
-        '</form>',
+  editUser(selected: IUser) {
+    this.show = true
+    this.add = false
+    this.selectedUserToEdit = selected;
+
+    Swal.fire({
+      html: this.userEditPopup.nativeElement,
       focusConfirm: false,
-      showConfirmButton: true,
-      showDenyButton: true,
+      showConfirmButton: false,
+      showDenyButton: false,
+      allowOutsideClick: true,
+      backdrop: true
     }).then((result) => {
-      if (result.isConfirmed) {
-        this.loadUsers(),
-        Swal.fire('Saved!', '', 'success')
-        return [
-          document.getElementById('inputName')?.ariaValueText,
-        ]
-      } else if (result.isDenied) {
-        Swal.fire('Changes are not saved', '', 'info')
-        return null;
-      }
-      else{
-        return null;
+      if (result.isDismissed) {
+        this.selectedUserToEdit = {} as IUser
+        this.show = false
       }
     })
   }
 
-  deleteUser(id: string) {
+  deleteUser(user: IUser) {
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
@@ -195,7 +111,7 @@ export class UsersComponent implements OnInit {
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.userService.deleteUser(id).subscribe(
+        this.userService.deleteUser(user.id).subscribe(
           {
             next: data => {
               Swal.fire({
@@ -205,7 +121,7 @@ export class UsersComponent implements OnInit {
               this.loadUsers()
             },
             error: err => {
-              if(this.tickets.find(t => t.buyer.id == id)){
+              if (this.tickets.find(t => t.buyer.id == user.id)) {
                 Swal.fire({
                   icon: 'error',
                   text: 'No se puede eliminar este usuario porque tiene tickets asociados',
