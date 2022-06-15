@@ -20,8 +20,8 @@ export class ConcertService {
     return this.http.get<IConcert>(`${this.endpoints.CONCERTS}/${id}`)
   }
 
-  getConcerts(startDate: string, endDate: string): Observable<IConcert[]> {
-    let params = new HttpParams().set('type', "TYPE_CONCERT").set('startDate', startDate).set('endDate', endDate);
+  getConcerts(startDate: string, endDate: string, tourName: string): Observable<IConcert[]> {
+    let params = new HttpParams().set('type', "TYPE_CONCERT").set('startDate', startDate).set('endDate', endDate).set('tourName', tourName);
     return this.http.get<IConcert[]>(this.endpoints.CONCERTS, { params: params })
   }
 

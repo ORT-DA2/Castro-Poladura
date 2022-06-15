@@ -57,7 +57,7 @@ namespace TicketPal.WebApi
                 services,
                 Configuration
             );
-            factory.AddDbContextService(Configuration.GetConnectionString("TicketPal_SQL_SERVER"));
+            factory.AddDbContextService(Configuration.GetConnectionString("TicketPal_SQL_EXPRESS"));
             factory.RegisterRepositories();
             factory.RegisterServices();
             factory.BuildServices();
