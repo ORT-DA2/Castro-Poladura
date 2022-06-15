@@ -30,6 +30,8 @@ import { ConcertModalComponent } from './components/tables/concerts/concert-moda
 import { GenreModalComponent } from './components/tables/genres/genre-modal/genre-modal.component';
 import { PerformerModalComponent } from './components/tables/performers/performer-modal/performer-modal.component';
 import { UserModalComponent } from './components/tables/users/user-modal/user-modal.component';
+import { ConcertSearchBarComponent } from './components/concert-search-bar/concert-search-bar.component';
+import { PerformerSearchBarComponent } from './components/performer-search-bar/performer-search-bar.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +55,9 @@ import { UserModalComponent } from './components/tables/users/user-modal/user-mo
     ConcertModalComponent,
     GenreModalComponent,
     PerformerModalComponent,
-    UserModalComponent
+    UserModalComponent,
+    ConcertSearchBarComponent,
+    PerformerSearchBarComponent
   ],
   imports: [
     BrowserModule,

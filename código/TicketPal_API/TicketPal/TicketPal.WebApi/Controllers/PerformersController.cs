@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using TicketPal.Domain.Constants;
+using TicketPal.Domain.Models.Param;
 using TicketPal.Domain.Models.Request;
 using TicketPal.Domain.Models.Response.Error;
 using TicketPal.Interfaces.Services.Performers;
@@ -77,10 +78,9 @@ namespace TicketPal.WebApi.Controllers
         }
 
         [HttpGet]
-        [AuthenticationFilter(Constants.ROLE_ADMIN)]
-        public async Task<IActionResult> GetPerformers()
+        public async Task<IActionResult> GetPerformers([FromQuery] PerformerSearchParam param)
         {
-            return Ok(await performerService.GetPerformers());
+            return Ok(await performerService.GetPerformers(param));
         }
 
     }

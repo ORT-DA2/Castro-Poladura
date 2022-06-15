@@ -1,10 +1,13 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Server.IIS.Core;
 using TicketPal.Domain.Constants;
 using TicketPal.Domain.Entity;
 using TicketPal.Domain.Exceptions;
+using TicketPal.Domain.Models.Param;
 using TicketPal.Domain.Models.Request;
 using TicketPal.Domain.Models.Response;
 using TicketPal.Interfaces.Factory;
@@ -114,9 +117,22 @@ namespace TicketPal.BusinessLogic.Services.Performers
             return mapper.Map<Performer>(await performerRepository.Get(id));
         }
 
-        public async Task<List<Performer>> GetPerformers()
+        public async Task<List<Performer>> GetPerformers(PerformerSearchParam param)
         {
-            var performers = await performerRepository.GetAll();
+            var performers = new List<PerformerEntity>();
+            var hasName = !String.IsNullOrEmpty(param.PerformerName);
+
+            if (!hasName)
+            {
+                performers = await performerRepository.GetAll();
+            }
+            else
+            {
+                performers = await performerRepository.GetAll();
+                performers = performers.FindAll(p =>
+                   p.UserInfo.Firstname.ToLower() + " " + p.UserInfo.Lastname.ToLower() == param.PerformerName.ToLower());
+            }
+            
             return mapper.Map<List<PerformerEntity>, List<Performer>>(performers);
         }
 

@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { IGenre } from 'src/app/models/response/genre.model';
 import { IPerformer } from 'src/app/models/response/performer.model';
 import { IUser } from 'src/app/models/response/user.model';
@@ -20,32 +21,53 @@ export class PerformersComponent implements OnInit {
   errorMessage: string;
   adminLoggedIn = false
   currentUser: IUser | null
+  notHome = false;
+  @Input() performerName: string;
 
   constructor(
-    private performerService: PerformerService, private tokenService: TokenStorageService, private genreService: GenreService
+    private performerService: PerformerService, private tokenService: TokenStorageService, private genreService: GenreService, private router: Router
   ) { }
 
   ngOnInit(): void {
     this.currentUser = this.tokenService.getUser(),
     this.adminLoggedIn = (this.currentUser?.role == "ADMIN"),
-    this.loadPerformers();
+    this.notHome = this.router.url != '/home';
+    if (this.notHome){
+      this.loadPerformers(this.performerName);
+    }
     this.loadGenres();
   }
 
-  loadPerformers(): void{
+  loadPerformers(performerName: string): void{
     this.performers = []
-    this.performerService.getPerformers().subscribe(
-      {
-        next: data => {
-          this.performers = data
-          this.fetchedPerformers = true
+    if (performerName != undefined && performerName != ""){
+      this.performerService.getPerformers(performerName).subscribe(
+        {
+          next: data => {
+            this.performers = data
+            this.fetchedPerformers = true
+          }
+          ,
+          error: err => {
+            this.errorMessage = err.error.message
+          }
         }
-        ,
-        error: err => {
-          this.errorMessage = err.error.message
+      )
+    }
+    else {
+      this.performerService.getPerformers("").subscribe(
+        {
+          next: data => {
+            this.performers = data
+            this.fetchedPerformers = true
+          }
+          ,
+          error: err => {
+            this.errorMessage = err.error.message
+          }
         }
-      }
-    )
+      )
+    }
   }
 
   loadGenres(): void {
@@ -62,6 +84,10 @@ export class PerformersComponent implements OnInit {
         }
       }
     )
+  }
+
+  onSearch(performerName: string){
+    this.loadPerformers(performerName)
   }
 
   showArtists(id: string): void {
@@ -112,7 +138,7 @@ export class PerformersComponent implements OnInit {
       showDenyButton: true,
     }).then((result) => {
       if (result.isConfirmed) {
-        this.loadPerformers(),
+        this.loadPerformers(""),
         Swal.fire('Saved!', '', 'success')
         return [
           document.getElementById('inputName')?.ariaValueText,
@@ -164,7 +190,7 @@ export class PerformersComponent implements OnInit {
       showDenyButton: true,
     }).then((result) => {
       if (result.isConfirmed) {
-        this.loadPerformers(),
+        this.loadPerformers(""),
         Swal.fire('Saved!', '', 'success')
         return [
           document.getElementById('inputName')?.ariaValueText,
@@ -197,7 +223,7 @@ export class PerformersComponent implements OnInit {
                 icon: 'success',
                 text: data.message,
               })
-              this.loadPerformers()
+              this.loadPerformers("")
             },
             error: err => {
               Swal.fire({

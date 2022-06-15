@@ -22,6 +22,7 @@ export class ConcertsComponent implements OnInit {
   notHome = false;
   @Input() fromDate: string;
   @Input() toDate: string;
+  @Input() tourName: string;
 
   constructor(
     private concertService: ConcertService, private tokenService: TokenStorageService, private router: Router
@@ -31,10 +32,12 @@ export class ConcertsComponent implements OnInit {
     this.currentUser = this.tokenService.getUser();
     this.adminLoggedIn = (this.currentUser?.role == "ADMIN");
     this.notHome = this.router.url != '/home';
-    this.loadConcerts(this.fromDate, this.toDate);
+    if (this.notHome){
+      this.loadConcerts(this.fromDate, this.toDate, this.tourName);
+    }
   }
 
-  loadConcerts(startDate: string, endDate: string) {
+  loadConcerts(startDate: string, endDate: string, tourName: string) {
     this.concerts = []
     if (this.currentUser?.role == "ARTIST" && this.notHome){
       this.concertService.getConcertsByPerformer(this.currentUser.id).subscribe(
@@ -50,10 +53,24 @@ export class ConcertsComponent implements OnInit {
         }
       )
     }
-    else if (startDate != undefined && startDate != ""){
+    else if ((startDate != undefined && startDate != "") && (endDate != undefined && endDate != "")){
       var formattedStartDate = this.parseDate(startDate);
       var formattedEndDate = this.parseDate(endDate);
-      this.concertService.getConcerts(formattedStartDate, formattedEndDate).subscribe(
+      this.concertService.getConcerts(formattedStartDate, formattedEndDate, "").subscribe(
+        {
+          next: data => {
+            this.concerts = data
+            this.fetchedConcerts = true
+          }
+          ,
+          error: err => {
+            this.errorMessage = err.error.message
+          }
+        }
+      )
+    }
+    else if (tourName != undefined && tourName != ""){
+      this.concertService.getConcerts("", "", tourName).subscribe(
         {
           next: data => {
             this.concerts = data
@@ -67,7 +84,7 @@ export class ConcertsComponent implements OnInit {
       )
     }
     else {
-      this.concertService.getConcerts("", "").subscribe(
+      this.concertService.getConcerts("", "", "").subscribe(
         {
           next: data => {
             this.concerts = data
@@ -135,7 +152,7 @@ export class ConcertsComponent implements OnInit {
       showDenyButton: true
     }).then((result) => {
       if (result.isConfirmed) {
-        this.loadConcerts("",""),
+        this.loadConcerts("","",""),
         Swal.fire('Saved!', '', 'success')
         return [
           document.getElementById('inputTourName')?.ariaValueText,
@@ -222,7 +239,7 @@ export class ConcertsComponent implements OnInit {
       } */
     }).then((result) => {
       if (result.isConfirmed) {
-        this.loadConcerts("",""),
+        this.loadConcerts("","",""),
         Swal.fire('Saved!', '', 'success')
         return [
           document.getElementById('inputTourName')?.ariaValueText,
@@ -261,7 +278,7 @@ export class ConcertsComponent implements OnInit {
                 icon: 'success',
                 text: data.message,
               })
-              this.loadConcerts("","")
+              this.loadConcerts("","","")
             },
             error: err => {
               Swal.fire({
@@ -275,8 +292,8 @@ export class ConcertsComponent implements OnInit {
     })
   }
 
-  onSearch(startDate: string, endDate: string | null){
-    this.loadConcerts(this.fromDate, this.toDate)
+  onSearch(startDate: string, endDate: string, tourName: string){
+    this.loadConcerts(startDate, endDate, tourName)
   }
 
   parseDate(date: string){
