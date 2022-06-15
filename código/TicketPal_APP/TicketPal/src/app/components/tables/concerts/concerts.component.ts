@@ -1,37 +1,10 @@
-import { Component, Directive, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { IConcert } from 'src/app/models/response/concert.model';
+import { IUser } from 'src/app/models/response/user.model';
 import { ConcertService } from 'src/app/services/concert/concert.service';
-
-export type SortColumn = keyof IConcert | '';
-export type SortDirection = 'asc' | 'desc' | '';
-const rotate: { [key: string]: SortDirection } = { 'asc': 'desc', 'desc': '', '': 'asc' };
-
-const compare = (v1: string | number | Date, v2: string | number | Date) => v1 < v2 ? -1 : v1 > v2 ? 1 : 0;
-
-export interface SortEvent {
-  column: SortColumn;
-  direction: SortDirection;
-}
-
-@Directive({
-  selector: 'th[sortable]',
-  host: {
-    '[class.asc]': 'direction === "asc"',
-    '[class.desc]': 'direction === "desc"',
-    '(click)': 'rotate()'
-  }
-})
-export class NgbdSortableHeader {
-
-  @Input() sortable: SortColumn = '';
-  @Input() direction: SortDirection = '';
-  @Output() sort = new EventEmitter<SortEvent>();
-
-  rotate() {
-    this.direction = rotate[this.direction];
-    this.sort.emit({ column: this.sortable, direction: this.direction });
-  }
-}
+import { TokenStorageService } from 'src/app/services/storage/token-storage.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-concerts',
@@ -42,51 +15,291 @@ export class ConcertsComponent implements OnInit {
   concerts: IConcert[];
   fetchedConcerts = false;
   errorMessage: string;
-
-  @ViewChildren(NgbdSortableHeader) headers: QueryList<NgbdSortableHeader>;
+  adminLoggedIn = false
+  currentUser: IUser | null
+  editedConcert: IConcert
+  newConcert: IConcert
+  notHome = false;
+  @Input() fromDate: string;
+  @Input() toDate: string;
+  @Input() tourName: string;
 
   constructor(
-    private concertService: ConcertService
+    private concertService: ConcertService, private tokenService: TokenStorageService, private router: Router
   ) { }
 
   ngOnInit(): void {
-    this.loadConcerts();
-  }
-
-  onSort({ column, direction }: SortEvent) {
-
-    // resetting other headers
-    this.headers.forEach(header => {
-      if (header.sortable !== column) {
-        header.direction = '';
-      }
-    });
-
-    // sorting countries
-    if (direction === '' || column === '') {
-      this.loadConcerts();
-    } else {
-      this.concerts = [...this.concerts].sort((a, b) => {
-        const res = compare(a[column], b[column]);
-        return direction === 'asc' ? res : -res;
-      });
+    this.currentUser = this.tokenService.getUser();
+    this.adminLoggedIn = (this.currentUser?.role == "ADMIN");
+    this.notHome = this.router.url != '/home';
+    if (this.notHome){
+      this.loadConcerts(this.fromDate, this.toDate, this.tourName);
     }
   }
 
-  loadConcerts() {
+  loadConcerts(startDate: string, endDate: string, tourName: string) {
     this.concerts = []
-    this.concertService.getConcerts().subscribe(
-      {
-        next: data => {
-          this.concerts = data
-          this.fetchedConcerts = true
+    if (this.currentUser?.role == "ARTIST" && this.notHome){
+      this.concertService.getConcertsByPerformer(this.currentUser.id).subscribe(
+        {
+          next: data => {
+            this.concerts = data
+            this.fetchedConcerts = true
+          }
+          ,
+          error: err => {
+            this.errorMessage = err.error.message
+          }
         }
-        ,
-        error: err => {
-          this.errorMessage = err.error.message
+      )
+    }
+    else if ((startDate != undefined && startDate != "") && (endDate != undefined && endDate != "")){
+      var formattedStartDate = this.parseDate(startDate);
+      var formattedEndDate = this.parseDate(endDate);
+      this.concertService.getConcerts(formattedStartDate, formattedEndDate, "").subscribe(
+        {
+          next: data => {
+            this.concerts = data
+            this.fetchedConcerts = true
+          }
+          ,
+          error: err => {
+            this.errorMessage = err.error.message
+          }
         }
-      }
-    )
+      )
+    }
+    else if (tourName != undefined && tourName != ""){
+      this.concertService.getConcerts("", "", tourName).subscribe(
+        {
+          next: data => {
+            this.concerts = data
+            this.fetchedConcerts = true
+          }
+          ,
+          error: err => {
+            this.errorMessage = err.error.message
+          }
+        }
+      )
+    }
+    else {
+      this.concertService.getConcerts("", "", "").subscribe(
+        {
+          next: data => {
+            this.concerts = data
+            this.fetchedConcerts = true
+          }
+          ,
+          error: err => {
+            this.errorMessage = err.error.message
+          }
+        }
+      )
+    }
   }
 
+  async addConcert(){
+    var result = await Swal.fire({
+      html:
+      '<h2>Concert: </h2>' +
+      '<form>' +
+          '<div class="form-group row">' +
+              '<label for="inputTourName" class="col-sm-2 col-form-label">Tour Name</label>' +
+              '<div class="col-sm-10">' +
+                '<input type="text" class="form-control" placeholder="Tour name" id="inputTourName" #tourName>' +
+              '</div>' +
+            '</div>' +
+            '<div class="form-group row">' +
+              '<label for="inputDate" class="col-sm-2 col-form-label">Date</label>' +
+              '<div class="col-sm-10">' +
+                '<input type="date" class="form-control" id="inputDate" #date>' +
+              '</div>' +
+            '</div>' +
+          '<div class="form-group row">' +
+          '<label for="inputTicketPrice" class="col-sm-2 col-form-label">Ticket price</label>' +
+          '<div class="col-sm-10">' +
+              '<input type="text" class="form-control" placeholder="0" id="inputTicketPrice" #ticketPrice>' +
+          '</div>' +
+          '</div>' +
+          '<div class="form-group row">' +
+              '<label for="inputCurrencyType" class="col-sm-2 col-form-label">Currency type</label>' +
+              '<div class="col-sm-10">' +
+                '<input type="text" class="form-control" placeholder="UYU" id="inputCurrencyType" #currencyType>' +
+              '</div>' +
+          '</div>' +
+          '<div class="form-group row">' +
+              '<label for="inputAddress" class="col-sm-2 col-form-label">Address</label>' +
+              '<div class="col-sm-10">' +
+                  '<input type="text" class="form-control" placeholder="Address" id="inputAddress" #address>' +
+              '</div>' +
+          '</div>' +
+          '<div class="form-group row">' +
+              '<label for="inputLocation" class="col-sm-2 col-form-label">Location</label>' +
+              '<div class="col-sm-10">' +
+                  '<input type="text" class="form-control" placeholder="Location" id="inputLocation" #location>' +
+              '</div>' +
+          '</div>' +
+          '<div class="form-group row">' +
+              '<label for="inputCountry" class="col-sm-2 col-form-label">Country</label>' +
+              '<div class="col-sm-10">' +
+                  '<input type="text" class="form-control" placeholder="Country" id="inputCountry" #country>' +
+              '</div>' +
+          '</div>' +
+       '</form>',
+      focusConfirm: false,
+      showConfirmButton: true,
+      showDenyButton: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.loadConcerts("","",""),
+        Swal.fire('Saved!', '', 'success')
+        return [
+          document.getElementById('inputTourName')?.ariaValueText,
+          document.getElementById('inputDate')?.ariaValueText,
+          document.getElementById('inputTicketPrice')?.ariaValueText,
+          document.getElementById('inputCurrencyType')?.ariaValueText,
+          document.getElementById('inputAddress')?.ariaValueText,
+          document.getElementById('inputLocation')?.ariaValueText,
+          document.getElementById('inputCountry')?.ariaValueText,
+        ]
+      } else if (result.isDenied) {
+        Swal.fire('Changes are not saved', '', 'info')
+        return null;
+      }
+      else{
+        return null;
+      }
+    })
+  }
+
+  async editConcert(id: string){
+    var concertSelected = this.concerts.find(c => c.id == id);
+    var result = await Swal.fire({
+      html:
+      '<h2>Concert: </h2>' +
+      '<form>' +
+          '<div class="form-group row">' +
+              '<label for="inputTourName" class="col-sm-2 col-form-label">Tour Name</label>' +
+              '<div class="col-sm-10">' +
+                '<input type="text" class="form-control" placeholder="Tour name" id="inputTourName" #tourName>' +
+              '</div>' +
+            '</div>' +
+            '<div class="form-group row">' +
+              '<label for="inputDate" class="col-sm-2 col-form-label">Date</label>' +
+              '<div class="col-sm-10">' +
+                '<input type="date" class="form-control" id="inputDate" #date>' +
+              '</div>' +
+            '</div>' +
+          '<div class="form-group row">' +
+          '<label for="inputTicketPrice" class="col-sm-2 col-form-label">Ticket price</label>' +
+          '<div class="col-sm-10">' +
+              '<input type="text" class="form-control" placeholder="0" id="inputTicketPrice" #ticketPrice>' +
+          '</div>' +
+          '</div>' +
+          '<div class="form-group row">' +
+              '<label for="inputCurrencyType" class="col-sm-2 col-form-label">Currency type</label>' +
+              '<div class="col-sm-10">' +
+                '<input type="text" class="form-control" placeholder="UYU" id="inputCurrencyType" #currencyType>' +
+              '</div>' +
+          '</div>' +
+          '<div class="form-group row">' +
+              '<label for="inputAddress" class="col-sm-2 col-form-label">Address</label>' +
+              '<div class="col-sm-10">' +
+                  '<input type="text" class="form-control" placeholder="Address" id="inputAddress" #address>' +
+              '</div>' +
+          '</div>' +
+          '<div class="form-group row">' +
+              '<label for="inputLocation" class="col-sm-2 col-form-label">Location</label>' +
+              '<div class="col-sm-10">' +
+                  '<input type="text" class="form-control" placeholder="Location" id="inputLocation" #location>' +
+              '</div>' +
+          '</div>' +
+          '<div class="form-group row">' +
+              '<label for="inputCountry" class="col-sm-2 col-form-label">Country</label>' +
+              '<div class="col-sm-10">' +
+                  '<input type="text" class="form-control" placeholder="Country" id="inputCountry" #country>' +
+              '</div>' +
+          '</div>' +
+          /* '<button id="saveButton" type="button" class="btn btn-primary" (click)="saveChanges(tourName.value, date.value, ticketPrice.value, currencyType.value, address.value, location.value, country.value)"> Save </button><button type="cancel" class="btn btn-danger">Cancel</button>' + */
+       '</form>',
+      focusConfirm: false,
+      showConfirmButton: true,
+      showDenyButton: true,
+      /* preConfirm: () => {
+        return [
+          document.getElementById('inputTourName')?.ariaValueText,
+          document.getElementById('inputDate')?.ariaValueText,
+          document.getElementById('inputTicketPrice')?.ariaValueText,
+          document.getElementById('inputCurrencyType')?.ariaValueText,
+          document.getElementById('inputAddress')?.ariaValueText,
+          document.getElementById('inputLocation')?.ariaValueText,
+          document.getElementById('inputCountry')?.ariaValueText,
+        ]
+      } */
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.loadConcerts("","",""),
+        Swal.fire('Saved!', '', 'success')
+        return [
+          document.getElementById('inputTourName')?.ariaValueText,
+          document.getElementById('inputDate')?.ariaValueText,
+          document.getElementById('inputTicketPrice')?.ariaValueText,
+          document.getElementById('inputCurrencyType')?.ariaValueText,
+          document.getElementById('inputAddress')?.ariaValueText,
+          document.getElementById('inputLocation')?.ariaValueText,
+          document.getElementById('inputCountry')?.ariaValueText,
+        ]
+      } else if (result.isDenied) {
+        Swal.fire('Changes are not saved', '', 'info')
+        return null;
+      }
+      else{
+        return null;
+      }
+    })
+  }
+
+  deleteConcert(id: string){
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.concertService.deleteConcert(id).subscribe(
+          {
+            next: data => {
+              Swal.fire({
+                icon: 'success',
+                text: data.message,
+              })
+              this.loadConcerts("","","")
+            },
+            error: err => {
+              Swal.fire({
+                icon: 'error',
+                text: err.error.message,
+              })
+            }
+          }
+        )
+      }
+    })
+  }
+
+  onSearch(startDate: string, endDate: string, tourName: string){
+    this.loadConcerts(startDate, endDate, tourName)
+  }
+
+  parseDate(date: string){
+    const [year, month, day] = date.split('-');
+    var newDate = day + '/' + month + '/' + year + ' ' + '00:00';
+    return newDate;
+  }
 }
+

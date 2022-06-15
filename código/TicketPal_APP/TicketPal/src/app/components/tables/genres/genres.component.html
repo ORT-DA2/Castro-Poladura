@@ -1,23 +1,29 @@
-<form>
-  <div class="mb-3 row">
-    <label for="table-filtering-search" class="col-xs-3 col-sm-auto col-form-label">Full text search:</label>
-    <!-- <div class="col-xs-3 col-sm-auto">
-         <input id="table-filtering-search" class="form-control" type="text" [formControl]="filter">
-      </div> -->
+<div class="container">
+  <div style="display: none;">
+    <div #editGenreView>
+      <div *ngIf="show">
+        <app-genre-edit-modal [refresh]="refresh" [add]="add" [genre]="selectedGenreToEdit"></app-genre-edit-modal>
+      </div>
+    </div>
   </div>
-</form>
-
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th scope="col">Id</th>
-      <th scope="col">Name</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let genre of genres">
-      <th scope="row">{{ genre.id }}</th>
-      <td>{{genre.name}}</td>
-    </tr>
-  </tbody>
-</table>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Name</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let genre of genres">
+        <th scope="row">{{ genre.id }}</th>
+        <td>{{genre.name}}</td>
+        <td><button type="button" class="btn btn-primary" (click)="editGenre(genre)" *ngIf="adminLoggedIn">Edit</button>
+        </td>
+        <td><button type="button" class="btn btn-danger" (click)="deleteGenre(genre.id)"
+            *ngIf="adminLoggedIn">Delete</button></td>
+      </tr>
+    </tbody>
+  </table>
+  <div><button type="button" class="btn btn-success" (click)="addGenre()" *ngIf="adminLoggedIn">Add Genre</button>
+  </div>
+</div>

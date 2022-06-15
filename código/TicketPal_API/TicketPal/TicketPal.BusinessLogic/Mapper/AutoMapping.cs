@@ -15,7 +15,7 @@ namespace TicketPal.BusinessLogic.Mapper
             CreateMap<ConcertEntity, Concert>()
             .ForMember(x => x.Date,
                 opt => opt.MapFrom(
-                    src => ((DateTime)src.Date).ToString("dddd, dd MMMM yyyy HH:mm")));
+                    src => src.Date.ToString("dddd, dd MMMM yyyy HH:mm")));
             // Genre
             CreateMap<GenreEntity, Genre>();
             // Performer
@@ -24,8 +24,12 @@ namespace TicketPal.BusinessLogic.Mapper
                     dest => dest.Members,
                     opt => opt.MapFrom(
                         src => src.Members));
-            // Ticket
-            CreateMap<TicketEntity, Ticket>();
+
+            //Ticket
+            CreateMap<TicketEntity, Ticket>()
+            .ForMember(x => x.PurchaseDate,
+                opt => opt.MapFrom(
+                    e => e.PurchaseDate.ToString("dddd, dd MMMM yyyy HH:mm")));
         }
     }
 }

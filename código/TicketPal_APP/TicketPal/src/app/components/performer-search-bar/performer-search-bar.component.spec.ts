@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GenresComponent } from './genres.component';
+import { PerformerSearchBarComponent } from './performer-search-bar.component';
 
-describe('GenresComponent', () => {
-  let component: GenresComponent;
-  let fixture: ComponentFixture<GenresComponent>;
+describe('PerformerSearchBarComponent', () => {
+  let component: PerformerSearchBarComponent;
+  let fixture: ComponentFixture<PerformerSearchBarComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ GenresComponent ]
+      declarations: [ PerformerSearchBarComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(GenresComponent);
+    fixture = TestBed.createComponent(PerformerSearchBarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

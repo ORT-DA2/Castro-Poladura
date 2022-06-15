@@ -1,5 +1,4 @@
-
-export class ApiResponse {
+export interface IApiResponse {
     message: string;
     resultCode: number
 }

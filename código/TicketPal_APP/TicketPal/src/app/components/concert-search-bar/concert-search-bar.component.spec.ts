@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BoardSpectatorComponent } from './board-spectator.component';
+import { ConcertSearchBarComponent } from './concert-search-bar.component';
 
-describe('BoardSpectatorComponent', () => {
-  let component: BoardSpectatorComponent;
-  let fixture: ComponentFixture<BoardSpectatorComponent>;
+describe('SearchBarComponent', () => {
+  let component: ConcertSearchBarComponent;
+  let fixture: ComponentFixture<ConcertSearchBarComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ BoardSpectatorComponent ]
+      declarations: [ ConcertSearchBarComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(BoardSpectatorComponent);
+    fixture = TestBed.createComponent(ConcertSearchBarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

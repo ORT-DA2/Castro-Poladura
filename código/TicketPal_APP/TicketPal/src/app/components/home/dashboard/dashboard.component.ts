@@ -17,7 +17,7 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.concerts = []
-    this.concertService.getConcerts().subscribe(
+    this.concertService.getConcerts("", "","").subscribe(
       {
         next: data => {
           this.concerts = data

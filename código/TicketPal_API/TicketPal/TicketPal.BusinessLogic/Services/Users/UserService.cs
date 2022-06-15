@@ -168,33 +168,25 @@ namespace TicketPal.BusinessLogic.Services.Users
         {
             try
             {
-                if (authorization.Equals(Constants.ROLE_SPECTATOR))
+                var toUpdate = new UserEntity
                 {
-                    repository.Update(
-                        new UserEntity
-                        {
-                            Id = model.Id,
-                            Firstname = model.Firstname,
-                            Lastname = model.Lastname,
-                            Email = model.Email,
-                            ActiveAccount = model.ActiveAccount
-                        });
+                    Id = model.Id,
+                    Firstname = model.Firstname,
+                    Lastname = model.Lastname,
+                    Email = model.Email,
+                    ActiveAccount = model.ActiveAccount
+                };
+                if (!String.IsNullOrEmpty(model.Password))
+                {
+                    toUpdate.Password = BC.HashPassword(model.Password);
                 }
-                else if (authorization.Equals(Constants.ROLE_ADMIN))
+
+                if (authorization.Equals(Constants.ROLE_ADMIN))
                 {
                     if (Constants.ValidRoles.Contains(model.Role))
                     {
-                        repository.Update(
-                            new UserEntity
-                            {
-                                Id = model.Id,
-                                Firstname = model.Firstname,
-                                Lastname = model.Lastname,
-                                Password = BC.HashPassword(model.Password),
-                                Email = model.Email,
-                                Role = model.Role,
-                                ActiveAccount = model.ActiveAccount
-                            });
+                        toUpdate.Role = model.Role;
+                        repository.Update(toUpdate);
                     }
                     else
                     {
@@ -204,6 +196,10 @@ namespace TicketPal.BusinessLogic.Services.Users
                             Message = $"Can't validate role: {model.Role}"
                         };
                     }
+                }
+                else
+                {
+                    repository.Update(toUpdate);
                 }
             }
             catch (RepositoryException ex)

@@ -1,31 +1,41 @@
-<form>
-  <div class="mb-3 row">
-    <label for="table-filtering-search" class="col-xs-3 col-sm-auto col-form-label">Full text search:</label>
-    <!-- <div class="col-xs-3 col-sm-auto">
-         <input id="table-filtering-search" class="form-control" type="text" [formControl]="filter">
-      </div> -->
+<button type="button" class="btn btn-primary" (click)="onSearch(performerName)" *ngIf="!notHome"> Search </button>
+<div class="container">
+  <div style="display: none;">
+    <div #editPerformerView>
+      <div *ngIf="show">
+        <app-performer-edit-modal [add]="add" [performer]="selectedPerformerToEdit">
+        </app-performer-edit-modal>
+      </div>
+    </div>
   </div>
-</form>
-
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th scope="col">Id</th>
-      <th scope="col">Name</th>
-      <th scope="col">PerformerType</th>
-      <th scope="col">Start Year</th>
-      <th scope="col">Genre</th>
-      <th scope="col">Members</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let performer of performers">
-      <th scope="row">{{ performer.id }}</th>
-      <td>{{performer.userInfo.firstname}} {{performer.userInfo.lastname}}</td>
-      <td>{{performer.performerType}}</td>
-      <td>{{performer.startYear}}</td>
-      <td>{{performer.genre.name}}</td>
-      <td>{{performer.members.join(', ')}}</td>
-    </tr>
-  </tbody>
-</table>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Name</th>
+        <th scope="col">PerformerType</th>
+        <th scope="col">Start Year</th>
+        <th scope="col">Genre</th>
+        <th scope="col">Members</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let performer of performers">
+        <th scope="row">{{ performer.id }}</th>
+        <td>{{performer.userInfo.firstname}} {{performer.userInfo.lastname}}</td>
+        <td>{{performer.performerType}}</td>
+        <td>{{performer.startYear}}</td>
+        <td>{{performer.genre.name}}</td>
+        <td><button type="button" class="btn btn-info" (click)="showArtists(performer.id)"
+            *ngIf="performer.members.length != 0">See members</button></td>
+        <!-- <td><button type="button" class="btn btn-primary" (click)="editPerformer(performer)"
+            *ngIf="adminLoggedIn">Edit</button></td> -->
+        <td><button type="button" class="btn btn-danger" (click)="deletePerformer(performer.id)"
+            *ngIf="adminLoggedIn && notHome">Delete</button></td>
+      </tr>
+    </tbody>
+  </table>
+  <!-- <div><button type="button" class="btn btn-success" (click)="addPerformer()" *ngIf="adminLoggedIn">Add
+      Performer</button>
+  </div> -->
+</div>

@@ -113,12 +113,10 @@ namespace TicketPal.BusinessLogic.Tests.Services.Tickets
         [TestMethod]
         public async Task AddTicketSuccesfullyTest()
         {
-            ticketRequest.NewUser = new TicketBuyer
-            {
-                FirstName = "SomeBuyerName",
-                LastName = "SomeBuyerLastname",
-                Email = "buyer@email.com"
-            };
+            ticketRequest.FirstName = "SomeBuyerName";
+            ticketRequest.LastName = "SomeBuyerLastname";
+            ticketRequest.Email = "buyer@email.com";
+
 
             OperationResult result = await ticketService.AddTicket(ticketRequest);
 
@@ -128,12 +126,9 @@ namespace TicketPal.BusinessLogic.Tests.Services.Tickets
         [TestMethod]
         public async Task AddTicketTwiceFailsTest()
         {
-            ticketRequest.NewUser = new TicketBuyer
-            {
-                FirstName = "SomeBuyerName",
-                LastName = "SomeBuyerLastname",
-                Email = "buyer@email.com"
-            };
+            ticketRequest.FirstName = "SomeBuyerName";
+            ticketRequest.LastName = "SomeBuyerLastname";
+            ticketRequest.Email = "buyer@email.com";
 
             await ticketService.AddTicket(ticketRequest);
 
@@ -240,6 +235,30 @@ namespace TicketPal.BusinessLogic.Tests.Services.Tickets
 
             this.ticketService = new TicketService(this.factoryMock.Object, this.mapper);
             Ticket ticket = await ticketService.GetTicket(id);
+
+            Assert.IsNotNull(ticket);
+            Assert.IsTrue(id == ticket.Id);
+        }
+
+        [TestMethod]
+        public async Task GetTicketByCodeTest()
+        {
+            int id = 1;
+            var dbTicket = new TicketEntity
+            {
+                Id = id,
+                Buyer = this.ticket.Buyer,
+                Code = this.ticket.Code,
+                Event = this.ticket.Event,
+                PurchaseDate = this.ticket.PurchaseDate,
+                Status = this.ticket.Status
+            };
+
+            this.mockTicketRepo.Setup(r => r.Get(It.IsAny<Expression<Func<TicketEntity, bool>>>())).Returns(Task.FromResult(dbTicket));
+            this.factoryMock.Setup(m => m.GetRepository(typeof(TicketEntity))).Returns(this.mockTicketRepo.Object);
+
+            this.ticketService = new TicketService(this.factoryMock.Object, this.mapper);
+            Ticket ticket = await ticketService.GetTicketByCode("someCode");
 
             Assert.IsNotNull(ticket);
             Assert.IsTrue(id == ticket.Id);

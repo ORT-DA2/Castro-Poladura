@@ -24,7 +24,7 @@ namespace TicketPal.WebApi.Controllers
 
         [HttpPost("purchase/{eventId}")]
         [AuthenticationFilter(Constants.ROLE_SELLER + "," + Constants.ROLE_SPECTATOR + "," + Constants.ROLE_ADMIN)]
-        public async Task<IActionResult> AddTicket([FromRoute] int eventId, [FromBody] AddTicketRequest request)
+        public async Task<IActionResult> AddTicket([FromRoute] int eventId, [FromBody] AddTicketRequest request = null)
         {
             request.EventId = eventId;
             var json = HttpContext.Session.GetString("user");
@@ -88,14 +88,20 @@ namespace TicketPal.WebApi.Controllers
             return Ok(await ticketService.GetTicket(id));
         }
 
+        [HttpGet("code/{code}")]
+        public async Task<IActionResult> GetTicketByCode([FromRoute] string code)
+        {
+            return Ok(await ticketService.GetTicketByCode(code));
+        }
+
         [HttpGet]
-        [AuthenticationFilter(Constants.ROLE_ADMIN + "," + Constants.ROLE_SPECTATOR)]
+        [AuthenticationFilter(Constants.ROLE_ADMIN + "," + Constants.ROLE_SPECTATOR + "," + Constants.ROLE_SELLER)]
         public async Task<IActionResult> GetTickets()
         {
             var json = HttpContext.Session.GetString("user");
             var authenticatedUser = JsonConvert.DeserializeObject<User>(json);
 
-            if (authenticatedUser.Role.Equals(Constants.ROLE_ADMIN))
+            if (authenticatedUser.Role.Equals(Constants.ROLE_ADMIN) || authenticatedUser.Role.Equals(Constants.ROLE_SELLER))
             {
                 return Ok(await ticketService.GetTickets());
             }

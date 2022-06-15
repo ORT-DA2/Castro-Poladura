@@ -2,8 +2,8 @@ using System;
 using System.Globalization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using TicketPal.Domain.Constants;
+using TicketPal.Domain.Models.Param;
 using TicketPal.Domain.Models.Request;
 using TicketPal.Domain.Models.Response.Error;
 using TicketPal.Interfaces.Services.Concerts;
@@ -78,39 +78,39 @@ namespace TicketPal.WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetConcerts(
-            [BindRequired][FromQuery] string type,
-            [FromQuery(Name = "newest")] bool newest,
-            [FromQuery(Name = "startDate")] string startDate,
-            [FromQuery(Name = "endDate")] string endDate,
-            [FromQuery(Name = "performerName")] string performerName
-        )
+        public async Task<IActionResult> GetConcerts([FromQuery] ConcertSearchParam param)
         {
             DateTime dtEnd;
-            var parseStartDate = DateTime.TryParseExact(startDate,
-                       "dd/M/yyyy hh:mm",
-                       CultureInfo.InvariantCulture,
-                       DateTimeStyles.None,
-                       out dtEnd);
+            var parseStartDate = DateTime.TryParseExact(param.StartDate,
+                "dd/M/yyyy HH:mm",
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.None,
+                out dtEnd);
             DateTime dtStart;
-            var parseEndDate = DateTime.TryParseExact(endDate,
-                       "dd/M/yyyy hh:mm",
-                       CultureInfo.InvariantCulture,
-                       DateTimeStyles.None,
-                       out dtStart);
+            var parseEndDate = DateTime.TryParseExact(param.EndDate,
+                "dd/M/yyyy HH:mm",
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.None,
+                out dtStart);
 
-            if (!String.IsNullOrEmpty(startDate) && !parseStartDate)
+            if (!String.IsNullOrEmpty(param.StartDate) && !parseStartDate)
             {
-                return BadRequest(new BadRequestError("Start date not in: dd/M/yyyy hh:mm"));
-            }
-            if (!String.IsNullOrEmpty(endDate) && !parseEndDate)
-            {
-                return BadRequest(new BadRequestError("End date not in: dd/M/yyyy hh:mm"));
+                return BadRequest(new BadRequestError("Start date not in: dd/M/yyyy HH:mm"));
             }
 
-            return Ok(await eventService.GetConcerts(type, newest, startDate, endDate, performerName));
+            if (!String.IsNullOrEmpty(param.EndDate) && !parseEndDate)
+            {
+                return BadRequest(new BadRequestError("End date not in: dd/M/yyyy HH:mm"));
+            }
+
+            return Ok(await eventService.GetConcerts(param));
         }
 
+        [HttpGet("performer")]
+        public async Task<IActionResult> GetConcertsByPerformerId([FromQuery] ConcertSearchParam param)
+        {
+            return Ok(await eventService.GetConcertsByPerformerId(param));
+        }
 
     }
 }

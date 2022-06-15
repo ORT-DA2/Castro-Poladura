@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using TicketPal.Domain.Constants;
+using TicketPal.Domain.Models.Param;
 using TicketPal.Domain.Models.Request;
 using TicketPal.Domain.Models.Response;
 using TicketPal.Interfaces.Services.Concerts;
@@ -196,20 +196,27 @@ namespace TicketPal.WebApi.Tests.Controllers
         public async Task GetConcerts()
         {
             mockService.Setup(s => s.GetConcerts(
-                It.IsAny<string>(),
-                true,
-                It.IsAny<string>(),
-                It.IsAny<string>(),
-                It.IsAny<string>()
+                new ConcertSearchParam
+                {
+                    Type = It.IsAny<string>(),
+                    Newest = true,
+                    StartDate = It.IsAny<string>(),
+                    EndDate = It.IsAny<string>(),
+                    ArtistName = It.IsAny<string>(),
+                    TourName = It.IsAny<string>()
+                }
             )).Returns(Task.FromResult(concerts));
 
             var result = await controller.GetConcerts(
-                Constants.EVENT_CONCERT_TYPE,
-                true,
-                DateTime.Now.ToString("dd/M/yyyy hh:mm"),
-                DateTime.Now.AddDays(30).ToString("dd/M/yyyy hh:mm"),
-                "Bono"
-                );
+                new ConcertSearchParam
+                {
+                    Type = Constants.EVENT_CONCERT_TYPE,
+                    Newest = true,
+                    StartDate = DateTime.Now.ToString("dd/M/yyyy hh:mm"),
+                    EndDate = DateTime.Now.AddDays(30).ToString("dd/M/yyyy hh:mm"),
+                    ArtistName = "Bono",
+                    TourName = "SomeTour"
+                });
             var objectResult = result as ObjectResult;
             var statusCode = objectResult.StatusCode;
 
@@ -221,20 +228,28 @@ namespace TicketPal.WebApi.Tests.Controllers
         public async Task GetConcertsWrongStartDate()
         {
             mockService.Setup(s => s.GetConcerts(
-                Constants.EVENT_CONCERT_TYPE,
-                false,
-                It.IsAny<string>(),
-                It.IsAny<string>(),
-                It.IsAny<string>()
+                new ConcertSearchParam
+                {
+                    Type = It.IsAny<string>(),
+                    Newest = true,
+                    StartDate = It.IsAny<string>(),
+                    EndDate = It.IsAny<string>(),
+                    ArtistName = It.IsAny<string>(),
+                    TourName = It.IsAny<string>()
+                }
             )).Returns(Task.FromResult(concerts));
 
             var result = await controller.GetConcerts(
-                Constants.EVENT_CONCERT_TYPE,
-                true,
-                "3fewfsdd",
-                DateTime.Now.AddDays(30).ToString("dd/M/yyyy"),
-                "Bono"
-                );
+                new ConcertSearchParam
+                {
+                    Type = Constants.EVENT_CONCERT_TYPE,
+                    Newest = true,
+                    StartDate = "3fewfsdd",
+                    EndDate = DateTime.Now.AddDays(30).ToString("dd/M/yyyy"),
+                    ArtistName = "Bono",
+                    TourName = "SomeTour"
+                }
+            );
             var operationResult = new OperationResult
             {
                 ResultCode = Constants.CODE_FAIL,
@@ -251,20 +266,28 @@ namespace TicketPal.WebApi.Tests.Controllers
         public async Task GetConcertsWrongEndDate()
         {
             mockService.Setup(s => s.GetConcerts(
-                Constants.EVENT_CONCERT_TYPE,
-                false,
-                It.IsAny<string>(),
-                It.IsAny<string>(),
-                It.IsAny<string>()
+                new ConcertSearchParam
+                {
+                    Type = It.IsAny<string>(),
+                    Newest = true,
+                    StartDate = It.IsAny<string>(),
+                    EndDate = It.IsAny<string>(),
+                    ArtistName = It.IsAny<string>(),
+                    TourName = It.IsAny<string>()
+                }
             )).Returns(Task.FromResult(concerts));
 
             var result = await controller.GetConcerts(
-                Constants.EVENT_CONCERT_TYPE,
-                true,
-                DateTime.Now.AddDays(30).ToString("dd/M/yyyy"),
-                "fdsf23fs",
-                "Bono"
-                );
+                new ConcertSearchParam
+                {
+                    Type = Constants.EVENT_CONCERT_TYPE,
+                    Newest = true,
+                    StartDate = DateTime.Now.AddDays(30).ToString("dd/M/yyyy"),
+                    EndDate = "fdsf23fs",
+                    ArtistName = "Bono",
+                    TourName = "SomeTour"
+                }
+            );
             var operationResult = new OperationResult
             {
                 ResultCode = Constants.CODE_FAIL,
@@ -289,7 +312,7 @@ namespace TicketPal.WebApi.Tests.Controllers
                     EventType = Constants.EVENT_CONCERT_TYPE,
                     TicketPrice = 197.8M,
                     CurrencyType = Constants.CURRENCY_US_DOLLARS,
-                    TourName = "SomeTour"
+                    TourName = "SomeTour",
                 },
                 new Concert
                 {
@@ -312,6 +335,45 @@ namespace TicketPal.WebApi.Tests.Controllers
                     TourName = "SomeTour"
                 },
             };
+        }
+
+        [TestMethod]
+        public async Task GetConcertsByPerformerIdTest()
+        {
+            var newConcertList = concerts;
+            var deleteConcert = concerts.Find(c => c.Id == 1);
+            newConcertList.Remove(deleteConcert);
+            deleteConcert = concerts.Find(c => c.Id == 2);
+            newConcertList.Remove(deleteConcert);
+            mockService.Setup(s => s.GetConcertsByPerformerId(
+                new ConcertSearchParam
+                {
+                    Type = It.IsAny<string>(),
+                    Newest = false,
+                    StartDate = null,
+                    EndDate = null,
+                    ArtistName = null,
+                    TourName = null,
+                    PerformerId = "1"
+                }
+            )).Returns(Task.FromResult(newConcertList));
+
+            var result = await controller.GetConcertsByPerformerId(
+                new ConcertSearchParam
+                {
+                    Type = Constants.EVENT_CONCERT_TYPE,
+                    Newest = false,
+                    StartDate = null,
+                    EndDate = null,
+                    ArtistName = null,
+                    TourName = null,
+                    PerformerId = "1"
+                });
+            var objectResult = result as ObjectResult;
+            var statusCode = objectResult.StatusCode;
+
+            Assert.AreEqual(200, statusCode);
+
         }
 
     }
