@@ -1,25 +1,38 @@
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th scope="col">Id</th>
-      <th scope="col">First Name</th>
-      <th scope="col">Last Name</th>
-      <th scope="col">Email</th>
-      <th scope="col">Role</th>
-      <th scope="col">Is Active</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let user of users">
-      <th scope="row">{{ user.id }}</th>
-      <td>{{user.firstname}}</td>
-      <td>{{user.lastname}}</td>
-      <td>{{user.email}}</td>
-      <td>{{user.role}}</td>
-      <td>{{user.activeAccount ? "Yes" : "No"}}</td>
-      <td><button type="button" class="btn btn-primary" (click)="editUser(user.id)" *ngIf="adminLoggedIn">Edit</button></td>
-      <td><button type="button" class="btn btn-danger" (click)="deleteUser(user.id)" *ngIf="adminLoggedIn">Delete</button></td>
-    </tr>
-  </tbody>
-</table>
-<div><button type="button" class="btn btn-success" (click)="addUser()" *ngIf="adminLoggedIn">Add User</button></div>
+<div class="container">
+  <div style="display: none;">
+    <div #editUserView>
+      <div *ngIf="show">
+        <app-user-edit-modal [refresh]="refresh" [add]="add" [user]="selectedUserToEdit"></app-user-edit-modal>
+      </div>
+    </div>
+  </div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Id</th>
+        <th scope="col">First Name</th>
+        <th scope="col">Last Name</th>
+        <th scope="col">Email</th>
+        <th scope="col">Role</th>
+        <th scope="col">Is Active</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of users">
+        <th scope="row">{{ user.id }}</th>
+        <td>{{user.firstname}}</td>
+        <td>{{user.lastname}}</td>
+        <td>{{user.email}}</td>
+        <td>{{user.role}}</td>
+        <td>{{user.activeAccount ? "Yes" : "No"}}</td>
+        <td><button type="button" class="btn btn-primary" (click)="editUser(user)" *ngIf="adminLoggedIn">Edit</button>
+        </td>
+        <td><button type="button" class="btn btn-danger" (click)="deleteUser(user)"
+            *ngIf="adminLoggedIn">Delete</button></td>
+      </tr>
+    </tbody>
+  </table>
+  <div>
+    <button type="button" class="btn btn-success" (click)="addUser()" *ngIf="adminLoggedIn">Add User</button>
+  </div>
+</div>

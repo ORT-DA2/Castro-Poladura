@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Endpoints } from 'src/app/config/endpoints';
+import { IAddGenre } from 'src/app/models/request/genre/addGenre.model';
 import { IUpdateGenre } from 'src/app/models/request/genre/updateGenre.model';
 import { IApiResponse } from 'src/app/models/response/apiResponse.model';
 import { IGenre } from 'src/app/models/response/genre.model';
@@ -23,7 +24,7 @@ export class GenreService {
     return this.http.get<IGenre[]>(this.endpoints.GENRES)
   }
 
-  addGenre(request: IUpdateGenre, headers?: HttpHeaders): Observable<IApiResponse> {
+  addGenre(request: IAddGenre, headers?: HttpHeaders): Observable<IApiResponse> {
     return this.http.post<IApiResponse>(`${this.endpoints.GENRES}`,
       request,
       { headers }

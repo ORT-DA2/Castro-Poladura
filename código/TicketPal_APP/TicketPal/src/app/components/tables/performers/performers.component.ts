@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { IGenre } from 'src/app/models/response/genre.model';
 import { IPerformer } from 'src/app/models/response/performer.model';
 import { IUser } from 'src/app/models/response/user.model';
@@ -21,40 +21,37 @@ export class PerformersComponent implements OnInit {
   adminLoggedIn = false
   currentUser: IUser | null
 
+  @ViewChild('editPerformerView', { static: false })
+  performerEditPopup: ElementRef;
+
+  selectedPerformerToEdit: IPerformer
+  show = false
+  add = false
+
   constructor(
-    private performerService: PerformerService, private tokenService: TokenStorageService, private genreService: GenreService
+    private performerService: PerformerService,
+    private tokenService: TokenStorageService,
+    private genreService: GenreService
   ) { }
 
   ngOnInit(): void {
-    this.currentUser = this.tokenService.getUser(),
-    this.adminLoggedIn = (this.currentUser?.role == "ADMIN"),
-    this.loadPerformers();
-    this.loadGenres();
+    this.currentUser = this.tokenService.getUser()
+    this.adminLoggedIn = (this.currentUser?.role == "ADMIN")
+    this.loadPerformers()
   }
 
-  loadPerformers(): void{
+  refresh = (): void => {
+    this.loadPerformers()
+    Swal.close()
+  }
+
+  loadPerformers(): void {
     this.performers = []
     this.performerService.getPerformers().subscribe(
       {
         next: data => {
           this.performers = data
           this.fetchedPerformers = true
-        }
-        ,
-        error: err => {
-          this.errorMessage = err.error.message
-        }
-      }
-    )
-  }
-
-  loadGenres(): void {
-    this.genres = []
-    this.genreService.getGenres().subscribe(
-      {
-        next: data => {
-          this.genres = data
-          this.fetchedGenres = true
         }
         ,
         error: err => {
@@ -76,105 +73,42 @@ export class PerformersComponent implements OnInit {
     })
   }
 
-  async addPerformer(){
-    var result = await Swal.fire({
-      html:
-      '<h2>Performer: </h2>'+
-      '<form>'+
-          '<div class="form-group row">'+
-              '<label for="inputPerformerType" class="col-sm-2 col-form-label">Performer Type</label>'+
-              '<div class="col-sm-10">'+
-                '<input type="text" class="form-control" placeholder="SOLO_ARTIST" id="inputPerformerType" #performerType>'+
-              '</div>'+
-            '</div>'+
-            '<div class="form-group row">'+
-              '<label for="inputYear" class="col-sm-2 col-form-label">Start Year</label>'+
-              '<div class="col-sm-10">'+
-                '<input type="text" class="form-control" placeholder="1981" id="inputYear" #year>'+
-              '</div>'+
-            '</div>'+
-          '<div class="form-group row">'+
-              '<label for="inputGenre">Genres</label>'+
-              '<select class="form-control" id="inputGenre" *ngFor="let genre of genres">'+
-                  '<option value="genre.id" #genre>{{genre.name}}</option>'+
-              '</select>'+
-          '</div>'+
-          '<div class="form-group row">'+
-              '<label for="inputMember">Members</label>'+
-              '<select class="custom-select" multiple d="inputMember" *ngFor="let performer of performers">'+
-                  '<option selected #performer>None</option>'+
-                  '<option value="performer.id" #performer>{{performer.userInfo.firstname}} {{performer.userInfo.lastname}}</option>'+
-                '</select>'+
-          '</div>'+
-        '</form>',
+  addPerformer() {
+    this.add = true
+    this.show = true
+    this.selectedPerformerToEdit = {} as IPerformer;
+    Swal.fire({
+      html: this.performerEditPopup.nativeElement,
       focusConfirm: false,
-      showConfirmButton: true,
-      showDenyButton: true,
+      showConfirmButton: false,
+      showDenyButton: false,
+      allowOutsideClick: true,
+      backdrop: true
     }).then((result) => {
-      if (result.isConfirmed) {
-        this.loadPerformers(),
-        Swal.fire('Saved!', '', 'success')
-        return [
-          document.getElementById('inputName')?.ariaValueText,
-        ]
-      } else if (result.isDenied) {
-        Swal.fire('Changes are not saved', '', 'info')
-        return null;
-      }
-      else{
-        return null;
+      if (result.isDismissed) {
+        this.selectedPerformerToEdit = {} as IPerformer
+        this.show = false
+        this.add = false
       }
     })
   }
 
-  async editPerformer(id: string){
-    var performerSelected = this.performers.find(p => p.id == id);
-    var result = await Swal.fire({
-      html:
-      '<h2>Performer: </h2>'+
-      '<form>'+
-          '<div class="form-group row">'+
-              '<label for="inputPerformerType" class="col-sm-2 col-form-label">Performer Type</label>'+
-              '<div class="col-sm-10">'+
-                '<input type="text" class="form-control" placeholder="SOLO_ARTIST" id="inputPerformerType" #performerType>'+
-              '</div>'+
-            '</div>'+
-            '<div class="form-group row">'+
-              '<label for="inputYear" class="col-sm-2 col-form-label">Start Year</label>'+
-              '<div class="col-sm-10">'+
-                '<input type="text" class="form-control" placeholder="1981" id="inputYear" #year>'+
-              '</div>'+
-            '</div>'+
-          '<div class="form-group row">'+
-              '<label for="inputGenre">Genres</label>'+
-              '<select class="form-control" id="inputGenre" *ngFor="let genre of genres">'+
-                  '<option value="genre.id" #genre>{{genre.name}}</option>'+
-              '</select>'+
-          '</div>'+
-          '<div class="form-group row">'+
-              '<label for="inputMember">Members</label>'+
-              '<select class="custom-select" multiple d="inputMember" *ngFor="let performer of performers">'+
-                  '<option selected #performer>None</option>'+
-                  '<option value="performer.id" #performer>{{performer.userInfo.firstname}} {{performer.userInfo.lastname}}</option>'+
-                '</select>'+
-          '</div>'+
-        '</form>',
+  editPerformer(selected: IPerformer) {
+    this.show = true
+    this.add = false
+    this.selectedPerformerToEdit = selected;
+
+    Swal.fire({
+      html: this.performerEditPopup.nativeElement,
       focusConfirm: false,
-      showConfirmButton: true,
-      showDenyButton: true,
+      showConfirmButton: false,
+      showDenyButton: false,
+      allowOutsideClick: true,
+      backdrop: true
     }).then((result) => {
-      if (result.isConfirmed) {
-        this.loadPerformers(),
-        Swal.fire('Saved!', '', 'success')
-        return [
-          document.getElementById('inputName')?.ariaValueText,
-        ]
-      } else if (result.isDenied) {
-        Swal.fire('Changes are not saved', '', 'info')
-        return null;
-      }
-      else{
-        return null;
+      if (result.isDismissed) {
+        this.selectedPerformerToEdit = {} as IPerformer
+        this.show = false
       }
     })
   }

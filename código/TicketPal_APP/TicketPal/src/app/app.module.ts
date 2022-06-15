@@ -8,7 +8,6 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { BoardAdminComponent } from './components/profile/board-admin/board-admin.component';
-import { BoardSpectatorComponent } from './components/profile/board-spectator/board-spectator.component';
 import { BoardSellerComponent } from './components/profile/board-seller/board-seller.component';
 import { BoardSupervisorComponent } from './components/profile/board-supervisor/board-supervisor.component';
 import { authInterceptorProviders } from './helpers/auth/auth.interceptor';
@@ -26,10 +25,10 @@ import { TicketsComponent } from './components/tables/tickets/tickets.component'
 import { DatePickerComponent } from './components/date-picker/date-picker.component';
 import { ReviewPurchaseComponent } from './components/ticket/purchase/reviewPurchase.component';
 import { ProfileComponent } from './components/profile/profile/profile.component';
-import { ConcertModalComponent } from './components/tables/concerts/concert-modal/concert-modal.component';
-import { GenreModalComponent } from './components/tables/genres/genre-modal/genre-modal.component';
-import { PerformerModalComponent } from './components/tables/performers/performer-modal/performer-modal.component';
-import { UserModalComponent } from './components/tables/users/user-modal/user-modal.component';
+import { ConcertEditModalComponent } from './components/profile/edit-modals/concert-edit-modal/concert-edit-modal.component';
+import { GenreEditModalComponent } from './components/profile/edit-modals/genre-edit-modal/genre-edit-modal.component';
+import { PerformerEditModalComponent } from './components/profile/edit-modals/performer-edit-modal/performer-edit-modal.component';
+import { UserEditModalComponent } from './components/profile/edit-modals/user-edit-modal/user-edit-modal.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +36,6 @@ import { UserModalComponent } from './components/tables/users/user-modal/user-mo
     LoginComponent,
     RegisterComponent,
     BoardAdminComponent,
-    BoardSpectatorComponent,
     BoardSellerComponent,
     BoardSupervisorComponent,
     DashboardComponent,
@@ -50,10 +48,10 @@ import { UserModalComponent } from './components/tables/users/user-modal/user-mo
     TicketsComponent,
     DatePickerComponent,
     ReviewPurchaseComponent,
-    ConcertModalComponent,
-    GenreModalComponent,
-    PerformerModalComponent,
-    UserModalComponent
+    ConcertEditModalComponent,
+    GenreEditModalComponent,
+    PerformerEditModalComponent,
+    UserEditModalComponent
   ],
   imports: [
     BrowserModule,

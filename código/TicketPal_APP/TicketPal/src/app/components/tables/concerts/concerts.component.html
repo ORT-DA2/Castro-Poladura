@@ -29,9 +29,11 @@
       <td>{{concert.location}}</td>
       <td>{{concert.address}}</td>
       <td>{{concert.country}}</td>
-      <td><button type="button" class="btn btn-primary" (click)="editConcert(concert.id)" *ngIf="adminLoggedIn && notHome">Edit</button></td>
-      <td><button type="button" class="btn btn-danger" (click)="deleteConcert(concert.id)" *ngIf="adminLoggedIn && notHome">Delete</button></td>
+      <!-- <td><button type="button" class="btn btn-primary" (click)="editConcert(concert.id)" *ngIf="adminLoggedIn && notHome">Edit</button></td> -->
+      <td><button type="button" class="btn btn-danger" (click)="deleteConcert(concert.id)"
+          *ngIf="adminLoggedIn && notHome">Delete</button></td>
     </tr>
   </tbody>
 </table>
-<div><button type="button" class="btn btn-success" (click)="addConcert()" *ngIf="adminLoggedIn && notHome">Add Concert</button></div>
+<div><button type="button" class="btn btn-success" (click)="addConcert()" *ngIf="adminLoggedIn && notHome">Add
+    Concert</button></div>

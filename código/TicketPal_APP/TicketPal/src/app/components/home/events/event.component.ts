@@ -37,10 +37,10 @@ export class EventComponent implements OnInit {
 
   showConcertDetails(id: string): void {
     var concertSelected = this.concerts.find(c => c.id == id);
-    var info = 'Tour name: ' + concertSelected?.tourName + '. Event type: ' + concertSelected?.eventType 
-    + '. Date: ' + concertSelected?.date + '. Available tickets: ' + concertSelected?.availableTickets 
-    + '. Ticket price: ' + concertSelected?.currencyType + ' ' + concertSelected?.ticketPrice 
-    + '. Location: ' + concertSelected?.address + ', ' + concertSelected?.location + ' - ' + concertSelected?.country + '.';
+    var info = 'Tour name: ' + concertSelected?.tourName + '. Event type: ' + concertSelected?.eventType
+      + '. Date: ' + concertSelected?.date + '. Available tickets: ' + concertSelected?.availableTickets
+      + '. Ticket price: ' + concertSelected?.currencyType + ' ' + concertSelected?.ticketPrice
+      + '. Location: ' + concertSelected?.address + ', ' + concertSelected?.location + ' - ' + concertSelected?.country + '.';
     Swal.fire({
       title: 'Concert details:',
       text: info,
@@ -63,7 +63,7 @@ export class EventComponent implements OnInit {
       cancelButtonText: "Cancel",
       showLoaderOnConfirm: true,
       backdrop: true,
-      preConfirm: (login) => {
+      preConfirm: () => {
         return this.ticketService.purchaseTicket(
           concert.id,
           {} as IBuyer,
