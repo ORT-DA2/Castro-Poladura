@@ -37,6 +37,7 @@ export class UsersComponent implements OnInit {
     this.currentUser = this.tokenService.getUser()
     this.adminLoggedIn = (this.currentUser?.role == "ADMIN")
     this.loadUsers();
+    this.loadTickets();
   }
 
   refresh = (): void => {
@@ -55,6 +56,17 @@ export class UsersComponent implements OnInit {
         ,
         error: err => {
           this.errorMessage = err.error.message
+        }
+      }
+    )
+  }
+
+  loadTickets(): void {
+    this.tickets = []
+    this.ticketService.getTickets().subscribe(
+      {
+        next: data => {
+          this.tickets = data
         }
       }
     )
