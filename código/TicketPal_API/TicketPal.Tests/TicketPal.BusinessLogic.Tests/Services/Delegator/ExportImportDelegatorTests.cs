@@ -91,7 +91,7 @@ namespace TicketPal.BusinessLogic.Tests.Services.Delegator
                 concert
             };
 
-            this.delegatorMock.Setup(x => x.GetAllTypes(typeof(IExportImport<>))).Returns(implementations);
+            this.delegatorMock.Setup(x => x.GetAllTypes(typeof(IExportImport<>)))/*.Returns(implementations)*/;
             this.mockConcertRepo.Setup(r => r.GetAll(It.IsAny<Expression<Func<ConcertEntity, bool>>>())).Returns(Task.FromResult(concerts.ToList()));
             this.factoryMock.Setup(m => m.GetRepository(typeof(ConcertEntity))).Returns(this.mockConcertRepo.Object);
             delegator = new ExportImportDelegator(factoryMock.Object, this.mapper);
