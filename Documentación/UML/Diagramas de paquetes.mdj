@@ -2964,7 +2964,7 @@
 											"top": 86,
 											"width": 511,
 											"height": 13,
-											"text": "TicketPal.BusinessLogic"
+											"text": "TicketPal::BusinessLogic"
 										},
 										{
 											"_type": "LabelView",
@@ -3082,9 +3082,9 @@
 											"font": "Arial;13;0",
 											"left": -208,
 											"top": -112,
-											"width": 178.6865234375,
+											"width": 182.29833984375,
 											"height": 13,
-											"text": "(from TicketPal.BusinessLogic)"
+											"text": "(from TicketPal::BusinessLogic)"
 										},
 										{
 											"_type": "LabelView",
@@ -3184,9 +3184,9 @@
 											"font": "Arial;13;0",
 											"left": 224,
 											"top": -432,
-											"width": 178.6865234375,
+											"width": 182.29833984375,
 											"height": 13,
-											"text": "(from TicketPal.BusinessLogic)"
+											"text": "(from TicketPal::BusinessLogic)"
 										},
 										{
 											"_type": "LabelView",
@@ -3289,9 +3289,9 @@
 											"font": "Arial;13;0",
 											"left": -128,
 											"top": 48,
-											"width": 178.6865234375,
+											"width": 182.29833984375,
 											"height": 13,
-											"text": "(from TicketPal.BusinessLogic)"
+											"text": "(from TicketPal::BusinessLogic)"
 										},
 										{
 											"_type": "LabelView",
@@ -3347,7 +3347,7 @@
 					"_parent": {
 						"$ref": "AAAAAAGA2igohogoPmw="
 					},
-					"name": "TicketPal.BusinessLogic",
+					"name": "TicketPal::BusinessLogic",
 					"ownedElements": [
 						{
 							"_type": "UMLPackage",
