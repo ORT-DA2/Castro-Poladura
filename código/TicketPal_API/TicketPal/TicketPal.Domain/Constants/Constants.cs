@@ -43,5 +43,10 @@ namespace TicketPal.Domain.Constants
         public const string PERFORMER_TYPE_BAND = "BAND";
         public const string PERFORMER_TYPE_SOLO_ARTIST = "SOLO_ARTIST";
 
+        // Export-Import
+        public const string EXPORT = "EXPORT";
+        public const string EXPORT_PATH = "../TicketPal/files/export/export.txt";
+        public const string IMPORT_PATH = "../TicketPal/files/import/import.txt";
+
     }
 }
