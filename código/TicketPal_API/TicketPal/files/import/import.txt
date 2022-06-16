@@ -1,0 +1,38 @@
+[
+    {
+        "id": 2,
+        "date": "miércoles, 15 junio 2022 00:00",
+        "availableTickets": 0,
+        "ticketPrice": 200.00,
+        "currencyType": "USD",
+        "eventType": "TYPE_CONCERT",
+        "tourName": "Tour de Prueba",
+        "location": "Antel Arena",
+        "address": "Av. Damaso A. Larrañaga S/N",
+        "country": "Uruguay"
+    },
+    {
+        "id": 3,
+        "date": "viernes, 22 julio 2022 00:00",
+        "availableTickets": 89,
+        "ticketPrice": 5700.00,
+        "currencyType": "UYU",
+        "eventType": "TYPE_CONCERT",
+        "tourName": "Tour with Styles",
+        "location": "Antel Arena",
+        "address": "Av. Damaso A. Larrañaga S/N",
+        "country": "Uruguay"
+    },
+    {
+        "id": 1,
+        "date": "jueves, 16 marzo 2023 16:23",
+        "availableTickets": 11997,
+        "ticketPrice": 156.80,
+        "currencyType": "USD",
+        "eventType": "TYPE_CONCERT",
+        "tourName": "Collaboration Project",
+        "location": "Antel Arena",
+        "address": "Av. Damaso A. Larrañaga S/N",
+        "country": "Uruguay"
+    }
+]
