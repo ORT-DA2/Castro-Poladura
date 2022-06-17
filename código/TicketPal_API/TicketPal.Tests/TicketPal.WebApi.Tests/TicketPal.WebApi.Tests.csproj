@@ -21,4 +21,10 @@
     <ProjectReference Include="..\..\TicketPal\TicketPal.WebApi\TicketPal.WebApi.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="ExportImport">
+      <HintPath>..\..\TicketPal\lib\ExportImport.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
