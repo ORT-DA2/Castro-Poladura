@@ -1,0 +1,39 @@
+<div class="wrapper bg-white mt-sm-5">
+    <form [formGroup]="profileForm">
+        <h4 class="pb-4 border-bottom">Account settings</h4>
+        <div class="py-2">
+            <div class="row py-2">
+                <div class="col-md-6">
+                    <label for="firstname">First Name</label>
+                    <input formControlName="firstname" type="text" class="bg-light form-control"
+                        placeholder="Firstname">
+                </div>
+                <div class="col-md-6 pt-md-0 pt-3">
+                    <label for="lastname">Last Name</label>
+                    <input formControlName="lastname" tyqpe="text" class="bg-light form-control" placeholder="Lastname">
+                </div>
+            </div>
+            <div class="row py-2">
+                <div class="col-md-6 pt-md-0 pt-3">
+                    <label for="phone">Password</label>
+                    <input formControlName="password" type="text" class="bg-light form-control"
+                        placeholder="New Password">
+                </div>
+            </div>
+            <div class="py-3 pb-4 border-bottom">
+                <button class="btn btn-primary mr-3" (click)="onUpdateProfileClicked()">Save Changes</button>
+                <a class="btn border button" href="#">Cancel</a>
+            </div>
+            <div class="row" *ngIf="isResponse() && error">
+                <div class="alert alert-danger" role="alert">
+                    {{ responseMessage }}
+                </div>
+            </div>
+            <div class="row" *ngIf="isResponse() && !error">
+                <div class="alert alert-success" role="alert">
+                    {{ responseMessage }}
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

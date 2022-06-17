@@ -1,0 +1,39 @@
+<button type="button" class="btn btn-primary" (click)="onSearch(fromDate, toDate, tourName)" *ngIf="!notHome"> Search </button>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">Id</th>
+      <th scope="col">Date</th>
+      <th scope="col">AvailableTickets</th>
+      <th scope="col">TicketPrice</th>
+      <th scope="col">CurrencyType</th>
+      <th scope="col">EventType</th>
+      <th scope="col">TourName</th>
+      <th scope="col">Location</th>
+      <th scope="col">Address</th>
+      <th scope="col">Country</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let concert of concerts">
+      <th scope="row">{{ concert.id }}</th>
+      <td>{{concert.date}}</td>
+      <td *ngIf="concert.availableTickets != 0; else soldOutTemplate">{{concert.availableTickets}}</td>
+      <ng-template #soldOutTemplate>
+        SOLD OUT
+      </ng-template>
+      <td>{{concert.ticketPrice}}</td>
+      <td>{{concert.currencyType}}</td>
+      <td>{{concert.eventType}}</td>
+      <td>{{concert.tourName}}</td>
+      <td>{{concert.location}}</td>
+      <td>{{concert.address}}</td>
+      <td>{{concert.country}}</td>
+      <!-- <td><button type="button" class="btn btn-primary" (click)="editConcert(concert.id)" *ngIf="adminLoggedIn && notHome">Edit</button></td> -->
+      <!-- <td><button type="button" class="btn btn-danger" (click)="deleteConcert(concert.id)"
+          *ngIf="adminLoggedIn && notHome">Delete</button></td> -->
+    </tr>
+  </tbody>
+</table>
+<!-- <div><button type="button" class="btn btn-success" (click)="addConcert()" *ngIf="adminLoggedIn && notHome">Add
+    Concert</button></div> -->

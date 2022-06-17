@@ -1,0 +1,56 @@
+<div class="wrapper bg-white mt-sm-5">
+  <form [formGroup]="editForm">
+    <h4 class="pb-4 border-bottom">{{add ? "Create User" : "Update User"}}</h4>
+    <div class="py-2">
+      <div class="row py-2">
+        <div class="col-md-6">
+          <label for="firstname">First Name</label>
+          <input formControlName="firstname" type="text" class="bg-light form-control" placeholder="Firstname">
+        </div>
+        <div class="col-md-6 pt-md-0 pt-3">
+          <label for="lastname">Last Name</label>
+          <input formControlName="lastname" tyqpe="text" class="bg-light form-control" placeholder="Lastname">
+        </div>
+      </div>
+      <div class="row py-2">
+        <div class="col-md-6 pt-md-0 pt-3">
+          <label for="password">Password</label>
+          <input formControlName="password" type="text" class="bg-light form-control" placeholder="New Password">
+        </div>
+        <div class="col-md-6 pt-md-0 pt-3">
+          <label for="email">Email</label>
+          <input formControlName="email" type="text" class="bg-light form-control" placeholder="Email">
+        </div>
+      </div>
+      <div class="row py-2">
+        <div class="col-md-6 pt-md-0 pt-3">
+          <label for="role">Accounts</label>
+          <select formControlName="role" class="bg-light form-control">
+            <option>ADMIN</option>
+            <option>SELLER</option>
+            <option>SUPERVISOR</option>
+            <option>ARTIST</option>
+            <option>SPECTATOR</option>
+          </select>
+        </div>
+      </div>
+      <div class="py-3 pb-4 border-bottom">
+        <button class="btn btn-primary mr-3" (click)="onSubmitClicked()">{{add ? "Create User" : "Update User"}}
+        </button>
+      </div>
+      <div class="row" *ngIf="isResponse() && error">
+        <div class="alert alert-danger" role="alert">
+          {{ responseMessage }}
+        </div>
+      </div>
+      <div class="row" *ngIf="isResponse() && !error">
+        <div class="alert alert-success" role="alert">
+          {{ responseMessage }}
+        </div>
+      </div>
+    </div>
+  </form>
+  <div class="container">
+    <router-outlet></router-outlet>
+  </div>
+</div>

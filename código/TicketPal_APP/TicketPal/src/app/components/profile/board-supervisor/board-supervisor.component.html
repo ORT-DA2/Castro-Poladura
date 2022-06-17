@@ -1,0 +1,66 @@
+<div class="wrapper" style="padding-top: 60px">
+    <h1>Search ticket by code</h1>
+    <form class="form-inline mr-auto" [formGroup]="searchCodeForm">
+        <input formControlName="input" class="form-control mr-sm-2" type="text" placeholder="Search"
+            aria-label="Search">
+        <button (click)="onSearchClicked()" class="btn btn-outline-success btn-rounded btn-sm my-0"
+            type="submit">Search</button>
+    </form>
+    <div class="card ticket" style="margin-top: 32px;" *ngIf="fetchedTicket">
+        <div class="card-header bg-dark text-light">
+            <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+            Ticket
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="text-md-left ml-2 text-justify">
+                    <h2 class="product-name" style="line-height: 0px;">
+                        <strong>
+                            {{ticket.event.tourName}}
+                        </strong>
+                    </h2>
+                    <h4 class="card-subtitle mb-2 text-muted">
+                        {{ticket.event.date}}
+                    </h4>
+                    <small style="line-height: 2;">
+                        <strong>Buyer: </strong>
+                        <h4 class="card-subtitle mb-2 text-muted">
+                            {{ticket.buyer.email}}
+                        </h4>
+                    </small>
+                    <small style="line-height: 2;">
+                        <strong>Status: </strong>
+                        <h4 class="card-subtitle mb-2 text-muted">
+                            {{ticket.status}}
+                        </h4>
+                    </small>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="pull-right" style="margin: 10px">
+                <div class="pull-right" style="margin: 5px">
+                    <h2>Code:</h2><strong><u>{{ticket.code}}</u></strong>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12" *ngIf="fetchedTicket"
+            style="display: flex; flex-direction: row;justify-content: center;align-items:center; padding-top: 32px;">
+            <button (click)="onUpdateClicked('PURCHASED')" id="btnMarkAsPurchased" href="#"
+                class="btn btn-success btn-md mr-3">Mark as Purchased</button>
+            <button (click)="onUpdateClicked('USED')" id="btnMarkAsUsed" href="#" class="btn btn-primary btn-md">Mark as
+                Used</button>
+        </div>
+        <div class="row" *ngIf="isResponse() && (errorUpdate || errorFetchTicket)" style="padding-top: 24px;">
+            <div class="alert alert-danger" role="alert">
+                {{ responseMessage }}
+            </div>
+        </div>
+        <div class="row" *ngIf="isResponse() && !errorUpdate && !errorFetchTicket" style="padding-top: 24px;">
+            <div class="alert alert-success" role="alert">
+                {{ responseMessage }}
+            </div>
+        </div>
+    </div>

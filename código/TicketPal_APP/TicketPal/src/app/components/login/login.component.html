@@ -1,0 +1,59 @@
+<div ng-app="myApp" ng-controller="myController" class="container"
+    style="background-color: #4d808dac; margin-top: 40px;">
+    <form *ngIf="!isLoggedIn" name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
+        <div class="login-container">
+            <div class="container py-5 h-100">
+                <div class="row d-flex justify-content-center align-items-center h-100">
+                    <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                        <div class="card shadow-2-strong" style="border-radius: 1rem;">
+                            <div class="card-body p-5 text-center">
+                                <div class="text-center" style="margin-bottom:20px">
+                                    <img src="/assets/img/tickets.svg" style="width: 135px;" alt="logo">
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <input type="email" name="email" [(ngModel)]="form.email" required
+                                                class="form-control form-control-lg" required #email="ngModel"
+                                                placeholder="Email address">
+                                            <div class="alert alert-danger" role="alert"
+                                                *ngIf="email.errors && f.submitted">
+                                                Email is required.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <input type="password" name="password" [(ngModel)]="form.password" required
+                                                class="form-control form-control-lg" required minlength="5"
+                                                #password="ngModel" placeholder="Password" />
+                                            <div class="alert alert-danger" role="alert"
+                                                *ngIf="password.errors && f.submitted">
+                                                <div *ngIf="password.errors['required']">Password is required</div>
+                                                <div *ngIf="password.errors['minlength']">
+                                                    Password must be at least 5 characters
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <button class="btn btn-primary btn-block mb-4">Login</button>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="alert alert-danger" role="alert" *ngIf="f.submitted && error">
+                                        {{ errorMessage }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
